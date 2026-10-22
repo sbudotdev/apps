@@ -1,5 +1,7 @@
 {
   "instagram": {
+    "inbox": "https://www.instagram.com/direct/inbox/",
+    "unreadBadge": "a[href^=\"/direct/inbox\"]",
     "hosts": [
       "instagram.com",
       "facebook.com"
@@ -88,6 +90,7 @@
     ]
   },
   "snapchat": {
+    "inbox": "https://web.snapchat.com/",
     "hosts": [
       "snapchat.com"
     ],

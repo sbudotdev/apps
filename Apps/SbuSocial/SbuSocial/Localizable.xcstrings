@@ -241,6 +241,46 @@
         }
       }
     },
+    "Hai %lld messaggi nuovi." : {
+      "localizations" : {
+        "it" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Hai un messaggio nuovo."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Hai %lld messaggi nuovi."
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "You have a new message."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "You have %lld new messages."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Hai raggiunto il tuo limite di tempo. I social si riaprono domani." : {
       "localizations" : {
         "en" : {
@@ -321,6 +361,16 @@
         }
       }
     },
+    "Messaggi di %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ messages"
+          }
+        }
+      }
+    },
     "Minuti" : {
       "localizations" : {
         "en" : {
@@ -397,6 +447,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "None"
+          }
+        }
+      }
+    },
+    "Notifiche" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications"
           }
         }
       }
@@ -497,6 +557,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sbu Social"
+          }
+        }
+      }
+    },
+    "Sbu Social guarda i tuoi messaggi quando iOS glielo lascia fare: le notifiche possono arrivare in ritardo. Instagram potrebbe chiederti di confermare che sei tu." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sbu Social checks your messages when iOS lets it: notifications can come late. Instagram may ask you to confirm it's you."
           }
         }
       }

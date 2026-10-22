@@ -6,6 +6,8 @@ import SwiftUI
 struct HomeView: View {
     @Environment(UsageLog.self) private var usage
     @Environment(OptionStore.self) private var options
+    @Environment(AccountStore.self) private var accounts
+    @Environment(NotificationRouter.self) private var router
     @State private var opened: Platform?
     /// The launch Platform opens once per launch, not every time Home comes back.
     @State private var hasLaunched = false
@@ -30,6 +32,14 @@ struct HomeView: View {
             hasLaunched = true
             opened = options.launchPlatform
         }
+        // A tapped message notification: its Account, on its Platform.
+        .onChange(of: router.pending, initial: true) {
+            guard let id = router.pending else { return }
+            router.pending = nil
+            guard let account = accounts.accounts.first(where: { $0.id == id }) else { return }
+            accounts.select(account)
+            opened = account.platform
+        }
     }
 
     /// Set while you are within the Limite di tempo; waiting with no limit or past it.
@@ -50,6 +60,8 @@ struct HomeView: View {
     }
     .environment(UsageLog(defaults: UserDefaults(suiteName: "preview")!))
     .environment(OptionStore(defaults: UserDefaults(suiteName: "preview")!))
+    .environment(AccountStore(defaults: UserDefaults(suiteName: "preview")!))
+    .environment(NotificationRouter())
 }
 
 #Preview("Dark") {
@@ -58,5 +70,7 @@ struct HomeView: View {
     }
     .environment(UsageLog(defaults: UserDefaults(suiteName: "preview")!))
     .environment(OptionStore(defaults: UserDefaults(suiteName: "preview")!))
+    .environment(AccountStore(defaults: UserDefaults(suiteName: "preview")!))
+    .environment(NotificationRouter())
     .preferredColorScheme(.dark)
 }

@@ -4,6 +4,8 @@ import SwiftUI
 /// The app inside `SbuTabShell`: Sonno, Statistiche, Home, Blocco, then Impostazioni (ADR-0017).
 struct RootView: View {
     @Environment(OptionStore.self) private var options
+    @Environment(MessageNotifications.self) private var notifications
+    @Environment(NotificationRouter.self) private var router
     @State private var tab = AppTab.home
 
     var body: some View {
@@ -23,9 +25,14 @@ struct RootView: View {
             }
         } settings: {
             LaunchSection(options: options)
+            NotificationSection(notifications: notifications)
             ForEach(Platform.allCases.filter { !$0.rules.options.isEmpty }) { platform in
                 FilterSection(platform: platform, options: options)
             }
+        }
+        // A message notification opens its Platform from Home.
+        .onChange(of: router.pending) {
+            if router.pending != nil { tab = .home }
         }
     }
 }
@@ -37,6 +44,8 @@ struct RootView: View {
         .environment(OptionStore(defaults: UserDefaults(suiteName: "preview")!))
         .environment(UsageLog(defaults: UserDefaults(suiteName: "preview")!))
         .environment(ShieldModel(defaults: UserDefaults(suiteName: "preview")!))
+        .environment(MessageNotifications(defaults: UserDefaults(suiteName: "preview")!))
+        .environment(NotificationRouter())
 }
 
 #Preview("Dark") {
@@ -46,5 +55,7 @@ struct RootView: View {
         .environment(OptionStore(defaults: UserDefaults(suiteName: "preview")!))
         .environment(UsageLog(defaults: UserDefaults(suiteName: "preview")!))
         .environment(ShieldModel(defaults: UserDefaults(suiteName: "preview")!))
+        .environment(MessageNotifications(defaults: UserDefaults(suiteName: "preview")!))
+        .environment(NotificationRouter())
         .preferredColorScheme(.dark)
 }

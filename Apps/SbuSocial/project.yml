@@ -31,7 +31,9 @@ targets:
       path: SbuSocial/Info.plist
       properties:
         # YouTube keeps playing when you leave the app, as in SocialLite.
-        UIBackgroundModes: [audio]
+        # fetch: the background check of your messages for their notifications.
+        UIBackgroundModes: [audio, fetch]
+        BGTaskSchedulerPermittedIdentifiers: [dev.sbu.social.inbox]
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
     entitlements:

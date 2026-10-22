@@ -36,6 +36,12 @@ final class WebViewPool: NSObject {
         return view
     }
 
+    /// The end of the user agent: the sites see Mobile Safari, not an in-app browser with fewer features.
+    static var safari: String {
+        let version = UIDevice.current.systemVersion.split(separator: ".").prefix(2).joined(separator: ".")
+        return "Version/\(version) Mobile/15E148 Safari/604.1"
+    }
+
     /// Sbu's own scripts that talk back to the app run here, where the page's scripts can't reach them.
     private static let world = WKContentWorld.world(name: "sbu")
 
@@ -86,9 +92,7 @@ final class WebViewPool: NSObject {
     private func configuration(for account: Account, rules: PlatformRules) -> WKWebViewConfiguration {
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = WKWebsiteDataStore(forIdentifier: account.id)
-        // The sites see Mobile Safari, not an in-app browser with fewer features.
-        let version = UIDevice.current.systemVersion.split(separator: ".").prefix(2).joined(separator: ".")
-        configuration.applicationNameForUserAgent = "Version/\(version) Mobile/15E148 Safari/604.1"
+        configuration.applicationNameForUserAgent = Self.safari
         configuration.allowsInlineMediaPlayback = true
         configuration.allowsPictureInPictureMediaPlayback = true
         let content = configuration.userContentController

@@ -1,5 +1,6 @@
 import AVFoundation
 import SwiftUI
+import UserNotifications
 
 @main
 struct SbuSocialApp: App {
@@ -8,12 +9,18 @@ struct SbuSocialApp: App {
     @State private var pool: WebViewPool
     @State private var usage = UsageLog.isDemo ? UsageLog.demo() : UsageLog()
     @State private var shield = ShieldModel()
+    @State private var notifications = MessageNotifications()
+    @State private var router: NotificationRouter
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
         let options = OptionStore()
         _options = State(initialValue: options)
         _pool = State(initialValue: WebViewPool(options: options))
+        // Set before launch ends, so a tap that launched the app still reaches it.
+        let router = NotificationRouter()
+        UNUserNotificationCenter.current().delegate = router
+        _router = State(initialValue: router)
         // Videos play with the silent switch on and keep playing in the background, as in SocialLite.
         try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback)
     }
@@ -26,9 +33,12 @@ struct SbuSocialApp: App {
                 .environment(options)
                 .environment(usage)
                 .environment(shield)
+                .environment(notifications)
+                .environment(router)
                 .task { await pool.prepare() }
                 .onChange(of: scenePhase, initial: true) {
                     if scenePhase == .active { shield.refresh() }
+                    if scenePhase == .background { InboxCheck.schedule(notifications) }
                 }
                 // With the app open, the Shield comes back on time even if iOS is late.
                 .task(id: [shield.postModeEnd, shield.focusEnd]) {
@@ -36,6 +46,9 @@ struct SbuSocialApp: App {
                     try? await Task.sleep(for: .seconds(max(end.timeIntervalSinceNow, 0)))
                     shield.refresh()
                 }
+        }
+        .backgroundTask(.appRefresh(InboxCheck.identifier)) {
+            await InboxCheck.run()
         }
     }
 }

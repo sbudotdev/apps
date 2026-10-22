@@ -29,6 +29,11 @@ nonisolated struct PlatformRules: Codable, Hashable {
     var options: [PlatformOption] = []
     /// The switches of the options that are on, for the Platform's script: `window.sbuOptions`.
     var flags: [String: Bool] = [:]
+    /// The page with your messages, opened out of sight to count the unread ones; `nil` where Sbu
+    /// Social sends no message notifications.
+    var inbox: URL?
+    /// The element carrying the unread count on `inbox`, read when the page title has none.
+    var unreadBadge: String?
 
     init() {}
 
@@ -46,6 +51,8 @@ nonisolated struct PlatformRules: Codable, Hashable {
         script = try container.decodeIfPresent(String.self, forKey: .script)
         options = try container.decodeIfPresent([PlatformOption].self, forKey: .options) ?? []
         flags = try container.decodeIfPresent([String: Bool].self, forKey: .flags) ?? [:]
+        inbox = try container.decodeIfPresent(URL.self, forKey: .inbox)
+        unreadBadge = try container.decodeIfPresent(String.self, forKey: .unreadBadge)
     }
 
     /// Every Platform's rules, read once from the app bundle.
