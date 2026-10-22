@@ -1,5 +1,6 @@
 import BackgroundTasks
 import Foundation
+import OSLog
 import UserNotifications
 import WebKit
 
@@ -10,6 +11,7 @@ import WebKit
 enum InboxCheck {
     /// The same in `BGTaskSchedulerPermittedIdentifiers` and in the app's `.backgroundTask`.
     static let identifier = "dev.sbu.social.inbox"
+    private static let log = Logger(subsystem: "dev.sbu.social", category: "inbox")
 
     /// Asks iOS for the next check, no sooner than in 15 minutes, while any notification is on.
     static func schedule(_ notifications: MessageNotifications = MessageNotifications()) {
@@ -32,6 +34,7 @@ enum InboxCheck {
                 group.addTask { (account, await unread(on: account)) }
             }
             for await (account, count) in group {
+                log.info("\(account.platform.rawValue) account \(account.number): \(count.map(String.init) ?? "no count")")
                 guard let count else { continue }
                 let new = notifications.record(count, for: account.id)
                 guard new > 0 else { continue }
@@ -55,10 +58,14 @@ enum InboxCheck {
         var isLoaded = false
         for _ in 0..<20 {
             guard (try? await Task.sleep(for: .seconds(1))) != nil else { break }
-            if UnreadCount.isSignedOut(view.url) { return nil }
+            if UnreadCount.isSignedOut(view.url) {
+                log.info("signed out: \(view.url?.absoluteString ?? "")")
+                return nil
+            }
             let page = try? await view.callAsyncJavaScript(script, arguments: ["badge": rules.unreadBadge ?? ""],
                                                           contentWorld: .defaultClient) as? [String: String]
             guard let page else { continue }
+            log.debug("\(page["state"] ?? "") \(view.url?.path ?? "") title: \(page["title"] ?? "") badge: \(page["badge"] ?? "")")
             isLoaded = page["state"] == "complete"
             count = UnreadCount.read(title: page["title"] ?? "", badge: page["badge"])
             if let count, count > 0 { break }

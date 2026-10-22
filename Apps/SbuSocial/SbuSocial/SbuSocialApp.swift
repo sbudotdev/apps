@@ -36,6 +36,12 @@ struct SbuSocialApp: App {
                 .environment(notifications)
                 .environment(router)
                 .task { await pool.prepare() }
+                #if DEBUG
+                // `-checkInbox` runs the message check at launch, without waiting for iOS.
+                .task {
+                    if CommandLine.arguments.contains("-checkInbox") { await InboxCheck.run() }
+                }
+                #endif
                 .onChange(of: scenePhase, initial: true) {
                     if scenePhase == .active { shield.refresh() }
                     if scenePhase == .background { InboxCheck.schedule(notifications) }
