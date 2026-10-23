@@ -56,3 +56,14 @@ Il rischio che resta per tutte e sei è quello che Apple ha nominato il 22/10: "
 ## Clean, 23/10
 
 Su richiesta di Matteo la 1.1 di Clean ha cinque funzioni nuove (branch `app/clean-1.1`, non unito): Foto sfocate, Foto dalle chat (gli album di WhatsApp, Telegram…), Video simili, il calendario di Accadde oggi e Contatti doppi (unione con copia .vcf in File). Libreria demo su foto vere (Unsplash, solo nelle build Debug), slide rifatte: la 02 delle promesse diventa la 02 delle funzioni nuove, le promesse passano nei sottotitoli di 03 e 05. Trovati e corretti: il sottotitolo "1 elemento" letto come tagliato dall'audit (la CI rossa), il titolo della griglia tagliato dal pulsante nella barra, e la parte nascosta delle miniature degli screenshot che riceveva i tocchi (il tocco su "Seleziona tutto" selezionava uno screenshot). Da provare insieme sull'iPhone: `docs/testbook/clean.md`, punto 10.
+
+### Originality-check di Clean 1.1 (23/10, prima dell'invio)
+
+| Dimensione | Giudizio |
+|---|---|
+| Funzione | distinta: l'unica app Sbu che legge la libreria Foto e i contatti; rispetto al 1.0 del 14/10 cinque funzioni nuove (sfocate, chat, video simili, calendario, contatti doppi) |
+| Contenuto | distinto: analisi Vision sull'iPhone, nessun contenuto preso da altri |
+| Metadati | distinti: descrizione che apre con cosa fa, slide nuove su foto vere, la slide delle promesse uguale per tutte tolta |
+| Esperienza | resta lo shell SbuKit comune (il fattore "overall design" della risposta del 22/10): rischio non azzerato |
+
+Verdetto: **distinta**, si può inviare. Sovrapposizione interna trovata: **Sbu Shrink** (comprimere video per liberare spazio) fa una cosa che Clean già fa (Comprimi). Shrink non è mai stato su ASC: prima di inviarla, valutare se unirla a Clean invece di pubblicarla da sola, è un 4.3 annunciato.
