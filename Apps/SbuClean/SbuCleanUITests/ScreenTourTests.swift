@@ -208,4 +208,23 @@ final class ScreenTourTests: XCTestCase {
             shot("n11-merge-confirm", app)
         }
     }
+
+    @MainActor
+    func testSwipeFrames() {
+        let app = launch()
+        _ = app.descendants(matching: .any).matching(identifier: "home.duplicates").firstMatch.waitForExistence(timeout: 10)
+        tap("pill.months", in: app)
+        tap("months.recent", in: app)
+        let card = app.descendants(matching: .any).matching(identifier: "swipe.card").firstMatch
+        _ = card.waitForExistence(timeout: 5)
+        sleep(2)
+        for index in 0..<4 {
+            card.swipeLeft(velocity: .fast)
+            // Right after the swipe: the new card must already show its photo.
+            let attachment = XCTAttachment(screenshot: app.screenshot())
+            attachment.name = "s\(index)-right-after"
+            attachment.lifetime = .keepAlways
+            add(attachment)
+        }
+    }
 }
