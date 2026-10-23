@@ -52,6 +52,10 @@ struct HomeList: View {
                           bytes: summary.blurry.bytes),
             ])
 
+            HomeGroup(title: "Contatti", entries: [
+                HomeEntry(route: .contacts, title: "Contatti doppi", subtitle: "Unisci chi è salvato due volte", symbol: "person.2"),
+            ])
+
             HomeGroup(title: "Scorri", entries: [
                 HomeEntry(route: .months, title: "Mese per mese", subtitle: "\(months.count { $0.isFinished }) finiti su \(months.count)", symbol: "calendar"),
                 HomeEntry(route: .swipe(.recent), title: "Recenti", subtitle: "\(summary.recentCount) da vedere", symbol: "clock"),
@@ -59,10 +63,6 @@ struct HomeList: View {
                 HomeEntry(route: .onThisDay, title: "Accadde oggi", subtitle: "\(summary.onThisDayCount) da vedere oggi", symbol: "calendar.badge.clock"),
                 HomeEntry(route: .albums, title: "Album", subtitle: "Uno alla volta", symbol: "rectangle.stack"),
                 HomeEntry(route: .swipe(.later), title: "Da decidere dopo", subtitle: "\(model.state.later.count) messi da parte", symbol: "bookmark"),
-            ])
-
-            HomeGroup(title: "Contatti", entries: [
-                HomeEntry(route: .contacts, title: "Contatti doppi", subtitle: "Unisci chi è salvato due volte", symbol: "person.2"),
             ])
 
             HomeGroup(title: nil, entries: [
