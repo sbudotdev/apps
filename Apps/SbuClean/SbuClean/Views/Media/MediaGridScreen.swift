@@ -9,6 +9,7 @@ struct MediaGridScreen: View {
 
     @State private var selection: Set<String> = []
     @State private var showsBin = false
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private let columns = [GridItem(.adaptive(minimum: 100), spacing: SbuTheme.space1)]
 
@@ -35,13 +36,13 @@ struct MediaGridScreen: View {
                 SpaceStat(label: "Selezionati", bytes: bytes, context: "\(selection.count) di \(items.count)")
 
                 // In the content, not in the bar: on a small iPhone the bar button cut the title.
-                ViewThatFits(in: .horizontal) {
-                    HStack(spacing: SbuTheme.space2) {
-                        actions(items)
-                    }
-                    VStack(alignment: .leading, spacing: SbuTheme.space2) {
-                        actions(items)
-                    }
+                // Not ViewThatFits: its hidden layout stayed in the accessibility tree, and a tap
+                // on it landed on a photo.
+                let layout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: SbuTheme.space2))
+                    : AnyLayout(HStackLayout(spacing: SbuTheme.space2))
+                layout {
+                    actions(items)
                 }
                 .buttonStyle(SbuFieldPillStyle())
 
