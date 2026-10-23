@@ -79,6 +79,14 @@ Build and upload to the App Store with metadata and framed screenshots, without 
 
 Upload only metadata and framed screenshots to the App Store listing, without a build or submitting
 
+### ios prepare_submission
+
+```sh
+[bundle exec] fastlane ios prepare_submission
+```
+
+Wait for a TestFlight build to process, attach it to the App Store version with the metadata and framed screenshots, without submitting
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
