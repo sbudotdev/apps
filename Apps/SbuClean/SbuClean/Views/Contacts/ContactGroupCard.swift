@@ -32,7 +32,8 @@ struct ContactGroupCard: View {
                 .accessibilityElement(children: .combine)
             }
 
-            SbuButton("Unisci", action: merge)
+            Button("Unisci", action: merge)
+                .buttonStyle(SbuFieldPillStyle())
         }
         .padding(SbuTheme.space3)
         .background(SbuTheme.surfaceRaised, in: .rect(cornerRadius: SbuTheme.radiusCard))

@@ -12,16 +12,16 @@
       ]
     }
   },
-  "02-privacy": {
+  "02-more": {
     "layout": "flat",
-    "subject": "an antique steamer trunk with leather straps, closed, three-quarter view",
+    "subject": "a vintage rotary card file with index cards, three-quarter view",
     "mark": {
       "shape": "underline",
       "box": [
-        130,
-        2280,
-        1030,
-        2530
+        0,
+        0,
+        0,
+        0
       ]
     }
   },

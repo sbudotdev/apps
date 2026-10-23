@@ -43,6 +43,8 @@ final class ScreenTourTests: XCTestCase {
         _ = matches.firstMatch.waitForExistence(timeout: 5)
         for _ in 0..<6 where visible() == nil {
             app.swipeUp()
+            // Let the page stop: a tap while it still glides lands on another row.
+            sleep(1)
         }
         guard let element = visible() else {
             XCTFail("no \(identifier)")
@@ -156,5 +158,54 @@ final class ScreenTourTests: XCTestCase {
         back(app)
         tap("home.stats", in: app)
         shot("t27-stats", app)
+    }
+
+    @MainActor
+    func testScreensOfOnePointOne() {
+        let app = launch()
+        _ = app.descendants(matching: .any).matching(identifier: "home.duplicates").firstMatch.waitForExistence(timeout: 10)
+        sleep(4)
+        shot("n01-home", app)
+        app.swipeUp()
+        shot("n02-home-middle", app)
+        app.swipeUp()
+        shot("n03-home-bottom", app)
+        app.swipeDown()
+        app.swipeDown()
+
+        tap("home.duplicates", in: app)
+        app.swipeUp()
+        shot("n04-duplicates-videos", app)
+        tap("card.videos", in: app)
+        shot("n05-video-groups", app)
+        back(app)
+        back(app)
+        sleep(1)
+
+        app.swipeUp()
+        sleep(1)
+        tap("home.grid.chats", in: app)
+        shot("n06-chats", app)
+        back(app)
+        app.swipeUp()
+        sleep(1)
+        tap("home.grid.blurry", in: app)
+        shot("n07-blurry", app)
+        back(app)
+        tap("home.onThisDay", in: app)
+        shot("n08-on-this-day", app)
+        app.swipeUp()
+        shot("n09-on-this-day-calendar", app)
+        back(app)
+        app.swipeUp()
+        sleep(1)
+        tap("home.contacts", in: app)
+        sleep(1)
+        shot("n10-contacts", app)
+        let merge = app.buttons.matching(NSPredicate(format: "label == 'Unisci' OR label == 'Merge'")).firstMatch
+        if merge.waitForExistence(timeout: 3) {
+            merge.tap()
+            shot("n11-merge-confirm", app)
+        }
     }
 }

@@ -227,7 +227,7 @@ nonisolated final class DemoLibrary: PhotoLibrary {
         video("video-beach", 199, ago: day * 6, seconds: 95, megabytes: 420)
         video("video-balloon", 174, ago: day * 26, seconds: 48, megabytes: 140)
         video("video-city-0", 43, ago: day * 40, seconds: 61, megabytes: 380)
-        video("video-city-1", 43, ago: day * 40 + minute * 3, seconds: 52, megabytes: 310, shift: 10)
+        video("video-city-1", 43, ago: day * 40 + minute * 3, seconds: 52, megabytes: 310)
         for (index, (ago, megabytes)) in [(9.0, 640.0), (23.0, 210.0)].enumerated() {
             let recording = MediaItem(id: "recording-\(index)", creationDate: now.addingTimeInterval(-day * ago), kind: .video, isScreenRecording: true,
                                       pixelWidth: 1178, pixelHeight: 2556, duration: megabytes / 4, size: ItemSize(bytes: Int64(megabytes * 1_000_000)))
@@ -240,6 +240,14 @@ nonisolated final class DemoLibrary: PhotoLibrary {
         photo("duplicate-b0", 164, ago: day * 33, megabytes: 4.1)
         photo("duplicate-b1", 164, ago: day * 120, megabytes: 4.1)
         photo("duplicate-b2", 164, ago: day * 200, megabytes: 4.1)
+
+        // Accadde oggi: this day one and two years ago.
+        for (years, pictures) in [(1, [186, 196]), (2, [197])] {
+            let date = Calendar.current.date(byAdding: .year, value: -years, to: now) ?? now
+            for (index, picture) in pictures.enumerated() {
+                photo("photo-year-\(years)-\(index)", picture, ago: now.timeIntervalSince(date) + Double(index) * 3_600, megabytes: 2.9)
+            }
+        }
 
         // Older months, two photos each.
         let older = [10, 13, 17, 28, 37, 42, 54, 58, 62, 70, 85, 92, 99, 107, 110, 112, 118, 124, 128, 136, 154, 162, 165, 176, 179, 182]

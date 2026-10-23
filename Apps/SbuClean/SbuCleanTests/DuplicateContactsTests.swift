@@ -49,7 +49,8 @@ struct DuplicateContactsTests {
         await model.load()
         let before = model.duplicateCount
 
-        let backup = try #require(await model.merge(try #require(model.groups.first)))
+        let group = try #require(model.groups.first)
+        let backup = try #require(await model.merge(group))
 
         #expect(FileManager.default.fileExists(atPath: backup.path))
         #expect(backup.pathExtension == "vcf")
