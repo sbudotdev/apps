@@ -16,6 +16,13 @@ struct HomeList: View {
         return "\(model.summary.groupCount) gruppi"
     }
 
+    private var blurrySubtitle: LocalizedStringKey {
+        if case .running = model.scan {
+            return "Le trovo con l'analisi"
+        }
+        return "\(model.summary.blurry.count) elementi"
+    }
+
     var body: some View {
         // Everything here comes from the summary, worked out off the main actor: the home stays
         // smooth with tens of thousands of items, even while the scan runs.
@@ -40,15 +47,22 @@ struct HomeList: View {
                 category(summary.videos, route: .videos, "Video", symbol: "video"),
                 HomeEntry(route: .livePhotos, title: "Live Photo", subtitle: "\(summary.livePhotos.count) Live Photo", symbol: "livephoto",
                           bytes: summary.livePhotos.bytes),
+                category(summary.chats, route: .grid(.chats), "Foto dalle chat", symbol: "bubble.left.and.bubble.right"),
+                HomeEntry(route: .grid(.blurry), title: "Foto sfocate", subtitle: blurrySubtitle, symbol: "camera.metering.unknown",
+                          bytes: summary.blurry.bytes),
             ])
 
             HomeGroup(title: "Scorri", entries: [
                 HomeEntry(route: .months, title: "Mese per mese", subtitle: "\(months.count { $0.isFinished }) finiti su \(months.count)", symbol: "calendar"),
                 HomeEntry(route: .swipe(.recent), title: "Recenti", subtitle: "\(summary.recentCount) da vedere", symbol: "clock"),
                 HomeEntry(route: .swipe(.random), title: "Casuale", subtitle: "Un giro a caso nella libreria", symbol: "shuffle"),
-                HomeEntry(route: .swipe(.onThisDay), title: "Accadde oggi", subtitle: "\(summary.onThisDayCount) da vedere", symbol: "calendar.badge.clock"),
+                HomeEntry(route: .onThisDay, title: "Accadde oggi", subtitle: "\(summary.onThisDayCount) da vedere oggi", symbol: "calendar.badge.clock"),
                 HomeEntry(route: .albums, title: "Album", subtitle: "Uno alla volta", symbol: "rectangle.stack"),
                 HomeEntry(route: .swipe(.later), title: "Da decidere dopo", subtitle: "\(model.state.later.count) messi da parte", symbol: "bookmark"),
+            ])
+
+            HomeGroup(title: "Contatti", entries: [
+                HomeEntry(route: .contacts, title: "Contatti doppi", subtitle: "Unisci chi è salvato due volte", symbol: "person.2"),
             ])
 
             HomeGroup(title: nil, entries: [

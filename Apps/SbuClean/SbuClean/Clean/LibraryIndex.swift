@@ -52,6 +52,22 @@ nonisolated struct LibraryIndex: Sendable {
         return copy
     }
 
+    /// The same items, flagged as saved from chats or blurry.
+    func flagging(chats: Set<String>, blurry: Set<String>) -> LibraryIndex {
+        var copy = self
+        for index in copy.items.indices {
+            let id = copy.items[index].id
+            let isFromChat = chats.contains(id)
+            let isBlurry = blurry.contains(id)
+            guard copy.items[index].isFromChat != isFromChat || copy.items[index].isBlurry != isBlurry else { continue }
+
+            copy.items[index].isFromChat = isFromChat
+            copy.items[index].isBlurry = isBlurry
+            copy.byID[id] = copy.items[index]
+        }
+        return copy
+    }
+
     /// The same index without some items.
     func removing(_ ids: Set<String>) -> LibraryIndex {
         var copy = self

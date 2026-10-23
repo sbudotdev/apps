@@ -7,15 +7,22 @@ struct GroupSection: View {
     let group: PhotoGroup
 
     @ScaledMetric(relativeTo: .body) private var tileSide: CGFloat = 120
+    @State private var playing: MediaItem?
+
+    private var isVideo: Bool {
+        group.kind == .videos
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: SbuTheme.space2) {
             HStack(alignment: .firstTextBaseline) {
-                Text("\(group.members.count) foto · \(model.bytes(of: group.members).sizeText)")
+                Text(isVideo
+                     ? "\(group.members.count) video · \(model.bytes(of: group.members).sizeText)"
+                     : "\(group.members.count) foto · \(model.bytes(of: group.members).sizeText)")
                     .font(SbuTheme.subheadline)
                     .foregroundStyle(SbuTheme.inkMuted)
                 Spacer(minLength: SbuTheme.space2)
-                Button(model.groupSelection.areAllCopiesSelected(in: group) ? "Tieni tutte" : "Tieni solo la migliore", action: toggleAll)
+                Button(toggleTitle, action: toggleAll)
                     .font(SbuTheme.subheadline)
                     .frame(minHeight: 44)
                     .contentShape(.rect)
@@ -29,7 +36,9 @@ struct GroupSection: View {
                             position: index + 1,
                             count: group.members.count,
                             isBest: id == group.best,
-                            isSelected: model.groupSelection.isSelected(id, in: group)
+                            isSelected: model.groupSelection.isSelected(id, in: group),
+                            isVideo: isVideo,
+                            play: { playing = model.itemsByID[id] }
                         ) {
                             model.groupSelection.toggle(id, in: group)
                         }
@@ -38,6 +47,19 @@ struct GroupSection: View {
                 }
             }
             .scrollIndicators(.hidden)
+        }
+        .sheet(item: $playing) { video in
+            VideoPreviewSheet(item: video)
+        }
+    }
+
+    private var toggleTitle: LocalizedStringKey {
+        let allSelected = model.groupSelection.areAllCopiesSelected(in: group)
+        return switch (isVideo, allSelected) {
+        case (true, true): "Tieni tutti"
+        case (true, false): "Tieni solo il migliore"
+        case (false, true): "Tieni tutte"
+        case (false, false): "Tieni solo la migliore"
         }
     }
 

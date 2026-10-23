@@ -11,6 +11,8 @@ import UIKit
 @Observable
 final class CleanModel {
     let library: any PhotoLibrary
+    /// The duplicate contacts, a separate job with its own permission.
+    @ObservationIgnored let contacts: ContactsModel
 
     /// Whether the app may read the library.
     private(set) var access: LibraryAccess
@@ -43,6 +45,8 @@ final class CleanModel {
     @ObservationIgnored private let analysisStore: AnalysisStore
     @ObservationIgnored private var sizes: [String: ItemSize] = [:]
     @ObservationIgnored private var analyses: [String: ImageAnalysis] = [:]
+    /// The items chat apps saved, from their albums.
+    @ObservationIgnored private var chatIDs: Set<String> = []
     @ObservationIgnored private var cachesLoaded = false
     @ObservationIgnored private var scanTask: Task<Void, Never>?
     @ObservationIgnored private var summaryTask: Task<Void, Never>?
@@ -71,15 +75,18 @@ final class CleanModel {
     ///   - now: The clock, for Recenti and Accadde oggi.
     ///   - readStorage: Reads the iPhone's capacity.
     ///   - publish: Hands the space you can free to the widget; nothing by default.
+    ///   - contacts: The duplicate contacts; the device's address book when `nil`.
     init(
         library: any PhotoLibrary,
         directory: URL? = nil,
         grouper: SimilarityGrouper = SimilarityGrouper(),
         now: @escaping @Sendable () -> Date = { .now },
         readStorage: @escaping @Sendable () -> DeviceStorage? = { DeviceStorage.current() },
-        publish: @escaping @Sendable (WidgetSnapshot) -> Void = { _ in }
+        publish: @escaping @Sendable (WidgetSnapshot) -> Void = { _ in },
+        contacts: ContactsModel? = nil
     ) {
         self.library = library
+        self.contacts = contacts ?? ContactsModel(store: SystemContactStore())
         self.grouper = grouper
         self.now = now
         self.readStorage = readStorage
@@ -139,8 +146,11 @@ final class CleanModel {
         }
 
         storage = readStorage()
-        let fetched = await library.fetchItems()
-        index = await Self.makeIndex(fetched, sizes: sizes)
+        async let fetching = library.fetchItems()
+        async let fetchingChats = library.chatItemIDs()
+        let (fetched, chats) = await (fetching, fetchingChats)
+        chatIDs = chats
+        index = await Self.makeIndex(fetched, sizes: sizes, chats: chats, analyses: analyses)
         if access == .full {
             let pruned = await Self.pruned(state, keeping: index.byID)
             if pruned != state {
@@ -190,8 +200,18 @@ final class CleanModel {
     // MARK: - Off the main actor
 
     @concurrent
-    private nonisolated static func makeIndex(_ items: [MediaItem], sizes: [String: ItemSize]) async -> LibraryIndex {
-        LibraryIndex(items: items, sizes: sizes)
+    private nonisolated static func makeIndex(_ items: [MediaItem], sizes: [String: ItemSize], chats: Set<String>, analyses: [String: ImageAnalysis]) async -> LibraryIndex {
+        flagged(LibraryIndex(items: items, sizes: sizes), chats: chats, analyses: analyses)
+    }
+
+    @concurrent
+    private nonisolated static func reflag(_ index: LibraryIndex, chats: Set<String>, analyses: [String: ImageAnalysis]) async -> LibraryIndex {
+        flagged(index, chats: chats, analyses: analyses)
+    }
+
+    private nonisolated static func flagged(_ index: LibraryIndex, chats: Set<String>, analyses: [String: ImageAnalysis]) -> LibraryIndex {
+        let blurry = Set(index.items.lazy.filter { BlurCheck.isBlurry($0, analysis: analyses[$0.id]) }.map(\.id))
+        return index.flagging(chats: chats, blurry: blurry)
     }
 
     @concurrent
@@ -368,7 +388,7 @@ final class CleanModel {
         groupSelection.selected(in: kind.map(groups(of:)) ?? groups)
     }
 
-    /// Analyses the photos not analysed yet, then groups the whole library again.
+    /// Analyses the photos and videos not analysed yet, then groups the whole library again.
     func startScan() {
         guard !scan.isRunning, access.canRead else { return }
 
@@ -390,7 +410,9 @@ final class CleanModel {
 
     private func runScan() async {
         let analysed = analyses
-        let pending = items.filter { $0.kind == .photo && analysed[$0.id] == nil }.map(\.id)
+        // Photos and videos: a video's frame finds its copies and retakes. Screen recordings
+        // are left out, as screenshots are from the similar shots.
+        let pending = items.filter { !$0.isScreenRecording && analysed[$0.id] == nil }.map(\.id)
         let total = pending.count
         scan = .running(done: 0, total: total)
         let library = library
@@ -437,6 +459,7 @@ final class CleanModel {
         await store.append(unsaved)
         await store.compact(analyses, keep: Set(itemsByID.keys))
         await regroup()
+        index = await Self.reflag(index, chats: chatIDs, analyses: analyses)
         scan = Task.isCancelled ? .cancelled : .finished
         publishFreeableSpace()
     }

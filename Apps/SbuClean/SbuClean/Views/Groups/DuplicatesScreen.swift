@@ -1,7 +1,7 @@
 import SbuKit
 import SwiftUI
 
-/// Duplicates and similar photos at a glance: what is selected as the one figure, one card per
+/// Duplicates, similar photos and similar videos at a glance: what is selected as the one figure, one card per
 /// kind with its best shot, and "Elimina" at the bottom, which sends the selection to the bin
 /// for the final review.
 struct DuplicatesScreen: View {
@@ -14,7 +14,7 @@ struct DuplicatesScreen: View {
         let bytes = model.bytes(of: selected)
         ScrollView {
             VStack(alignment: .leading, spacing: SbuTheme.space6) {
-                SpaceStat(label: "Selezionati", bytes: bytes, context: "\(selected.count) foto da eliminare, la migliore di ogni gruppo resta")
+                SpaceStat(label: "Selezionati", bytes: bytes, context: "\(selected.count) da eliminare, il migliore di ogni gruppo resta")
 
                 ScanStatusView(model: model)
 
