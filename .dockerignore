@@ -1,7 +1,0 @@
-**/node_modules
-Site/dist
-Site/.astro
-.git
-.claude
-Packages
-research

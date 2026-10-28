@@ -52,7 +52,7 @@ Baseline: on 2026-10-12 `sbu.dev` did not resolve (no DNS answer), so there is n
 
 ## Security and hosting
 
-- [x] HTTPS only (Coolify, Let's Encrypt); `Site/headers.inc` (nginx) with HSTS, `X-Content-Type-Options`, `Referrer-Policy: strict-origin-when-cross-origin`, a CSP that allows only self
+- [x] HTTPS only (Coolify, Let's Encrypt); `headers.inc` di sbudotdev/site (nginx) with HSTS, `X-Content-Type-Options`, `Referrer-Policy: strict-origin-when-cross-origin`, a CSP that allows only self
 - [ ] `www.sbu.dev` → `sbu.dev` 301 in Coolify (redirect setting on the resource)
 
 ## Alternative pages

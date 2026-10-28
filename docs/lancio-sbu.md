@@ -8,7 +8,7 @@ Ordine: **Sbu Subscriptions** (punta di lancia, già pubblicata), **Sbu Find** (
 
 Stato delle app il 17/10 (lookup dell'App Store): pubblicate solo **Sbu Subscriptions 2.0.0** (id 6780154928, uscita il 15/10) e **Sbu Scanner 2.0.0** (id 6772572337, uscita il 17/10). Find in revisione. Clean, Habits, Noise, Moon respinte il 14/10, risposta in attesa. Un invio a settimana.
 
-**Repo pubblica dal 15/10/2026:** https://github.com/sbudotdev/apps, licenza MIT, cronologia ripulita dai dati personali. Issue e PR di lavoro restano nella privata `mgiuditta/sbu-apps-private`. Le segnalazioni di sicurezza arrivano dalla "private vulnerability reporting" di GitHub.
+**Repo pubblica dal 15/10/2026 (dal 29/10 in sbudotdev):** https://github.com/sbudotdev/apps, licenza MIT, cronologia ripulita dai dati personali. Issue e PR di lavoro restano nella privata `mgiuditta/sbu-apps-private`. Le segnalazioni di sicurezza arrivano dalla "private vulnerability reporting" di GitHub.
 
 ## a. Il numero
 
