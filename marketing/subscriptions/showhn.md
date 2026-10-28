@@ -22,7 +22,7 @@ Alternativa: `Show HN: Subscription tracker for iPhone, no account, no server, n
 >
 > What it does NOT do: read your bank statements or screenshots, connect to your bank, cancel subscriptions for you. It sends you to the service's page or to App Store subscriptions.
 >
-> Repo: github.com/mgiuditta/sbu-apps. Page: https://sbu.dev/apps/subscriptions
+> Repo: github.com/sbudotdev/apps. Page: https://sbu.dev/apps/subscriptions
 
 ## Risposte pronte
 
