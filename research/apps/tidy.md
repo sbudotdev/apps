@@ -1,6 +1,6 @@
 # Sbu Tidy: sintesi su Tody
 
-Originale: Tody (id 595339588, Looploop IVS). Concorrente: Sweepy (id 1498897320, Appsent). Dati: `research/595339588/` e `research/1498897320/` (`meta.json`, `screenshots/`, `reviews.json`). Ticket: mgiuditta/sbu-apps-private#477, mappa #476.
+Originale: Tody (id 595339588, Looploop IVS). Concorrente: Sweepy (id 1498897320, Appsent). Dati: `research/595339588/` e `research/1498897320/` (`meta.json`, `screenshots/`, `reviews.json`). Ticket: sbudotdev/tracker#477, mappa #476.
 
 `spec.json` non c'è: `Tools/spec.py` si ferma senza `ANTHROPIC_API_KEY` in questa sessione. Le recensioni 1-3 stelle sono state scaricate dallo stesso feed pubblico che usa `spec.py` (Atom XML), su più storefront perché il feed US tornava vuoto: 13 per Tody, 11 per Sweepy, con il campo `country`. Lo spec qui sotto è scritto a mano da listing, screenshot e recensioni.
 

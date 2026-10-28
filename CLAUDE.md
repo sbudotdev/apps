@@ -63,7 +63,7 @@ Direction **Quaderno** (v5, ADR-0013, supersedes v4 "Carta e punto fermo"): Sbu 
 
 ### Issue tracker
 
-GitHub Issues of mgiuditta/sbu-apps-private (not the public sbudotdev/apps), via `gh`. See `docs/agents/issue-tracker.md`.
+GitHub Issues of the private sbudotdev/tracker (not the public sbudotdev/apps), via `gh`. See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 

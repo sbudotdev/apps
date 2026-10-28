@@ -11,7 +11,7 @@ Issues and PRDs for this repo live as GitHub issues. Use the `gh` CLI for all op
 - **Apply / remove labels**: `gh issue edit <number> --add-label "..."` / `--remove-label "..."`
 - **Close**: `gh issue close <number> --comment "..."`
 
-Issues live in the private repo `mgiuditta/sbu-apps-private`; the public code repo `sbudotdev/apps` is not the tracker. `gh repo set-default mgiuditta/sbu-apps-private` is set in this clone; in a fresh clone pass `-R mgiuditta/sbu-apps-private`.
+Issues live in the private repo `sbudotdev/tracker`; the public code repo `sbudotdev/apps` is not the tracker. `gh repo set-default sbudotdev/tracker` is set in this clone; in a fresh clone pass `-R sbudotdev/tracker`.
 
 ## When a skill says "publish to the issue tracker"
 
