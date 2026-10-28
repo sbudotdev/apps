@@ -1,6 +1,6 @@
 # sbu-apps
 
-Monorepo of free iOS apps and games for sbu.dev: Swift 6, SwiftUI, iOS 17+, shared `Packages/SbuKit`, one XcodeGen project per app in `Apps/`. Commands and layout are in README.md.
+Monorepo of free iOS apps and games for sbu.dev: Swift 6, SwiftUI, iOS 17+, shared `Packages/SbuKit`, one XcodeGen project per app in `Apps/`. Commands and layout are in README.md. The sbu.dev site is the sibling repo `sbudotdev/site`, cloned at `../site`.
 
 sbu.dev has three branches: **App** (paid iPhone apps remade free), **Giochi** (the most played games remade without ads, ADR-0015, also in `Apps/`) and **Software** (software companies pay for, remade open source and self-hosted, ADR-0016; first project Sbu Commerce, an open source e-commerce backend, in its own repo `sbu-commerce`). The product rules below are for apps and games; Software projects follow ADR-0016.
 
@@ -23,7 +23,7 @@ Where a skill and these rules disagree, these rules win: iOS 17 deployment targe
 Direction **Quaderno** (v5, ADR-0013, supersedes v4 "Carta e punto fermo"): Sbu is a squared notebook; the full stop is the one filled cell on the page, and everything else follows from the cell. Source: `Design/tokens.json` (v5), rules and reference canvas in `Design/README.md`. Never invent a color, size, spacing, radius, duration or font.
 
 - Use `SbuTheme.<token>` (camel-cased token names: `paper`, `surfaceRaised`, `space4`, `radiusCard`, `gridCell`) and `SbuAccent.<app>`. No literal colors, spacings or durations in app code.
-- Colors and metrics are generated: edit `Design/tokens.json`, run `python3 Tools/sync_tokens.py` (it fails if a promised contrast pair drops below WCAG). Never edit `SbuTheme+Tokens.swift`, the colorsets or `Site/src/styles/tokens.css` by hand.
+- Colors and metrics are generated: edit `Design/tokens.json`, run `python3 Tools/sync_tokens.py` (it fails if a promised contrast pair drops below WCAG). Never edit `SbuTheme+Tokens.swift`, the colorsets or the site's `src/styles/tokens.css` by hand.
 - Paper and grid: every screen on `paper`. Paper areas (figure zone, empty states, first run) get the 24 pt grid with `.sbuPaper(grid: true)`; never under `List`/`Form` rows or user content (photos, PDFs, previews).
 - One figure per screen: `SbuFigure` (Bricolage ExtraBold variable, tabular, 144–216 pt on the grid, `ViewThatFits` wdth 100/87/75, one line up to AX5, one VoiceOver element), in `ink`; everything else secondary in `inkMuted`.
 - The full stop (`SbuFullStop`): states `absent`, `waiting` (`inkMuted`, nothing to count or in progress), `set` (the app's accent); sizes `hero` 24, `inline` 16, `mark` 10. Exactly one `.set` per screen or widget (DEBUG warns otherwise), never decorative, never on list containers. VoiceOver ignores it.

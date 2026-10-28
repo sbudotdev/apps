@@ -7,7 +7,7 @@
 #   subject       the instrument the icon engraves, in English: "an old iron padlock, closed" (needs GEMINI_API_KEY)
 #
 # Creates Apps/Sbu<Name> (XcodeGen project, bundle id dev.sbu.<name>, SbuKit dependency,
-# generated icon, fastlane lanes test/snapshot/frames/beta/release), the site entry Site/src/content/apps/<name>.md,
+# generated icon, fastlane lanes test/snapshot/frames/beta/release), the site entry ../site/src/content/apps/<name>.md,
 # and generates the Xcode project.
 set -euo pipefail
 
@@ -68,9 +68,9 @@ rm -rf "$tmp"
 (cd "$dest" && xcodegen generate --quiet)
 
 # Site page: only what the fastlane listing doesn't say. The site skips the app until the listing is filled in.
-site_app="$root/Site/src/content/apps/$lower.md"
+site_app="$root/../site/src/content/apps/$lower.md"
 if [[ ! -e $site_app ]]; then
-  order=$(( $(cat "$root"/Site/src/content/apps/*.md 2>/dev/null | sed -n 's/^order: //p' | sort -n | tail -1) + 1 ))
+  order=$(( $(cat "$root"/../site/src/content/apps/*.md 2>/dev/null | sed -n 's/^order: //p' | sort -n | tail -1) + 1 ))
   cat > "$site_app" <<EOF
 ---
 # Name, subtitle, description and features come from Apps/Sbu$name/fastlane/metadata. Do not repeat them here.
@@ -101,5 +101,5 @@ Next:
   1. Write the app in Apps/Sbu$name/Sbu$name (start from MainView.swift), strings in Localizable.xcstrings.
   2. Fill fastlane/metadata/{it,en-US}: subtitle and the __FEATURES__/__ONE_THING__ placeholders.
   3. cd Apps/Sbu$name && fastlane test
-  4. Site/src/content/apps/$lower.md: Originale, Cifra, FAQ; then cd Site && npm run build
+  4. ../site/src/content/apps/$lower.md: Originale, Cifra, FAQ; then cd ../site && npm run build
 EOF
