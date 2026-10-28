@@ -5,8 +5,8 @@ Free iOS apps and games from [sbu.dev](https://sbu.dev). Each app remakes a sing
 **On the App Store:** [Sbu Subscriptions](https://apps.apple.com/app/id6780154928), a free alternative to Orbit, and [Sbu Scanner](https://apps.apple.com/app/id6772572337), QR codes and barcodes without ads. One new app a week; the rest are below.
 
 <p>
-  <a href="https://sbu.dev/en/apps/subscriptions"><img src="Site/public/og/subscriptions.png" width="49%" alt="Sbu Subscriptions: what your subscriptions cost, and no renewal surprises you"></a>
-  <a href="https://sbu.dev/en/apps/scanner"><img src="Site/public/og/scanner.png" width="49%" alt="Sbu Scanner: reads any code and shows where it goes before you open it"></a>
+  <a href="https://sbu.dev/en/apps/subscriptions"><img src="https://sbu.dev/og/subscriptions.png" width="49%" alt="Sbu Subscriptions: what your subscriptions cost, and no renewal surprises you"></a>
+  <a href="https://sbu.dev/en/apps/scanner"><img src="https://sbu.dev/og/scanner.png" width="49%" alt="Sbu Scanner: reads any code and shows where it goes before you open it"></a>
 </p>
 
 Native SwiftUI, one shared design system (`Packages/SbuKit`), Italian and English, iOS 17+. The apps depend only on Apple frameworks: no third-party code, no analytics, no network. MIT licence.
@@ -16,7 +16,6 @@ Design/            design system snapshot: tokens.json, icons, logos, fonts
 Packages/SbuKit/   SwiftUI package: SbuTheme tokens, components, app shell
 Apps/Sbu<Name>/    one XcodeGen project per app, with fastlane
 Tools/             discover, spec, icons, token sync, new app scaffold
-Site/              sbu.dev: Astro + Tailwind, app text read from each app's fastlane metadata
 .claude/skills/    Swift agent skills to load before writing Swift (see CLAUDE.md)
 ```
 
@@ -50,12 +49,12 @@ Between 3 and 4 you write the app: start from `MainView.swift`, put strings in `
 
 | | |
 |---|---|
-| `sync_tokens.py` | Regenerates SbuKit colors (asset catalog, light/dark), metrics and `Site/src/styles/tokens.css` from `Design/tokens.json`. CI fails if they drift. |
+| `sync_tokens.py` | Regenerates SbuKit colors (asset catalog, light/dark), metrics and the site's `src/styles/tokens.css` (in `../site`, when cloned) from `Design/tokens.json`. CI fails if they drift. |
 | `make_icons.py` | `<name>` → engraved icon `Design/icons/sbu-<name>.png` from `engravings.json` and `source/`; `--generate` draws a new engraving with Gemini, `--appiconset`/`--artwork` write light, dark and tinted variants. |
-| `make_og.py` | Link previews (1200×630) for the site: each app's name closed by its full stop beside its engraving, and the home's title per locale, into `Site/public/og/`. Rerun after a new engraving. |
+| `make_og.py` | Link previews (1200×630) for the site: each app's name closed by its full stop beside its engraving, and the home's title per locale, into `../site/public/og/`. Rerun after a new engraving. |
 | `discover.py` | Top-paid charts (Apple marketing RSS) + iTunes Lookup: description, screenshots, price, release notes, genre. |
 | `spec.py` | Claude (`claude-opus-5-5`, vision, structured output) → `features[]`, `screens[]`, `flows[]`, `data_model`, `monetization`, `user_pains[]`. |
-| `new_app.sh` | Scaffolds `Apps/Sbu<Name>` from `Tools/templates/app` and its site entry `Site/src/content/apps/<name>.md`. |
+| `new_app.sh` | Scaffolds `Apps/Sbu<Name>` from `Tools/templates/app` and its site entry `../site/src/content/apps/<name>.md`. |
 
 Specs come only from public App Store data. Nothing here decompiles or extracts assets from other apps.
 
@@ -87,4 +86,4 @@ Live, in review and coming apps, with their pages: [sbu.dev](https://sbu.dev).
 
 ## Site
 
-`cd Site && npm install && npm run dev`. Pages are built from `src/content/apps/*.md` (accent, store id, Originale, FAQ) joined with `Apps/*/fastlane/metadata/{it,en-US}` (name, subtitle, description). An app with a content file but no listing yet gets no page: it shows on the home as "In arrivo" with the `teaser` line from its content file. Set `status: live` and `appStoreId` when an app is on the App Store; its `alternatives/<it|en>/<originale>.md` page is built only then and with `draft: false`. `SBU_DRAFTS=1 npm run build` builds drafts too. Strategy in `docs/marketing/`.
+The site lives in [sbudotdev/site](https://github.com/sbudotdev/site), cloned next to this repo (`../site`): it reads `Design/`, `research/` and the fastlane metadata from here. `cd ../site && npm install && npm run dev`. Pages are built from `src/content/apps/*.md` (accent, store id, Originale, FAQ) joined with `Apps/*/fastlane/metadata/{it,en-US}` (name, subtitle, description). An app with a content file but no listing yet gets no page: it shows on the home as "In arrivo" with the `teaser` line from its content file. Set `status: live` and `appStoreId` when an app is on the App Store; its `alternatives/<it|en>/<originale>.md` page is built only then and with `draft: false`. `SBU_DRAFTS=1 npm run build` builds drafts too. Strategy in `docs/marketing/`.

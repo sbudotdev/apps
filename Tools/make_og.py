@@ -8,7 +8,7 @@ full stop in its accent (exactly one cell), the engraving in `ink` beside it. On
 home: "App a pagamento, rifatte gratis" closed by the full stop in `brand`. Light only: previews are shown on
 someone else's page, which we don't theme.
 
-Usage: python3 Tools/make_og.py      -> Site/public/og/<name>.png, home-it.png, home-en.png
+Usage: python3 Tools/make_og.py      -> ../site/public/og/<name>.png, home-it.png, home-en.png
 """
 import json
 import re
@@ -20,10 +20,10 @@ ROOT = Path(__file__).resolve().parent.parent
 TOKENS = ROOT / "Design" / "tokens.json"
 SOURCES = ROOT / "Design" / "icons" / "source"
 SPECS = ROOT / "Design" / "icons" / "engravings.json"
-CONTENT = ROOT / "Site" / "src" / "content" / "apps"
+CONTENT = ROOT.parent / "site" / "src" / "content" / "apps"
 DISPLAY = ROOT / "Design" / "fonts" / "BricolageGrotesque-Variable.ttf"
 MONO = ROOT / "Design" / "fonts" / "IBMPlexMono-Medium.ttf"
-OUT = ROOT / "Site" / "public" / "og"
+OUT = ROOT.parent / "site" / "public" / "og"
 W, H = 1200, 630
 SCALE = 2  # preview pixels per CSS pixel
 HOME = {
@@ -154,7 +154,7 @@ def main() -> None:
             app_card(name, spec["accent"], colors, m).save(OUT / f"{name}.png", optimize=True)
     for locale, (lines, line) in HOME.items():
         home_card(lines, line, colors, m).save(OUT / f"home-{locale}.png", optimize=True)
-    print(f"wrote {len(list(OUT.glob('*.png')))} previews to {OUT.relative_to(ROOT)}")
+    print(f"wrote {len(list(OUT.glob('*.png')))} previews to {OUT}")
 
 
 if __name__ == "__main__":

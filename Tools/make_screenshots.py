@@ -68,7 +68,7 @@ def light_tokens():
 
 def catalogue_number(app):
     """The app's `order` from its site content file, for the cartiglio; None without one."""
-    content = ROOT / "Site/src/content/apps" / f"{app}.md"
+    content = ROOT.parent / "site/src/content/apps" / f"{app}.md"
     found = content.exists() and re.search(r"^order:\s*(\d+)", content.read_text(), re.M)
     return int(found.group(1)) if found else None
 

@@ -5,7 +5,7 @@ Usage: python3 Tools/sync_tokens.py
 Writes:
   Packages/SbuKit/Sources/SbuKit/Resources/Colors.xcassets/<token>.colorset
   Packages/SbuKit/Sources/SbuKit/Theme/SbuTheme+Tokens.swift
-  Site/src/styles/tokens.css
+  ../site/src/styles/tokens.css (the sbudotdev/site clone next to this repo, when present)
 """
 import json
 import re
@@ -17,7 +17,8 @@ TOKENS = ROOT / "Design" / "tokens.json"
 KIT = ROOT / "Packages" / "SbuKit" / "Sources" / "SbuKit"
 ASSETS = KIT / "Resources" / "Colors.xcassets"
 SWIFT = KIT / "Theme" / "SbuTheme+Tokens.swift"
-CSS = ROOT / "Site" / "src" / "styles" / "tokens.css"
+SITE = ROOT.parent / "site"
+CSS = SITE / "src" / "styles" / "tokens.css"
 
 
 def camel(name: str) -> str:
@@ -225,9 +226,11 @@ def main() -> None:
     SWIFT.write_text("\n".join(lines))
     print(f"{len(colors)} colors, {sum(len(g) for _, g in metrics)} metrics -> {SWIFT.relative_to(ROOT)}")
 
-    CSS.parent.mkdir(parents=True, exist_ok=True)
-    CSS.write_text(css(tokens))
-    print(f"-> {CSS.relative_to(ROOT)}")
+    if SITE.is_dir():
+        CSS.write_text(css(tokens))
+        print(f"-> {CSS}")
+    else:
+        print(f"No site clone at {SITE}: site CSS skipped")
 
 
 if __name__ == "__main__":

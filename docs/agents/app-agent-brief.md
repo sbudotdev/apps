@@ -6,7 +6,7 @@ Rules: read and follow /CLAUDE.md of the repo (it overrides anything else): desi
 Scope: the "1.0 minima" items for your app in docs/parity.md, as detailed below. Nothing from "Dopo (1.1+)". Read the linked GitHub issues (`gh issue view N --comments`) for decisions already taken.
 
 Boundaries, so the five agents don't collide:
-- Touch only Apps/<YourApp>/, Site/src/content/apps/<app>.md, research/ for your app, and docs/testbook/<app>.md. Do NOT edit Packages/SbuKit, Design/tokens.json, Tools/, .github/, other apps. If you truly need a SbuKit change, build it inside your app instead and note it in your report as a candidate for SbuKit.
+- Touch only Apps/<YourApp>/, ../site/src/content/apps/<app>.md, research/ for your app, and docs/testbook/<app>.md. Do NOT edit Packages/SbuKit, Design/tokens.json, Tools/, .github/, other apps. If you truly need a SbuKit change, build it inside your app instead and note it in your report as a candidate for SbuKit.
 - Work on a branch named app/<app>-1.0 (create it in your worktree). Commit after each completed step with a clear message ending with:
   Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
   Claude-Session: https://claude.ai/code/session_01UYFDPwfXGynLPDQ5FhVWMQ
