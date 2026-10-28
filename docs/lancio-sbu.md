@@ -112,7 +112,7 @@ Nota Find: Sbu Find non dice i metri, nessuna app può farlo con il Bluetooth. L
 
 ## g. Metriche per contenuto
 
-Ogni post o thread va in `marketing/log.md`: data, canale, link, download nei 3 giorni successivi (App Store Connect, Analisi > Sorgenti), visite a `/apps/<slug>` (log di nginx sul server Coolify: sbu.dev non è dietro Cloudflare e il sito non ha script), stelle GitHub (`gh api repos/mgiuditta/sbu-apps --jq .stargazers_count`, 1 il 17/10).
+Ogni post o thread va in `marketing/log.md`: data, canale, link, download nei 3 giorni successivi (App Store Connect, Analisi > Sorgenti), visite a `/apps/<slug>` (log di nginx sul server Coolify: sbu.dev non è dietro Cloudflare e il sito non ha script), stelle GitHub (`gh api repos/sbudotdev/apps --jq .stargazers_count`, 1 il 17/10).
 
 Obiettivi del lancio di Subscriptions: **1.000 download, 20 recensioni e 50 stelle in 14 giorni**; front page HN: 3-5 mila download. Se nessun canale supera i 150 download in 3 giorni, il problema è l'hook: si riscrive da `hooks.md` prima di Find.
 
