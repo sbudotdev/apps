@@ -1,6 +1,6 @@
 # Sbu Remote: entitlement multicast nel 2026
 
-Ticket: [#484](https://github.com/mgiuditta/sbu-apps-private/issues/484), mappa [#365](https://github.com/mgiuditta/sbu-apps-private/issues/365). Ricerca del 16/10/2026. Collegati: [#360](https://github.com/mgiuditta/sbu-apps-private/issues/360) (entitlement o solo Bonjour?), [#303](https://github.com/mgiuditta/sbu-apps-private/issues/303) (ricerca TV), [#341](https://github.com/mgiuditta/sbu-apps-private/issues/341) (Wake-on-LAN). Protocolli per marca in `research/1539090879/protocols.md`.
+Ticket: [#484](https://github.com/sbudotdev/tracker/issues/484), mappa [#365](https://github.com/sbudotdev/tracker/issues/365). Ricerca del 16/10/2026. Collegati: [#360](https://github.com/sbudotdev/tracker/issues/360) (entitlement o solo Bonjour?), [#303](https://github.com/sbudotdev/tracker/issues/303) (ricerca TV), [#341](https://github.com/sbudotdev/tracker/issues/341) (Wake-on-LAN). Protocolli per marca in `research/1539090879/protocols.md`.
 
 ## Cosa richiede l'entitlement
 

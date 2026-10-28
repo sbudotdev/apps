@@ -1,6 +1,6 @@
 # Sbu Find: Wunderfind e Find My Bluetooth Device
 
-Ticket: [#483](https://github.com/mgiuditta/sbu-apps-private/issues/483), mappa [#248](https://github.com/mgiuditta/sbu-apps-private/issues/248). Ricerca del 16/10/2026, solo dati pubblici.
+Ticket: [#483](https://github.com/sbudotdev/tracker/issues/483), mappa [#248](https://github.com/sbudotdev/tracker/issues/248). Ricerca del 16/10/2026, solo dati pubblici.
 
 Dati: `research/1458601441/` (`meta.json` da `Tools/discover.py`, 4 screenshot, `reviews.json` con 11 recensioni da 1 a 3 stelle su 50 lette dal feed RSS pubblico). `spec.json` manca: `Tools/spec.py` richiede una chiave API che in questa sessione non c'era; la sintesi sotto la sostituisce.
 
@@ -34,7 +34,7 @@ Il free tier di Wunderfind è quindi già quello che Find Air fa pagare: scansio
 5. **Dispositivo non trovato** (2): Apple Pencil in auto, AirTag mai visto.
 6. **Mappa che non si apre** (1).
 
-Rispetto a Find Air ([#158](https://github.com/mgiuditta/sbu-apps-private/issues/158)) manca la rabbia per il paywall e gli addebiti: è un acquisto unico onesto. Le nuove richieste sono il caso del singolo auricolare e le funzioni "memoria" (mappa, avviso).
+Rispetto a Find Air ([#158](https://github.com/sbudotdev/tracker/issues/158)) manca la rabbia per il paywall e gli addebiti: è un acquisto unico onesto. Le nuove richieste sono il caso del singolo auricolare e le funzioni "memoria" (mappa, avviso).
 
 ## Find My Bluetooth Device (1522814560)
 
