@@ -30,11 +30,11 @@
   .slice { width: 1320px; height: 2868px; position: relative; overflow: hidden; flex: none; }
   .preview .slice { border-radius: 12px; }
   .page { position: absolute; inset: 0; background: var(--paper); }
-  /* The grid: `grid` ink through a one-cell mask (the site's own Site/public/grid-cell.svg), a vertical
+  /* The grid: `grid` ink through a one-cell mask (a copy of the site's public/grid-cell.svg), a vertical
      line every cell from the grid offset, so the titles' margin falls on one. No gradient. */
   .page::before { content: ""; position: absolute; inset: 0; background: var(--grid);
-    -webkit-mask: url("../../Site/public/grid-cell.svg") var(--grid-offset) 0 / var(--grid-cell) var(--grid-cell) repeat;
-    mask: url("../../Site/public/grid-cell.svg") var(--grid-offset) 0 / var(--grid-cell) var(--grid-cell) repeat; }
+    -webkit-mask: url("grid-cell.svg") var(--grid-offset) 0 / var(--grid-cell) var(--grid-cell) repeat;
+    mask: url("grid-cell.svg") var(--grid-offset) 0 / var(--grid-cell) var(--grid-cell) repeat; }
 
   /* Titles: two cells a line, from the third row; the cartiglio sits on the row above. */
   .t { position: absolute; top: calc(var(--grid-cell) * 3); width: 1080px; margin: 0; color: var(--ink);

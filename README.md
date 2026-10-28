@@ -1,4 +1,4 @@
-# sbu-apps
+# sbudotdev/apps
 
 Free iOS apps and games from [sbu.dev](https://sbu.dev). Each app remakes a single paid utility from the top of the App Store, each game one of the most played free games without its ads: no subscription, no in-app purchases, no account, no ads, no tracking, data only on the device. sbu.dev's third branch, [Software](https://sbu.dev/software), remakes enterprise software as open source; its first project, Sbu Commerce, lives in its own repo.
 

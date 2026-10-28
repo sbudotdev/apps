@@ -1,6 +1,6 @@
 # Sito: cosa cambiare per la punta di lancia (15 ottobre 2026)
 
-Il sito è in questa repo (`Site/`, Astro), ma oggi non l'ho toccato: ogni modifica sotto ha un blocco tecnico o una regola contraria. Qui cosa fare, in che ordine e con quale vincolo.
+Il sito è nella repo `sbudotdev/site` (Astro, clonata in `../site`; i path `Site/` sotto sono quelli di prima del 29/10), ma oggi non l'ho toccato: ogni modifica sotto ha un blocco tecnico o una regola contraria. Qui cosa fare, in che ordine e con quale vincolo.
 
 ## 1. `/apps/auth` e `/privacy/auth`
 

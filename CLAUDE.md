@@ -1,4 +1,4 @@
-# sbu-apps
+# sbudotdev/apps
 
 Monorepo of free iOS apps and games for sbu.dev: Swift 6, SwiftUI, iOS 17+, shared `Packages/SbuKit`, one XcodeGen project per app in `Apps/`. Commands and layout are in README.md. The sbu.dev site is the sibling repo `sbudotdev/site`, cloned at `../site`.
 
@@ -63,7 +63,7 @@ Direction **Quaderno** (v5, ADR-0013, supersedes v4 "Carta e punto fermo"): Sbu 
 
 ### Issue tracker
 
-GitHub Issues of mgiuditta/sbu-apps-private (the public repo mgiuditta/sbu-apps has issues off), via `gh`. See `docs/agents/issue-tracker.md`.
+GitHub Issues of mgiuditta/sbu-apps-private (not the public sbudotdev/apps), via `gh`. See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 
