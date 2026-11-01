@@ -5,6 +5,8 @@ import SwiftUI
 struct SearchScreen: View {
     @Bindable var model: MapModel
     @State private var search = SearchModel()
+    @State private var voice = VoiceSearch()
+    @State private var listening: Task<Void, Never>?
     @FocusState private var isFocused: Bool
 
     var body: some View {
@@ -16,11 +18,17 @@ struct SearchScreen: View {
                     .autocorrectionDisabled()
                     .submitLabel(.search)
                     .textFieldStyle(.roundedBorder)
+                IconButton(title: voice.isListening ? "Ferma" : "Detta", symbol: voice.isListening ? "stop.circle" : "mic", action: toggleVoice)
             }
             .padding(.horizontal, SbuTheme.space4)
             .padding(.vertical, SbuTheme.space2)
 
             List {
+                if let problem = voice.problem {
+                    Label(problem, systemImage: "mic.slash")
+                        .font(SbuTheme.footnote)
+                        .foregroundStyle(SbuTheme.inkMuted)
+                }
                 if search.query.isEmpty {
                     if !model.store.state.recents.isEmpty {
                         Section("Recenti") {
@@ -49,7 +57,15 @@ struct SearchScreen: View {
         }
         .background(SbuTheme.paper)
         .onAppear { isFocused = true }
+        .onDisappear { voice.stop() }
         .task(id: search.query) { await search.search(near: model.location.fix?.point) }
+    }
+
+    private func toggleVoice() {
+        guard !voice.isListening else { return voice.stop() }
+        isFocused = false
+        listening?.cancel()
+        listening = Task { await voice.listen { search.query = $0 } }
     }
 
     private func row(_ place: Place, symbol: String?) -> some View {

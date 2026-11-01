@@ -2,7 +2,7 @@ import SwiftUI
 
 /// The controls the first-run tour points at.
 enum TourAnchor: Hashable {
-    case search, moment, vehicle
+    case search, answer, moment, vehicle
 }
 
 struct TourAnchorKey: PreferenceKey {

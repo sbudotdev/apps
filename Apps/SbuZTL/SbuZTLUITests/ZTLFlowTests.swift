@@ -43,8 +43,31 @@ final class ZTLFlowTests: XCTestCase {
         shot(app, "09-tour-3")
         next.tap()
         sleep(1)
-        XCTAssertFalse(next.exists)
+        shot(app, "09b-tour-4")
+        next.tap()
+        XCTAssertFalse(next.waitForExistence(timeout: 1))
+        sleep(3)
         shot(app, "10-home")
+        XCTAssertTrue(app.buttons["Cerca un luogo"].exists)
+    }
+
+    @MainActor
+    func testTheTourCanBeSkippedAndReplayed() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-uiTesting", "-AppleLanguages", "(it)", "-AppleLocale", "it_IT"]
+        app.launch()
+        app.buttons["later"].tap()
+        let skip = app.buttons["tourSkip"]
+        XCTAssertTrue(skip.waitForExistence(timeout: 5))
+        skip.tap()
+        XCTAssertFalse(app.buttons["tourNext"].waitForExistence(timeout: 1))
+        app.buttons["Impostazioni"].tap()
+        let replay = app.buttons["Rivedi l'introduzione"]
+        app.swipeUp()
+        XCTAssertTrue(replay.waitForExistence(timeout: 5))
+        replay.tap()
+        XCTAssertTrue(app.buttons["addVehicle"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["addVehicle"].isHittable)
     }
 
     @MainActor

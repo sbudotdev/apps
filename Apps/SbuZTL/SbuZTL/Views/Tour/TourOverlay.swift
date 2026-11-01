@@ -1,17 +1,22 @@
 import SbuKit
 import SwiftUI
 
-/// The first look at the map: where to search, which moment, which vehicle.
+/// The first look at the real map, on an example: where you go, the answer, your vehicle, your moment.
 struct TourOverlay: View {
+    let model: MapModel
     let anchors: [TourAnchor: Anchor<CGRect>]
-    let onFinish: () -> Void
+    /// `true` when you reached the last step, `false` when you skipped.
+    let onFinish: (Bool) -> Void
     @State private var index = 0
 
     private let steps: [(anchor: TourAnchor, text: LocalizedStringKey)] = [
-        (.search, "Cerca dove vai. Ti dico se ci puoi entrare."),
+        (.search, "Cerca dove vai."),
+        (.answer, "Ti dico subito se puoi entrare. Qui vedi il Duomo di Milano."),
         (.vehicle, "La risposta dipende dal tuo veicolo."),
-        (.moment, "E da quando guidi: scegli un altro giorno o un'altra ora."),
+        (.moment, "E dall'ora: scegli un altro giorno o un altro orario."),
     ]
+
+    private var isLast: Bool { index == steps.count - 1 }
 
     var body: some View {
         GeometryReader { proxy in
@@ -29,13 +34,16 @@ struct TourOverlay: View {
                     }
                     .compositingGroup()
                     .ignoresSafeArea()
+                    .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: SbuTheme.space3) {
                     Text(steps[index].text)
                         .font(SbuTheme.headline)
                         .foregroundStyle(SbuTheme.ink)
                         .fixedSize(horizontal: false, vertical: true)
-                    SbuButton(index == steps.count - 1 ? "Inizia" : "Avanti", action: advance)
-                        .accessibilityIdentifier("tourNext")
+                    ViewThatFits(in: .horizontal) {
+                        HStack(spacing: SbuTheme.space2) { buttons }
+                        VStack(spacing: SbuTheme.space2) { buttons }
+                    }
                 }
                 .padding(SbuTheme.space4)
                 .background(SbuTheme.surfaceRaised, in: RoundedRectangle(cornerRadius: SbuTheme.radiusLg))
@@ -46,11 +54,24 @@ struct TourOverlay: View {
         .accessibilityAddTraits(.isModal)
     }
 
-    private func advance() {
-        if index == steps.count - 1 {
-            onFinish()
-        } else {
-            index += 1
+    @ViewBuilder
+    private var buttons: some View {
+        if !isLast {
+            SbuButton("Salta", kind: .secondary) { end(completed: false) }
+                .accessibilityIdentifier("tourSkip")
         }
+        SbuButton(isLast ? "Inizia" : "Avanti", action: advance)
+            .accessibilityIdentifier("tourNext")
+    }
+
+    private func advance() {
+        guard !isLast else { return end(completed: true) }
+        index += 1
+        if steps[index].anchor == .answer { model.showExample() }
+    }
+
+    private func end(completed: Bool) {
+        model.close()
+        onFinish(completed)
     }
 }

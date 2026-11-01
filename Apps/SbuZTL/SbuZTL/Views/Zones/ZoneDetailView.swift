@@ -48,6 +48,11 @@ struct ZoneDetailView: View {
             } footer: {
                 Text("Fa fede la segnaletica. Questa app non sostituisce gli atti del Comune.")
             }
+            if let url = ReportMail.url(zone: zone.name) {
+                Section {
+                    Link("Segnala un dato sbagliato", destination: url)
+                }
+            }
         }
         .navigationTitle(zone.name)
         .navigationBarTitleDisplayMode(.inline)

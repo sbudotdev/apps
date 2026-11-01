@@ -21,7 +21,7 @@ struct AnswerCard: View {
         .padding(SbuTheme.space3)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(SbuTheme.paper, in: RoundedRectangle(cornerRadius: SbuTheme.radiusCard))
-        .overlay(RoundedRectangle(cornerRadius: SbuTheme.radiusCard).strokeBorder(tint))
+        .overlay(RoundedRectangle(cornerRadius: SbuTheme.radiusCard).strokeBorder(SbuTheme.line))
         .accessibilityElement(children: .combine)
     }
 }
