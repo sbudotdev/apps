@@ -107,8 +107,32 @@ Possibile uso e limiti:
 - Non basta contro una riserva esplicita o una licenza diversa. "Tutti i diritti riservati" (Palermo) e CC BY-NC (Verona) sono casi da chiarire col Comune.
 - Non ho letto art. 1 c. 1 lett. l-bis e l-ter del CAD né il d.lgs. 36/2006, né le note legali dei singoli siti. La stringa "tutti i diritti riservati" è stata cercata solo nelle pagine scaricate.
 
+## Seconda passata con Chrome (1/11/2026)
+
+Matteo ha chiesto di cercare i 15 comuni non riusabili sui siti ufficiali. Prevale sulla tabella sopra. Pagine lette in Chrome salvo dove indicato; ricerca con DuckDuckGo limitata ai domini comunali. Nessun file geografico scaricato.
+
+| Comune | Trovato | Effetto |
+|---|---|---|
+| Napoli | [Open data ZTL e aree pedonali](https://trasparenza.comune.napoli.it/flex/cm/pages/ServeBLOB.php/L/IT/IDPagina/46176): Shapefile, 27/10/2022, licenza indicata solo dal logo "Iodl" (versione non letta). [Mappa varchi PDF 2025](https://static-www.comune.napoli.it/wp-content/uploads/2025/05/Varchi_Perimetro_ZTL_Layout2.pdf) vista solo nei risultati | **Passa a riusabile** |
+| Brescia | [Varchi ZTL](https://dati.comune.brescia.it/dataset/varchi-ztl): CSV, 12/2025, "Creative Commons CCZero" (API). [Disciplina e Mappa](https://www.comune.brescia.it/it/documenti_pubblici/disciplina-e-mappa-ztl): licenza "Pubblico dominio", ordinanza dal 12/10/2026, planimetria 2/2024. Perimetro: nessun dataset | Resta da ridisegnare, ma con licenza dichiarata |
+| Venezia | [ZTL Auto](https://www.comune.venezia.it/it/content/ztl-centrali-mestre-0): mappa e ordinanza, pagina aggiornata 26/10/2026. Nessun dataset emerso su dati.venezia.it | Resta da ridisegnare |
+| Padova | [ZTL centro storico](https://www.comune.padova.it/zona-traffico-limitato-ztl-centro-storico): accessi e ordinanza 437/2023. dati.gov.it `ztl padova`: 0 risultati | Resta da ridisegnare |
+| Prato, Trieste | Nessun dataset ZTL emerso; le condizioni open data di Trieste valgono solo per i dataset del portale | Restano da ridisegnare |
+| Palermo | [Info e Mappa](https://repository.comune.palermo.it/polizia-municipale-info.php): orari diurni e notturni, mappa su Google. Nessun perimetro come dato | Regole ufficiali sì; resta da chiedere |
+| Bari | [Giunta, ZTL Bari Vecchia](https://www.comune.bari.it/-/ztl-bari-vecchia-giunta-approva-le-modifiche-in-vigore-dal-1%C2%B0-luglio): varco Castello e fasce dal 1/7/2026. Il filtro `q=ztl` del portale non filtra: portale **non verificato** | Regole parziali; resta da chiedere |
+| Parma | [Ordinanza](https://atti.comune.parma.it/AttiVisualizzatore/download/determina/2029318?fId=2029330) con fascia 7:30-19:30, vista solo nei risultati. Nessun dataset ZTL emerso | Resta da chiedere |
+| Messina | [Portale ZTL](https://ztl.comune.messina.it) solo per i permessi. CKAN `ztl`: 0 risultati. [Ordinanze viabili](https://dati.comune.messina.it/dataset/ordinanze-viabili) vista solo nei risultati, licenza non letta | Resta da chiedere |
+| Catania | Solo [comunicato 2022](https://www.comune.catania.it/cstampa/83484/index.html) su un'area pedonale, ZTL previste. Pagina argomento vuota | Resta da chiedere |
+| Taranto | Pagine argomento senza mappa né regole; esiste l'ufficio autorizzazioni | Resta da chiedere |
+| Verona | Pagina riaperta, licenza non visibile nel testo estratto: conflitto non risolto | Resta da chiedere |
+| Villadossola, Cuorgnè | Nessuna ZTL descritta sui siti comunali. Assenza non confermata | Restano non trovati; serve conferma del Comune |
+
+Quasi ovunque l'informazione ufficiale esiste, ma come pagina o PDF. Solo CAD art. 52 potrebbe coprire il ridisegno dove manca una licenza: serve un parere legale.
+
 ## Sintesi
 
-- **Riusabili oggi: 11** (Bergamo, Bologna, Cesena, Ferrara, Firenze, Genova, Milano, Modena, Roma, Torino, Trento), tutti con controllo di attualità da fare e varchi mancanti o non verificati a Cesena, Ferrara, Genova, Modena, Trento.
-- **Richiedono lavoro: 15**: 6 da ridisegnare (Brescia, Napoli, Padova, Prato, Trieste, Venezia), 7 da chiedere (Bari, Catania, Messina, Palermo, Parma, Taranto, Verona), 2 non trovati (Cuorgnè, Villadossola).
+Aggiornata dopo la passata con Chrome.
+
+- **Riusabili oggi: 12** (Bergamo, Bologna, Cesena, Ferrara, Firenze, Genova, Milano, Modena, Napoli, Roma, Torino, Trento), tutti con controllo di attualità da fare e varchi mancanti o non verificati a Cesena, Ferrara, Genova, Modena, Trento.
+- **Richiedono lavoro: 14**: 5 da ridisegnare (Brescia, Padova, Prato, Trieste, Venezia), 7 da chiedere (Bari, Catania, Messina, Palermo, Parma, Taranto, Verona), 2 non trovati (Cuorgnè, Villadossola).
 - **Da cui partire: Milano, Firenze, Bologna, Roma, Torino.** Hanno perimetro e varchi con licenza aperta e molti utenti potenziali; Milano e Firenze sono le più aggiornate, Roma e Torino richiedono prima di chiarire licenza e attualità.

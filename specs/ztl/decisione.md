@@ -10,8 +10,8 @@ Dettaglio in `fonti.md`. Non è parere legale, e le geometrie non sono state sca
 
 | Stato | Comuni | Quali |
 |---|---|---|
-| Licenza aperta dichiarata | 11 | Bergamo, Bologna, Cesena, Ferrara, Firenze, Genova, Milano, Modena, Roma, Torino, Trento |
-| Da ridisegnare da fonte ufficiale | 6 | Brescia, Napoli, Padova, Prato, Trieste, Venezia |
+| Licenza aperta dichiarata | 12 | Bergamo, Bologna, Cesena, Ferrara, Firenze, Genova, Milano, Modena, Napoli, Roma, Torino, Trento |
+| Da ridisegnare da fonte ufficiale | 5 | Brescia, Padova, Prato, Trieste, Venezia |
 | Da chiedere al Comune | 7 | Bari, Catania, Messina, Palermo, Parma, Taranto, Verona |
 | Non trovati | 2 | Cuorgnè, Villadossola |
 
