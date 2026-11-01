@@ -24,8 +24,9 @@ struct GuidanceBottomView: View {
     var body: some View {
         Panel {
             if model.isCameraDetached {
-                Button("Riprendi", systemImage: "location.fill") { model.followUser() }
-                .mapPill()
+                Button { model.followUser() } label: {
+                    Label("Riprendi", systemImage: "location.fill").mapPill()
+                }
                 .buttonStyle(.plain)
             }
             VStack(alignment: .leading, spacing: 2) {
@@ -51,10 +52,7 @@ struct GuidanceBottomView: View {
                     .font(SbuTheme.headline)
                     .foregroundStyle(SbuTheme.ink)
                     .accessibilityLabel(Text("Arrivo alle \(arrival.formatted(.dateTime.hour().minute()))"))
-                Button("Termina", systemImage: "xmark") { model.close() }
-                    .labelStyle(.iconOnly)
-                    .frame(minWidth: 44, minHeight: 44)
-                    .foregroundStyle(SbuTheme.ink)
+                IconButton(title: "Termina", symbol: "xmark") { model.close() }
             }
         }
         .task(id: ObjectIdentifier(guidance)) {

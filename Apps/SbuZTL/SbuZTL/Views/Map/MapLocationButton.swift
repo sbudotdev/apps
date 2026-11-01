@@ -6,13 +6,9 @@ struct MapLocationButton: View {
     let model: MapModel
 
     var body: some View {
-        Button("La tua posizione", systemImage: "location") {
+        IconButton(title: "La tua posizione", symbol: "location", isPill: true) {
             model.location.start()
             model.followUser()
         }
-        .labelStyle(.iconOnly)
-        .fontWeight(.medium)
-        .mapPill()
-        .buttonStyle(.plain)
     }
 }

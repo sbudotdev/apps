@@ -1,17 +1,13 @@
 import XCTest
 
-/// Drives the App Store screenshots for `fastlane snapshot`.
-/// First the central figure, then the privacy promise in settings.
+/// Drives the App Store screenshots for `fastlane snapshot`. The slides are written before release.
 final class SnapshotTests: XCTestCase {
     @MainActor
     func testScreenshots() {
         let app = XCUIApplication()
+        app.launchArguments = ["-uiTesting", "-withVehicle"]
         setupSnapshot(app)
         app.launch()
-
         snapshot("01-main")
-
-        app.navigationBars.buttons.element(boundBy: 0).tap()
-        snapshot("02-privacy")
     }
 }

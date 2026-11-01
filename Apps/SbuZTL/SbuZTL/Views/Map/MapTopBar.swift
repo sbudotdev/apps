@@ -15,18 +15,15 @@ struct MapTopBar: View {
 
     var body: some View {
         HStack(spacing: SbuTheme.space2) {
-            Button("Impostazioni", systemImage: "line.3.horizontal") { showSettings() }
-                .labelStyle(.iconOnly)
-                .fontWeight(.medium)
-                .mapPill()
+            IconButton(title: "Impostazioni", symbol: "line.3.horizontal", isPill: true) { showSettings() }
             Spacer(minLength: 0)
             Button {
                 isPickingTime = true
             } label: {
                 Label { momentTitle } icon: { Image(systemName: "clock") }
                     .lineLimit(1)
+                    .mapPill()
             }
-            .mapPill()
             .tourAnchor(.moment)
             vehicleMenu
                 .tourAnchor(.vehicle)

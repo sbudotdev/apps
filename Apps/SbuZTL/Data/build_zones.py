@@ -24,13 +24,14 @@ def expired(properties):
 
 
 KINDS = {"AP": "pedestrian", "DT": "noTransit", "DA": "other", "ZTL": "ztl", "AREA_C": "areaC", "AREA_B": "areaB"}
+NAMES = {"AREA_C": "Area C", "AREA_B": "Area B"}
 zones = []
 for f in json.load(open(sys.argv[1]))["features"]:
     p = f["properties"]
     if expired(p) or not polygons(f["geometry"]):
         continue
     zones.append({
-        "id": f"mi-{p['id_amat']}", "city": "milano", "name": p["nome"] or p["tipo"], "kind": KINDS[p["tipo"]],
+        "id": f"mi-{p['id_amat']}", "city": "milano", "name": NAMES.get(p["tipo"]) or p["nome"] or p["tipo"], "kind": KINDS[p["tipo"]],
         "act": p["ordinanza"], "exceptions": p["deroghe"], "section": p["tratto"], "polygons": rings(f["geometry"]),
     })
 for f in json.load(open(sys.argv[2]))["features"]:

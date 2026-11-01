@@ -26,6 +26,8 @@ final class GuidanceModel {
         self.speaks = speaks
         self.replan = replan
         tracker = GuidanceTracker(plan: plan)
+        state.remainingMetres = plan.metres
+        state.remainingSeconds = plan.seconds
     }
 
     var currentStep: RouteStep? {

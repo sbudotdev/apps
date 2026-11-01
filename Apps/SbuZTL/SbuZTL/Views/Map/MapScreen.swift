@@ -109,9 +109,7 @@ struct MapScreen: View {
                     .font(SbuTheme.subheadline)
                     .foregroundStyle(SbuTheme.ink)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Button("Chiudi", systemImage: "xmark") { model.problem = nil }
-                    .labelStyle(.iconOnly)
-                    .frame(minWidth: 44, minHeight: 44)
+                IconButton(title: "Chiudi", symbol: "xmark") { model.problem = nil }
             }
             .padding(SbuTheme.space3)
             .background(SbuTheme.surfaceRaised, in: RoundedRectangle(cornerRadius: SbuTheme.radiusCard))

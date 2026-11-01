@@ -18,19 +18,19 @@ struct RoutePreviewPanel: View {
                     .foregroundStyle(SbuTheme.inkMuted)
                 SbuFullStop(.set, size: .mark)
                 Spacer()
-                Button("Chiudi", systemImage: "xmark") { model.phase = .place(place) }
-                    .labelStyle(.iconOnly)
-                    .frame(minWidth: 44, minHeight: 44)
-                    .foregroundStyle(SbuTheme.ink)
+                IconButton(title: "Chiudi", symbol: "xmark") { model.phase = .place(place) }
             }
             Label(model.store.hasVehicle ? model.store.vehicle.nickname : String(localized: "Nessun veicolo: evito ogni zona"),
                   systemImage: model.store.vehicle.kind.symbol)
                 .font(SbuTheme.subheadline)
                 .foregroundStyle(SbuTheme.ink)
-            if let walk = plan.walkMetres, let zone = plan.destinationZone {
-                RouteNotice(symbol: "figure.walk",
-                            title: "L'arrivo è dentro \(zone)",
-                            detail: "Ti lascio al bordo, a \(Measurement(value: walk, unit: UnitLength.meters).formatted(.measurement(width: .abbreviated, usage: .road))) a piedi.")
+            if let walk = plan.walkMetres {
+                let distance = Measurement(value: walk, unit: UnitLength.meters).formatted(.measurement(width: .abbreviated, usage: .road))
+                if let zone = plan.destinationZone {
+                    RouteNotice(symbol: "figure.walk", title: "L'arrivo è dentro \(zone)", detail: "Ti lascio al bordo, a \(distance) a piedi.")
+                } else {
+                    RouteNotice(symbol: "figure.walk", title: "L'ultimo tratto è a piedi", detail: "La strada finisce a \(distance) dall'arrivo.")
+                }
             }
             if let zone = plan.startZone {
                 RouteNotice(symbol: "arrow.up.forward.circle",
