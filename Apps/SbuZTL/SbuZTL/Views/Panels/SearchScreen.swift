@@ -10,10 +10,7 @@ struct SearchScreen: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: SbuTheme.space2) {
-                Button("Chiudi", systemImage: "chevron.down") { model.phase = .home }
-                    .labelStyle(.iconOnly)
-                    .frame(minWidth: 44, minHeight: 44)
-                    .foregroundStyle(SbuTheme.ink)
+                IconButton(title: "Chiudi", symbol: "chevron.down") { model.phase = .home }
                 TextField("Nome o indirizzo", text: $search.query)
                     .focused($isFocused)
                     .autocorrectionDisabled()

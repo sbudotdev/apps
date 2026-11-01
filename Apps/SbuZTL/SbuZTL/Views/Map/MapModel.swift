@@ -68,7 +68,14 @@ final class MapModel {
             return
         }
         do {
+            let clock = ContinuousClock()
+            let began = clock.now
             let result = try await planner.plan(request(from: fix.point, to: place.point))
+            #if DEBUG
+            problem = "Calcolo: \(began.duration(to: clock.now).formatted(.units(allowed: [.milliseconds], width: .narrow)))"
+            #else
+            _ = began
+            #endif
             guard !Task.isCancelled else { return }
             phase = .preview(place, result)
             fit(result)

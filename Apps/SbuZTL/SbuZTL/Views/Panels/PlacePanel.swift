@@ -28,10 +28,7 @@ struct PlacePanel: View {
                     }
                 }
                 Spacer()
-                Button("Chiudi", systemImage: "xmark") { model.close() }
-                    .labelStyle(.iconOnly)
-                    .frame(minWidth: 44, minHeight: 44)
-                    .foregroundStyle(SbuTheme.ink)
+                IconButton(title: "Chiudi", symbol: "xmark") { model.close() }
             }
             actions
             ScrollView {

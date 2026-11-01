@@ -6,6 +6,8 @@ nonisolated struct RoutePlanner: Sendable {
     static let etaFactor = 1.4
     /// How far ahead a zone's hours matter, for one that opens during the trip.
     private static let horizon: TimeInterval = 45 * 60
+    /// Beyond this the end of the road is worth a word, even with no zone around.
+    private static let walkThreshold = 80.0
 
     let catalog: ZoneCatalog
     let graphs: @Sendable (City) async throws -> Graph
@@ -40,7 +42,8 @@ nonisolated struct RoutePlanner: Sendable {
         let end = graph.point(path.nodes[path.nodes.count - 1])
         let walk = request.destination.metres(to: end)
         return assemble(graph: graph, path: path, prefix: prefix, request: request,
-                        walkMetres: destinationZone == nil ? nil : walk, destinationZone: destinationZone, startZone: startZone)
+                        walkMetres: destinationZone != nil || walk > Self.walkThreshold ? walk : nil,
+                        destinationZone: destinationZone, startZone: startZone)
     }
 
     private func closedZones(city: City, request: RouteRequest) -> [Zone] {

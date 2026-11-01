@@ -1,16 +1,1658 @@
 {
-  "sourceLanguage" : "it",
-  "strings" : {
-    "Sbu ZTL" : {
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sbu ZTL" } }
+  "sourceLanguage": "it",
+  "strings": {
+    "Adesso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Now"
+          }
+        }
       }
     },
-    "Valore" : {
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Value" } }
+    "Aggiungi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add"
+          }
+        }
+      }
+    },
+    "Aggiungi il veicolo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add vehicle"
+          }
+        }
+      }
+    },
+    "Aggiungi la tua auto per sapere dove puoi entrare, e quando.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add your car to find out where you can enter, and when."
+          }
+        }
+      }
+    },
+    "Aggiungi permesso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add permit"
+          }
+        }
+      }
+    },
+    "Aggiungi solo i permessi che hai davvero. Non posso verificarli: l'esito per quella zona diventa \"puoi entrare\".": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only add permits you really hold. I can't check them: the answer for that zone becomes \"you can enter\"."
+          }
+        }
+      }
+    },
+    "Aggiungi veicolo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add vehicle"
+          }
+        }
+      }
+    },
+    "Aggiunto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Added"
+          }
+        }
+      }
+    },
+    "Aiuto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Help"
+          }
+        }
+      }
+    },
+    "Alimentazione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fuel"
+          }
+        }
+      }
+    },
+    "Annulla": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "Apri in Mappe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open in Maps"
+          }
+        }
+      }
+    },
+    "Area pedonale. Le deroghe sono quelle dell'atto.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pedestrian area. Exceptions are those in the city's act."
+          }
+        }
+      }
+    },
+    "Arrivato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrived"
+          }
+        }
+      }
+    },
+    "Arrivo alle %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arriving at %@"
+          }
+        }
+      }
+    },
+    "Attiva la voce": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn voice on"
+          }
+        }
+      }
+    },
+    "Atto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Act"
+          }
+        }
+      }
+    },
+    "Auto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Car"
+          }
+        }
+      }
+    },
+    "Avanti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next"
+          }
+        }
+      }
+    },
+    "Avvia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start"
+          }
+        }
+      }
+    },
+    "Avvio la navigazione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starting navigation"
+          }
+        }
+      }
+    },
+    "Benzina": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Petrol"
+          }
+        }
+      }
+    },
+    "Calcola percorso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan route"
+          }
+        }
+      }
+    },
+    "Calcolo: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planned in %@"
+          }
+        }
+      }
+    },
+    "Calendario del veicolo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vehicle calendar"
+          }
+        }
+      }
+    },
+    "Cerca dove vai. Ti dico se ci puoi entrare.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search where you're going. I'll tell you if you can enter."
+          }
+        }
+      }
+    },
+    "Cerca per nome o città": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search by name or city"
+          }
+        }
+      }
+    },
+    "Cerca un luogo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search for a place"
+          }
+        }
+      }
+    },
+    "Cerca un luogo, una via o una città.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search for a place, a street or a city."
+          }
+        }
+      }
+    },
+    "Cerco un percorso adatto al tuo veicolo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Looking for a route that suits your vehicle"
+          }
+        }
+      }
+    },
+    "Che classe Euro ha?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What Euro class is it?"
+          }
+        }
+      }
+    },
+    "Che veicolo è?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What kind of vehicle is it?"
+          }
+        }
+      }
+    },
+    "Chiudi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "Ciclomotore": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moped"
+          }
+        }
+      }
+    },
+    "Classe Euro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Euro class"
+          }
+        }
+      }
+    },
+    "Come lo chiami?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What do you call it?"
+          }
+        }
+      }
+    },
+    "Come è alimentato?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What does it run on?"
+          }
+        }
+      }
+    },
+    "Condividi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share"
+          }
+        }
+      }
+    },
+    "Conferma": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm"
+          }
+        }
+      }
+    },
+    "Continua": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        }
+      }
+    },
+    "Controlla il tuo veicolo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check your vehicle"
+          }
+        }
+      }
+    },
+    "Deroghe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exceptions"
+          }
+        }
+      }
+    },
+    "Disattiva la voce": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn voice off"
+          }
+        }
+      }
+    },
+    "E da quando guidi: scegli un altro giorno o un'altra ora.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "And on when you drive: pick another day or time."
+          }
+        }
+      }
+    },
+    "Edifici 3D": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3D buildings"
+          }
+        }
+      }
+    },
+    "Elettrica": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Electric"
+          }
+        }
+      }
+    },
+    "Elimina": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        }
+      }
+    },
+    "Evita le zone a pagamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avoid paid zones"
+          }
+        }
+      }
+    },
+    "Fa fede la segnaletica. Questa app non sostituisce gli atti del Comune.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Road signs prevail. This app doesn't replace the city's acts."
+          }
+        }
+      }
+    },
+    "Fonte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source"
+          }
+        }
+      }
+    },
+    "Fonti dei dati": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data sources"
+          }
+        }
+      }
+    },
+    "GPL o metano": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LPG or methane"
+          }
+        }
+      }
+    },
+    "Gasolio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diesel"
+          }
+        }
+      }
+    },
+    "Grafo stradale © OpenStreetMap contributors, Open Database License.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Road graph © OpenStreetMap contributors, Open Database License."
+          }
+        }
+      }
+    },
+    "Hai dichiarato un permesso per questa zona.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You declared a permit for this zone."
+          }
+        }
+      }
+    },
+    "I tuoi veicoli": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your vehicles"
+          }
+        }
+      }
+    },
+    "Ibrida": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hybrid"
+          }
+        }
+      }
+    },
+    "Impostazioni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "In quei tratti non controllo le zone. Segui la segnaletica.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I don't check zones on those stretches. Follow the road signs."
+          }
+        }
+      }
+    },
+    "In vigore dal lunedì al venerdì, 7:30-19:30, festivi esclusi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In force Monday to Friday, 7:30-19:30, except public holidays."
+          }
+        }
+      }
+    },
+    "Indietro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        }
+      }
+    },
+    "Inizia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Begin"
+          }
+        }
+      }
+    },
+    "Inverti la marcia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make a U-turn"
+          }
+        }
+      }
+    },
+    "L'arrivo è dentro %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The destination is inside %@"
+          }
+        }
+      }
+    },
+    "L'arrivo è dentro Area C": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The destination is inside Area C"
+          }
+        }
+      }
+    },
+    "L'ultimo tratto è a piedi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The last stretch is on foot"
+          }
+        }
+      }
+    },
+    "La classe Euro è sul libretto, al campo V.9. Non chiedo la targa: resta tutto sul tuo iPhone.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Euro class is on the registration document, field V.9. I don't ask for the plate: everything stays on your iPhone."
+          }
+        }
+      }
+    },
+    "La risposta dipende dal tuo veicolo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The answer depends on your vehicle."
+          }
+        }
+      }
+    },
+    "La strada finisce a %@ dall'arrivo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The road ends %@ from the destination."
+          }
+        }
+      }
+    },
+    "La tua posizione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your position"
+          }
+        }
+      }
+    },
+    "Limite %lld chilometri orari": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limit %lld kilometres per hour"
+          }
+        }
+      }
+    },
+    "Livelli": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Layers"
+          }
+        }
+      }
+    },
+    "Mantieni il nord in alto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep north up"
+          }
+        }
+      }
+    },
+    "Mappa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Map"
+          }
+        }
+      }
+    },
+    "Mappa e ricerca": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Map and search"
+          }
+        }
+      }
+    },
+    "Mappa, ricerca dei luoghi e percorso fuori dalle città coperte vengono da Apple Maps.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The map, place search and routes outside covered cities come from Apple Maps."
+          }
+        }
+      }
+    },
+    "Modifica veicolo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit vehicle"
+          }
+        }
+      }
+    },
+    "Mostra i parcheggi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show parking"
+          }
+        }
+      }
+    },
+    "Mostra le zone": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show zones"
+          }
+        }
+      }
+    },
+    "Moto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motorcycle"
+          }
+        }
+      }
+    },
+    "Nessun risultato.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No results."
+          }
+        }
+      }
+    },
+    "Nessun veicolo: evito ogni zona": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No vehicle: I avoid every zone"
+          }
+        }
+      }
+    },
+    "Nessuna zona qui": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No zone here"
+          }
+        }
+      }
+    },
+    "Nessuno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None"
+          }
+        }
+      }
+    },
+    "Nome": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        }
+      }
+    },
+    "Nome o indirizzo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name or address"
+          }
+        }
+      }
+    },
+    "Non ho orari verificati per questa zona. Segui la segnaletica.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I have no verified hours for this zone. Follow the road signs."
+          }
+        }
+      }
+    },
+    "Non in vigore a quest'ora.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not in force at this time."
+          }
+        }
+      }
+    },
+    "Non lo so": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I don't know"
+          }
+        }
+      }
+    },
+    "Non puoi entrare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You cannot enter"
+          }
+        }
+      }
+    },
+    "Non risultano limiti in questo punto. Fa fede la segnaletica.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No restrictions on record at this point. Road signs prevail."
+          }
+        }
+      }
+    },
+    "Non trovo la tua posizione. Riprova tra poco.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I can't find your position. Try again soon."
+          }
+        }
+      }
+    },
+    "Non trovo un percorso che rispetti le zone. Controlla veicolo e orario, o scegli un altro arrivo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I can't find a route that respects the zones. Check vehicle and time, or pick another destination."
+          }
+        }
+      }
+    },
+    "Oggi è il patrono: l'atto non lo cita. Segui la segnaletica.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today is the patron saint's day: the act doesn't mention it. Follow the road signs."
+          }
+        }
+      }
+    },
+    "Pannello": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Panel"
+          }
+        }
+      }
+    },
+    "Parte del percorso è fuori copertura": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Part of the route is outside coverage"
+          }
+        }
+      }
+    },
+    "Parte del percorso è fuori copertura.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Part of the route is outside coverage."
+          }
+        }
+      }
+    },
+    "Parti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set off"
+          }
+        }
+      }
+    },
+    "Parti dentro %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You start inside %@"
+          }
+        }
+      }
+    },
+    "Per esempio Panda": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For example Panda"
+          }
+        }
+      }
+    },
+    "Per i festivi non ho una fonte certa. Segui la segnaletica.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I have no firm source for public holidays. Follow the road signs."
+          }
+        }
+      }
+    },
+    "Per moto e ciclomotori le date dei divieti non sono confermate.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For motorcycles and mopeds the ban dates are not confirmed."
+          }
+        }
+      }
+    },
+    "Per moto e ciclomotori non ho una fonte certa.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I have no firm source for motorcycles and mopeds."
+          }
+        }
+      }
+    },
+    "Per questa alimentazione non ho letto una regola certa.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I haven't read a firm rule for this fuel."
+          }
+        }
+      }
+    },
+    "Percorso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Route"
+          }
+        }
+      }
+    },
+    "Percorso ricalcolato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Route updated"
+          }
+        }
+      }
+    },
+    "Perimetri dai dati aperti dei Comuni. Verificati il 1 novembre 2026.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perimeters from the cities' open data. Checked on 1 November 2026."
+          }
+        }
+      }
+    },
+    "Permessi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permits"
+          }
+        }
+      }
+    },
+    "Permetti la posizione nelle Impostazioni per calcolare il percorso.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow location in Settings to plan the route."
+          }
+        }
+      }
+    },
+    "Più tardi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Later"
+          }
+        }
+      }
+    },
+    "Preferiti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favourites"
+          }
+        }
+      }
+    },
+    "Prosegui": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        }
+      }
+    },
+    "Prova su strada": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Road test"
+          }
+        }
+      }
+    },
+    "Punto sulla mappa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Point on the map"
+          }
+        }
+      }
+    },
+    "Puoi entrare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can enter"
+          }
+        }
+      }
+    },
+    "Puoi entrare pagando": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can enter by paying"
+          }
+        }
+      }
+    },
+    "Quando guidi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When you drive"
+          }
+        }
+      }
+    },
+    "Questa classe Euro non è vietata.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This Euro class is not banned."
+          }
+        }
+      }
+    },
+    "Qui non ho dati. Segui la segnaletica.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I have no data here. Follow the road signs."
+          }
+        }
+      }
+    },
+    "Recenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recent"
+          }
+        }
+      }
+    },
+    "Ricalcolo il percorso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Updating the route"
+          }
+        }
+      }
+    },
+    "Riprendi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume"
+          }
+        }
+      }
+    },
+    "Rivedi l'introduzione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replay the introduction"
+          }
+        }
+      }
+    },
+    "Salva": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        }
+      }
+    },
+    "Salva il veicolo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save vehicle"
+          }
+        }
+      }
+    },
+    "Salva un luogo per ritrovarlo qui.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save a place to find it here."
+          }
+        }
+      }
+    },
+    "Salvato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved"
+          }
+        }
+      }
+    },
+    "Sbu ZTL": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu ZTL"
+          }
+        }
+      }
+    },
+    "Scegli un veicolo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a vehicle"
+          }
+        }
+      }
+    },
+    "Scegli una ZTL": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a ZTL"
+          }
+        }
+      }
+    },
+    "Se lo spegni, il percorso può attraversare Area C: il ticket lo paghi tu sul sito del Comune.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If you turn this off, the route can cross Area C: you pay the ticket yourself on the city's site."
+          }
+        }
+      }
+    },
+    "Segnala un dato sbagliato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Report wrong data"
+          }
+        }
+      }
+    },
+    "Segnale GPS debole. Percorso mantenuto.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weak GPS signal. Route kept."
+          }
+        }
+      }
+    },
+    "Segui la segnaletica.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follow the road signs."
+          }
+        }
+      }
+    },
+    "Sei a destinazione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You have arrived"
+          }
+        }
+      }
+    },
+    "Serve un permesso per questo settore.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This sector needs a permit."
+          }
+        }
+      }
+    },
+    "Si entra pagando il ticket giornaliero.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You enter by paying the daily ticket."
+          }
+        }
+      }
+    },
+    "Strade": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Roads"
+          }
+        }
+      }
+    },
+    "Sul percorso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On route"
+          }
+        }
+      }
+    },
+    "Svolta a destra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn right"
+          }
+        }
+      }
+    },
+    "Svolta a sinistra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn left"
+          }
+        }
+      }
+    },
+    "Svolta tutto a destra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn sharp right"
+          }
+        }
+      }
+    },
+    "Svolta tutto a sinistra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn sharp left"
+          }
+        }
+      }
+    },
+    "Termina": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End"
+          }
+        }
+      }
+    },
+    "Ti lascio al bordo, a %@ a piedi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I'll leave you at the edge, %@ on foot."
+          }
+        }
+      }
+    },
+    "Ti lascio al bordo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I'll leave you at the edge."
+          }
+        }
+      }
+    },
+    "Ti porto fuori dalla via più breve. Questo tratto non lo posso evitare.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I'll take you out the shortest way. I can't avoid this stretch."
+          }
+        }
+      }
+    },
+    "Ticket": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ticket"
+          }
+        }
+      }
+    },
+    "Tieni la destra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep right"
+          }
+        }
+      }
+    },
+    "Tieni la sinistra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep left"
+          }
+        }
+      }
+    },
+    "Torna ad adesso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back to now"
+          }
+        }
+      }
+    },
+    "Tra %lld metri, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %lld metres, %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Tra %1$lld metri, %2$@"
+          }
+        }
+      }
+    },
+    "Tra %lld metri, %@, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %lld metres, %@, %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Tra %1$lld metri, %2$@, %3$@"
+          }
+        }
+      }
+    },
+    "Tratto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stretch"
+          }
+        }
+      }
+    },
+    "Veicoli e accessi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vehicles and access"
+          }
+        }
+      }
+    },
+    "Veicolo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vehicle"
+          }
+        }
+      }
+    },
+    "Verificata il": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checked on"
+          }
+        }
+      }
+    },
+    "Vietata a questa classe Euro nei giorni e negli orari in vigore.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Banned for this Euro class on the days and at the hours in force."
+          }
+        }
+      }
+    },
+    "Vietata a questa classe Euro.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Banned for this Euro class."
+          }
+        }
+      }
+    },
+    "ZTL": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ZTL"
+          }
+        }
+      }
+    },
+    "Zona non attiva": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zone not in force"
+          }
+        }
+      }
+    },
+    "Zona non coperta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Area not covered"
+          }
+        }
+      }
+    },
+    "Zone": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zones"
+          }
+        }
+      }
+    },
+    "openstreetmap.org/copyright": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "openstreetmap.org/copyright"
+          }
+        }
       }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

@@ -35,14 +35,10 @@ struct GuidanceTopView: View {
                     SpeedLimitBadge(kph: guidance.state.limit)
                 }
                 Spacer()
-                Button(guidance.speaks ? "Disattiva la voce" : "Attiva la voce", systemImage: guidance.speaks ? "speaker.wave.2" : "speaker.slash") {
+                IconButton(title: guidance.speaks ? "Disattiva la voce" : "Attiva la voce", symbol: guidance.speaks ? "speaker.wave.2" : "speaker.slash", isPill: true) {
                     guidance.speaks.toggle()
                     model.store.state.speaks = guidance.speaks
                 }
-                .labelStyle(.iconOnly)
-                .fontWeight(.medium)
-                .mapPill()
-                .buttonStyle(.plain)
             }
         }
         .padding(.horizontal, SbuTheme.space4)
