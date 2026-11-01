@@ -431,6 +431,16 @@
         }
       }
     },
+    "Dati di %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ data"
+          }
+        }
+      }
+    },
     "Deroghe": {
       "localizations": {
         "en": {
@@ -457,6 +467,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Turn voice off"
+          }
+        }
+      }
+    },
+    "Domenica ecologica: veicoli e deroghe li decide ogni volta un'ordinanza. Segui la segnaletica.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ecological Sunday: an ordinance sets vehicles and exceptions each time. Follow the signs."
           }
         }
       }
@@ -591,6 +611,16 @@
         }
       }
     },
+    "Grafo stradale e parcheggi © OpenStreetMap contributors, Open Database License.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Road graph and parkings © OpenStreetMap contributors, Open Database License."
+          }
+        }
+      }
+    },
     "Grafo stradale © OpenStreetMap contributors, Open Database License.": {
       "localizations": {
         "en": {
@@ -631,6 +661,36 @@
         }
       }
     },
+    "Il Tridente vale dal lunedì al venerdì 6:30-19, sabato 10-19, festivi esclusi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Tridente applies Monday to Friday 6:30-19, Saturday 10-19, holidays excluded."
+          }
+        }
+      }
+    },
+    "Il percorso non evita ciò che non conosco": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The route doesn't avoid what I don't know"
+          }
+        }
+      }
+    },
+    "Il perimetro ufficiale non ha un nome: non so quali regole ha. Segui la segnaletica.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The official perimeter has no name: I don't know its rules. Follow the signs."
+          }
+        }
+      }
+    },
     "Il riconoscimento sull'iPhone non è disponibile. Usa il microfono della tastiera.": {
       "localizations": {
         "en": {
@@ -661,12 +721,72 @@
         }
       }
     },
+    "In vigore dal lunedì al sabato 24 ore su 24, esclusi i festivi infrasettimanali.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In force Monday to Saturday, 24 hours a day, midweek holidays excluded."
+          }
+        }
+      }
+    },
+    "In vigore dal lunedì al sabato 6:30-10, festivi esclusi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In force Monday to Saturday 6:30-10, holidays excluded."
+          }
+        }
+      }
+    },
+    "In vigore dal lunedì al venerdì 6:30-18, sabato 14-18, festivi esclusi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In force Monday to Friday 6:30-18, Saturday 14-18, holidays excluded."
+          }
+        }
+      }
+    },
+    "In vigore dal lunedì al venerdì 7:30-10:30, festivi esclusi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In force Monday to Friday 7:30-10:30, holidays excluded."
+          }
+        }
+      }
+    },
     "In vigore dal lunedì al venerdì, 7:30-19:30, festivi esclusi.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "In force Monday to Friday, 7:30-19:30, except public holidays."
+          }
+        }
+      }
+    },
+    "In vigore venerdì e sabato 21:30-3, da maggio a ottobre anche mercoledì e giovedì. Ad agosto non è attiva.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In force Friday and Saturday 21:30-3, from May to October also Wednesday and Thursday. Not active in August."
+          }
+        }
+      }
+    },
+    "In vigore venerdì e sabato 23-3, festivi esclusi. Ad agosto non è attiva.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In force Friday and Saturday 23-3, holidays excluded. Not active in August."
           }
         }
       }
@@ -731,12 +851,62 @@
         }
       }
     },
+    "La Zona T è limitata tutti i giorni, 24 ore su 24.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zona T is restricted every day, 24 hours a day."
+          }
+        }
+      }
+    },
+    "La Zona T è limitata tutti i giorni, 24 ore su 24. Serve un'autorizzazione.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zona T is restricted every day, 24 hours a day. You need an authorisation."
+          }
+        }
+      }
+    },
     "La classe Euro è sul libretto, al campo V.9. Non chiedo la targa: resta tutto sul tuo iPhone.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "The Euro class is on the registration document, field V.9. I don't ask for the plate: everything stays on your iPhone."
+          }
+        }
+      }
+    },
+    "La limitazione è 7-20, ma non ho una fonte letta sui giorni. Dentro ci sono zone attive 24 ore su 24 senza perimetro.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The restriction is 7-20, but I haven't read a source on the days. Inside are zones active 24 hours a day, without a perimeter."
+          }
+        }
+      }
+    },
+    "La limitazione è 7-20, ma per moto e ciclomotori non ho una fonte certa.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The restriction is 7-20, but I have no certain source for motorbikes and mopeds."
+          }
+        }
+      }
+    },
+    "La proroga che ho letto finisce il 31 ottobre 2027. Segui la segnaletica.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The extension I read ends on 31 October 2027. Follow the signs."
           }
         }
       }
@@ -787,6 +957,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Layers"
+          }
+        }
+      }
+    },
+    "Mancano alcuni perimetri": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some perimeters are missing"
           }
         }
       }
@@ -871,6 +1051,26 @@
         }
       }
     },
+    "Moto e ciclomotori sono esenti in ZTL Centrale.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motorbikes and mopeds are exempt in ZTL Centrale."
+          }
+        }
+      }
+    },
+    "Moto e ciclomotori sono liberi in questa ZTL.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motorbikes and mopeds are free in this ZTL."
+          }
+        }
+      }
+    },
     "Nessun risultato.": {
       "localizations": {
         "en": {
@@ -927,6 +1127,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Name or address"
+          }
+        }
+      }
+    },
+    "Non ho i perimetri delle zone Pedonale, Romana, Valentino e delle corsie riservate.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I don't have the perimeters of the Pedonale, Romana and Valentino zones or of the reserved lanes."
+          }
+        }
+      }
+    },
+    "Non ho i perimetri di Tridente e Testaccio: possono valere regole che non vedo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I don't have the perimeters of Tridente and Testaccio: rules I can't see may apply."
+          }
+        }
+      }
+    },
+    "Non ho i perimetri di Università, San Francesco-Pratello e Moline-Capo di Lucca, attive 24 ore su 24.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I don't have the perimeters of Università, San Francesco-Pratello and Moline-Capo di Lucca, active 24 hours a day."
           }
         }
       }
@@ -1031,6 +1261,16 @@
         }
       }
     },
+    "Parcheggio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parking"
+          }
+        }
+      }
+    },
     "Parte del percorso è fuori copertura": {
       "localizations": {
         "en": {
@@ -1117,6 +1357,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "I haven't read a firm rule for this fuel."
+          }
+        }
+      }
+    },
+    "Per questo giorno le fonti non dicono se vale. Segui la segnaletica.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The sources don't say whether it applies on this day. Follow the signs."
           }
         }
       }
@@ -1281,12 +1531,52 @@
         }
       }
     },
+    "Questa classe non è vietata in Fascia Verde. Le ZTL hanno regole proprie.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This class isn't banned in Fascia Verde. ZTLs have their own rules."
+          }
+        }
+      }
+    },
     "Qui non ho dati. Segui la segnaletica.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "I have no data here. Follow the road signs."
+          }
+        }
+      }
+    },
+    "Qui non ho zone, ma non ho tutti i perimetri. Segui la segnaletica.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I have no zone here, but I don't have every perimeter. Follow the signs."
+          }
+        }
+      }
+    },
+    "Qui può esserci il Tridente, attivo in questo orario. Non ho il suo perimetro: segui la segnaletica.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Tridente may be here, active at this time. I don't have its perimeter: follow the signs."
+          }
+        }
+      }
+    },
+    "Qui può esserci il Tridente, dove anche le moto hanno bisogno del permesso. Non ho il suo perimetro: segui la segnaletica.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Tridente may be here, where motorbikes need a permit too. I don't have its perimeter: follow the signs."
           }
         }
       }
@@ -1481,6 +1771,26 @@
         }
       }
     },
+    "Serve un permesso. Alcuni casi si regolarizzano comunicando la targa a GTT entro 10 giorni.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You need a permit. Some cases are settled by giving your plate to GTT within 10 days."
+          }
+        }
+      }
+    },
+    "Serve un permesso. Esenti taxi, NCC e CUDE con il titolare a bordo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You need a permit. Exempt: taxis, private hire and CUDE with the holder on board."
+          }
+        }
+      }
+    },
     "Si entra pagando il ticket giornaliero.": {
       "localizations": {
         "en": {
@@ -1497,6 +1807,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Roads"
+          }
+        }
+      }
+    },
+    "Strade e parcheggi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Roads and parkings"
           }
         }
       }
@@ -1719,6 +2039,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Banned for this Euro class on the days and at the hours in force."
+          }
+        }
+      }
+    },
+    "Vietata a questa classe Euro nei giorni in vigore.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Closed to this Euro class on the days in force."
           }
         }
       }

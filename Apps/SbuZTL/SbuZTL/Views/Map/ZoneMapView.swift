@@ -7,6 +7,7 @@ struct ZoneMapView: View {
     @Bindable var model: MapModel
     let route: RoutePlan?
     let marker: Place?
+    @State private var visibleRegion: MKCoordinateRegion?
 
     private struct Overlay: Identifiable {
         let id: String
@@ -25,6 +26,12 @@ struct ZoneMapView: View {
         }
     }
 
+    private var parkings: [Parking] {
+        guard model.store.state.showsParking, let region = visibleRegion else { return [] }
+        return ParkingCatalog.bundled.visible(latitude: region.center.latitude, longitude: region.center.longitude,
+                                              latitudeDelta: region.span.latitudeDelta, longitudeDelta: region.span.longitudeDelta)
+    }
+
     var body: some View {
         MapReader { proxy in
             Map(position: $model.camera) {
@@ -41,11 +48,17 @@ struct ZoneMapView: View {
                     Marker(marker.name, coordinate: marker.point.coordinate)
                         .tint(SbuTheme.ink)
                 }
+                ForEach(parkings) { parking in
+                    Annotation(parking.name, coordinate: parking.point.coordinate) {
+                        ParkingMark(name: parking.name)
+                    }
+                    .annotationTitles(.hidden)
+                }
                 UserAnnotation()
             }
-            .mapStyle(.standard(elevation: model.store.state.shows3D ? .realistic : .flat,
-                                pointsOfInterest: model.store.state.showsParking ? .all : .excluding([.parking])))
+            .mapStyle(.standard(elevation: model.store.state.shows3D ? .realistic : .flat, pointsOfInterest: .excluding([.parking])))
             .mapControls {}
+            .onMapCameraChange(frequency: .onEnd) { visibleRegion = $0.region }
             .onTapGesture { position in
                 if let coordinate = proxy.convert(position, from: .local) {
                     model.selectPoint(Point(coordinate))
