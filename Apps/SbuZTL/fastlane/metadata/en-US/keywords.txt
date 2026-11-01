@@ -1,1 +1,1 @@
-
+ztl,limited traffic zone,italy,area c,navigation,milan,rome,florence,turin,bologna,permit,fines

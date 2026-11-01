@@ -1,10 +1,17 @@
-No subscription.
-No in-app purchases.
-No account.
-No ads.
-No tracking.
-Data stays on your device.
+Sbu ZTL tells you whether your vehicle can enter an Italian limited traffic zone at a given time, and drives you to your destination without entering it.
 
-__FEATURES_EN__
+The map colors the zones for your vehicle and the moment you pick.
+Tap a place and read the answer: you can enter, you can enter by paying, you can't enter, or I don't know.
+Every answer has its reason, source and verification date.
+The vehicle calendar shows when a zone is open to you.
+Declare your permits, zone by zone.
+Turn-by-turn guidance has a voice and works with the screen locked.
+If your destination is inside a zone, it leaves you at the edge and tells you how far to walk.
 
-Sbu does one thing: __ONE_THING_EN__
+Covered cities: Milan, Florence, Bologna, Rome and Turin. Where data is missing or unverified, the app says it doesn't know.
+
+Road signs prevail. The app doesn't replace the city's acts and doesn't guarantee you won't get a fine.
+
+Sbu does one thing: it tells you where your vehicle can enter, and takes you there.
+
+No subscription · No in-app purchases · No account · No ads · No tracking · Data stays on your device
