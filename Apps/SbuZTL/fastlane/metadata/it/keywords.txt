@@ -1,1 +1,1 @@
-
+ztl,zona traffico limitato,area c,area b,navigatore,varchi,multe,permessi,milano,roma,firenze,euro

@@ -1,10 +1,17 @@
-Nessun abbonamento.
-Nessun acquisto in-app.
-Nessun account.
-Nessuna pubblicità.
-Nessun tracking.
-Dati solo sul dispositivo.
+Sbu ZTL ti dice se puoi entrare in una zona a traffico limitato con il tuo veicolo, a quell'ora, e ti porta a destinazione senza entrarci.
 
-__FEATURES_IT__
+La mappa colora le zone secondo il tuo veicolo e il momento che scegli.
+Tocchi un luogo e leggi la risposta: puoi entrare, puoi entrare pagando, non puoi entrare, oppure non lo so.
+Ogni risposta ha il motivo, la fonte e la data di verifica.
+Il calendario del veicolo mostra quando una zona è aperta per te.
+Dichiari i tuoi permessi, zona per zona.
+La guida svolta per svolta ha la voce e funziona anche con lo schermo bloccato.
+Se l'arrivo è dentro una zona, ti lascia al bordo e ti dice quanto resta a piedi.
 
-Sbu fa una cosa sola: __ONE_THING_IT__
+Comuni coperti: Milano, Firenze, Bologna, Roma e Torino. Dove i dati mancano o non sono verificati, l'app dice che non lo sa.
+
+Fa fede la segnaletica. L'app non sostituisce gli atti del Comune e non garantisce che tu non prenda una multa.
+
+Sbu fa una cosa sola: ti dice dove puoi entrare con il tuo veicolo, e ti ci porta.
+
+Nessun abbonamento · Nessun acquisto in-app · Nessun account · Nessuna pubblicità · Nessun tracking · Dati solo sul dispositivo

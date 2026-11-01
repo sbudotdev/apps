@@ -1,0 +1,9 @@
+No account. No server of ours, no analytics, ads or tracking. The only network use is Apple's: MapKit for the map, place search and the approach route outside the bundled road graph. Vehicles, permits and places stay on the device. Voice search runs on device only.
+
+To review:
+1. First run: add a vehicle or tap "Più tardi" (Later), then follow the four-step tour.
+2. Search "Duomo Milano" and tap the result: the panel shows the answer for your vehicle and moment, with its zones and sources.
+3. Change the time from "Adesso" (Now) at the top: the zones and the answer change. Area C is off at weekends.
+4. Tap "Calcola percorso" (Plan route), then "Avvia" (Start). This needs a location in a covered city; in the Simulator set a location in Milan.
+
+Background modes: location and audio are used only during turn-by-turn guidance, for the position and the spoken directions with the screen locked.
