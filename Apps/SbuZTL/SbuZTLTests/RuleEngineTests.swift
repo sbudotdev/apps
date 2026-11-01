@@ -108,6 +108,6 @@ nonisolated struct RuleEngineTests {
         #expect(here.contains { $0.kind == .areaC })
         #expect(here.contains { $0.kind == .areaB })
         #expect(catalog.city(at: duomo) == .milano)
-        #expect(catalog.city(at: Point(41.9, 12.5)) == nil)
+        #expect(catalog.city(at: Point(40.85, 14.27)) == nil) // Napoli
     }
 }
