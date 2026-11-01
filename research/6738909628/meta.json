@@ -1,0 +1,34 @@
+{
+  "id": "6738909628",
+  "name": "ZigZag: navigatore ZTL",
+  "developer": "The Stolen Spot S.R.L.",
+  "bundle_id": "com.thestolenspot.lookpark",
+  "store_country": "it",
+  "ranks": {},
+  "price": 0.0,
+  "formatted_price": "Gratis",
+  "currency": "EUR",
+  "genre": "Navigation",
+  "genres": [
+    "Navigazione",
+    "Viaggi"
+  ],
+  "description": "ZigZag ti aiuta a muoverti tra le zone a traffico limitato (ZTL) italiane con le informazioni giuste per la tua auto.\n\nCittà coperte\nConsulta le ZTL e le aree pedonali pubblicate per Milano, Roma, Firenze, Torino, Bologna, Bergamo, Brescia, Cesena e Trento. Tra le zone presenti trovi Area B e Area C a Milano, Scudo Verde a Firenze e Città Alta a Bergamo. La copertura comprende anche Villadossola e Cuorgnè, dove la ricerca pubblicata ha rilevato l'assenza di ZTL nelle aree verificate.\n\nCerca un luogo, esplora la mappa e controlla se puoi entrare nelle ZTL coperte. Aggiungi le caratteristiche del veicolo e gli eventuali permessi: quando le fonti disponibili consentono una verifica, ZigZag ti mostra una risposta personalizzata e le condizioni di accesso.\n\nConsulta le regole e gli orari delle zone, salva i luoghi che ti interessano e scegli quando viaggiare. Mappa, ricerca, preferiti, gestione dei veicoli e verifica dell'accesso attuale sono gratuiti. ZigZag Pro include la verifica per un'altra data e ora, il calendario del veicolo e la navigazione interna.\n\nLa copertura viene ampliata nel tempo. Se una zona non è coperta o manca un dato decisivo, ZigZag te lo segnala. La navigazione non garantisce l'assenza di restrizioni: verifica sempre la segnaletica e le comunicazioni ufficiali prima di entrare.\n\nPrivacy: https://privacy.zigzagmaps.com/\nTermini: https://privacy.zigzagmaps.com/terms.html",
+  "release_notes": "Abbiamo rinnovato l’introduzione a ZigZag e semplificato l’accesso a ZigZag Pro. Migliorati i controlli di navigazione su CarPlay.",
+  "version": "0.4.14",
+  "current_version_release_date": "2026-10-27T22:40:51Z",
+  "rating": 4.73536,
+  "rating_count": 752,
+  "minimum_os": "15.5",
+  "url": "https://apps.apple.com/it/app/zigzag-navigatore-ztl/id6738909628?uo=4",
+  "screenshot_urls": [
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/7b/d8/85/7bd88506-3f18-fdb7-2d54-5e1bebd58f44/01.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/4d/b6/21/4db62197-fe68-f21d-e975-55a3d831ac61/02.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/da/00/6d/da006d16-7b3c-d9cd-3473-e12b7cf51502/03.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/39/70/be/3970be15-5de9-db42-1eff-66ce43c3ea31/04.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/e6/24/df/e624df08-7f4d-9b41-7218-d02c4ad700aa/05.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/a2/65/01/a2650192-ca63-b61c-d11e-7dad67a462da/06.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/9c/75/a0/9c75a0b1-94f0-5edc-2cc0-5f717529b43c/07.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/b4/10/6c/b4106c63-c7eb-d1c4-056b-c184280e5116/08.png/320x480bb.jpg"
+  ]
+}
