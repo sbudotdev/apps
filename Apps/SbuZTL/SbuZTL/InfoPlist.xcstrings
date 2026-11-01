@@ -9,6 +9,20 @@
         "it" : { "stringUnit" : { "state" : "translated", "value" : "Sbu ZTL" } }
       }
     },
+    "NSMicrophoneUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sbu ZTL listens to the place you say. The audio stays on your iPhone." } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Sbu ZTL ascolta il luogo che dici. L'audio resta sull'iPhone." } }
+      }
+    },
+    "NSSpeechRecognitionUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sbu ZTL recognizes the place you say directly on your iPhone." } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Sbu ZTL riconosce il luogo che dici direttamente sull'iPhone." } }
+      }
+    },
     "NSLocationWhenInUseUsageDescription" : {
       "extractionState" : "manual",
       "localizations" : {

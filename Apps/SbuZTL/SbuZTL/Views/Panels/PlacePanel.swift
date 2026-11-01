@@ -33,7 +33,7 @@ struct PlacePanel: View {
             actions
             ScrollView {
                 VStack(alignment: .leading, spacing: SbuTheme.space3) {
-                    answer
+                    answer.tourAnchor(.answer)
                     ForEach(verdicts, id: \.zone.id) { item in
                         NavigationLink {
                             ZoneDetailView(model: model, zone: item.zone)

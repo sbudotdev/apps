@@ -5,6 +5,8 @@ import SwiftUI
 struct ZoneRow: View {
     let zone: Zone
     let verdict: Verdict
+    /// A `List` draws its own for a `NavigationLink`.
+    var showsChevron = true
 
     var body: some View {
         HStack(spacing: SbuTheme.space3) {
@@ -16,8 +18,10 @@ struct ZoneRow: View {
                 Text(verdict.access.headline).font(SbuTheme.footnote).foregroundStyle(SbuTheme.inkMuted)
             }
             Spacer(minLength: 0)
-            Image(systemName: "chevron.right").font(SbuTheme.footnote).foregroundStyle(SbuTheme.inkMuted)
-                .accessibilityHidden(true)
+            if showsChevron {
+                Image(systemName: "chevron.right").font(SbuTheme.footnote).foregroundStyle(SbuTheme.inkMuted)
+                    .accessibilityHidden(true)
+            }
         }
         .frame(minHeight: 44)
         .contentShape(Rectangle())

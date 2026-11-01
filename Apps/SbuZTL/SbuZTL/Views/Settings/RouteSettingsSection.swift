@@ -6,6 +6,7 @@ struct RouteSettingsSection: View {
     @Bindable var store: AppStore
     let catalog: ZoneCatalog
     let replayIntro: () -> Void
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         Section("Veicoli e accessi") {
@@ -25,9 +26,12 @@ struct RouteSettingsSection: View {
             Toggle("Mostra i parcheggi", isOn: $store.state.showsParking)
         }
         Section("Aiuto") {
-            Button("Rivedi l'introduzione", action: replayIntro)
+            Button("Rivedi l'introduzione") {
+                dismiss()
+                replayIntro()
+            }
             NavigationLink("Fonti dei dati") { DataSourcesView() }
-            if let url = URL(string: "https://github.com/sbudotdev/apps/issues/new") {
+            if let url = ReportMail.url() {
                 Link("Segnala un dato sbagliato", destination: url)
             }
         }

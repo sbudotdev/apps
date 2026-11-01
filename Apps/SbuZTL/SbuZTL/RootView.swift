@@ -9,6 +9,7 @@ struct RootView: View {
     @State private var isTourRunning = false
     @State private var showsFirstRun: Bool
     @State private var addedVehicle = false
+    @State private var isReady = false
 
     init(store: AppStore, location: LocationService) {
         _store = State(initialValue: store)
@@ -22,7 +23,7 @@ struct RootView: View {
                 .toolbar(.hidden, for: .navigationBar)
                 .overlayPreferenceValue(TourAnchorKey.self) { anchors in
                     if isTourRunning {
-                        TourOverlay(anchors: anchors, onFinish: finishTour)
+                        TourOverlay(model: model, anchors: anchors, onFinish: finishTour)
                     }
                 }
         } settings: {
@@ -41,6 +42,7 @@ struct RootView: View {
             if !isShowing, showsFirstRun { startTour() }
         }
         .sbuClosure($addedVehicle, word: "Aggiunto")
+        .sbuClosure($isReady, word: "Pronto")
     }
 
     private func startTour() {
@@ -48,9 +50,10 @@ struct RootView: View {
         isTourRunning = true
     }
 
-    private func finishTour() {
+    private func finishTour(completed: Bool) {
         isTourRunning = false
         store.state.hasFinishedIntro = true
+        isReady = completed
     }
 
     private func replayIntro() {

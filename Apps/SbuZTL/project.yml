@@ -43,6 +43,8 @@ targets:
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         # Asked only when you first ask for a route or your position. English in InfoPlist.xcstrings.
         INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "Sbu ZTL usa la tua posizione per calcolare il percorso e guidarti. La posizione resta sull'iPhone."
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: "Sbu ZTL ascolta il luogo che dici. L'audio resta sull'iPhone."
+        INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: "Sbu ZTL riconosce il luogo che dici direttamente sull'iPhone."
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
         # XcodeGen's target default is iPhone and iPad, which beats the project setting.

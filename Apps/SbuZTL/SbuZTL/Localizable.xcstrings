@@ -251,6 +251,16 @@
         }
       }
     },
+    "Cerca dove vai.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search where you're going."
+          }
+        }
+      }
+    },
     "Cerca dove vai. Ti dico se ci puoi entrare.": {
       "localizations": {
         "en": {
@@ -411,12 +421,32 @@
         }
       }
     },
+    "Cosa è sbagliato, e dove lo hai visto:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What's wrong, and where you saw it:"
+          }
+        }
+      }
+    },
     "Deroghe": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Exceptions"
+          }
+        }
+      }
+    },
+    "Detta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dictate"
           }
         }
       }
@@ -431,12 +461,32 @@
         }
       }
     },
+    "Duomo di Milano": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Milan Duomo"
+          }
+        }
+      }
+    },
     "E da quando guidi: scegli un altro giorno o un'altra ora.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "And on when you drive: pick another day or time."
+          }
+        }
+      }
+    },
+    "E dall'ora: scegli un altro giorno o un altro orario.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "And on the time: pick another day or hour."
           }
         }
       }
@@ -487,6 +537,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Road signs prevail. This app doesn't replace the city's acts."
+          }
+        }
+      }
+    },
+    "Ferma": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop"
           }
         }
       }
@@ -567,6 +627,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hybrid"
+          }
+        }
+      }
+    },
+    "Il riconoscimento sull'iPhone non è disponibile. Usa il microfono della tastiera.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recognition on this iPhone isn't available. Use the keyboard's microphone."
           }
         }
       }
@@ -901,6 +971,16 @@
         }
       }
     },
+    "Non riesco a usare il microfono.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I can't use the microphone."
+          }
+        }
+      }
+    },
     "Non risultano limiti in questo punto. Fa fede la segnaletica.": {
       "localizations": {
         "en": {
@@ -1091,6 +1171,16 @@
         }
       }
     },
+    "Permetti microfono e riconoscimento vocale nelle Impostazioni.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow microphone and speech recognition in Settings."
+          }
+        }
+      }
+    },
     "Più tardi": {
       "localizations": {
         "en": {
@@ -1107,6 +1197,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Favourites"
+          }
+        }
+      }
+    },
+    "Pronto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready"
           }
         }
       }
@@ -1231,6 +1331,16 @@
         }
       }
     },
+    "Salta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip"
+          }
+        }
+      }
+    },
     "Salva": {
       "localizations": {
         "en": {
@@ -1277,6 +1387,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sbu ZTL"
+          }
+        }
+      }
+    },
+    "Sbu ZTL: dato sbagliato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu ZTL: wrong data"
           }
         }
       }
@@ -1437,6 +1557,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "End"
+          }
+        }
+      }
+    },
+    "Ti dico subito se puoi entrare. Qui vedi il Duomo di Milano.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I tell you right away if you can enter. Here's Milan's Duomo."
           }
         }
       }
@@ -1649,6 +1779,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "openstreetmap.org/copyright"
+          }
+        }
+      }
+    },
+    "zone vietate adesso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "zones closed now"
+          }
+        }
+      }
+    },
+    "zone vietate adesso a %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "zones closed to %@ now"
           }
         }
       }

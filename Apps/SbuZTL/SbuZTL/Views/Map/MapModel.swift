@@ -37,6 +37,15 @@ final class MapModel {
 
     func select(_ place: Place) {
         store.remember(place)
+        show(place)
+    }
+
+    /// The first-run tour's example: not among your recent places.
+    func showExample() {
+        show(Place(name: String(localized: "Duomo di Milano"), address: "Milano", point: Point(45.4642, 9.1900)))
+    }
+
+    private func show(_ place: Place) {
         phase = .place(place)
         withAnimation(SbuMotion.base) {
             camera = .region(MKCoordinateRegion(center: place.point.coordinate, latitudinalMeters: 700, longitudinalMeters: 700))
