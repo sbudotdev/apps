@@ -48,7 +48,7 @@ Direction **Quaderno** (v5, ADR-0013, supersedes v4 "Carta e punto fermo"): Sbu 
 - No analytics, accounts, network calls, ads or tracking in apps. Data stays on the device. Links to sbu.dev open Safari. Three exceptions: the local network to the user's own devices when the one thing needs it (ADR-0007), the user's own iCloud for sync/backup, off by default (ADR-0008), and sharing one item read-only with another person through iCloud, only when the user shares it (ADR-0009).
 - Every user-facing string in Italian (source) and English, in `Localizable.xcstrings`. Second person singular, short sentences, no emoji, no exclamation marks. Actions are infinitive verbs ("Calibra"), results are participles ("Calibrata").
 - App Store descriptions open with what the app does in one sentence, then features, then "Sbu fa una cosa sola: …", then the promises on one last line, in this order: nessun abbonamento · nessun acquisto in-app · nessun account · nessuna pubblicità · nessun tracking · dati solo sul dispositivo. Never the promises at the top: the identical opening across apps was a 4.3 signal (rejection of 14/10/2026).
-- Specs come only from public App Store data (`Tools/discover.py`, `Tools/spec.py`). Never write code that decompiles, unpacks or extracts assets from other apps.
+- Specs come only from public App Store data (`Tools/discover.py`, `Tools/spec.py`), plus a hands-on black-box audit that notes behaviour only (ADR-0003). Never write code that decompiles, unpacks or extracts assets from other apps.
 
 ## Code conventions
 
