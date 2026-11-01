@@ -8,6 +8,7 @@ struct PlacePanel: View {
     let place: Place
 
     private var verdicts: [(zone: Zone, verdict: Verdict)] { model.verdicts(at: place.point) }
+    private var placeCity: City? { model.catalog.city(at: place.point) }
 
     var body: some View {
         Panel {
@@ -34,6 +35,9 @@ struct PlacePanel: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: SbuTheme.space3) {
                     answer.tourAnchor(.answer)
+                    if let gap = placeCity?.missingPerimeters, RuleEngine.worst(verdicts.map(\.verdict))?.access != .forbidden {
+                        RouteNotice(symbol: "exclamationmark.triangle", title: "Mancano alcuni perimetri", detail: "\(String(localized: gap))")
+                    }
                     ForEach(verdicts, id: \.zone.id) { item in
                         NavigationLink {
                             ZoneDetailView(model: model, zone: item.zone)
@@ -77,10 +81,12 @@ struct PlacePanel: View {
     /// The sentence the app exists for, with the one full stop on the screen.
     @ViewBuilder
     private var answer: some View {
-        if model.catalog.city(at: place.point) == nil {
+        if placeCity == nil {
             AnswerCard(headline: "Zona non coperta", detail: "Qui non ho dati. Segui la segnaletica.", tint: SbuTheme.warning, symbol: "questionmark.circle", isCertain: false)
         } else if let worst = RuleEngine.worst(verdicts.map(\.verdict)) {
             AnswerCard(headline: worst.access.headline, detail: worst.reason, tint: worst.access.tint, symbol: worst.access.symbol, isCertain: worst.access != .unknown)
+        } else if placeCity?.missingPerimeters != nil {
+            AnswerCard(headline: "Non lo so", detail: "Qui non ho zone, ma non ho tutti i perimetri. Segui la segnaletica.", tint: SbuTheme.warning, symbol: "questionmark.circle", isCertain: false)
         } else {
             AnswerCard(headline: "Nessuna zona qui", detail: "Non risultano limiti in questo punto. Fa fede la segnaletica.", tint: SbuTheme.success, symbol: "checkmark.circle", isCertain: true)
         }

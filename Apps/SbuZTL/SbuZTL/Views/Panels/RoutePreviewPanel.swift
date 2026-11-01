@@ -42,6 +42,9 @@ struct RoutePreviewPanel: View {
                             title: "Parte del percorso è fuori copertura",
                             detail: "In quei tratti non controllo le zone. Segui la segnaletica.")
             }
+            if let gap = model.catalog.city(at: place.point)?.missingPerimeters {
+                RouteNotice(symbol: "exclamationmark.triangle", title: "Il percorso non evita ciò che non conosco", detail: "\(String(localized: gap))")
+            }
             Text("Fa fede la segnaletica. Questa app non sostituisce gli atti del Comune.")
                 .font(SbuTheme.footnote)
                 .foregroundStyle(SbuTheme.inkMuted)

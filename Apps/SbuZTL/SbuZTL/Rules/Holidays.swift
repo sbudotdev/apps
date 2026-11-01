@@ -25,6 +25,9 @@ nonisolated enum Holidays {
         return switch city {
         case .milano: c.month == 12 && c.day == 7
         case .firenze: c.month == 6 && c.day == 24
+        case .bologna: c.month == 10 && c.day == 4
+        case .roma: c.month == 6 && c.day == 29
+        case .torino: c.month == 6 && c.day == 24
         }
     }
 

@@ -19,9 +19,9 @@ struct RoutePlannerTests {
         return RoutePlanner(catalog: ZoneCatalog(zones: zones), graphs: { try await store.graph(for: $0) }, approach: approach)
     }
 
-    private func request(from: Point, to: Point, vehicle: Vehicle? = nil, avoidsPaid: Bool = true) -> RouteRequest {
+    private func request(from: Point, to: Point, vehicle: Vehicle? = nil, avoidsPaid: Bool = true, departure: Date = RuleEngineTests.monday) -> RouteRequest {
         RouteRequest(start: from, destination: to, vehicle: vehicle ?? RuleEngineTests.car(.petrol, .euro5),
-                     departure: RuleEngineTests.monday, permits: [], avoidsPaidZones: avoidsPaid)
+                     departure: departure, permits: [], avoidsPaidZones: avoidsPaid)
     }
 
     private static let bicocca = Point(45.5140, 9.2100)
@@ -58,7 +58,7 @@ struct RoutePlannerTests {
 
     @Test("A destination outside coverage is Apple's route, flagged")
     func outside() async throws {
-        let plan = try await planner(ZoneCatalog.bundled.zones, approach: LineApproach()).plan(request(from: Self.bocconi, to: Point(41.9, 12.5)))
+        let plan = try await planner(ZoneCatalog.bundled.zones, approach: LineApproach()).plan(request(from: Self.bocconi, to: Point(40.85, 14.27))) // Napoli
         #expect(plan.isPartlyUncovered)
     }
 
@@ -70,5 +70,33 @@ struct RoutePlannerTests {
         // The Duomo's square has no road, so paying still ends with a short walk: only the zone changes.
         #expect(avoiding.destinationZone == "Area C")
         #expect(paying.destinationZone == nil)
+    }
+
+    @Test("Bologna: across the centre the route stays out of the ZTL")
+    func bologna() async throws {
+        let catalog = ZoneCatalog.bundled
+        let ztl = try #require(catalog.zones(in: .bologna).first { $0.kind == .bolognaZtl })
+        let plan = try await planner(catalog.zones(in: .bologna)).plan(request(from: Point(44.5080, 11.3430), to: Point(44.4800, 11.3400)))
+        #expect(!plan.points.contains { ztl.contains($0) })
+        #expect(plan.steps.last?.maneuver == .arrive)
+    }
+
+    @Test("Roma: across the centre the route stays out of the ZTL in its hours")
+    func roma() async throws {
+        let catalog = ZoneCatalog.bundled
+        let centro = try #require(catalog.zones(in: .roma).first { $0.kind == .romaCentroDay })
+        let plan = try await planner(catalog.zones(in: .roma)).plan(request(from: Point(41.9090, 12.5010), to: Point(41.8870, 12.4580)))
+        #expect(!plan.points.contains { centro.contains($0) })
+        #expect(plan.steps.last?.maneuver == .arrive)
+    }
+
+    @Test("Torino: across the centre the route stays out of the ZTL in its hours")
+    func torino() async throws {
+        let catalog = ZoneCatalog.bundled
+        let centrale = try #require(catalog.zones(in: .torino).first)
+        let plan = try await planner(catalog.zones(in: .torino)).plan(request(
+            from: Point(45.0640, 7.6600), to: Point(45.0620, 7.7050), departure: RuleEngineTests.moment(2026, 11, 2, 9)))
+        #expect(!plan.points.contains { centrale.contains($0) })
+        #expect(plan.steps.last?.maneuver == .arrive)
     }
 }

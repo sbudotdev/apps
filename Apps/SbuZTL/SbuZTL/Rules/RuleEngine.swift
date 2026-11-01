@@ -1,7 +1,7 @@
 import Foundation
 
 /// Answers "can this vehicle enter this zone at this moment?".
-/// shortcut: rules are code for two cities; move them to bundled data before adding the third.
+/// Bologna, Roma and Torino answer from `ZoneRule.table`. Milano and Firenze stay in code: Euro calendars and seasons by relative date, tested as they are.
 nonisolated enum RuleEngine {
     static func verdict(zone: Zone, vehicle: Vehicle, at date: Date, permits: [Permit] = []) -> Verdict {
         switch zone.kind {
@@ -14,6 +14,10 @@ nonisolated enum RuleEngine {
         case .ztl, .noTransit, .other:
             declared(permits, vehicle, zone) ?? Verdict(
                 access: .unknown, reason: "Non ho orari verificati per questa zona. Segui la segnaletica.", source: .milanoData)
+        case .romaFasciaVerde: fasciaVerde(zone: zone, vehicle: vehicle, at: date, permits: permits)
+        case .romaCentroDay, .romaCentroNight, .romaTridenteArea, .romaTrastevereDay, .romaTrastevereNight, .romaSanLorenzoNight,
+             .torinoCentrale, .bolognaT, .bolognaZtl, .bolognaUnnamed:
+            scheduled(zone: zone, vehicle: vehicle, at: date, permits: permits)
         }
     }
 
@@ -35,6 +39,50 @@ nonisolated enum RuleEngine {
     private static func declared(_ permits: [Permit], _ vehicle: Vehicle, _ zone: Zone) -> Verdict? {
         guard permits.contains(where: { $0.vehicleID == vehicle.id && $0.zoneID == zone.id }) else { return nil }
         return Verdict(access: .allowed, reason: "Hai dichiarato un permesso per questa zona.", source: nil)
+    }
+
+    private static func scheduled(zone: Zone, vehicle: Vehicle, at date: Date, permits: [Permit]) -> Verdict {
+        guard let rule = ZoneRule.table[zone.kind] else {
+            return Verdict(access: .unknown, reason: "Non ho orari verificati per questa zona. Segui la segnaletica.", source: nil)
+        }
+        let state = rule.schedule.state(at: date, city: zone.city)
+        if state == .off {
+            return Verdict(access: .off, reason: rule.offReason, source: rule.source)
+        }
+        if let held = declared(permits, vehicle, zone) { return held }
+        if state == .unverified {
+            return Verdict(access: .unknown, reason: "Per questo giorno le fonti non dicono se vale. Segui la segnaletica.", source: rule.source)
+        }
+        guard vehicle.kind == .car else {
+            return Verdict(access: rule.twoWheels, reason: rule.twoWheelsReason, source: rule.source)
+        }
+        if rule.unverifiedFuels.contains(vehicle.fuel) {
+            return Verdict(access: .unknown, reason: "Per questa alimentazione non ho letto una regola certa.", source: rule.source)
+        }
+        return Verdict(access: rule.car, reason: rule.carReason, source: rule.source)
+    }
+
+    private static func fasciaVerde(zone: Zone, vehicle: Vehicle, at date: Date, permits: [Permit]) -> Verdict {
+        let source = RuleSource.romaFasciaVerde
+        if FasciaVerde.isExpired(date) {
+            return Verdict(access: .unknown, reason: "La proroga che ho letto finisce il 31 ottobre 2027. Segui la segnaletica.", source: source)
+        }
+        if FasciaVerde.isEcoSundayBand(date) {
+            return Verdict(access: .unknown, reason: "Domenica ecologica: veicoli e deroghe li decide ogni volta un'ordinanza. Segui la segnaletica.", source: source)
+        }
+        let state = FasciaVerde.schedule.state(at: date, city: zone.city)
+        if state == .off {
+            return Verdict(access: .off, reason: "In vigore dal lunedì al sabato 24 ore su 24, esclusi i festivi infrasettimanali.", source: source)
+        }
+        if let held = declared(permits, vehicle, zone) { return held }
+        if state == .unverified {
+            return Verdict(access: .unknown, reason: "Per questo giorno le fonti non dicono se vale. Segui la segnaletica.", source: source)
+        }
+        switch FasciaVerde.isBanned(vehicle) {
+        case true?: return Verdict(access: .forbidden, reason: "Vietata a questa classe Euro nei giorni in vigore.", source: source)
+        case false?: return Verdict(access: .allowed, reason: "Questa classe non è vietata in Fascia Verde. Le ZTL hanno regole proprie.", source: source)
+        case nil: return Verdict(access: .unknown, reason: "Per questa alimentazione non ho letto una regola certa.", source: source)
+        }
     }
 
     private enum MilanArea { case areaB, areaC }
