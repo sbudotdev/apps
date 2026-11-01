@@ -1,0 +1,57 @@
+{
+  "name": "Sbu ZTL (nome provvisorio)",
+  "slug": "ztl",
+  "in_repo": false,
+  "status": "spec, in attesa dello spike di routing e del censimento delle fonti",
+  "accent": null,
+  "replaces": {
+    "name": "ZigZag: navigatore ZTL",
+    "app_id": "6738909628",
+    "developer": "The Stolen Spot S.R.L.",
+    "price": "Gratis con acquisti in-app: Pro 3,99 €/settimana, 34,99 €/anno, 149,99 € a vita; prova di 3 giorni citata in una recensione",
+    "rating": "4,7 su 752 valutazioni (IT, 01/11/2026)",
+    "paywalled_features": ["verifica per un'altra data e ora", "calendario del veicolo", "navigazione interna"],
+    "privacy_note": "La scheda dichiara dati usati per tracciare, tra cui la posizione, e dati collegati all'identità, tra cui email e posizione precisa."
+  },
+  "one_thing": "Ti dice se con la tua auto puoi entrare in una ZTL, adesso o quando vuoi, e ti porta a destinazione evitandola.",
+  "features": [
+    {"name": "Mappa delle zone", "description": "Perimetri di ZTL e aree pedonali sulla mappa, colorati in base all'esito per il veicolo e l'orario scelti: vietato, con condizioni o ticket, consentito. Selettore dei livelli.", "priority": "P0", "reason": "Schermata principale dell'originale.", "source": "screenshot 1-4"},
+    {"name": "Verifica dell'accesso", "description": "Tocco su una zona: esito in una frase con orario e veicolo modificabili sul posto. Se le fonti non bastano, l'app lo dice invece di rispondere.", "priority": "P0", "reason": "La funzione che definisce l'app.", "source": "screenshot 1-3, descrizione"},
+    {"name": "Veicoli e permessi", "description": "Più veicoli con caratteristiche (alimentazione, classe Euro, tipo) e permessi; selettore in alto sulla mappa.", "priority": "P0", "reason": "Senza veicolo non esiste una risposta personalizzata.", "source": "screenshot 4, descrizione"},
+    {"name": "Verifica per data e ora", "description": "Selettore di giorno, ora e minuti con ritorno ad Adesso. Orari sempre italiani.", "priority": "P0", "reason": "Dietro paywall nell'originale: è il motivo del remake.", "source": "screenshot 5, descrizione"},
+    {"name": "Regole della zona", "description": "Schede per orari, auto private, moto e ciclomotori, ticket; ogni scheda porta il link alla fonte. Date future di decorrenza dei divieti.", "priority": "P0", "reason": "Rende verificabile la risposta.", "source": "screenshot 6"},
+    {"name": "Calendario del veicolo", "description": "Quando il veicolo può entrare in una zona, nel tempo. Forma esatta da osservare nell'audit.", "priority": "P0", "reason": "Dietro paywall nell'originale.", "source": "descrizione"},
+    {"name": "Navigazione che evita le ZTL", "description": "Guida svolta per svolta: manovra con distanza, manovra successiva, limite di velocità, audio con muto, tempo, km e arrivo. Tratti in zona evidenziati sul percorso e avviso quando parte del percorso è fuori copertura.", "priority": "P0", "reason": "Dietro paywall nell'originale; è l'incognita tecnica dello spike. Il limite di velocità non è fornito da MapKit: da verificare.", "source": "screenshot 7, descrizione"},
+    {"name": "CarPlay", "description": "Navigazione e relativi controlli su CarPlay.", "priority": "P1", "reason": "Richiede l'entitlement CarPlay navigazione, da chiedere ad Apple.", "source": "note di versione"},
+    {"name": "Ricerca e preferiti", "description": "Ricerca di luoghi, anche vocale; salvataggio di luoghi e zone.", "priority": "P0", "reason": "Gratis nell'originale.", "source": "screenshot 2 e 4, scheda"},
+    {"name": "Copertura dichiarata", "description": "Elenco dei comuni; un comune verificato senza ZTL è un esito esplicito. Fuori copertura l'app lo segnala.", "priority": "P0", "reason": "Onestà del dato: evita multe per una falsa sicurezza.", "source": "screenshot 8, descrizione"},
+    {"name": "Link a luoghi e zone", "description": "Condivisione e apertura di link a un luogo o a una ZTL.", "priority": "P1", "reason": "Citata nella scheda; senza server servono universal link statici su sbu.dev.", "source": "scheda"},
+    {"name": "Parcheggi", "description": "Parcheggi sulla mappa, con aggiunta e modifica da parte degli utenti.", "priority": "P1", "reason": "Citati nella scheda e nelle recensioni. Senza server le modifiche restano locali: non sono condivise tra utenti.", "source": "scheda, recensioni"},
+    {"name": "Segnalazioni", "description": "Segnalare un dato sbagliato.", "priority": "P1", "reason": "Senza server si fa via mail o issue pubblica. Canale essenziale per la manutenzione dei dati.", "source": "scheda"}
+  ],
+  "tool_screen": "Mappa a tutto schermo con menu, selettore Adesso/data e selettore veicolo in alto, livelli e posizione a destra, foglio in basso con ricerca o scheda della zona. Da rendere con il design Quaderno senza copiarne testi, colori o layout grafico.",
+  "flows": [
+    {"name": "Posso entrare", "steps": ["Apri la mappa", "Tocca una zona", "Leggi l'esito per veicolo e orario", "Cambia orario o veicolo nella frase", "Apri le regole e la fonte"]},
+    {"name": "Portami lì", "steps": ["Cerca un luogo", "Vedi se è in una zona e se puoi entrare", "Avvia la navigazione", "Segui la guida; un avviso segnala i tratti non coperti"]},
+    {"name": "Primo avvio", "steps": ["Stato vuoto Sbu", "Aggiungi un veicolo", "Prima richiesta di posizione solo quando serve"]}
+  ],
+  "skipped": [
+    {"name": "Account, email, tracciamento", "reason": "Regole Sbu."},
+    {"name": "Parcheggi condivisi tra utenti", "reason": "Richiede un server. Tecnicamente impossibile con le regole Sbu: resta la versione locale."}
+  ],
+  "network": "Non serverless in senso stretto: mappa, ricerca e routing usano i servizi Apple. Serve un nuovo ADR. Dati ZTL nel bundle, aggiornati con le versioni dell'app (decisione del 01/11/2026).",
+  "review_risks": [
+    "Risposte sbagliate causano multe: fonte, data di verifica e avviso sulla segnaletica su ogni esito.",
+    "Nessun dato derivato da ZigZag: solo fonti ufficiali o con licenza riusabile (ADR-0003).",
+    "4.3: nicchia unica tra le app Sbu."
+  ],
+  "open_questions": [
+    "Copertura: la descrizione elenca 9 città più Villadossola e Cuorgnè; lo screenshot 8 elenca 24 comuni. Da confermare nell'audit quali hanno dati reali.",
+    "L'originale usa Mapbox per mappa e presumibilmente per il routing; Sbu può usare solo MapKit.",
+    "Granularità: a Bergamo le zone sono piccole e contigue, a livello quasi di strada. Il costo dei dati dipende da questo."
+  ],
+  "estimate_days": null,
+  "launch_tier": null,
+  "launch_assets": null,
+  "source": "research/6738909628 (meta.json, screenshot), pagina App Store IT del 01/11/2026. Scritto a mano: Tools/spec.py non è stato eseguito perché mancano ANTHROPIC_API_KEY e il profilo ant. Solo dati pubblici."
+}
