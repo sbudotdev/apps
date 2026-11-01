@@ -136,3 +136,12 @@ Aggiornata dopo la passata con Chrome.
 - **Riusabili oggi: 12** (Bergamo, Bologna, Cesena, Ferrara, Firenze, Genova, Milano, Modena, Napoli, Roma, Torino, Trento), tutti con controllo di attualità da fare e varchi mancanti o non verificati a Cesena, Ferrara, Genova, Modena, Trento.
 - **Richiedono lavoro: 14**: 5 da ridisegnare (Brescia, Padova, Prato, Trieste, Venezia), 7 da chiedere (Bari, Catania, Messina, Palermo, Parma, Taranto, Verona), 2 non trovati (Cuorgnè, Villadossola).
 - **Da cui partire: Milano, Firenze, Bologna, Roma, Torino.** Hanno perimetro e varchi con licenza aperta e molti utenti potenziali; Milano e Firenze sono le più aggiornate, Roma e Torino richiedono prima di chiarire licenza e attualità.
+
+## Dati inclusi nell'app per Bologna, Roma e Torino (1/11/2026)
+
+Scaricati e controllati con `Apps/SbuZTL/Data/build_cities.py`: conteggio, riquadro e nomi per città. Regole da tracker #624.
+
+- **Bologna:** 14 record, CC BY 4.0, ultimo aggiornamento 26/8/2021. I record non hanno nomi. Il codice 40 è la ZTL (solo anello esterno, buchi riempiti); il codice 41 è la Zona T, confermato dal dataset [Zona T](https://opendata.comune.bologna.it/explore/dataset/zona-t-centro-storico/) (CC BY 4.0). Gli altri 12 restano senza nome e rispondono `.unknown`. Università, San Francesco-Pratello e Moline-Capo di Lucca non hanno un perimetro identificabile. Non incluso, da valutare: [Zona pedonale centro storico](https://opendata.comune.bologna.it/explore/dataset/zona-pedonale-centro-storico/), 62 record, CC BY 4.0, 28/5/2026.
+- **Roma:** solo layer con `creativecommons.org/licenses/by/4.0` nel feed DCAT; la pagina RSM rimanda invece a CC BY 3.0 IT. Esclusi: AF1 VAM (`by-sa/4.0`), Tridente e Testaccio (licenza vuota). I loro perimetri sono stati scaricati solo per un controllo, non inclusi: il Tridente cade nei settori A e C della ZTL Centro, quindi quei settori rispondono `.unknown` negli orari del Tridente. Testaccio cade fuori dalle altre ZTL e resta una lacuna segnalata in app.
+- **Torino:** XML 5T, solo ZTL Centrale, validità 2022-2024, generato 4/2024. Licenza in conflitto: aperTO dice Creative Commons Attribution, Muoversi a Torino IODL v2.0. Pedonale, Romana, Valentino e corsie non hanno un perimetro nei dati.
+- **Parcheggi:** OSM `amenity=parking`, ODbL, via Overpass in fase di build. Esclusi accessi privati e `parking=street_side`.
