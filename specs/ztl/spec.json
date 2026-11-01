@@ -17,7 +17,7 @@
   "features": [
     {"name": "Mappa delle zone", "description": "Perimetri di ZTL e aree pedonali sulla mappa, colorati in base all'esito per il veicolo e l'orario scelti: vietato, con condizioni o ticket, consentito. Selettore dei livelli.", "priority": "P0", "reason": "Schermata principale dell'originale.", "source": "screenshot 1-4"},
     {"name": "Verifica dell'accesso", "description": "Tocco su una zona: esito in una frase con orario e veicolo modificabili sul posto. Se le fonti non bastano, l'app lo dice invece di rispondere.", "priority": "P0", "reason": "La funzione che definisce l'app.", "source": "screenshot 1-3, descrizione"},
-    {"name": "Veicoli e permessi", "description": "Più veicoli con caratteristiche (alimentazione, classe Euro, tipo) e permessi; selettore in alto sulla mappa.", "priority": "P0", "reason": "Senza veicolo non esiste una risposta personalizzata.", "source": "screenshot 4, descrizione"},
+    {"name": "Veicoli e permessi", "description": "Più veicoli con caratteristiche (alimentazione, classe Euro, tipo) compilate a mano, e permessi; selettore in alto sulla mappa.", "priority": "P0", "reason": "Senza veicolo non esiste una risposta personalizzata.", "source": "screenshot 4, descrizione"},
     {"name": "Verifica per data e ora", "description": "Selettore di giorno, ora e minuti con ritorno ad Adesso. Orari sempre italiani.", "priority": "P0", "reason": "Dietro paywall nell'originale: è il motivo del remake.", "source": "screenshot 5, descrizione"},
     {"name": "Regole della zona", "description": "Schede per orari, auto private, moto e ciclomotori, ticket; ogni scheda porta il link alla fonte. Date future di decorrenza dei divieti.", "priority": "P0", "reason": "Rende verificabile la risposta.", "source": "screenshot 6"},
     {"name": "Calendario del veicolo", "description": "Quando il veicolo può entrare in una zona, nel tempo. Forma esatta da osservare nell'audit.", "priority": "P0", "reason": "Dietro paywall nell'originale.", "source": "descrizione"},
@@ -37,7 +37,8 @@
   ],
   "skipped": [
     {"name": "Account, email, tracciamento", "reason": "Regole Sbu."},
-    {"name": "Parcheggi condivisi tra utenti", "reason": "Richiede un server. Tecnicamente impossibile con le regole Sbu: resta la versione locale."}
+    {"name": "Parcheggi condivisi tra utenti", "reason": "Richiede un server. Tecnicamente impossibile con le regole Sbu: resta la versione locale."},
+    {"name": "Dati del veicolo dalla targa", "reason": "Richiede un servizio esterno. Regole Sbu: il veicolo si compila a mano."}
   ],
   "network": "Non serverless in senso stretto: mappa, ricerca e routing usano i servizi Apple. Serve un nuovo ADR. Dati ZTL nel bundle, aggiornati con le versioni dell'app (decisione del 01/11/2026).",
   "review_risks": [

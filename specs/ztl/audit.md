@@ -59,7 +59,7 @@ Primo giro: 1/11/2026, versione 0.4.14 (93), due registrazioni dello schermo sen
 
 ## Cosa cambia per lo spec
 
-1. **Dati dalla targa:** richiedono un servizio esterno, in conflitto con le regole di prodotto. Senza eccezione, in Sbu il veicolo si compila a mano. Decide Matteo.
+1. **Dati dalla targa:** richiedono un servizio esterno, in conflitto con le regole di prodotto. Deciso il 1/11: in Sbu il veicolo si compila a mano.
 2. **Destinazione in zona vietata:** è il punto debole osservato dell'originale. Lo spec deve dire dove ti lascia Sbu: ultimo punto consentito e tratto finale a piedi.
 3. **Tratti di singole vie:** il dato da mantenere è più vasto dei perimetri comunali. Il censimento in `fonti.md` va riletto con questo in mente.
 4. **Segnalazioni e comuni richiesti:** richiedono un server condiviso. Resta la proposta di `decisione.md` (mail o issue pubblica); la parità piena non è possibile senza eccezione.
