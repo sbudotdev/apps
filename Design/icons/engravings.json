@@ -233,6 +233,10 @@
   },
   "ztl": {
     "accent": "accent-ztl",
-    "subject": "an old iron city gate with an arch, half open"
+    "subject": "a medieval Italian stone city gate, a square tower with a swallow-tail crenellated top and one tall round arch, the road passing through it, heavy wooden doors open, no plants, three-quarter view",
+    "name": {
+      "it": "Porta di città",
+      "en": "City gate"
+    }
   }
 }
