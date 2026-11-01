@@ -1,5 +1,26 @@
 import Foundation
 
+/// Metres of the route inside any of the zones, not counting the stretch before it first leaves them all:
+/// adjacent sectors of one ZTL count as one zone for a start inside.
+public func metresInside(_ zones: [Zone], route: [Point]) -> Double {
+    var left = false
+    var total = 0.0
+    for (a, b) in zip(route, route.dropFirst()) {
+        let length = a.metres(to: b)
+        let steps = max(1, Int(length / 25))
+        for step in 0..<steps {
+            let t = (Double(step) + 0.5) / Double(steps)
+            let p = Point(a.lat + (b.lat - a.lat) * t, a.lon + (b.lon - a.lon) * t)
+            if zones.contains(where: { $0.contains(p) }) {
+                if left { total += length / Double(steps) }
+            } else {
+                left = true
+            }
+        }
+    }
+    return total
+}
+
 public struct Point: Sendable, Hashable {
     public let lat: Double
     public let lon: Double
@@ -10,7 +31,7 @@ public struct Point: Sendable, Hashable {
     }
 
     /// Equirectangular metres: accurate enough at city scale.
-    func metres(to other: Point) -> Double {
+    public func metres(to other: Point) -> Double {
         let dLat = (other.lat - lat) * 111_320
         let dLon = (other.lon - lon) * 111_320 * cos(lat * .pi / 180)
         return (dLat * dLat + dLon * dLon).squareRoot()
@@ -20,14 +41,28 @@ public struct Point: Sendable, Hashable {
 public struct Zone: Sendable {
     public let name: String
     public let ring: [Point]
+    public let holes: [[Point]]
+    private let bounds: (minLat: Double, maxLat: Double, minLon: Double, maxLon: Double)
 
-    public init(name: String, ring: [Point]) {
+    public init(name: String, ring: [Point], holes: [[Point]] = []) {
         self.name = name
         self.ring = ring
+        self.holes = holes
+        bounds = (
+            ring.map(\.lat).min() ?? 0, ring.map(\.lat).max() ?? 0,
+            ring.map(\.lon).min() ?? 0, ring.map(\.lon).max() ?? 0)
     }
 
     public func contains(_ p: Point) -> Bool {
+        guard p.lat >= bounds.minLat, p.lat <= bounds.maxLat, p.lon >= bounds.minLon, p.lon <= bounds.maxLon else { return false }
         var inside = false
+        for loop in [ring] + holes {
+            Self.toggleCrossings(of: loop, at: p, &inside)
+        }
+        return inside
+    }
+
+    private static func toggleCrossings(of ring: [Point], at p: Point, _ inside: inout Bool) {
         var j = ring.count - 1
         for i in ring.indices {
             let a = ring[i], b = ring[j]
@@ -37,7 +72,6 @@ public struct Zone: Sendable {
             }
             j = i
         }
-        return inside
     }
 
     /// Metres of the route inside the zone. The stretch before the route first leaves the zone

@@ -7,6 +7,7 @@ let package = Package(
     targets: [
         .target(name: "ZTLCore"),
         .executableTarget(name: "ztlspike", dependencies: ["ZTLCore"]),
+        .executableTarget(name: "ztlgraph", dependencies: ["ZTLCore"]),
         .testTarget(name: "ZTLCoreTests", dependencies: ["ZTLCore"]),
     ]
 )

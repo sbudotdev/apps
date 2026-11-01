@@ -3,7 +3,6 @@ import Foundation
 @preconcurrency import MapKit
 import ZTLCore
 
-struct Trip { let name: String; let from: Point; let to: Point }
 struct Found { let points: [Point]; let seconds: Double }
 
 let toleranceMetres = 150.0 // the hand-drawn perimeter is only good to about this
@@ -87,44 +86,15 @@ func run(zone: Zone, trips: [Trip]) async -> (valid: Int, total: Int) {
     return (valid, trips.count)
 }
 
-let centrale = Point(45.4862, 9.2044), bocconi = Point(45.4490, 9.1900)
-let duomoMI = Point(45.4642, 9.1900), brera = Point(45.4719, 9.1880), castello = Point(45.4705, 9.1794)
 let areaC = Zone(name: "Milano Area C", ring: [
     Point(45.4797, 9.1977), Point(45.4745, 9.2055), Point(45.4626, 9.2069), Point(45.4545, 9.2045),
     Point(45.4517, 9.2000), Point(45.4520, 9.1815), Point(45.4541, 9.1719), Point(45.4600, 9.1690),
     Point(45.4673, 9.1675), Point(45.4757, 9.1725), Point(45.4815, 9.1825), Point(45.4810, 9.1900),
 ])
-let milano = [
-    Trip(name: "Centrale-Porta Genova", from: centrale, to: Point(45.4533, 9.1680)),
-    Trip(name: "Sempione-Porta Romana", from: Point(45.4790, 9.1690), to: Point(45.4490, 9.2030)),
-    Trip(name: "Loreto-Bocconi", from: Point(45.4859, 9.2160), to: bocconi),
-    Trip(name: "Lambrate-San Siro", from: Point(45.4847, 9.2365), to: Point(45.4781, 9.1240)),
-    Trip(name: "Cinque Giornate-Conciliazione", from: Point(45.4626, 9.2120), to: Point(45.4671, 9.1635)),
-    Trip(name: "Porta Venezia-Ticinese", from: Point(45.4765, 9.2085), to: Point(45.4495, 9.1815)),
-    Trip(name: "Centrale-Duomo (arrivo dentro)", from: centrale, to: duomoMI),
-    Trip(name: "Bocconi-Castello (arrivo dentro)", from: bocconi, to: castello),
-    Trip(name: "Duomo-Centrale (partenza dentro)", from: duomoMI, to: centrale),
-    Trip(name: "Brera-Bocconi (partenza dentro)", from: brera, to: bocconi),
-]
-
-let campoMarte = Point(43.7833, 11.2825), novoli = Point(43.7960, 11.2190), duomoFI = Point(43.7731, 11.2560)
 let centroFI = Zone(name: "Firenze ZTL Centro", ring: [
     Point(43.7825, 11.2490), Point(43.7830, 11.2620), Point(43.7775, 11.2665), Point(43.7695, 11.2680),
     Point(43.7635, 11.2670), Point(43.7610, 11.2650), Point(43.7620, 11.2610), Point(43.7585, 11.2420),
     Point(43.7705, 11.2350), Point(43.7725, 11.2365), Point(43.7785, 11.2410),
 ])
-let firenze = [
-    Trip(name: "Campo di Marte-Porta Romana", from: campoMarte, to: Point(43.7560, 11.2400)),
-    Trip(name: "Dalmazia-Ferrucci", from: Point(43.7930, 11.2430), to: Point(43.7585, 11.2700)),
-    Trip(name: "Le Cure-Soffiano", from: Point(43.7900, 11.2660), to: Point(43.7600, 11.2200)),
-    Trip(name: "Novoli-Gavinana", from: novoli, to: Point(43.7550, 11.2750)),
-    Trip(name: "Cascine-Beccaria", from: Point(43.7810, 11.2200), to: Point(43.7690, 11.2720)),
-    Trip(name: "Libertà-San Frediano", from: Point(43.7860, 11.2620), to: Point(43.7710, 11.2300)),
-    Trip(name: "Campo di Marte-Duomo (arrivo dentro)", from: campoMarte, to: duomoFI),
-    Trip(name: "Novoli-Santa Croce (arrivo dentro)", from: novoli, to: Point(43.7686, 11.2622)),
-    Trip(name: "Duomo-Novoli (partenza dentro)", from: duomoFI, to: novoli),
-    Trip(name: "Santo Spirito-Campo di Marte (partenza dentro)", from: Point(43.7675, 11.2480), to: campoMarte),
-]
-
-_ = await run(zone: areaC, trips: milano)
-_ = await run(zone: centroFI, trips: firenze)
+_ = await run(zone: areaC, trips: milanoTrips)
+_ = await run(zone: centroFI, trips: firenzeTrips)
