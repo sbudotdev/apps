@@ -1,0 +1,21 @@
+{
+  "sourceLanguage" : "it",
+  "strings" : {
+    "CFBundleDisplayName" : {
+      "comment" : "The app's name under its icon. Localized so the bundle declares Italian as well as English.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sbu ZTL" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Sbu ZTL" } }
+      }
+    },
+    "NSLocationWhenInUseUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sbu ZTL uses your position to plan the route and guide you. Your position stays on your iPhone." } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Sbu ZTL usa la tua posizione per calcolare il percorso e guidarti. La posizione resta sull'iPhone." } }
+      }
+    }
+  },
+  "version" : "1.0"
+}
