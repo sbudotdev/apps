@@ -1,0 +1,90 @@
+name: SbuZTL
+options:
+  bundleIdPrefix: dev.sbu
+  deploymentTarget:
+    iOS: "17.0"
+  developmentLanguage: it
+  createIntermediateGroups: true
+packages:
+  SbuKit:
+    path: ../../Packages/SbuKit
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: $(SBU_TEAM_ID)
+    TARGETED_DEVICE_FAMILY: "1"
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+targets:
+  SbuZTL:
+    type: application
+    platform: iOS
+    sources:
+      - path: SbuZTL
+        excludes: ["Resources/**"]
+      - path: SbuZTL/Resources
+        buildPhase: resources
+    dependencies:
+      - package: SbuKit
+    info:
+      path: SbuZTL/Info.plist
+      properties:
+        # Turn-by-turn guidance with the screen locked: position and the voice.
+        UIBackgroundModes: [location, audio]
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.ztl
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Sbu ZTL
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        # Asked only when you first ask for a route or your position. English in InfoPlist.xcstrings.
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "Sbu ZTL usa la tua posizione per calcolare il percorso e guidarti. La posizione resta sull'iPhone."
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        # XcodeGen's target default is iPhone and iPad, which beats the project setting.
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: AppIcon-Inversa
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
+        ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+        SWIFT_APPROACHABLE_CONCURRENCY: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+  SbuZTLTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [SbuZTLTests]
+    dependencies:
+      - target: SbuZTL
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+  SbuZTLUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [SbuZTLUITests]
+    dependencies:
+      - target: SbuZTL
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        # SnapshotHelper.swift comes from fastlane and predates Swift 6 strict concurrency.
+        SWIFT_VERSION: "5.0"
+schemes:
+  SbuZTL:
+    build:
+      targets:
+        SbuZTL: all
+    test:
+      targets: [SbuZTLTests]
+  SbuZTLSnapshots:
+    build:
+      targets:
+        SbuZTL: all
+    test:
+      targets: [SbuZTLUITests]

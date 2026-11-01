@@ -230,5 +230,9 @@
       "it": "Pellicola e forbici",
       "en": "Film and scissors"
     }
+  },
+  "ztl": {
+    "accent": "accent-ztl",
+    "subject": "an old iron city gate with an arch, half open"
   }
 }
