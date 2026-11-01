@@ -67,7 +67,8 @@ struct RoutePlannerTests {
         let areaC = try #require(ZoneCatalog.bundled.zones.first { $0.kind == .areaC })
         let avoiding = try await planner([areaC]).plan(request(from: Self.bicocca, to: Self.duomo))
         let paying = try await planner([areaC]).plan(request(from: Self.bicocca, to: Self.duomo, avoidsPaid: false))
-        #expect(avoiding.walkMetres != nil)
-        #expect(paying.walkMetres == nil)
+        // The Duomo's square has no road, so paying still ends with a short walk: only the zone changes.
+        #expect(avoiding.destinationZone == "Area C")
+        #expect(paying.destinationZone == nil)
     }
 }

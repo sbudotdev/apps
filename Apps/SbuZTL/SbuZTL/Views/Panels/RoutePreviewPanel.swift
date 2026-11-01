@@ -45,6 +45,13 @@ struct RoutePreviewPanel: View {
             Text("Fa fede la segnaletica. Questa app non sostituisce gli atti del Comune.")
                 .font(SbuTheme.footnote)
                 .foregroundStyle(SbuTheme.inkMuted)
+            #if DEBUG
+            if let time = model.planTime {
+                Text(verbatim: time.formatted(.units(allowed: [.milliseconds], width: .narrow)))
+                    .font(SbuTheme.footnote)
+                    .foregroundStyle(SbuTheme.inkMuted)
+            }
+            #endif
             SbuButton("Avvia") { model.start(plan, to: place) }
                 .accessibilityIdentifier("start")
         }

@@ -12,6 +12,10 @@ final class MapModel {
     var camera: MapCameraPosition = .region(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 42.5, longitude: 12.5), span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)))
     var showsZones = true
     var problem: LocalizedStringKey?
+    #if DEBUG
+    /// The last route's computing time, for the numbers of the device test (#628).
+    var planTime: Duration?
+    #endif
     let store: AppStore
     let location: LocationService
     let catalog: ZoneCatalog
@@ -72,7 +76,7 @@ final class MapModel {
             let began = clock.now
             let result = try await planner.plan(request(from: fix.point, to: place.point))
             #if DEBUG
-            problem = "Calcolo: \(began.duration(to: clock.now).formatted(.units(allowed: [.milliseconds], width: .narrow)))"
+            planTime = began.duration(to: clock.now)
             #else
             _ = began
             #endif
