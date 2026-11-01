@@ -68,7 +68,7 @@ Perché non basta:
 - **Test poco discriminante:** il percorso libero del grafo entrava in zona solo in 3 tragitti su 10 a Milano Area C e 2 su 10 a Firenze. Il grafo favorisce le circonvallazioni anche senza vincoli.
 - **Zero in zona è per costruzione:** l'algoritmo non può entrare. Il controllo geometrico lo conferma, ma vale quanto il perimetro.
 - **Zero svolte vietate vale solo rispetto a OSM:** router e controllo usano gli stessi dati. Errori della mappa, sensi unici sbagliati e vie chiuse non si vedono. Nessun percorso è stato guidato.
-- **Tempi di arrivo inutilizzabili:** il grafo stima circa la metà di Apple (Milano 80 minuti contro 195 sui 10 tragitti del giro 3, Firenze 99 contro 188), mentre le distanze sono vicine. Servono calibrazione e penalità agli incroci. Traffico assente.
+- **Tempi di arrivo non calibrati:** il grafo li sottostima molto, soprattutto per i semafori. Si calibrano con tracce GPS di viaggi veri, non con i dati Apple (decisione del 1/11, per il limite di licenza riportato nel ticket di ricerca). Traffico assente.
 - **Non provati:** iPhone, istruzioni di guida, voce, ricalcolo fuori percorso, CarPlay, raccordo con MapKit fuori dal grafo.
 - **Limiti di velocità:** `maxspeed` copre il 34% delle strade a Milano e il 29% a Firenze. La parità con l'originale non è garantita.
 - **Zone reali:** in `milano-tutte` i tipi DT e DA sono stati evitati senza leggerne il significato. L'app vera sceglie le zone in base a veicolo e orario, e per Area C deve poter proporre il ticket.
