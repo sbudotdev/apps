@@ -13,7 +13,7 @@ final class ZTLFlowTests: XCTestCase {
     @MainActor
     func testFirstRunAddsAVehicleAndEndsTheTour() {
         let app = XCUIApplication()
-        app.launchArguments = ["-uiTesting"]
+        app.launchArguments = ["-uiTesting", "-AppleLanguages", "(it)", "-AppleLocale", "it_IT"]
         app.launch()
         shot(app, "01-first-run")
         app.buttons["addVehicle"].tap()
@@ -33,6 +33,7 @@ final class ZTLFlowTests: XCTestCase {
         app.buttons["continue"].tap()
         let next = app.buttons["tourNext"]
         XCTAssertTrue(next.waitForExistence(timeout: 8))
+        sleep(1)
         shot(app, "07-tour-1")
         next.tap()
         sleep(1)
@@ -49,7 +50,7 @@ final class ZTLFlowTests: XCTestCase {
     @MainActor
     func testSearchPlaceRouteAndGuide() throws {
         let app = XCUIApplication()
-        app.launchArguments = ["-uiTesting", "-withVehicle"]
+        app.launchArguments = ["-uiTesting", "-withVehicle", "-AppleLanguages", "(it)", "-AppleLocale", "it_IT"]
         app.launch()
         app.buttons["Cerca un luogo"].tap()
         let field = app.textFields.firstMatch
@@ -76,7 +77,7 @@ final class ZTLFlowTests: XCTestCase {
     @MainActor
     func testSettingsAndZoneList() {
         let app = XCUIApplication()
-        app.launchArguments = ["-uiTesting", "-withVehicle"]
+        app.launchArguments = ["-uiTesting", "-withVehicle", "-AppleLanguages", "(it)", "-AppleLocale", "it_IT"]
         app.launch()
         app.buttons["Impostazioni"].tap()
         sleep(1)
@@ -94,8 +95,12 @@ final class ZTLFlowTests: XCTestCase {
     @MainActor
     func testAccessibilityAudit() throws {
         let app = XCUIApplication()
-        app.launchArguments = ["-uiTesting", "-withVehicle"]
+        app.launchArguments = ["-uiTesting", "-withVehicle", "-AppleLanguages", "(it)", "-AppleLocale", "it_IT"]
         app.launch()
-        try app.performAccessibilityAudit(for: [.sufficientElementDescription, .hitRegion, .dynamicType])
+        try app.performAccessibilityAudit(for: [.sufficientElementDescription, .hitRegion, .dynamicType]) { issue in
+            print("AUDIT", issue.compactDescription, issue.element?.description ?? "-")
+            // Apple's own Maps logo and legal link inside the map aren't ours to size.
+            return issue.element?.label.contains("legali") == true || issue.element?.label.contains("Mappe") == true
+        }
     }
 }

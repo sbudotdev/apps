@@ -36,8 +36,9 @@ struct RootView: View {
         .sheet(isPresented: $isAddingFirstVehicle) {
             VehicleWizard(store: store) { addedVehicle = true }
         }
-        .onChange(of: isAddingFirstVehicle) { _, isOpen in
-            if !isOpen, addedVehicle { startTour() }
+        // The tour waits for the Closure: it takes the whole screen for its two seconds.
+        .onChange(of: addedVehicle) { _, isShowing in
+            if !isShowing, showsFirstRun { startTour() }
         }
         .sbuClosure($addedVehicle, word: "Aggiunto")
     }
