@@ -22,7 +22,10 @@ enum LaunchMode {
         let suite = "dev.sbu.social.demo"
         let defaults = UserDefaults(suiteName: suite) ?? .standard
         defaults.removePersistentDomain(forName: suite)
-        if self == .sample { ShieldSettings.sample().save(to: defaults) }
+        if self == .sample {
+            ShieldSettings.sample().save(to: defaults)
+            Tally.sample().save(to: defaults)
+        }
         return defaults
     }
 }

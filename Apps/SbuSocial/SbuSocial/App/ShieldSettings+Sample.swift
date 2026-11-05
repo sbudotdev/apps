@@ -8,6 +8,10 @@ extension ShieldSettings {
         var settings = ShieldSettings()
         settings.put(Intention(name: "Instagram", maxOpens: 10, minutes: 10, opensDay: today, opens: 3))
         settings.put(Intention(name: "YouTube", maxOpens: 5, minutes: 15, days: [2, 3, 4, 5, 6], opensDay: today, opens: 1))
+        // Notte, turned off so that no screenshot depends on the hour it is taken.
+        var night = BlockSession.presets[2]
+        night.isOn = false
+        settings.put(night)
         return settings
     }
 }

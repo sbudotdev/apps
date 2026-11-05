@@ -61,6 +61,29 @@ struct ShieldSettingsTests {
         #expect(!settings.isBlocking(now: now.addingTimeInterval(60)))
     }
 
+    @Test func aRunningSessionBlocksToo() {
+        var settings = ShieldSettings()
+        // `now` is 17:46 UTC: a session over the whole afternoon and evening holds it.
+        var utc = calendar
+        utc.timeZone = .gmt
+        settings.put(BlockSession(name: "Sera", start: 17 * 60, end: 23 * 60))
+        #expect(settings.isBlocking(now: now, calendar: utc))
+        #expect(settings.kind(for: nil, now: now, calendar: utc) == .session)
+        #expect(!settings.isBlocking(now: now.addingTimeInterval(6 * 3600), calendar: utc))
+    }
+
+    @Test func puttingASessionAgainReplacesItAndTenIsTheMost() {
+        var settings = ShieldSettings()
+        var session = BlockSession(name: "Cena", start: 18 * 60, end: 19 * 60)
+        settings.put(session)
+        session.name = "Cena lunga"
+        settings.put(session)
+        #expect(settings.sessions.map(\.name) == ["Cena lunga"])
+
+        for _ in 0..<12 { settings.put(BlockSession(name: "Altra", start: 0, end: 60)) }
+        #expect(settings.sessions.count == ShieldSettings.maxSessions)
+    }
+
     @Test func onlyIntentionsWithNoOpeningRunningAreLocked() throws {
         var settings = ShieldSettings()
         settings.put(Intention(app: try app(1)))

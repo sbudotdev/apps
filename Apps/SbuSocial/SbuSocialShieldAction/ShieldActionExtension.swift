@@ -26,7 +26,7 @@ final class ShieldActionExtension: ShieldActionDelegate {
             completionHandler(.close)
             return
         }
-        settings.apply(to: ManagedSettingsStore(named: ShieldSettings.storeName), now: now)
+        settings.apply(to: ManagedSettingsStore(named: ShieldSettings.storeName), in: defaults, now: now)
         // The Shield's return is the start of a one-off schedule: see `oneOff(from:to:)`.
         try? DeviceActivityCenter().startMonitoring(ShieldSettings.relockActivity(for: opened.id),
                                                     during: .oneOff(from: end, to: end.addingTimeInterval(15 * 60)))

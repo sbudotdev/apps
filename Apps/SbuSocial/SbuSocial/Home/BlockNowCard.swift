@@ -1,7 +1,7 @@
 import SbuKit
 import SwiftUI
 
-/// Blocca ora: every app closes now for the time you pick.
+/// Blocca ora: every app but the allowed ones closes now for the time you pick.
 struct BlockNowCard: View {
     let shield: ShieldModel
 
@@ -20,7 +20,7 @@ struct BlockNowCard: View {
                         }
                     }
                 }
-                Text("Tutte le app si chiudono per il tempo che scegli.")
+                Text("Tutte le app si chiudono per il tempo che scegli, tranne le App consentite.")
                     .font(SbuTheme.footnote)
                     .foregroundStyle(SbuTheme.inkMuted)
             }

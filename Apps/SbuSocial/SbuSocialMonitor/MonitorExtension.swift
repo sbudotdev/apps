@@ -26,6 +26,6 @@ final class MonitorExtension: DeviceActivityMonitor {
     }
 
     private func apply() {
-        ShieldSettings.load(from: defaults).apply(to: store, now: .now.addingTimeInterval(Self.lead))
+        ShieldSettings.load(from: defaults).apply(to: store, in: defaults, now: .now.addingTimeInterval(Self.lead))
     }
 }

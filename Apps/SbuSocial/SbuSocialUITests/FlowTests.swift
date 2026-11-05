@@ -27,17 +27,32 @@ final class FlowTests: XCTestCase {
 
         // By label, not through the tab bar: on a wide screen such as iPhone Duo's inner display
         // the tabs are buttons in a side toolbar.
+        app.buttons["Sessioni"].firstMatch.tap()
+        XCTAssertTrue(app.buttons["Nuova Sessione"].waitForExistence(timeout: 5), "The Sessioni tab opens")
+        try audit(app)
+
+        app.buttons.containing(.staticText, identifier: "Notte").firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["Sessione"].waitForExistence(timeout: 5), "A row opens its Sessione")
+        try audit(app, excluding: Self.formExclusions)
+        app.buttons["Annulla"].tap()
+
+        // The sample's only Sessione is off: one that is on can only be the idea just added.
+        let isOn = app.buttons.containing(.staticText, identifier: "Accesa").firstMatch
+        XCTAssertFalse(isOn.exists)
+        app.buttons.containing(.staticText, identifier: "Cena").firstMatch.tap()
+        XCTAssertTrue(isOn.waitForExistence(timeout: 5), "An idea becomes a Sessione that is on")
+
         app.buttons["Impostazioni"].firstMatch.tap()
         try audit(app, excluding: Self.settingsExclusions)
     }
 
     @MainActor
-    func testFirstRunOffersToChooseAnAppAndWaitsForIt() throws {
+    func testFirstRunOffersAnIntentionAndWaitsForItsApp() throws {
         let app = launch(store: "-SBU_EMPTY_STORE")
-        XCTAssertTrue(app.buttons["Scegli un'app"].waitForExistence(timeout: 5), "First run asks for one app")
+        XCTAssertTrue(app.buttons["Aggiungi un'Intenzione"].waitForExistence(timeout: 5), "First run offers an Intenzione")
         try audit(app)
 
-        app.buttons["Scegli un'app"].tap()
+        app.buttons["Aggiungi un'Intenzione"].tap()
         XCTAssertTrue(app.navigationBars["Nuova Intenzione"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.buttons["Salva"].isEnabled, "Nothing to save until an app is chosen")
         try audit(app, excluding: Self.formExclusions)
@@ -75,7 +90,8 @@ final class FlowTests: XCTestCase {
                 return true
             }
             // SbuFigure: the hero figure snaps to the grid by its length, not by text size, by design.
-            if issue.auditType == .dynamicType, !label.isEmpty, label.allSatisfy(\.isNumber) {
+            // Home's is a time, "0:45:00".
+            if issue.auditType == .dynamicType, !label.isEmpty, label.allSatisfy({ $0.isNumber || $0 == ":" }) {
                 return true
             }
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? "no element")")

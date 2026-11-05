@@ -1,7 +1,7 @@
 import SbuKit
 import SwiftUI
 
-/// The app inside `SbuTabShell`: Home, then Impostazioni.
+/// The app inside `SbuTabShell`: Home, Sessioni, then Impostazioni (ADR-0021).
 struct RootView: View {
     @State private var tab = AppTab.home
 
@@ -11,6 +11,9 @@ struct RootView: View {
             SbuTab("Home", systemImage: "house", value: AppTab.home) {
                 HomeView()
             }
+            SbuTab("Sessioni", systemImage: "calendar", value: AppTab.sessions) {
+                SessionsView()
+            }
         } settings: {
         }
     }
@@ -18,11 +21,11 @@ struct RootView: View {
 
 #Preview("Light") {
     RootView()
-        .environment(ShieldModel(defaults: UserDefaults(suiteName: "preview")!))
+        .environment(ShieldModel(defaults: UserDefaults(suiteName: "preview")!, isDemo: true))
 }
 
 #Preview("Dark") {
     RootView()
-        .environment(ShieldModel(defaults: UserDefaults(suiteName: "preview")!))
+        .environment(ShieldModel(defaults: UserDefaults(suiteName: "preview")!, isDemo: true))
         .preferredColorScheme(.dark)
 }

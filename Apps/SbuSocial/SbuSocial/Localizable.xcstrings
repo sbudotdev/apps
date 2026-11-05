@@ -11,6 +11,16 @@
         }
       }
     },
+    "%@ in blocco oggi" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ blocked today"
+          }
+        }
+      }
+    },
     "%@ è bloccata" : {
       "localizations" : {
         "en" : {
@@ -31,12 +41,52 @@
         }
       }
     },
+    "Accesa" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On"
+          }
+        }
+      }
+    },
+    "Aggiunge la Sessione" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adds the Session"
+          }
+        }
+      }
+    },
     "Aggiungi un'Intenzione" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Add an Intention"
+          }
+        }
+      }
+    },
+    "Al massimo %lld app: scegline di meno." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "At most %lld apps: choose fewer."
+          }
+        }
+      }
+    },
+    "Allenamento" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Workout"
           }
         }
       }
@@ -101,6 +151,16 @@
         }
       }
     },
+    "App consentite: %lld su %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allowed apps: %1$lld of %2$lld"
+          }
+        }
+      }
+    },
     "App schermata" : {
       "localizations" : {
         "en" : {
@@ -151,6 +211,16 @@
         }
       }
     },
+    "Cena" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dinner"
+          }
+        }
+      }
+    },
     "Chiudi" : {
       "localizations" : {
         "en" : {
@@ -181,6 +251,36 @@
         }
       }
     },
+    "Elimina la Sessione" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete the Session"
+          }
+        }
+      }
+    },
+    "Fine" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End"
+          }
+        }
+      }
+    },
+    "Fine settimana" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weekend"
+          }
+        }
+      }
+    },
     "Giorni: %lld" : {
       "localizations" : {
         "en" : {
@@ -197,6 +297,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Home"
+          }
+        }
+      }
+    },
+    "Idee" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ideas"
+          }
+        }
+      }
+    },
+    "Inizio" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
           }
         }
       }
@@ -221,6 +341,16 @@
         }
       }
     },
+    "Lavoro" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Work"
+          }
+        }
+      }
+    },
     "Le hai finite: se la apri, oggi non conta per la serie." : {
       "localizations" : {
         "en" : {
@@ -231,12 +361,62 @@
         }
       }
     },
+    "Mattina" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Morning"
+          }
+        }
+      }
+    },
+    "Meditazione" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meditation"
+          }
+        }
+      }
+    },
+    "Nome" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        }
+      }
+    },
+    "Notte" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Night"
+          }
+        }
+      }
+    },
     "Nuova Intenzione" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "New Intention"
+          }
+        }
+      }
+    },
+    "Nuova Sessione" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Session"
           }
         }
       }
@@ -257,6 +437,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "This app already has an Intention."
+          }
+        }
+      }
+    },
+    "Restano aperte durante Blocca ora e le Sessioni." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "They stay open during Block now and the Sessions."
           }
         }
       }
@@ -301,16 +491,6 @@
         }
       }
     },
-    "Scegli un'app" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choose an app"
-          }
-        }
-      }
-    },
     "Scegli un'app da limitare: la apri solo le volte che decidi." : {
       "localizations" : {
         "en" : {
@@ -341,6 +521,46 @@
         }
       }
     },
+    "Sessione" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session"
+          }
+        }
+      }
+    },
+    "Sessioni" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sessions"
+          }
+        }
+      }
+    },
+    "Sessioni accese" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sessions on"
+          }
+        }
+      }
+    },
+    "Spenta" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off"
+          }
+        }
+      }
+    },
     "Termina il blocco" : {
       "localizations" : {
         "en" : {
@@ -351,12 +571,42 @@
         }
       }
     },
-    "Tutte le app si chiudono per il tempo che scegli." : {
+    "Tutte le app si chiudono per il tempo che scegli, tranne le App consentite." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Every app closes for the time you choose."
+            "value" : "Every app closes for the time you choose, except the Allowed apps."
+          }
+        }
+      }
+    },
+    "Una Sessione dura almeno %lld minuti." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A Session lasts at least %lld minutes."
+          }
+        }
+      }
+    },
+    "in blocco oggi" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "blocked today"
+          }
+        }
+      }
+    },
+    "in blocco oggi, record %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "blocked today, record %@"
           }
         }
       }
