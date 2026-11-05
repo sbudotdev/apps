@@ -20,6 +20,10 @@ struct RootView: View {
             ProgressSection(shield: shield)
             AccessSection(shield: shield)
         }
+        // First run: the app does nothing until Screen Time, an Intenzione and the allowed apps are set.
+        .fullScreenCover(isPresented: .constant(!shield.settings.isSetUp)) {
+            SetupView()
+        }
     }
 }
 

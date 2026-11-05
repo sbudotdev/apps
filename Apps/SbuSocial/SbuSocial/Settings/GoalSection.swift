@@ -5,15 +5,9 @@ import SwiftUI
 struct GoalSection: View {
     @Bindable var shield: ShieldModel
 
-    private var length: String {
-        Duration.seconds(shield.goalMinutes * 60).formatted(.units(allowed: [.hours, .minutes], width: .abbreviated))
-    }
-
     var body: some View {
         Section {
-            Stepper(value: $shield.goalMinutes, in: 15...720, step: 15) {
-                Text("Obiettivo giornaliero: \(length)")
-            }
+            GoalStepper(shield: shield)
         } footer: {
             Text("Il tempo di schermo che ti dai per oggi. Quando lo raggiungi arriva una notifica e il giorno non conta per la serie.")
         }

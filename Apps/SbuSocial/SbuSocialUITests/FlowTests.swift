@@ -57,7 +57,15 @@ final class FlowTests: XCTestCase {
     @MainActor
     func testFirstRunOffersAnIntentionAndWaitsForItsApp() throws {
         let app = launch(store: "-SBU_EMPTY_STORE")
-        XCTAssertTrue(app.buttons["Aggiungi un'Intenzione"].waitForExistence(timeout: 5), "First run offers an Intenzione")
+        XCTAssertTrue(app.buttons["Avanti"].waitForExistence(timeout: 5), "First run opens the setup")
+        try audit(app)
+        // Six steps, each passed over: access, goal, Intenzione, Sessione, allowed apps, widget.
+        for _ in 0..<5 { app.buttons["Avanti"].tap() }
+        XCTAssertFalse(app.buttons["Avanti"].exists, "The last step only ends the setup")
+        try audit(app)
+        app.buttons["Fatto"].tap()
+
+        XCTAssertTrue(app.buttons["Blocca ora"].waitForExistence(timeout: 5), "The setup ends on Home")
         try audit(app)
 
         app.buttons["Aggiungi un'Intenzione"].tap()

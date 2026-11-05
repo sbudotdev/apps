@@ -20,6 +20,7 @@ struct ShieldSettingsTests {
     @Test func emptyUntilYouAddAnIntention() {
         let settings = ShieldSettings.load(from: freshDefaults())
         #expect(settings.intentions.isEmpty)
+        #expect(!settings.isSetUp)
         #expect(!settings.isBlocking(now: now))
         #expect(settings.locked(now: now, calendar: calendar).isEmpty)
     }
@@ -30,6 +31,7 @@ struct ShieldSettingsTests {
         settings.put(Intention(app: try app(1), maxOpens: 3))
         settings.blockNowEnd = now
         settings.goalMinutes = 45
+        settings.isSetUp = true
         settings.put(BlockSession(name: "Cena", start: 18 * 60, end: 19 * 60))
         settings.save(to: defaults)
         #expect(ShieldSettings.load(from: defaults) == settings)

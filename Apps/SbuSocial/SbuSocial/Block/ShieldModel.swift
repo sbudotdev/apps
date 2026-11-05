@@ -139,6 +139,11 @@ final class ShieldModel {
         try? center.startMonitoring(ShieldSettings.dayActivity, during: day, events: [ShieldSettings.goalEvent: goal])
     }
 
+    /// The first-run setup is over, finished or skipped.
+    func finishSetup() {
+        update { $0.isSetUp = true }
+    }
+
     // MARK: Serie, punti, Missione del giorno
 
     func complete(_ task: QuestTask, now: Date = .now) {

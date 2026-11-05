@@ -101,6 +101,16 @@
         }
       }
     },
+    "Accesso concesso." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Access allowed."
+          }
+        }
+      }
+    },
     "Aggiunge la Sessione" : {
       "localizations" : {
         "en" : {
@@ -201,6 +211,16 @@
         }
       }
     },
+    "App consentite" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allowed apps"
+          }
+        }
+      }
+    },
     "App consentite: %lld su %lld" : {
       "localizations" : {
         "en" : {
@@ -227,6 +247,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open for %@"
+          }
+        }
+      }
+    },
+    "Avanti" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
           }
         }
       }
@@ -641,6 +671,16 @@
         }
       }
     },
+    "Obiettivo giornaliero" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily goal"
+          }
+        }
+      }
+    },
     "Obiettivo giornaliero: %@" : {
       "localizations" : {
         "en" : {
@@ -657,6 +697,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Beyond today's opens: the day does not count for your streak."
+          }
+        }
+      }
+    },
+    "Per avere la serie nella schermata Home: tieni premuto lo sfondo, tocca Modifica e aggiungi il widget di Sbu Social." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To have your streak on the Home Screen: touch and hold the background, tap Edit and add the Sbu Social widget."
           }
         }
       }
@@ -701,6 +751,16 @@
         }
       }
     },
+    "Quanto schermo ti dai in un giorno. Quando lo raggiungi arriva una notifica e il giorno non conta per la serie." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How much screen time you give yourself in a day. When you reach it a notification comes and the day does not count for your streak."
+          }
+        }
+      }
+    },
     "Questa app ha già un'Intenzione." : {
       "localizations" : {
         "en" : {
@@ -741,6 +801,16 @@
         }
       }
     },
+    "Salta la configurazione" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skip the setup"
+          }
+        }
+      }
+    },
     "Salva" : {
       "localizations" : {
         "en" : {
@@ -761,6 +831,16 @@
         }
       }
     },
+    "Sbu Social copre le app con lo Schermo di Tempo di utilizzo. Serve il tuo permesso; i dati restano sul telefono." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sbu Social covers apps with the Screen Time Shield. It needs your permission; the data stays on the phone."
+          }
+        }
+      }
+    },
     "Sbu · Social · %@" : {
       "localizations" : {
         "en" : {
@@ -771,12 +851,52 @@
         }
       }
     },
+    "Sbu · Social · Passo %lld di %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sbu · Social · Step %1$lld of %2$lld"
+          }
+        }
+      }
+    },
     "Scegli l'app" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Choose the app"
+          }
+        }
+      }
+    },
+    "Scegli l'app che ti distrae di più: la apri solo le volte che decidi, per i minuti che decidi." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose the app that distracts you most: you open it only as many times as you decide, for the minutes you decide."
+          }
+        }
+      }
+    },
+    "Scegli le app che restano sempre aperte durante un blocco: telefono, mappe, quello che ti serve." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose the apps that always stay open during a block: phone, maps, what you need."
+          }
+        }
+      }
+    },
+    "Scegli un momento della giornata in cui tutte le app restano chiuse. Parte e finisce da solo." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a time of day when every app stays closed. It starts and ends by itself."
           }
         }
       }
@@ -871,6 +991,16 @@
         }
       }
     },
+    "Sessioni accese: %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sessions on: %lld"
+          }
+        }
+      }
+    },
     "Spenta" : {
       "localizations" : {
         "en" : {
@@ -957,6 +1087,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A Session lasts at least %lld minutes."
+          }
+        }
+      }
+    },
+    "Widget" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Widget"
           }
         }
       }

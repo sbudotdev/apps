@@ -15,6 +15,8 @@ nonisolated struct ShieldSettings: Codable, Equatable {
     var blockNowEnd: Date?
     /// The Obiettivo giornaliero: the minutes of screen you give yourself for a day.
     var goalMinutes = 120
+    /// The first-run setup was finished or skipped: it shows once.
+    var isSetUp = false
 
     static let maxIntentions = 8
     /// With one schedule each, the Intenzioni's returns and Blocca ora, this stays within the
@@ -49,6 +51,7 @@ nonisolated struct ShieldSettings: Codable, Equatable {
         allowList = try container.decodeIfPresent(FamilyActivitySelection.self, forKey: .allowList) ?? FamilyActivitySelection()
         blockNowEnd = try container.decodeIfPresent(Date.self, forKey: .blockNowEnd)
         goalMinutes = try container.decodeIfPresent(Int.self, forKey: .goalMinutes) ?? 120
+        isSetUp = try container.decodeIfPresent(Bool.self, forKey: .isSetUp) ?? false
     }
 
     /// Whether everything but the allowed apps is blocked now: Blocca ora or a Sessione is running.

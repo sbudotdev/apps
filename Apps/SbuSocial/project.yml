@@ -66,6 +66,7 @@ targets:
       - Shared
       # The Shield's words come from the app's catalog.
       - SbuSocial/Localizable.xcstrings
+      - SbuSocial/PrivacyInfo.xcprivacy
     dependencies:
       - package: SbuKit
     entitlements:
@@ -96,6 +97,7 @@ targets:
       - Shared
       # The Shield's words come from the app's catalog.
       - SbuSocial/Localizable.xcstrings
+      - SbuSocial/PrivacyInfo.xcprivacy
     entitlements:
       path: SbuSocialShieldAction/SbuSocialShieldAction.entitlements
       properties:
@@ -123,6 +125,7 @@ targets:
       - SbuSocialMonitor
       - Shared
       - SbuSocial/Localizable.xcstrings
+      - SbuSocial/PrivacyInfo.xcprivacy
     entitlements:
       path: SbuSocialMonitor/SbuSocialMonitor.entitlements
       properties:
@@ -153,6 +156,7 @@ targets:
       - Shared/Day.swift
       - Shared/QuestTask.swift
       - SbuSocial/Localizable.xcstrings
+      - SbuSocial/PrivacyInfo.xcprivacy
     dependencies:
       - package: SbuKit
     entitlements:
