@@ -1,14 +1,12 @@
-import ActivityKit
 import DeviceActivity
 import FamilyControls
 import ManagedSettings
 import Observation
-import SbuKit
 import UserNotifications
 
-/// The Shield's state for Blocco and Sonno: Screen Time permission, the chosen apps, the switch,
-/// Sonno, focus, the Limite di tempo and Modalità post. Every change saves to the app group and
-/// applies the one answer of `ShieldSettings`, as the monitor extension does.
+/// The Shield's state for the app: Screen Time permission, the Intenzioni and Blocca ora.
+/// Every change loads the app group afresh, saves and applies the one answer of `ShieldSettings`,
+/// as the extensions do.
 @Observable
 final class ShieldModel {
     private(set) var settings: ShieldSettings
@@ -24,10 +22,16 @@ final class ShieldModel {
         isAuthorized = AuthorizationCenter.shared.authorizationStatus == .approved
     }
 
-    var postModeEnd: Date? { settings.postModeEnd }
-    var focusEnd: Date? { settings.focusEnd }
+    var blockNowEnd: Date? { settings.blockNowEnd }
 
-    /// Asks for Screen Time the first time you choose apps, never earlier.
+    /// The next moment the Shield changes by itself: an opening or Blocca ora ends.
+    func nextChange(after now: Date = .now) -> Date? {
+        (settings.intentions.compactMap(\.unlockedUntil) + [settings.blockNowEnd].compactMap(\.self))
+            .filter { $0 > now }
+            .min()
+    }
+
+    /// Asks for Screen Time the first time you choose an app, never earlier.
     func authorize() async -> Bool {
         if !isAuthorized {
             try? await AuthorizationCenter.shared.requestAuthorization(for: .individual)
@@ -36,109 +40,47 @@ final class ShieldModel {
         return isAuthorized
     }
 
-    func choose(_ selection: FamilyActivitySelection) {
-        settings.selection = selection
-        if settings.appCount > 0 || !selection.categoryTokens.isEmpty { settings.isOn = true }
-        commit()
+    // MARK: Intenzioni
+
+    /// Adds an Intenzione or saves its changes.
+    func save(_ intention: Intention) {
+        update { $0.put(intention) }
+        // An opening is announced by a notification: ask when the first Intenzione exists.
+        Task { _ = try? await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) }
     }
 
-    /// The Shield's switch.
-    var isOn: Bool {
-        get { settings.isOn }
-        set {
-            settings.isOn = newValue
-            commit()
-        }
+    func remove(_ intention: Intention) {
+        center.stopMonitoring([ShieldSettings.relockActivity(for: intention.id)])
+        update { $0.intentions.removeAll { $0.id == intention.id } }
     }
 
-    // MARK: Sonno
+    // MARK: Blocca ora
 
-    /// Sonno's settings; every change reschedules the nights. Writable, for bindings from Sonno's controls.
-    var sleep: SleepSettings {
-        get { settings.sleep }
-        set {
-            settings.sleep = newValue
-            center.stopMonitoring([SleepSettings.activity])
-            if newValue.isOn {
-                try? center.startMonitoring(SleepSettings.activity, during: newValue.schedule)
-            }
-            settings.isSleeping = newValue.isOn && settings.isSleeping
-            commit()
-        }
-    }
-
-    // MARK: Focus
-
-    /// Shields the chosen apps from now for `minutes`, whatever the switch says.
-    func startFocus(minutes: Int, now: Date = .now) {
+    /// Blocks everything but the allowed apps from now for `minutes`.
+    func startBlockNow(minutes: Int, now: Date = .now) {
         let end = now.addingTimeInterval(TimeInterval(minutes * 60))
-        try? center.startMonitoring(ShieldSettings.focusActivity, during: PostMode.oneOff(from: now, to: end))
-        settings.focusEnd = end
-        commit()
+        try? center.startMonitoring(ShieldSettings.blockNowActivity, during: .oneOff(from: now, to: end))
+        update { $0.blockNowEnd = end }
     }
 
-    func endFocus() {
-        center.stopMonitoring([ShieldSettings.focusActivity])
-        settings.focusEnd = nil
-        commit()
+    func endBlockNow() {
+        center.stopMonitoring([ShieldSettings.blockNowActivity])
+        update { $0.blockNowEnd = nil }
     }
 
-    // MARK: Limite di tempo
-
-    /// The Limite di tempo is reached: the native apps are shielded too until midnight.
-    func limitReached(now: Date = .now, calendar: Calendar = .current) {
-        let day = ShieldSettings.day(now, calendar: calendar)
-        guard settings.limitDay != day, let midnight = calendar.nextDate(after: now, matching: DateComponents(hour: 0), matchingPolicy: .nextTime) else { return }
-        try? center.startMonitoring(ShieldSettings.limitActivity, during: PostMode.oneOff(from: now, to: midnight.addingTimeInterval(-1), calendar: calendar))
-        settings.limitDay = day
-        commit()
-    }
-
-    // MARK: Modalità post
-
-    /// Lifts the Shield for 10 minutes, with the countdown on the Lock Screen and in the Dynamic Island.
-    func startPostMode(now: Date = .now) {
-        guard settings.isShielding(now: now), settings.postModeEnd == nil else { return }
-        let end = now.addingTimeInterval(PostMode.duration)
-        try? center.startMonitoring(PostMode.activity, during: PostMode.schedule(from: now))
-        settings.postModeEnd = end
-        commit()
-        _ = try? Activity.request(attributes: PostModeAttributes(start: now, end: end),
-                                  content: .init(state: .init(), staleDate: end))
-    }
-
-    /// Brings the Shield back: when the 10 minutes are up, or early from the Blocco tab.
-    func endPostMode() {
-        center.stopMonitoring([PostMode.activity])
-        settings.postModeEnd = nil
-        commit()
-        Task {
-            for activity in Activity<PostModeAttributes>.activities {
-                await activity.end(.init(state: .init(isOver: true), staleDate: nil),
-                                   dismissalPolicy: .after(.now.addingTimeInterval(SbuTheme.liveEndDelay)))
-            }
-        }
-    }
-
-    /// When the app comes back: the monitor extension may have changed the Shield meanwhile, or
-    /// iOS was late; finished sessions end now.
+    /// When the app comes back, or an opening or a block ends with the app open: the extensions
+    /// may have changed the Shield meanwhile, or iOS was late.
     func refresh(now: Date = .now) {
         settings = ShieldSettings.load(from: defaults)
-        if let end = settings.postModeEnd, end <= now {
-            endPostMode()
-        } else if settings.postModeEnd == nil, !Activity<PostModeAttributes>.activities.isEmpty {
-            endPostMode()
+        if let end = settings.blockNowEnd, end <= now {
+            endBlockNow()
+        } else {
+            settings.apply(to: store, now: now)
         }
-        if let end = settings.focusEnd, end <= now { endFocus() }
-        settings.apply(to: store, now: now)
     }
 
-    private func commit() {
-        settings.save(to: defaults)
+    private func update(_ change: (inout ShieldSettings) -> Void) {
+        settings = ShieldSettings.update(in: defaults, change)
         settings.apply(to: store)
-        // The Shield's button and Sonno's warning are notifications: ask the first time either is used.
-        if settings.isOn || settings.sleep.isOn {
-            Task { _ = try? await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) }
-        }
     }
 }

@@ -1,4 +1,4 @@
-/// The five tabs, in SocialLite's order (ADR-0017). The app opens on Home, in the middle.
+/// The tabs; Impostazioni is the last, added by the shell.
 nonisolated enum AppTab: Hashable {
-    case sleep, stats, home, block, settings
+    case home, settings
 }

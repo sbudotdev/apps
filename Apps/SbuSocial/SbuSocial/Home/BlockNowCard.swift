@@ -1,26 +1,26 @@
 import SbuKit
 import SwiftUI
 
-/// Focus, as in SocialLite: the apps chosen in Blocco close now for the time you pick.
-struct FocusCard: View {
+/// Blocca ora: every app closes now for the time you pick.
+struct BlockNowCard: View {
     let shield: ShieldModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: SbuTheme.space2) {
-            if let end = shield.focusEnd {
-                Text("Focus fino alle \(end, format: .dateTime.hour().minute())")
-                Button("Termina il focus", action: shield.endFocus)
+            if let end = shield.blockNowEnd {
+                Text("Blocco fino alle \(end, format: .dateTime.hour().minute())")
+                Button("Termina il blocco", action: shield.endBlockNow)
             } else {
-                Menu("Inizia un focus") {
-                    ForEach(ShieldSettings.focusLengths, id: \.self) { minutes in
+                Menu("Blocca ora") {
+                    ForEach(ShieldSettings.blockNowLengths, id: \.self) { minutes in
                         Button {
-                            shield.startFocus(minutes: minutes)
+                            start(minutes: minutes)
                         } label: {
                             Text(Duration.seconds(minutes * 60), format: .units(allowed: [.hours, .minutes], width: .wide))
                         }
                     }
                 }
-                Text("Le app scelte in Blocco si chiudono per il tempo che scegli.")
+                Text("Tutte le app si chiudono per il tempo che scegli.")
                     .font(SbuTheme.footnote)
                     .foregroundStyle(SbuTheme.inkMuted)
             }
@@ -34,15 +34,23 @@ struct FocusCard: View {
                 .strokeBorder(SbuTheme.line, lineWidth: SbuTheme.hairline)
         }
     }
+
+    /// Screen Time is asked for the first time you block, never earlier.
+    private func start(minutes: Int) {
+        Task {
+            guard await shield.authorize() else { return }
+            shield.startBlockNow(minutes: minutes)
+        }
+    }
 }
 
 #Preview("Light") {
-    FocusCard(shield: ShieldModel(defaults: UserDefaults(suiteName: "preview")!))
+    BlockNowCard(shield: ShieldModel(defaults: UserDefaults(suiteName: "preview")!))
         .padding()
 }
 
 #Preview("Dark") {
-    FocusCard(shield: ShieldModel(defaults: UserDefaults(suiteName: "preview")!))
+    BlockNowCard(shield: ShieldModel(defaults: UserDefaults(suiteName: "preview")!))
         .padding()
         .preferredColorScheme(.dark)
 }

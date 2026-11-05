@@ -26,18 +26,15 @@ targets:
       - target: SbuSocialShieldConfiguration
       - target: SbuSocialShieldAction
       - target: SbuSocialMonitor
-      - target: SbuSocialWidget
     info:
       path: SbuSocial/Info.plist
       properties:
-        # YouTube keeps playing when you leave the app, as in SocialLite.
-        UIBackgroundModes: [audio]
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
     entitlements:
       path: SbuSocial/SbuSocial.entitlements
       properties:
-        # Screen Time with individual authorization: the Shield, Modalità post, Sonno and the Limite di tempo.
+        # Screen Time with individual authorization: the Shield, the Intenzioni and Blocca ora.
         com.apple.developer.family-controls: true
         # The app and its Screen Time extensions share the chosen apps and the schedules here.
         com.apple.security.application-groups: [group.dev.sbu.social]
@@ -46,8 +43,6 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.social
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Sbu Social
-        # Modalità post's countdown on the Lock Screen and in the Dynamic Island.
-        INFOPLIST_KEY_NSSupportsLiveActivities: YES
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
@@ -67,6 +62,7 @@ targets:
     platform: iOS
     sources:
       - SbuSocialShieldConfiguration
+      - Shared
       # The Shield's words come from the app's catalog.
       - SbuSocial/Localizable.xcstrings
     dependencies:
@@ -96,6 +92,7 @@ targets:
     platform: iOS
     sources:
       - SbuSocialShieldAction
+      - Shared
       # The Shield's words come from the app's catalog.
       - SbuSocial/Localizable.xcstrings
     entitlements:
@@ -144,31 +141,6 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.social.deviceactivitymonitor
         TARGETED_DEVICE_FAMILY: "1"
-  SbuSocialWidget:
-    # Modalità post's Live Activity; the widget comes later.
-    type: app-extension
-    platform: iOS
-    sources:
-      - SbuSocialWidget
-      - Shared/PostModeAttributes.swift
-      - SbuSocial/Localizable.xcstrings
-    dependencies:
-      - package: SbuKit
-    info:
-      path: SbuSocialWidget/Info.plist
-      properties:
-        CFBundleDisplayName: Sbu Social
-        CFBundleShortVersionString: $(MARKETING_VERSION)
-        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
-        NSExtension:
-          NSExtensionPointIdentifier: com.apple.widgetkit-extension
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.social.widget
-        TARGETED_DEVICE_FAMILY: "1"
-        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
-        SWIFT_APPROACHABLE_CONCURRENCY: YES
-        SWIFT_EMIT_LOC_STRINGS: YES
   SbuSocialTests:
     type: bundle.unit-test
     platform: iOS

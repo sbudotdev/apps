@@ -1,5 +1,7 @@
 # Sbu Social: la rete solo verso i siti delle Piattaforme
 
+Ritirato da ADR-0021 (5/11/2026): senza il browser filtrato Sbu Social non fa più chiamate di rete.
+
 Sbu Social apre i siti web delle **Piattaforme** dentro l'app, quindi fa chiamate di rete, che le regole di prodotto vietano salvo eccezioni (ADR-0007, 0008, 0009). Questa è la quarta eccezione, solo per Sbu Social, con questi confini:
 
 - La webview di una Piattaforma apre come pagina solo i domini elencati per lei in `rules.json` (il sito e il suo login, per esempio `instagram.com`, `youtube.com`, `accounts.google.com`); immagini e video dei CDN si caricano solo dentro quelle pagine. Ogni altra pagina si apre in Safari, e solo se è http o https; tracker e domini pubblicitari di terzi sono bloccati con `WKContentRuleList`.

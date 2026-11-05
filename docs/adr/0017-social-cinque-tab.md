@@ -1,5 +1,7 @@
 # Sbu Social: cinque tab come SocialLite
 
+Sostituito da ADR-0021 (5/11/2026): l'Originale di Sbu Social è ora BePresent, con quattro tab.
+
 Sostituisce ADR-0001 solo per Sbu Social. L'app è una `TabView` nativa dentro `SbuTabShell` con cinque tab nell'ordine di SocialLite, il suo **Originale**: **Sonno** (`moon.zzz`), **Statistiche** (`chart.bar`), **Home** (`house`), **Blocco** (`shield`) e **Impostazioni** (`gearshape`), l'ultima, aggiunta dalla shell come in ADR-0012. L'app si apre su Home, la tab centrale, che è la **Schermata strumento**.
 
 Ogni tab ha al massimo una **Cifra**: Home i minuti di oggi in Sbu Social, Statistiche la media al giorno degli ultimi 7 giorni, Sonno le ore della fascia di sonno, Blocco quante app sono schermate; Impostazioni nessuna. Il **Punto fermo** è pieno solo dove qualcosa è compiuto (Home sotto il **Limite di tempo**, Sonno attivo, **Schermo** attivo), altrimenti è in attesa. Aprire una **Piattaforma** da Home la porta a schermo intero senza tab bar, con in alto la striscia del cronometro e dei contatori, il ritorno e il menu della piattaforma, messo dove non copre i controlli del sito.

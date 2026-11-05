@@ -1,8 +1,8 @@
 import SbuKit
 import SwiftUI
 
-/// The nights Sonno holds, one checkbox per weekday, from the locale's first day of the week.
-struct NightsPicker: View {
+/// The days something holds, one checkbox per weekday, from the locale's first day of the week.
+struct WeekdaysPicker: View {
     @Binding var days: Set<Int>
 
     private var weekdays: [(number: Int, name: String)] {
@@ -15,7 +15,7 @@ struct NightsPicker: View {
     }
 
     var body: some View {
-        DisclosureGroup("Notti: \(days.count)") {
+        DisclosureGroup("Giorni: \(days.count)") {
             ForEach(weekdays, id: \.number) { day in
                 Toggle(day.name.capitalized, isOn: Binding {
                     days.contains(day.number)
@@ -29,12 +29,12 @@ struct NightsPicker: View {
 }
 
 #Preview("Light") {
-    NightsPicker(days: .constant([2, 3, 4, 5, 6]))
+    WeekdaysPicker(days: .constant([2, 3, 4, 5, 6]))
         .padding()
 }
 
 #Preview("Dark") {
-    NightsPicker(days: .constant([2, 3, 4, 5, 6]))
+    WeekdaysPicker(days: .constant([2, 3, 4, 5, 6]))
         .padding()
         .preferredColorScheme(.dark)
 }

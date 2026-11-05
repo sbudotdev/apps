@@ -1,4 +1,5 @@
 import Foundation
+import ManagedSettings
 import Testing
 @testable import SbuSocial
 
@@ -6,99 +7,112 @@ struct ShieldSettingsTests {
     private let now = Date(timeIntervalSince1970: 1_792_000_000)
     private let calendar = Calendar(identifier: .gregorian)
 
-    @Test func offAndEmptyUntilYouChoose() {
-        let defaults = UserDefaults(suiteName: "ShieldSettingsTests-\(UUID())")!
-        let settings = ShieldSettings.load(from: defaults)
-        #expect(!settings.isOn)
-        #expect(settings.appCount == 0)
-        #expect(!settings.isShielding(now: now))
+    private func freshDefaults() -> UserDefaults {
+        UserDefaults(suiteName: "ShieldSettingsTests-\(UUID())")!
     }
 
-    @Test func everythingSurvivesARelaunch() {
-        let defaults = UserDefaults(suiteName: "ShieldSettingsTests-\(UUID())")!
+    /// A stand-in for an app as Screen Time hands it over: tokens are opaque data.
+    private func app(_ byte: UInt8) throws -> ApplicationToken {
+        let json = #"{"data":"\#(Data([byte]).base64EncodedString())"}"#
+        return try JSONDecoder().decode(ApplicationToken.self, from: Data(json.utf8))
+    }
+
+    @Test func emptyUntilYouAddAnIntention() {
+        let settings = ShieldSettings.load(from: freshDefaults())
+        #expect(settings.intentions.isEmpty)
+        #expect(!settings.isBlocking(now: now))
+        #expect(settings.locked(now: now, calendar: calendar).isEmpty)
+    }
+
+    @Test func everythingSurvivesARelaunch() throws {
+        let defaults = freshDefaults()
         var settings = ShieldSettings()
-        settings.isOn = true
-        settings.sleep.isOn = true
-        settings.focusEnd = now
+        settings.put(Intention(app: try app(1), maxOpens: 3))
+        settings.blockNowEnd = now
         settings.save(to: defaults)
         #expect(ShieldSettings.load(from: defaults) == settings)
     }
 
-    nonisolated struct Case: Sendable, CustomTestStringConvertible {
-        var isOn = false
-        var sleeping = false
-        var focusIn: TimeInterval?
-        var limitToday = false
-        var postIn: TimeInterval?
-        let up: Bool
-        let testDescription: String
+    @Test func aSavedShieldWithoutTheNewerFieldsKeepsWhatItHas() {
+        let defaults = freshDefaults()
+        defaults.set(Data(#"{"blockNowEnd":1000}"#.utf8), forKey: "shield")
+        #expect(ShieldSettings.load(from: defaults).blockNowEnd == Date(timeIntervalSinceReferenceDate: 1000))
     }
 
-    nonisolated static let cases: [Case] = [
-        Case(up: false, testDescription: "nothing holds it"),
-        Case(isOn: true, up: true, testDescription: "the switch"),
-        Case(sleeping: true, up: true, testDescription: "the night"),
-        Case(focusIn: 60, up: true, testDescription: "a running focus"),
-        Case(focusIn: -60, up: false, testDescription: "a finished focus"),
-        Case(limitToday: true, up: true, testDescription: "today's limit"),
-        Case(isOn: true, sleeping: true, focusIn: 60, limitToday: true, postIn: 300, up: false, testDescription: "Modalità post beats everything"),
-        Case(isOn: true, postIn: -1, up: true, testDescription: "a finished Modalità post"),
-    ]
-
-    @Test(arguments: cases)
-    func whyTheShieldIsUp(_ test: Case) {
+    @Test func aChangeKeepsWhatAnExtensionWroteMeanwhile() throws {
+        let defaults = freshDefaults()
         var settings = ShieldSettings()
-        settings.isOn = test.isOn
-        settings.isSleeping = test.sleeping
-        settings.focusEnd = test.focusIn.map(now.addingTimeInterval)
-        settings.limitDay = test.limitToday ? ShieldSettings.day(now, calendar: calendar) : nil
-        settings.postModeEnd = test.postIn.map(now.addingTimeInterval)
-        #expect(settings.isShielding(now: now, calendar: calendar) == test.up)
+        settings.put(Intention(app: try app(1)))
+        settings.save(to: defaults)
+
+        // The Shield's button counts an opening while the app still holds its older copy.
+        ShieldSettings.update(in: defaults) { $0.intentions[0].open(now: now, calendar: calendar) }
+        let saved = ShieldSettings.update(in: defaults) { $0.blockNowEnd = now }
+
+        #expect(saved.intentions[0].opens == 1)
+        #expect(saved.blockNowEnd == now)
+        #expect(ShieldSettings.load(from: defaults) == saved)
     }
 
-    @Test func yesterdaysLimitNoLongerHolds() throws {
+    @Test func blockNowHoldsUntilItsEnd() {
         var settings = ShieldSettings()
-        let yesterday = try #require(calendar.date(byAdding: .day, value: -1, to: now))
-        settings.limitDay = ShieldSettings.day(yesterday, calendar: calendar)
-        #expect(!settings.isShielding(now: now, calendar: calendar))
-    }
-}
-
-struct SleepSettingsTests {
-    @Test(arguments: [(1380, 420, 28800), (1350, 405, 29700), (60, 540, 28800)] as [(Int, Int, Int)])
-    func durationCrossesMidnight(bedtime: Int, wake: Int, seconds: Int) {
-        var sleep = SleepSettings()
-        sleep.bedtime = bedtime
-        sleep.wake = wake
-        #expect(sleep.duration == .seconds(seconds))
+        settings.blockNowEnd = now.addingTimeInterval(60)
+        #expect(settings.isBlocking(now: now))
+        #expect(!settings.isBlocking(now: now.addingTimeInterval(60)))
     }
 
-    @Test func theScheduleTakesTheMarginAndRepeatsWithAWarning() {
-        var sleep = SleepSettings()
-        sleep.bedtime = 23 * 60
-        sleep.wake = 7 * 60
-        sleep.margin = 30
-        let schedule = sleep.schedule
-        #expect(schedule.intervalStart.hour == 22 && schedule.intervalStart.minute == 30)
-        #expect(schedule.intervalEnd.hour == 7 && schedule.intervalEnd.minute == 30)
-        #expect(schedule.repeats)
-        #expect(schedule.warningTime?.minute == 30)
+    @Test func onlyIntentionsWithNoOpeningRunningAreLocked() throws {
+        var settings = ShieldSettings()
+        settings.put(Intention(app: try app(1)))
+        settings.put(Intention(app: try app(2)))
+        settings.intentions[1].open(now: now, calendar: calendar)
+        #expect(settings.locked(now: now, calendar: calendar) == [try app(1)])
     }
 
-    @Test func aMarginBeforeMidnightBedtimeWrapsToTheEvening() {
-        var sleep = SleepSettings()
-        sleep.bedtime = 15
-        sleep.margin = 30
-        #expect(sleep.schedule.intervalStart.hour == 23 && sleep.schedule.intervalStart.minute == 45)
+    @Test func puttingAnIntentionAgainReplacesIt() throws {
+        var settings = ShieldSettings()
+        var intention = Intention(app: try app(1))
+        settings.put(intention)
+        intention.maxOpens = 4
+        settings.put(intention)
+        #expect(settings.intentions.map(\.maxOpens) == [4])
     }
 
-    @Test func onlyTheChosenNights() throws {
-        let calendar = Calendar(identifier: .gregorian)
-        var sleep = SleepSettings()
-        sleep.days = [2, 3, 4, 5, 6]
-        let saturday = try #require(calendar.date(from: DateComponents(year: 2026, month: 10, day: 24, hour: 23)))
-        let monday = try #require(calendar.date(from: DateComponents(year: 2026, month: 10, day: 26, hour: 23)))
-        #expect(!sleep.isNight(startingAt: saturday, calendar: calendar))
-        #expect(sleep.isNight(startingAt: monday, calendar: calendar))
+    @Test func atMostEightIntentions() {
+        var settings = ShieldSettings()
+        for _ in 0..<9 { settings.put(Intention()) }
+        #expect(settings.intentions.count == ShieldSettings.maxIntentions)
+    }
+
+    // MARK: Which Shield
+
+    @Test func outsideABlockALimitedAppShowsItsIntention() throws {
+        var settings = ShieldSettings()
+        settings.put(Intention(app: try app(1), maxOpens: 3))
+        #expect(settings.kind(for: try app(1), now: now) == .intention(settings.intentions[0]))
+    }
+
+    @Test func whileBlockingTheShieldIsTheSessionOne() throws {
+        var settings = ShieldSettings()
+        settings.put(Intention(app: try app(1)))
+        settings.blockNowEnd = now.addingTimeInterval(60)
+        #expect(settings.kind(for: try app(1), now: now) == .session)
+        #expect(settings.kind(for: try app(2), now: now) == .session)
+        #expect(settings.kind(for: nil, now: now) == .session)
+    }
+
+    @Test func anAllowedAppKeepsItsIntentionShieldWhileBlocking() throws {
+        var settings = ShieldSettings()
+        settings.put(Intention(app: try app(1)))
+        settings.allowList.applicationTokens = [try app(1)]
+        settings.blockNowEnd = now.addingTimeInterval(60)
+        #expect(settings.kind(for: try app(1), now: now) == .intention(settings.intentions[0]))
+    }
+
+    @Test func anythingElseIsPlain() throws {
+        var settings = ShieldSettings()
+        settings.put(Intention(app: try app(1)))
+        #expect(settings.kind(for: try app(2), now: now) == .plain)
+        #expect(settings.kind(for: nil, now: now) == .plain)
     }
 }

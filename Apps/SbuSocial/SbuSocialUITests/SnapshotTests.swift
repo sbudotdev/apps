@@ -11,7 +11,9 @@ final class SnapshotTests: XCTestCase {
 
         snapshot("01-main")
 
-        app.tabBars.buttons.element(boundBy: 4).tap()
+        // Impostazioni is always the last tab; on a wide screen the tabs sit in a side toolbar.
+        let tabs = app.tabBars.buttons.count > 0 ? app.tabBars.buttons : app.toolbars.buttons
+        tabs.element(boundBy: tabs.count - 1).tap()
         snapshot("02-privacy")
     }
 }
