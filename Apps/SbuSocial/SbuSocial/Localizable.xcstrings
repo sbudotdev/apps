@@ -11,6 +11,16 @@
         }
       }
     },
+    "%@ di schermo oggi. Il giorno non conta per la serie." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ of screen time today. The day does not count for your streak."
+          }
+        }
+      }
+    },
     "%@ in blocco oggi" : {
       "localizations" : {
         "en" : {
@@ -37,6 +47,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ is shielded"
+          }
+        }
+      }
+    },
+    "%@, da venire" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, to come"
+          }
+        }
+      }
+    },
+    "%@, non tenuto" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, not kept"
+          }
+        }
+      }
+    },
+    "%@, tenuto" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, kept"
+          }
+        }
+      }
+    },
+    "A tavola il telefono resta in un'altra stanza." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "At the table, the phone stays in another room."
           }
         }
       }
@@ -111,12 +161,12 @@
         }
       }
     },
-    "Aperture oggi: %lld su %lld." : {
+    "Aperture oggi: %lld su %lld. Giorni di serie: %lld." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Opens today: %1$lld of %2$lld."
+            "value" : "Opens today: %1$lld of %2$lld. Streak days: %3$lld."
           }
         }
       }
@@ -181,6 +231,26 @@
         }
       }
     },
+    "Azzera il record" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset the record"
+          }
+        }
+      }
+    },
+    "Azzerare il record del tempo in blocco?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset the record of time blocked?"
+          }
+        }
+      }
+    },
     "Blocca ora" : {
       "localizations" : {
         "en" : {
@@ -231,6 +301,36 @@
         }
       }
     },
+    "Concedi l'accesso a Tempo di utilizzo" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow Screen Time access"
+          }
+        }
+      }
+    },
+    "Concesso" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allowed"
+          }
+        }
+      }
+    },
+    "Da fare" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To do"
+          }
+        }
+      }
+    },
     "Durata di ogni apertura" : {
       "localizations" : {
         "en" : {
@@ -261,6 +361,16 @@
         }
       }
     },
+    "Fatto" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        }
+      }
+    },
     "Fine" : {
       "localizations" : {
         "en" : {
@@ -281,12 +391,42 @@
         }
       }
     },
+    "Finisci un blocco" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish a block"
+          }
+        }
+      }
+    },
+    "Giorni di serie: %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Streak days: %lld"
+          }
+        }
+      }
+    },
     "Giorni: %lld" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Days: %lld"
+          }
+        }
+      }
+    },
+    "Hai raggiunto l'Obiettivo giornaliero" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You reached your Daily goal"
           }
         }
       }
@@ -307,6 +447,56 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ideas"
+          }
+        }
+      }
+    },
+    "Ieri hai aperto un'app oltre le aperture della sua Intenzione: il giorno non ha contato per la serie." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yesterday you opened an app beyond its Intention's opens: the day did not count for your streak."
+          }
+        }
+      }
+    },
+    "Ieri hai raggiunto l'Obiettivo giornaliero: il giorno non ha contato per la serie." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yesterday you reached your Daily goal: the day did not count for your streak."
+          }
+        }
+      }
+    },
+    "Ieri hai tenuto: nessuna Intenzione oltre le sue aperture, e sotto l'Obiettivo giornaliero." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yesterday held: no Intention beyond its opens, and under your Daily goal."
+          }
+        }
+      }
+    },
+    "Ieri la serie non era ancora iniziata. Comincia oggi." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yesterday your streak had not started yet. Begin today."
+          }
+        }
+      }
+    },
+    "Il tempo di schermo che ti dai per oggi. Quando lo raggiungi arriva una notifica e il giorno non conta per la serie." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The screen time you give yourself for today. When you reach it a notification comes and the day does not count for your streak."
           }
         }
       }
@@ -361,6 +551,16 @@
         }
       }
     },
+    "Leggi il consiglio di oggi" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read today's tip"
+          }
+        }
+      }
+    },
     "Mattina" : {
       "localizations" : {
         "en" : {
@@ -377,6 +577,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Meditation"
+          }
+        }
+      }
+    },
+    "Missione del giorno: %lld su %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily quest: %1$lld of %2$lld"
           }
         }
       }
@@ -421,12 +631,62 @@
         }
       }
     },
+    "Obiettivo giornaliero: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily goal: %@"
+          }
+        }
+      }
+    },
+    "Oltre le aperture di oggi: il giorno non conta per la serie." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beyond today's opens: the day does not count for your streak."
+          }
+        }
+      }
+    },
     "Poi lo Schermo torna da solo." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Then the Shield comes back by itself."
+          }
+        }
+      }
+    },
+    "Prima di aprire un'app chiediti cosa ci vai a fare. Se non lo sai, non aprirla." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Before opening an app, ask yourself what you are going there for. If you do not know, do not open it."
+          }
+        }
+      }
+    },
+    "Punti: %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Points: %lld"
+          }
+        }
+      }
+    },
+    "Quando aspetti qualcosa, aspetta e basta: non serve riempire ogni minuto." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When you are waiting for something, just wait: not every minute needs filling."
           }
         }
       }
@@ -447,6 +707,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "They stay open during Block now and the Sessions."
+          }
+        }
+      }
+    },
+    "Ripristina la serie" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restore the streak"
+          }
+        }
+      }
+    },
+    "Rivedi ieri" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review yesterday"
           }
         }
       }
@@ -501,6 +781,16 @@
         }
       }
     },
+    "Scegli un'ora al giorno senza schermo e tienila fissa." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose one hour a day without a screen and keep it fixed."
+          }
+        }
+      }
+    },
     "Scegli una sola app." : {
       "localizations" : {
         "en" : {
@@ -517,6 +807,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Screen Time access is needed. Allow it in Settings, Screen Time."
+          }
+        }
+      }
+    },
+    "Serve per coprire le app con lo Schermo e contare il tempo di schermo. I dati restano sul telefono." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Needed to cover apps with the Shield and count screen time. The data stays on the phone."
           }
         }
       }
@@ -561,12 +861,62 @@
         }
       }
     },
+    "Sposta le app che ti distraggono fuori dalla prima schermata." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move the apps that distract you off your first screen."
+          }
+        }
+      }
+    },
+    "Tempo di utilizzo" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Screen Time"
+          }
+        }
+      }
+    },
     "Termina il blocco" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "End the block"
+          }
+        }
+      }
+    },
+    "Tieni il telefono fuori dalla camera da letto: la sveglia la fa anche una sveglia." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep your phone out of the bedroom: an alarm clock wakes you too."
+          }
+        }
+      }
+    },
+    "Togli le notifiche delle app che apri per noia: resta quello che ti serve davvero." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn off notifications for the apps you open out of boredom: what you really need stays."
+          }
+        }
+      }
+    },
+    "Toglie l'ultimo giorno che ha interrotto la serie." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Removes the last day that broke the streak."
           }
         }
       }

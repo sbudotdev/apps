@@ -1,5 +1,7 @@
 /// The three tasks of the Missione del giorno.
-nonisolated enum QuestTask: String, Codable, CaseIterable {
+nonisolated enum QuestTask: String, Codable, CaseIterable, Identifiable {
+    var id: String { rawValue }
+
     /// Look at how yesterday went.
     case review
     /// Read the tip of the day.

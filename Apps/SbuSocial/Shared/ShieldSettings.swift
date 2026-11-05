@@ -13,6 +13,8 @@ nonisolated struct ShieldSettings: Codable, Equatable {
     var allowList = FamilyActivitySelection()
     /// The running Blocca ora's end.
     var blockNowEnd: Date?
+    /// The Obiettivo giornaliero: the minutes of screen you give yourself for a day.
+    var goalMinutes = 120
 
     static let maxIntentions = 8
     /// With one schedule each, the Intenzioni's returns and Blocca ora, this stays within the
@@ -25,6 +27,11 @@ nonisolated struct ShieldSettings: Codable, Equatable {
     /// The one store every part of the app writes the Shield to.
     static var storeName: ManagedSettingsStore.Name { .init("shield") }
     static var blockNowActivity: DeviceActivityName { .init("blocknow") }
+    /// The whole day, every day: it carries the Obiettivo giornaliero's threshold.
+    static var dayActivity: DeviceActivityName { .init("day") }
+    static var goalEvent: DeviceActivityEvent.Name { .init("goal") }
+    /// The points of a finished Blocca ora.
+    static let blockNowXP = 10
 
     /// The one-off schedule whose start brings an Intenzione's Shield back.
     static func relockActivity(for id: Intention.ID) -> DeviceActivityName {
@@ -41,6 +48,7 @@ nonisolated struct ShieldSettings: Codable, Equatable {
         sessions = try container.decodeIfPresent([BlockSession].self, forKey: .sessions) ?? []
         allowList = try container.decodeIfPresent(FamilyActivitySelection.self, forKey: .allowList) ?? FamilyActivitySelection()
         blockNowEnd = try container.decodeIfPresent(Date.self, forKey: .blockNowEnd)
+        goalMinutes = try container.decodeIfPresent(Int.self, forKey: .goalMinutes) ?? 120
     }
 
     /// Whether everything but the allowed apps is blocked now: Blocca ora or a Sessione is running.

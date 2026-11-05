@@ -3,6 +3,7 @@ import SwiftUI
 
 /// The app inside `SbuTabShell`: Home, Sessioni, then Impostazioni (ADR-0021).
 struct RootView: View {
+    @Environment(ShieldModel.self) private var shield
     @State private var tab = AppTab.home
 
     var body: some View {
@@ -15,6 +16,9 @@ struct RootView: View {
                 SessionsView()
             }
         } settings: {
+            GoalSection(shield: shield)
+            ProgressSection(shield: shield)
+            AccessSection(shield: shield)
         }
     }
 }

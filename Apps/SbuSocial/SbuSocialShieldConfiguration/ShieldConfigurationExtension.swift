@@ -28,7 +28,8 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
             remember(name, for: intention)
             let opens = intention.opens(on: Day(now))
             let length = Duration.seconds(intention.minutes * 60).formatted(.units(allowed: [.minutes], width: .wide))
-            let count = String(localized: "Aperture oggi: \(opens) su \(intention.maxOpens).")
+            let streak = Tally.load(from: defaults).streak(on: Day(now))
+            let count = String(localized: "Aperture oggi: \(opens) su \(intention.maxOpens). Giorni di serie: \(streak).")
             let warning = String(localized: "Le hai finite: se la apri, oggi non conta per la serie.")
             return shield(title: name ?? String(localized: "App schermata"),
                           subtitle: opens < intention.maxOpens ? count : count + " " + warning,

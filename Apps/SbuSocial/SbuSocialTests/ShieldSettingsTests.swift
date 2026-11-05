@@ -29,6 +29,8 @@ struct ShieldSettingsTests {
         var settings = ShieldSettings()
         settings.put(Intention(app: try app(1), maxOpens: 3))
         settings.blockNowEnd = now
+        settings.goalMinutes = 45
+        settings.put(BlockSession(name: "Cena", start: 18 * 60, end: 19 * 60))
         settings.save(to: defaults)
         #expect(ShieldSettings.load(from: defaults) == settings)
     }
@@ -36,7 +38,9 @@ struct ShieldSettingsTests {
     @Test func aSavedShieldWithoutTheNewerFieldsKeepsWhatItHas() {
         let defaults = freshDefaults()
         defaults.set(Data(#"{"blockNowEnd":1000}"#.utf8), forKey: "shield")
-        #expect(ShieldSettings.load(from: defaults).blockNowEnd == Date(timeIntervalSinceReferenceDate: 1000))
+        let loaded = ShieldSettings.load(from: defaults)
+        #expect(loaded.blockNowEnd == Date(timeIntervalSinceReferenceDate: 1000))
+        #expect(loaded.goalMinutes == 120)
     }
 
     @Test func aChangeKeepsWhatAnExtensionWroteMeanwhile() throws {

@@ -20,6 +20,14 @@ final class FlowTests: XCTestCase {
         XCTAssertTrue(app.buttons["Blocca ora"].waitForExistence(timeout: 5), "The app opens on Home")
         try audit(app)
 
+        // The sample's Serie: six days ago to today, one broken four days ago.
+        XCTAssertTrue(app.staticTexts["Giorni di serie: 4"].exists, "Home shows the Serie")
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Rivedi ieri'")).firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["Rivedi ieri"].waitForExistence(timeout: 5), "A quest task opens")
+        try audit(app, excluding: Self.formExclusions)
+        app.buttons["Fatto"].firstMatch.tap()
+        XCTAssertTrue(app.staticTexts["Missione del giorno: 2 su 3"].waitForExistence(timeout: 5), "Reading it ticks the task")
+
         app.buttons.containing(.staticText, identifier: "Instagram").firstMatch.tap()
         XCTAssertTrue(app.navigationBars["Intenzione"].waitForExistence(timeout: 5), "A row opens its Intenzione")
         try audit(app, excluding: Self.formExclusions)

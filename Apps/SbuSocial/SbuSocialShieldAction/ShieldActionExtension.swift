@@ -15,11 +15,12 @@ final class ShieldActionExtension: ShieldActionDelegate {
         }
         let now = Date.now
         var opened: Intention?
+        var isBeyond = false
         let settings = ShieldSettings.update(in: defaults) { settings in
             // Only an Intenzione's Shield has the second button.
             guard case .intention(let intention) = settings.kind(for: application, now: now),
                   let index = settings.intentions.firstIndex(where: { $0.id == intention.id }) else { return }
-            settings.intentions[index].open(now: now)
+            isBeyond = settings.intentions[index].open(now: now)
             opened = settings.intentions[index]
         }
         guard let opened, let end = opened.unlockedUntil else {
@@ -27,6 +28,9 @@ final class ShieldActionExtension: ShieldActionDelegate {
             return
         }
         settings.apply(to: ManagedSettingsStore(named: ShieldSettings.storeName), in: defaults, now: now)
+        if isBeyond {
+            Tally.update(in: defaults) { $0.markExceeded(on: Day(now)) }
+        }
         // The Shield's return is the start of a one-off schedule: see `oneOff(from:to:)`.
         try? DeviceActivityCenter().startMonitoring(ShieldSettings.relockActivity(for: opened.id),
                                                     during: .oneOff(from: end, to: end.addingTimeInterval(15 * 60)))
@@ -34,7 +38,7 @@ final class ShieldActionExtension: ShieldActionDelegate {
         let length = Duration.seconds(opened.minutes * 60).formatted(.units(allowed: [.minutes], width: .wide))
         let content = UNMutableNotificationContent()
         content.title = opened.name.map { String(localized: "\($0) aperta per \(length)") } ?? String(localized: "App aperta per \(length)")
-        content.body = String(localized: "Poi lo Schermo torna da solo.")
+        content.body = isBeyond ? String(localized: "Oltre le aperture di oggi: il giorno non conta per la serie.") : String(localized: "Poi lo Schermo torna da solo.")
         let request = UNNotificationRequest(identifier: "open-\(opened.id.uuidString)", content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request) { _ in
             // ponytail: whether `.none` leaves you in the app without reopening it is unverified,
