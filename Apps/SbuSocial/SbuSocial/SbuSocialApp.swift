@@ -2,7 +2,7 @@ import SwiftUI
 
 @main
 struct SbuSocialApp: App {
-    @State private var shield = ShieldModel()
+    @State private var shield = ShieldModel(defaults: LaunchMode.current.defaults)
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {

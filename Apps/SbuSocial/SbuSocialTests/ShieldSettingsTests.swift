@@ -78,6 +78,39 @@ struct ShieldSettingsTests {
         #expect(settings.intentions.map(\.maxOpens) == [4])
     }
 
+    @Test func savingAnEditedIntentionKeepsWhatTheShieldCountedMeanwhile() throws {
+        var settings = ShieldSettings()
+        var edited = Intention(app: try app(1))
+        settings.put(edited)
+        // The form holds its copy while the Shield counts an opening and learns the app's name.
+        settings.intentions[0].open(now: now, calendar: calendar)
+        settings.intentions[0].name = "Instagram"
+        edited.maxOpens = 4
+        settings.put(edited)
+
+        let saved = settings.intentions[0]
+        #expect(saved.maxOpens == 4)
+        #expect(saved.opens == 1)
+        #expect(saved.unlockedUntil == now.addingTimeInterval(600))
+        #expect(saved.name == "Instagram")
+    }
+
+    @Test func anAppTakesOneIntentionOnly() throws {
+        var settings = ShieldSettings()
+        let first = Intention(app: try app(1))
+        settings.put(first)
+        #expect(settings.isLimited(try app(1), besides: UUID()))
+        // Editing the Intenzione that already holds the app is not a second one.
+        #expect(!settings.isLimited(try app(1), besides: first.id))
+        #expect(!settings.isLimited(try app(2), besides: UUID()))
+    }
+
+    @Test func theSampleShieldHasOpeningsCountedToday() {
+        let sample = ShieldSettings.sample(now: now, calendar: calendar)
+        #expect(sample.intentions.count == 2)
+        #expect(sample.intentions.allSatisfy { $0.opens(on: Day(now, calendar: calendar)) > 0 })
+    }
+
     @Test func atMostEightIntentions() {
         var settings = ShieldSettings()
         for _ in 0..<9 { settings.put(Intention()) }

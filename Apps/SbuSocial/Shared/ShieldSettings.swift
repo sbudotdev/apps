@@ -47,13 +47,24 @@ nonisolated struct ShieldSettings: Codable, Equatable {
         Set(intentions.filter { $0.isLocked(now: now, calendar: calendar) }.compactMap(\.app))
     }
 
-    /// Adds an Intenzione, up to `maxIntentions`, or replaces the one with the same id.
+    /// Adds an Intenzione, up to `maxIntentions`, or saves the changes to the one with the same id.
     mutating func put(_ intention: Intention) {
         if let index = intentions.firstIndex(where: { $0.id == intention.id }) {
+            // The form edits a copy: what the Shield counted and learned meanwhile stays.
+            let current = intentions[index]
             intentions[index] = intention
+            intentions[index].opensDay = current.opensDay
+            intentions[index].opens = current.opens
+            intentions[index].unlockedUntil = current.unlockedUntil
+            if intention.app == current.app { intentions[index].name = current.name }
         } else if intentions.count < Self.maxIntentions {
             intentions.append(intention)
         }
+    }
+
+    /// Whether `app` already has an Intenzione other than the one with `id`.
+    func isLimited(_ app: ApplicationToken, besides id: Intention.ID) -> Bool {
+        intentions.contains { $0.app == app && $0.id != id }
     }
 
     /// Which Shield `app` shows now. `app` is missing when Screen Time shields a whole category.

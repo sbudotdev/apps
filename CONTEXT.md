@@ -209,33 +209,41 @@ _Avoid_: fallback, sveglia di backup
 
 ### Sbu Social
 
-**Piattaforma** (_Platform_):
-Un social che Sbu Social apre nel suo browser filtrato, con le sue **Regole**: Instagram, YouTube.
-_Avoid_: social, sito, servizio
+**Intenzione** (_App intention_):
+Un'app che apri al massimo un certo numero di volte al giorno, per un certo numero di minuti ogni volta, nei giorni scelti. In quei giorni l'app resta coperta dallo **Schermo**.
+_Avoid_: limite, regola, blocco
 
-**Account**:
-Un login su una **Piattaforma**, con i suoi cookie separati da quelli degli altri account. Una piattaforma può averne più di uno.
-_Avoid_: profilo, utente
-
-**Regole** (_Rules_):
-Cosa Sbu Social nasconde o blocca su una **Piattaforma** (Reels, Shorts, Esplora, suggeriti, annunci). Cambiano solo con un aggiornamento dell'app.
-_Avoid_: filtri, blocklist
+**Apertura** (_Open_):
+Una volta che apri l'app di un'**Intenzione** dal bottone dello **Schermo**: lo Schermo si alza per i minuti dell'Intenzione e poi torna da solo. Le Aperture si contano per giorno.
+_Avoid_: sblocco, pausa, accesso
 
 **Schermo** (_Shield_):
-La schermata Sbu che copre un'app nativa bloccata, con il bottone per aprire la piattaforma in Sbu Social.
+La schermata Sbu che copre un'app chiusa. Su un'**Intenzione** conta le **Aperture** di oggi e ha il bottone per aprire; durante un blocco ha solo il bottone per chiudere.
 _Avoid_: blocco, muro, overlay
 
-**Modalità post** (_Post mode_):
-Lo sblocco di 10 minuti di un'app nativa schermata, per pubblicare qualcosa; finito il tempo lo **Schermo** torna.
-_Avoid_: pausa, sblocco temporaneo, eccezione
+**Blocca ora** (_Block now_):
+Tutte le app chiuse da subito per i minuti scelti, tranne le **App consentite**.
+_Avoid_: focus, sessione immediata
 
-**Limite di tempo** (_Time limit_):
-Quanti minuti al giorno puoi passare sulle **Piattaforme** in Sbu Social; raggiunto, le app native restano schermate fino a domani. Non è il **Limite** di Sbu Habits.
-_Avoid_: limite, tetto, budget
+**Sessione** (_Scheduled session_):
+Un blocco di tutte le app tranne le **App consentite**, che parte e finisce da solo a orari fissi nei giorni scelti.
+_Avoid_: routine, programma, focus
 
-**Routine**:
-Fasce orarie in cui Sbu Social scherma le app native da sola (notte, focus), con avviso 30 minuti prima della notte.
-_Avoid_: programma, pianificazione
+**App consentite** (_Allow list_):
+Le app che restano aperte durante **Blocca ora** e le **Sessioni**; al massimo 50, il limite di Screen Time.
+_Avoid_: eccezioni, lista bianca
+
+**Obiettivo giornaliero** (_Daily goal_):
+I minuti di schermo che ti dai per oggi; raggiunti, arriva una notifica e il giorno non conta per la **Serie**. Non è il **Limite** di Sbu Habits.
+_Avoid_: limite di tempo, tetto, budget
+
+**Serie** (_Streak_), in Sbu Social:
+I giorni di fila in cui nessuna **Intenzione** è andata oltre le sue **Aperture** e sei rimasto sotto l'**Obiettivo giornaliero**; oggi conta finché regge. Non è la **Serie** di Sbu Habits, che conta un'abitudine.
+_Avoid_: streak, catena
+
+**Missione del giorno** (_Daily quest_):
+Tre compiti che si rinnovano ogni giorno: rivedere ieri, leggere il consiglio, finire un blocco.
+_Avoid_: quest, sfida, obiettivi
 
 ## Relationships
 
