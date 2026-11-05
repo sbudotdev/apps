@@ -2,6 +2,7 @@ import DeviceActivity
 import Foundation
 import ManagedSettings
 import UserNotifications
+import WidgetKit
 
 /// The Shield's buttons. "Chiudi" closes the app. On an Intenzione's Shield, the second button
 /// counts an opening and lifts the Shield for the Intenzione's minutes; a notification says so.
@@ -30,6 +31,7 @@ final class ShieldActionExtension: ShieldActionDelegate {
         settings.apply(to: ManagedSettingsStore(named: ShieldSettings.storeName), in: defaults, now: now)
         if isBeyond {
             Tally.update(in: defaults) { $0.markExceeded(on: Day(now)) }
+            WidgetCenter.shared.reloadTimelines(ofKind: Tally.widgetKind)
         }
         // The Shield's return is the start of a one-off schedule: see `oneOff(from:to:)`.
         try? DeviceActivityCenter().startMonitoring(ShieldSettings.relockActivity(for: opened.id),

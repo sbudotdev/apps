@@ -441,6 +441,16 @@
         }
       }
     },
+    "I giorni di fila in cui hai tenuto." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The days in a row that held."
+          }
+        }
+      }
+    },
     "Idee" : {
       "localizations" : {
         "en" : {
@@ -801,6 +811,16 @@
         }
       }
     },
+    "Serie" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Streak"
+          }
+        }
+      }
+    },
     "Serve l'accesso a Tempo di utilizzo. Dallo in Impostazioni, Tempo di utilizzo." : {
       "localizations" : {
         "en" : {
@@ -937,6 +957,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A Session lasts at least %lld minutes."
+          }
+        }
+      }
+    },
+    "giorni di serie" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "streak days"
           }
         }
       }

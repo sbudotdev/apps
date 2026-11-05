@@ -3,6 +3,7 @@ import FamilyControls
 import ManagedSettings
 import Observation
 import UserNotifications
+import WidgetKit
 
 /// The Shield's state for the app: Screen Time permission, the Intenzioni, Blocca ora, the
 /// Sessioni and the App consentite, with the time in a block they add up to.
@@ -11,7 +12,14 @@ import UserNotifications
 @Observable
 final class ShieldModel {
     private(set) var settings: ShieldSettings
-    private(set) var tally: Tally
+    private(set) var tally: Tally {
+        didSet {
+            let today = Day(.now)
+            if tally.streak(on: today) != oldValue.streak(on: today) {
+                WidgetCenter.shared.reloadTimelines(ofKind: Tally.widgetKind)
+            }
+        }
+    }
     private(set) var isAuthorized: Bool
 
     @ObservationIgnored private let defaults: UserDefaults

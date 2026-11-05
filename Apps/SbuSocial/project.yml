@@ -26,6 +26,7 @@ targets:
       - target: SbuSocialShieldConfiguration
       - target: SbuSocialShieldAction
       - target: SbuSocialMonitor
+      - target: SbuSocialWidget
     info:
       path: SbuSocial/Info.plist
       properties:
@@ -141,6 +142,38 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.social.deviceactivitymonitor
         TARGETED_DEVICE_FAMILY: "1"
+  SbuSocialWidget:
+    # The Serie on the Home Screen.
+    type: app-extension
+    platform: iOS
+    sources:
+      - SbuSocialWidget
+      # The widget reads the count with Foundation only, without Screen Time.
+      - Shared/Tally.swift
+      - Shared/Day.swift
+      - Shared/QuestTask.swift
+      - SbuSocial/Localizable.xcstrings
+    dependencies:
+      - package: SbuKit
+    entitlements:
+      path: SbuSocialWidget/SbuSocialWidget.entitlements
+      properties:
+        com.apple.security.application-groups: [group.dev.sbu.social]
+    info:
+      path: SbuSocialWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Sbu Social
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.social.widget
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+        SWIFT_APPROACHABLE_CONCURRENCY: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
   SbuSocialTests:
     type: bundle.unit-test
     platform: iOS

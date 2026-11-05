@@ -1,6 +1,7 @@
 import DeviceActivity
 import Foundation
 import ManagedSettings
+import WidgetKit
 
 /// Runs when a Screen Time schedule starts or ends, or the day's screen time reaches the
 /// Obiettivo giornaliero. It brings the Shield to what the settings say now, pays a finished
@@ -46,6 +47,7 @@ final class MonitorExtension: DeviceActivityMonitor {
         let today = Day(now)
         guard !Tally.load(from: defaults).overGoalDays.contains(today) else { return }
         Tally.update(in: defaults) { $0.markOverGoal(on: today) }
+        WidgetCenter.shared.reloadTimelines(ofKind: Tally.widgetKind)
         let length = Duration.seconds(goal).formatted(.units(allowed: [.hours, .minutes], width: .wide))
         Task {
             await ShieldNotice.post(id: "goal", title: String(localized: "Hai raggiunto l'Obiettivo giornaliero"),

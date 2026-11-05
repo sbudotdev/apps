@@ -32,6 +32,8 @@ nonisolated struct Tally: Codable, Equatable {
 
     /// The points of a finished day under the Obiettivo giornaliero.
     static let dayXP = 75
+    /// The Home Screen widget that shows the Serie: whoever changes it asks for a reload by this name.
+    static let widgetKind = "dev.sbu.social.streak"
 
     init() {}
 
