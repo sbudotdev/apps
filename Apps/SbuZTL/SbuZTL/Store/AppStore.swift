@@ -15,8 +15,14 @@ final class AppStore {
         self.url = url
         if let state {
             self.state = state
-        } else if let url, let data = try? Data(contentsOf: url), let saved = try? JSONDecoder().decode(PersistedState.self, from: data) {
-            self.state = saved
+        } else if let url, let data = try? Data(contentsOf: url) {
+            if let saved = try? JSONDecoder().decode(PersistedState.self, from: data) {
+                self.state = saved
+            } else {
+                // Unreadable: keep a copy before the first save writes over it.
+                try? data.write(to: url.appendingPathExtension("unreadable"), options: .atomic)
+                self.state = PersistedState()
+            }
         } else {
             self.state = PersistedState()
         }
