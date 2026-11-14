@@ -90,11 +90,14 @@ final class GuidanceModel {
     /// Once far ahead, once at the corner.
     private func announce() {
         guard let step = currentStep, step.maneuver != .arrive || state.metresToManeuver < 300 else { return }
-        for threshold in [300.0, 60.0] where state.metresToManeuver <= threshold {
-            let metres = max(Int(state.metresToManeuver / 10) * 10, 10)
-            say(ManeuverText.spoken(step, metres: metres), once: "\(state.stepIndex)-\(threshold)")
-            break
-        }
+        guard let threshold = Self.threshold(metresToManeuver: state.metresToManeuver) else { return }
+        let metres = max(Int(state.metresToManeuver / 10) * 10, 10)
+        say(ManeuverText.spoken(step, metres: metres), once: "\(state.stepIndex)-\(threshold)")
+    }
+
+    /// The nearest announcement point already reached: the corner wins over far ahead.
+    nonisolated static func threshold(metresToManeuver metres: Double) -> Double? {
+        [60.0, 300.0].first { metres <= $0 }
     }
 
     private func say(_ text: String, once key: String) {
