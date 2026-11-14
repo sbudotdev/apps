@@ -111,4 +111,21 @@ struct RoutePlannerTests {
         #expect(plan.startZone == nil)
         #expect(!plan.points.contains { areaC.contains($0) })
     }
+
+    @Test("Leaving Milan the city stretch avoids the zones, Apple takes it from the edge")
+    func leavingCity() async throws {
+        let catalog = ZoneCatalog.bundled
+        let areaC = try #require(catalog.zones.first { $0.kind == .areaC })
+        let bergamo = Point(45.6983, 9.6773)
+        let plan = try await planner(catalog.zones, approach: LineApproach()).plan(request(from: Self.duomo, to: bergamo))
+        #expect(plan.startZone == "Area C")
+        let out = try #require(plan.points.firstIndex { !areaC.contains($0) })
+        #expect(!plan.points[out...].contains { areaC.contains($0) })
+        #expect(plan.isPartlyUncovered)
+        #expect(plan.cumulative == plan.cumulative.sorted())
+        #expect(plan.steps.last?.maneuver == .arrive)
+        #expect(plan.steps.dropLast().allSatisfy { $0.maneuver != .arrive })
+        let end = try #require(plan.points.last)
+        #expect(end.metres(to: bergamo) < 100)
+    }
 }
