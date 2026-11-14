@@ -99,4 +99,16 @@ struct RoutePlannerTests {
         #expect(!plan.points.contains { centrale.contains($0) })
         #expect(plan.steps.last?.maneuver == .arrive)
     }
+
+    /// Just outside Area C, with the nearest graph node just inside.
+    @Test("A start at the edge of a closed zone begins outside it", arguments: [
+        Point(45.473691, 9.169474), Point(45.479867, 9.188909), Point(45.463406, 9.165326),
+    ])
+    func startAtEdge(start: Point) async throws {
+        let areaC = try #require(ZoneCatalog.bundled.zones.first { $0.kind == .areaC })
+        try #require(!areaC.contains(start))
+        let plan = try await planner([areaC]).plan(request(from: start, to: Self.bicocca))
+        #expect(plan.startZone == nil)
+        #expect(!plan.points.contains { areaC.contains($0) })
+    }
 }

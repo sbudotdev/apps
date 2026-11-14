@@ -35,7 +35,8 @@ nonisolated struct RoutePlanner: Sendable {
             startPoint = leg.points[entry]
         }
         let startZone = prefix == nil ? closed.first { $0.contains(startPoint) }?.name : nil
-        let starts = graph.nearest(to: startPoint, count: 20)
+        // Starting outside every closed zone, the first node must be outside too.
+        let starts = graph.nearest(to: startPoint, count: 20) { startZone == nil && blocked[$0] }
         guard let path = search(graph, starts: starts, goals: goals, blocked: blocked) else { throw RouteError.noRoute }
         try Task.checkCancellation()
 
