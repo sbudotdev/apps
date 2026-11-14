@@ -23,7 +23,7 @@ struct PermitWizard: View {
                             store.state.permits.append(Permit(vehicleID: vehicle.id, zoneID: zone.id))
                             dismiss()
                         } label: {
-                            VStack(alignment: .leading, spacing: 2) {
+                            VStack(alignment: .leading, spacing: SbuTheme.space1) {
                                 Text(zone.name).foregroundStyle(SbuTheme.ink)
                                 Text(zone.city.name).font(SbuTheme.footnote).foregroundStyle(SbuTheme.inkMuted)
                             }

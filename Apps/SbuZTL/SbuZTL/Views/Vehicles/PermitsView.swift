@@ -11,7 +11,7 @@ struct PermitsView: View {
         List {
             Section {
                 ForEach(store.state.permits) { permit in
-                    VStack(alignment: .leading, spacing: 2) {
+                    VStack(alignment: .leading, spacing: SbuTheme.space1) {
                         Text(catalog.zones.first { $0.id == permit.zoneID }?.name ?? "")
                         Text(store.state.vehicles.first { $0.id == permit.vehicleID }?.nickname ?? "")
                             .font(SbuTheme.footnote)

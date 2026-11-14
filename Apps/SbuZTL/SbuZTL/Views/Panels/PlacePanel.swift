@@ -13,7 +13,7 @@ struct PlacePanel: View {
     var body: some View {
         Panel {
             HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: SbuTheme.space1) {
                     Text(place.name)
                         .font(SbuTheme.title2)
                         .foregroundStyle(SbuTheme.ink)

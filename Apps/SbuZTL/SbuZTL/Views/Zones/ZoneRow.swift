@@ -13,7 +13,7 @@ struct ZoneRow: View {
             Image(systemName: verdict.access.symbol)
                 .fontWeight(.medium)
                 .foregroundStyle(verdict.access.tint)
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: SbuTheme.space1) {
                 Text(zone.name).font(SbuTheme.body).foregroundStyle(SbuTheme.ink)
                 Text(verdict.access.headline).font(SbuTheme.footnote).foregroundStyle(SbuTheme.inkMuted)
             }

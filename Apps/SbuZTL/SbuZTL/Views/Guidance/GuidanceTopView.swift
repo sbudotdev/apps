@@ -13,7 +13,7 @@ struct GuidanceTopView: View {
                     Image(systemName: step.maneuver.symbol)
                         .font(SbuTheme.largeTitle.weight(.medium))
                         .accessibilityHidden(true)
-                    VStack(alignment: .leading, spacing: 2) {
+                    VStack(alignment: .leading, spacing: SbuTheme.space1) {
                         Text(step.street ?? ManeuverText.action(step))
                             .font(SbuTheme.title2)
                             .lineLimit(2)

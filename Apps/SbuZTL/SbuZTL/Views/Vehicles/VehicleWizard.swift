@@ -127,7 +127,7 @@ struct VehicleWizard: View {
             self.step = step
         } label: {
             HStack {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: SbuTheme.space1) {
                     Text(title).font(SbuTheme.footnote).foregroundStyle(SbuTheme.inkMuted)
                     Text(value).font(SbuTheme.body).foregroundStyle(SbuTheme.ink)
                 }

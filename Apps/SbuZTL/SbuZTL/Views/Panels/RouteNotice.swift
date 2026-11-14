@@ -10,7 +10,7 @@ struct RouteNotice: View {
     var body: some View {
         HStack(alignment: .top, spacing: SbuTheme.space2) {
             Image(systemName: symbol).fontWeight(.medium).foregroundStyle(SbuTheme.warning)
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: SbuTheme.space1) {
                 Text(title).font(SbuTheme.subheadline.weight(.medium)).foregroundStyle(SbuTheme.ink)
                 Text(detail).font(SbuTheme.footnote).foregroundStyle(SbuTheme.inkMuted)
             }

@@ -14,7 +14,7 @@ struct VehiclesView: View {
                     editing = vehicle
                 } label: {
                     Label {
-                        VStack(alignment: .leading, spacing: 2) {
+                        VStack(alignment: .leading, spacing: SbuTheme.space1) {
                             Text(vehicle.nickname).foregroundStyle(SbuTheme.ink)
                             Text(Self.summary(vehicle)).font(SbuTheme.footnote).foregroundStyle(SbuTheme.inkMuted)
                         }

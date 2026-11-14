@@ -13,7 +13,7 @@ struct PlaceRow: View {
                 .fontWeight(.medium)
                 .foregroundStyle(SbuTheme.ink)
                 .frame(width: SbuTheme.space6)
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: SbuTheme.space1) {
                 Text(place.name)
                     .font(SbuTheme.body)
                     .foregroundStyle(SbuTheme.ink)

@@ -29,7 +29,7 @@ struct GuidanceBottomView: View {
                 }
                 .buttonStyle(.plain)
             }
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: SbuTheme.space1) {
                 Text(statusText)
                 if guidance.plan.isPartlyUncovered {
                     Text("Parte del percorso è fuori copertura.")
@@ -39,7 +39,7 @@ struct GuidanceBottomView: View {
             .foregroundStyle(SbuTheme.inkMuted)
 
             HStack(alignment: .firstTextBaseline) {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: SbuTheme.space1) {
                     Text(Duration.seconds(guidance.state.remainingSeconds), format: .units(allowed: [.hours, .minutes], width: .abbreviated, maximumUnitCount: 2))
                         .font(SbuTheme.title2)
                         .foregroundStyle(SbuTheme.ink)
