@@ -16,4 +16,10 @@ struct HolidaysTests {
         #expect(Holidays.isNational(RuleEngineTests.moment(2026, 4, 6, 9)))
         #expect(!Holidays.isNational(RuleEngineTests.moment(2026, 4, 7, 9)))
     }
+
+    @Test("San Francesco, 4 October, is national from 2026")
+    func sanFrancesco() {
+        #expect(Holidays.isNational(RuleEngineTests.moment(2027, 10, 4, 9)))
+        #expect(!Holidays.isNational(RuleEngineTests.moment(2025, 10, 4, 9)))
+    }
 }

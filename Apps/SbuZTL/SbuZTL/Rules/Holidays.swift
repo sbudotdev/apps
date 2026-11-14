@@ -13,6 +13,8 @@ nonisolated enum Holidays {
         guard let year = c.year, let month = c.month, let day = c.day else { return false }
         let fixed = [(1, 1), (1, 6), (4, 25), (5, 1), (6, 2), (8, 15), (11, 1), (12, 8), (12, 25), (12, 26)]
         if fixed.contains(where: { $0 == (month, day) }) { return true }
+        // San Francesco is a national holiday again from 2026 (L. 8 ottobre 2025, n. 151).
+        if year >= 2026, month == 10, day == 4 { return true }
         let easter = easterSunday(year: year)
         guard let sunday = calendar.date(from: DateComponents(year: year, month: easter.month, day: easter.day)),
               let monday = calendar.date(byAdding: .day, value: 1, to: sunday) else { return false }
