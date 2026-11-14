@@ -10,7 +10,7 @@ Il codice è molto più avanti dello Store: 20 app scritte, 2 pubblicate, 1 in r
 
 | App | Stato su App Store Connect | Da quando |
 |---|---|---|
-| Sbu Subscriptions | **2.0.0 pubblicata**; 2.1.0 preparata, non inviata | 2.0 live dal 16/10 |
+| Sbu Subscriptions | **2.1.0 pubblicata** (build 7, verificata via API il 14/11) | 2.0 live dal 16/10 |
 | Sbu Scanner | **2.0.0 pubblicata** | confermata il 17/10 |
 | Sbu Find | **1.0 pubblicata** (approvata dopo l'appello al Board) | live dal 21/10 |
 
@@ -35,7 +35,6 @@ Ogni app è su `main` (tutti i branch `app/*` sono già fusi). "Prossimo passo" 
 
 | App | ASC | Manca | Chi |
 |---|---|---|---|
-| Subscriptions 2.1 | 2.1.0 PREPARE_FOR_SUBMISSION, nessuna build agganciata | `fastlane select_build build:7`, test insieme sul device, Invia | Claude + Matteo |
 | Chats | 1.0 PREPARE_FOR_SUBMISSION | App Privacy sul web, test insieme, slot | Matteo |
 | Fuel | 1.0 PREPARE_FOR_SUBMISSION | App Privacy sul web, test insieme, slot | Matteo |
 | Inventory | 1.0 PREPARE_FOR_SUBMISSION | foto di esempio per gli screenshot, App Privacy, test insieme, slot | insieme |
@@ -57,7 +56,7 @@ Cycle, Cast, Image, Gif, Tags, Knit, Chores, Reader, Exposure.
 
 1. **Apple ha respinto le risposte sul 4.3 il 22/10** (messaggio generico, `docs/rejections/2026-10-14-guideline-4.3/risposta-apple-2026-10-22.md`). Prossimo passo: appello del Board solo per Habits; Clean, Noise, Moon, Level e Speed ferme fino all'esito. Resta la regola: un invio a settimana.
 2. **TestFlight non installa sul tuo iPhone** ("The requested app is not available or doesn't exist", dal 16/10, caso aperto con Developer Support). Ripiego: build Release via cavo per il test insieme.
-3. **Il test insieme è il passaggio che manca a quasi tutto**: Subscriptions 2.1, Chats, Fuel, Inventory, Level, Speed, Squares, e le sei scritte. Nessuna di queste va inviata senza.
+3. **Il test insieme è il passaggio che manca a quasi tutto**: Chats, Fuel, Inventory, Level, Speed, Squares, e le sei scritte. Nessuna di queste va inviata senza.
 4. **CI rossa su main**: i test UI di Clean e Noise falliscono sui runner GitHub (timeout dell'audit, testo tagliato), Habits cancellato. Il sito invece si pubblica (workflow Site verde).
 
 ## 4. Calendario delle prossime settimane
@@ -66,7 +65,6 @@ Cycle, Cast, Image, Gif, Tags, Knit, Chores, Reader, Exposure.
 |---|---|
 | ora | Find in revisione. All'approvazione: giorno 0 del lancio, checklist `marketing/find/lancio.md`, Show HN il giorno 1 |
 | 21/10 | se Apple tace, follow-up su Habits nello stesso thread |
-| dal 24/10 | Subscriptions 2.1 (un aggiornamento: secondo `docs/factory.md` non occupa lo slot, quindi può andare anche prima, decidi tu) |
 | settimana successiva alla risposta di Apple | primo slot nuovo: Clean se Apple la accetta, altrimenti la prima tra Chats e Fuel che ha superato il test insieme |
 | inizio dicembre | Squares in revisione |
 | metà dicembre | lancio della collezione: Show HN + Product Hunt |
@@ -88,9 +86,8 @@ Aperto: indicizzazione delle pagine nuove (#575), handle su X/TikTok/YouTube/Lin
 
 1. App Privacy "nessun dato" sul web per Chats, Fuel, Inventory.
 2. Il 21/10: mandare o no il follow-up Habits.
-3. Una sessione di test insieme, via cavo, partendo da Subscriptions 2.1 (è la prossima a poter uscire).
-4. Decidere se Subscriptions 2.1 aspetta il 24/10 o esce prima (aggiornamento, fuori slot).
-5. Richiesta entitlement multicast per Remote, quando vuoi riprenderla.
+3. Una sessione di test insieme, via cavo.
+4. Richiesta entitlement multicast per Remote, quando vuoi riprenderla.
 
 ## 8. Cosa NON fare adesso
 
