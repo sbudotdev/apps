@@ -48,6 +48,20 @@ struct RoutePlannerTests {
         #expect(walk > 0)
     }
 
+    @Test("A start inside a closed zone names it and leads out, with no network")
+    func startInside() async throws {
+        let catalog = ZoneCatalog.bundled
+        let areaC = try #require(catalog.zones.first { $0.kind == .areaC })
+        let viaTorino = Point(45.4610, 9.1860)
+        #expect(areaC.contains(viaTorino))
+        // NoApproach throws: inside a covered city nothing asks Apple.
+        let plan = try await planner(catalog.zones).plan(request(from: viaTorino, to: Self.bocconi))
+        #expect(plan.startZone == "Area C")
+        #expect(!plan.isPartlyUncovered)
+        let last = try #require(plan.points.last)
+        #expect(!areaC.contains(last))
+    }
+
     @Test("A start outside the graph uses Apple's stretch and says part isn't covered")
     func approach() async throws {
         let plan = try await planner(ZoneCatalog.bundled.zones, approach: LineApproach()).plan(request(from: Self.trezzano, to: Self.bocconi))

@@ -21,15 +21,18 @@ Primo giro: 1/11/2026, versione 0.4.14 (93), due registrazioni dello schermo sen
   - Il veicolo si può rimandare durante l'introduzione.
   - Permesso: si sceglie il veicolo, poi la ZTL da un elenco per comune. I passi successivi non sono stati aperti.
 - [ ] Come tratta festivi e deroghe?
+  - Sbu oggi: festivi nazionali, Pasqua e patrono per città in `Holidays`; ogni regola dice se li esclude o li include, e quando la fonte non lo dice risponde "non so" (`CitySchedulesTests`, `HolidaysTests`). Le deroghe sono i permessi dichiarati. Resta da osservare l'originale (secondo giro, punto 7).
 
 ## Calendario del veicolo (Pro)
 - [ ] Che forma ha: griglia, lista, per zona o per città? Quanto avanti arriva?
+  - Sbu oggi: per zona, 14 giorni da oggi, ogni giorno diviso in tratti a passo di 30 minuti con un esito ciascuno (`VehicleCalendarTests`). Resta da osservare l'originale (punto 1).
 
 ## Navigazione (Pro)
 - [~] Destinazione dentro una ZTL vietata: cosa propone? Dove ti lascia?
   - Duomo di Milano, due tentativi: attesa (la prima volta circa 29 s), poi errore generico senza alternative e senza punto di arrivo proposto. Dopo l'errore la finestra di attesa resta a schermo.
   - Porta Venezia, appena fuori dall'Area C, ha risposto in circa 3 s dallo stesso punto. Il legame con la destinazione è probabile ma non provato: serve un altro tentativo, anche con un altro veicolo.
 - [ ] Partenza dentro una ZTL: cosa fa?
+  - Sbu oggi: nomina la zona nell'anteprima e cerca la via d'uscita più breve, pesando 5 volte le strade dentro la zona (`RoutePlannerTests`, partenza dentro l'Area C). Resta da osservare l'originale in auto (punto 3).
 - [~] Cosa succede se esci dal percorso? Quanto ricalcola?
   - Non provato in movimento. A veicolo fermo la riga di stato passa da avvio a ricalcolo a segnale GPS debole con percorso mantenuto; tempo e km non cambiano.
 - [~] Quali tipi di zona evita, e quali lascia sul percorso con un avviso?
@@ -37,6 +40,7 @@ Primo giro: 1/11/2026, versione 0.4.14 (93), due registrazioni dello schermo sen
 - [~] Istruzioni vocali: in quali momenti? Limite di velocità: sempre presente?
   - Pulsante audio presente, nessun audio registrato. Il limite compare pochi secondi dopo l'avvio, non subito.
 - [ ] CarPlay: quali controlli ci sono?
+  - Sbu oggi: CarPlay non c'è; serve l'entitlement di navigazione, che chiede Matteo ad Apple. Resta da osservare l'originale in auto (punto 3).
 
 ## Altro
 - [~] Parcheggi: cosa si vede, cosa si modifica, si vede cosa hanno modificato gli altri?
@@ -45,6 +49,7 @@ Primo giro: 1/11/2026, versione 0.4.14 (93), due registrazioni dello schermo sen
   - Finiscono in un elenco pubblico con ricerca, filtri per stato e comune, stato di verifica, voti e commenti. Il modulo di invio non è stato aperto.
   - C'è anche una classifica pubblica dei comuni richiesti, con voti: in testa Pisa, Monza, Reggio Emilia.
 - [ ] Cosa funziona senza connessione?
+  - Sbu oggi: zone, regole, calendario e percorsi dentro le città coperte sono nel bundle e non usano la rete (`RoutePlannerTests` gira senza il tratto di Apple). Fuori dal grafo servono le indicazioni di Apple, e le tessere della mappa vengono da MapKit. Resta da osservare l'originale in modalità aereo (punto 6).
 
 ## Osservato fuori dalla lista
 
