@@ -16,6 +16,9 @@ final class GuidanceModel {
     private let voice = VoiceGuide()
     private let replan: (Point) async throws -> RoutePlan
     private var isRerouting = false
+    private var lastReroute: Date?
+    /// Apple throttles directions: after a failed attempt the next one waits this long.
+    nonisolated static let rerouteInterval: TimeInterval = 10
     private var announced: Set<String> = []
     #if DEBUG
     private let trace = TraceRecorder()
@@ -65,8 +68,11 @@ final class GuidanceModel {
             say(String(localized: "Sei a destinazione"), once: "arrive")
             return
         }
-        if state.isOffRoute, !isRerouting {
-            await reroute(from: fix.point)
+        if state.isOffRoute {
+            if !isRerouting, Self.mayReroute(after: lastReroute, at: fix.date) {
+                lastReroute = fix.date
+                await reroute(from: fix.point)
+            }
             return
         }
         status = fix.accuracy > GuidanceTracker.weakAccuracy ? .weakSignal : .following
@@ -86,6 +92,10 @@ final class GuidanceModel {
         } catch {
             // The old route stays on the map: the status line keeps saying it's looking for a new one.
         }
+    }
+
+    nonisolated static func mayReroute(after last: Date?, at now: Date) -> Bool {
+        last.map { now.timeIntervalSince($0) >= rerouteInterval } ?? true
     }
 
     /// Once far ahead, once at the corner.
