@@ -61,7 +61,7 @@ final class PlayerFlowTests: XCTestCase {
     /// @ScaledMetric, which the Dynamic Type audit does not recognize, as in the other apps.
     @MainActor
     private func audit(_ app: XCUIApplication) throws {
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? "no element")")
             return true
         }

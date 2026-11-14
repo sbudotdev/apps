@@ -44,6 +44,9 @@ struct BedsideClockView: View {
                     Text(context.date, format: .dateTime.weekday(.wide).day().month(.wide))
                         .font(SbuTheme.title2)
                         .foregroundStyle(SbuTheme.inkMuted)
+                        .multilineTextAlignment(.center)
+                        // At large text the date wraps instead of ending in "…".
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
             nextAlarm

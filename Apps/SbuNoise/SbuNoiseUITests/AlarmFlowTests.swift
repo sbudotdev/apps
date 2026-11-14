@@ -54,7 +54,7 @@ final class AlarmFlowTests: XCTestCase {
     /// The same exclusions as the player flow: contrast comes from the tokens.
     @MainActor
     private func audit(_ app: XCUIApplication) throws {
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? "no element")")
             return true
         }
