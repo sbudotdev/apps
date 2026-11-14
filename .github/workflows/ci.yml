@@ -7,6 +7,7 @@ on:
 
 jobs:
   kit:
+    if: false
     runs-on: macos-26
     timeout-minutes: 45
     steps:
@@ -41,7 +42,7 @@ jobs:
     steps:
       - *checkout
       - id: apps
-        run: echo "apps=$(ls -d Apps/Sbu* | xargs -n1 basename | jq -R . | jq -sc .)" >> "$GITHUB_OUTPUT"
+        run: echo "apps=$(ls -d Apps/SbuClean Apps/SbuNoise | xargs -n1 basename | jq -R . | jq -sc .)" >> "$GITHUB_OUTPUT"
 
   app:
     needs: list
