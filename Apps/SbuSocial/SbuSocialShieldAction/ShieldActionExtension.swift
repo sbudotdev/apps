@@ -42,11 +42,10 @@ final class ShieldActionExtension: ShieldActionDelegate {
         content.title = opened.name.map { String(localized: "\($0) aperta per \(length)") } ?? String(localized: "App aperta per \(length)")
         content.body = isBeyond ? String(localized: "Oltre le aperture di oggi: il giorno non conta per la serie.") : String(localized: "Poi lo Schermo torna da solo.")
         let request = UNNotificationRequest(identifier: "open-\(opened.id.uuidString)", content: content, trigger: nil)
-        UNUserNotificationCenter.current().add(request) { _ in
-            // ponytail: whether `.none` leaves you in the app without reopening it is unverified,
-            // try `.defer` on a device if it does not.
-            completionHandler(.none)
-        }
+        // The notification is posted on its own: the Shield answers now, without waiting for it.
+        UNUserNotificationCenter.current().add(request)
+        // shortcut: `.none` leaving you in the app without reopening it is unverified on a device, switch to `.defer` if the app stays closed.
+        completionHandler(.none)
     }
 
     override func handle(action: ShieldAction, for category: ActivityCategoryToken, completionHandler: @escaping (ShieldActionResponse) -> Void) {

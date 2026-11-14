@@ -65,4 +65,14 @@ nonisolated struct BlockSession: Codable, Equatable, Identifiable {
         return minute >= start && days.contains(today.weekday)
             || minute < end && days.contains(Day(ordinal: today.ordinal - 1).weekday)
     }
+
+    /// Whether a schedule ending at `date` is this Sessione finished: it ran on one of its days and
+    /// `date` is at its end, give or take two minutes, since iOS may call a little early or late.
+    /// An interval that ends because the Sessione was changed or stopped midway is not finished.
+    func isFinished(at date: Date, calendar: Calendar = .current) -> Bool {
+        let parts = calendar.dateComponents([.hour, .minute, .second], from: date)
+        let seconds = ((parts.hour ?? 0) * 60 + (parts.minute ?? 0)) * 60 + (parts.second ?? 0)
+        let distance = abs(seconds - end * 60)
+        return min(distance, 24 * 3600 - distance) <= 120 && isRunning(at: date.addingTimeInterval(-120), calendar: calendar)
+    }
 }

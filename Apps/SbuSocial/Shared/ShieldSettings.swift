@@ -122,11 +122,12 @@ nonisolated struct ShieldSettings: Codable, Equatable {
 
     /// Covers each Intenzione's app unless an opening is running, and everything but the allowed
     /// apps while a block runs; then counts the time in a block up to `now` in `defaults`.
-    func apply(to store: ManagedSettingsStore, in defaults: UserDefaults, now: Date = .now) {
+    /// - Parameter store: `nil` on a made-up Shield, which must never touch the real one.
+    func apply(to store: ManagedSettingsStore?, in defaults: UserDefaults, now: Date = .now) {
         let locked = locked(now: now)
         let isBlocking = isBlocking(now: now)
-        store.shield.applications = locked.isEmpty ? nil : locked
-        store.shield.applicationCategories = isBlocking ? .all(except: allowList.applicationTokens) : nil
+        store?.shield.applications = locked.isEmpty ? nil : locked
+        store?.shield.applicationCategories = isBlocking ? .all(except: allowList.applicationTokens) : nil
         Tally.update(in: defaults) { $0.settle(isBlocking: isBlocking, now: now) }
     }
 }

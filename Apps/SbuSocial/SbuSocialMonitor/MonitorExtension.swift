@@ -29,8 +29,8 @@ final class MonitorExtension: DeviceActivityMonitor {
         if activity == ShieldSettings.blockNowActivity, let end = settings.blockNowEnd, end <= now.addingTimeInterval(Self.lead) {
             Tally.update(in: defaults) { $0.completeBlock("blocknow-\(Int(end.timeIntervalSince1970))", xp: ShieldSettings.blockNowXP, on: Day(now)) }
         }
-        // A Sessione's schedule ends every day: it is finished only if it ran, on one of its days.
-        if let session = settings.sessions.first(where: { $0.activity == activity }), session.isRunning(at: now.addingTimeInterval(-120)) {
+        // A Sessione's schedule ends every day, and when it is changed or turned off: pay only one that ran to its end.
+        if let session = settings.sessions.first(where: { $0.activity == activity }), session.isFinished(at: now) {
             Tally.update(in: defaults) { $0.completeBlock(session.id.uuidString, xp: session.xp, on: Day(now)) }
         }
         apply()

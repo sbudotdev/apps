@@ -53,6 +53,38 @@ struct BlockSessionTests {
         #expect(night.isRunning(at: Self.date(moment.day, moment.hour, moment.minute), calendar: Self.rome) == moment.runs)
     }
 
+    nonisolated struct Ending: Sendable, CustomTestStringConvertible {
+        let day: Int
+        let hour: Int
+        let minute: Int
+        let isOn: Bool
+        let pays: Bool
+        let testDescription: String
+    }
+
+    nonisolated static let endings = [
+        Ending(day: 5, hour: 17, minute: 0, isOn: true, pays: true, testDescription: "at its end"),
+        Ending(day: 5, hour: 16, minute: 59, isOn: true, pays: true, testDescription: "iOS a minute early"),
+        Ending(day: 5, hour: 17, minute: 1, isOn: true, pays: true, testDescription: "iOS a minute late"),
+        Ending(day: 5, hour: 12, minute: 0, isOn: true, pays: false, testDescription: "changed midway"),
+        Ending(day: 5, hour: 17, minute: 0, isOn: false, pays: false, testDescription: "turned off"),
+        Ending(day: 7, hour: 17, minute: 0, isOn: true, pays: false, testDescription: "a Saturday, not one of its days"),
+    ]
+
+    /// A schedule also ends when the Sessione is changed or stopped: only one that reached its end pays.
+    @Test(arguments: endings)
+    func onlyASessionThatReachedItsEndIsFinished(_ ending: Ending) {
+        var work = BlockSession(name: "Lavoro", start: 9 * 60 + 30, end: 17 * 60, days: [2, 3, 4, 5, 6])
+        work.isOn = ending.isOn
+        #expect(work.isFinished(at: Self.date(ending.day, ending.hour, ending.minute), calendar: Self.rome) == ending.pays)
+    }
+
+    @Test func aNightIsFinishedTheNextMorning() {
+        let night = BlockSession(name: "Notte", start: 23 * 60, end: 0, days: [5])
+        #expect(night.isFinished(at: Self.date(5, 23, 59), calendar: Self.rome))
+        #expect(night.isFinished(at: Self.date(6, 0, 1), calendar: Self.rome))
+    }
+
     @Test func aSessionTurnedOffNeverRuns() {
         var work = BlockSession(name: "Lavoro", start: 9 * 60, end: 17 * 60)
         work.isOn = false

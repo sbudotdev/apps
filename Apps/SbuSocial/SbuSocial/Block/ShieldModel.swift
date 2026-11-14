@@ -23,13 +23,16 @@ final class ShieldModel {
     private(set) var isAuthorized: Bool
 
     @ObservationIgnored private let defaults: UserDefaults
-    @ObservationIgnored private let store = ManagedSettingsStore(named: ShieldSettings.storeName)
-    @ObservationIgnored private let center = DeviceActivityCenter()
+    /// Both `nil` on a made-up Shield: screenshots and UI tests must not change your real one.
+    @ObservationIgnored private let store: ManagedSettingsStore?
+    @ObservationIgnored private let center: DeviceActivityCenter?
 
     /// - Parameter isDemo: On the made-up Shield of screenshots and UI tests there is no Screen
-    ///   Time to ask for: the Simulator has none.
+    ///   Time to ask for: the Simulator has none. It never touches the real Shield or schedules.
     init(defaults: UserDefaults = .appGroup, isDemo: Bool = false) {
         self.defaults = defaults
+        store = isDemo ? nil : ManagedSettingsStore(named: ShieldSettings.storeName)
+        center = isDemo ? nil : DeviceActivityCenter()
         settings = ShieldSettings.load(from: defaults)
         tally = Tally.load(from: defaults)
         isAuthorized = isDemo || AuthorizationCenter.shared.authorizationStatus == .approved
@@ -73,7 +76,7 @@ final class ShieldModel {
     }
 
     func remove(_ intention: Intention) {
-        center.stopMonitoring([ShieldSettings.relockActivity(for: intention.id)])
+        center?.stopMonitoring([ShieldSettings.relockActivity(for: intention.id)])
         update { $0.intentions.removeAll { $0.id == intention.id } }
     }
 
@@ -82,30 +85,32 @@ final class ShieldModel {
     /// Blocks everything but the allowed apps from now for `minutes`.
     func startBlockNow(minutes: Int, now: Date = .now) {
         let end = now.addingTimeInterval(TimeInterval(minutes * 60))
-        try? center.startMonitoring(ShieldSettings.blockNowActivity, during: .oneOff(from: now, to: end))
+        try? center?.startMonitoring(ShieldSettings.blockNowActivity, during: .oneOff(from: now, to: end))
         update { $0.blockNowEnd = end }
     }
 
     /// Ends it early: an unfinished block gives no points.
     func endBlockNow() {
-        center.stopMonitoring([ShieldSettings.blockNowActivity])
+        center?.stopMonitoring([ShieldSettings.blockNowActivity])
         update { $0.blockNowEnd = nil }
     }
 
     // MARK: Sessioni
 
     /// Adds a Sessione or saves its changes, and schedules it again.
+    /// Saved before the schedule stops: if iOS ends the interval then, the monitor already sees
+    /// the change, and `BlockSession.isFinished(at:)` pays only a Sessione that reached its end.
     func save(_ session: BlockSession) {
-        center.stopMonitoring([session.activity])
-        if session.isOn {
-            try? center.startMonitoring(session.activity, during: session.schedule)
-        }
         update { $0.put(session) }
+        center?.stopMonitoring([session.activity])
+        if session.isOn {
+            try? center?.startMonitoring(session.activity, during: session.schedule)
+        }
     }
 
     func remove(_ session: BlockSession) {
-        center.stopMonitoring([session.activity])
         update { $0.sessions.removeAll { $0.id == session.id } }
+        center?.stopMonitoring([session.activity])
     }
 
     /// The apps that stay open during Blocca ora and the Sessioni.
@@ -136,7 +141,7 @@ final class ShieldModel {
         } else {
             DeviceActivityEvent(applications: [], categories: [], webDomains: [], threshold: threshold)
         }
-        try? center.startMonitoring(ShieldSettings.dayActivity, during: day, events: [ShieldSettings.goalEvent: goal])
+        try? center?.startMonitoring(ShieldSettings.dayActivity, during: day, events: [ShieldSettings.goalEvent: goal])
     }
 
     /// The first-run setup is over, finished or skipped.
@@ -164,12 +169,12 @@ final class ShieldModel {
         settings = ShieldSettings.load(from: defaults)
         if isAuthorized {
             Tally.update(in: defaults) { $0.begin(on: Day(now)) }
-            if !center.activities.contains(ShieldSettings.dayActivity) { watchDay() }
+            if center?.activities.contains(ShieldSettings.dayActivity) == false { watchDay() }
         }
         if let end = settings.blockNowEnd, end <= now {
             // The monitor extension pays it too, whichever comes first: the key makes it once.
             Tally.update(in: defaults) { $0.completeBlock("blocknow-\(Int(end.timeIntervalSince1970))", xp: ShieldSettings.blockNowXP, on: Day(now)) }
-            center.stopMonitoring([ShieldSettings.blockNowActivity])
+            center?.stopMonitoring([ShieldSettings.blockNowActivity])
             update { $0.blockNowEnd = nil }
         } else {
             settings.apply(to: store, in: defaults, now: now)
