@@ -44,6 +44,7 @@ final class GuidanceModel {
         let background = CLBackgroundActivitySession()
         defer { background.invalidate() }
         location.start()
+        defer { location.stop() }
         var last: Date?
         while !Task.isCancelled, status != .arrived {
             if let fix = location.fix, fix.date != last {
