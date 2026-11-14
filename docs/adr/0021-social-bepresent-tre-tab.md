@@ -1,4 +1,4 @@
-# Sbu Social: l'Originale diventa BePresent, quattro tab, niente rete
+# Sbu Social: l'Originale diventa BePresent, tre tab, niente rete
 
 Sostituisce ADR-0017 e ritira ADR-0018. Il numero salta 0019 e 0020, già presi dai rami di Sbu ZTL.
 
@@ -16,7 +16,7 @@ Sopra le leve c'è il conto dei progressi, anche lui solo sul telefono: la **Ser
 
 **Niente rete.** Senza il browser l'app non fa più chiamate: l'eccezione di ADR-0018 non serve e nessuno la eredita. I dati di Screen Time non escono dall'app nemmeno verso Sbu: il sistema li mostra solo dentro la sua estensione, e l'app sa soltanto se l'Obiettivo giornaliero è stato raggiunto.
 
-**Quattro tab.** `TabView` nativa dentro `SbuTabShell`, come ADR-0012: **Home** (`house`), **Sessioni** (`calendar`), **Tempo di schermo** (`hourglass`) e **Impostazioni** (`gearshape`), l'ultima, aggiunta dalla shell. L'app si apre su Home, la **Schermata strumento**. Ogni tab ha al massimo una **Cifra**: Home il tempo in blocco oggi, Sessioni quante Sessioni sono accese, Tempo di schermo i minuti di oggi; Impostazioni nessuna. Il **Punto fermo** è pieno dove qualcosa è compiuto o in corso: in Home e in Sessioni mentre un blocco è in corso, in Tempo di schermo finché sei sotto l'Obiettivo giornaliero; altrimenti è in attesa.
+**Tre tab.** `TabView` nativa dentro `SbuTabShell`, come ADR-0012: **Home** (`house`), **Sessioni** (`calendar`) e **Impostazioni** (`gearshape`), l'ultima, aggiunta dalla shell. L'app si apre su Home, la **Schermata strumento**. Ogni tab ha al massimo una **Cifra**: Home il tempo in blocco oggi, Sessioni quante Sessioni sono accese; Impostazioni nessuna. Il **Punto fermo** è pieno dove qualcosa è in corso: in Home e in Sessioni mentre un blocco è in corso; altrimenti è in attesa. Niente tab Tempo di schermo con i minuti di oggi: il sistema li mostra solo dentro un'estensione DeviceActivityReport, che vorrebbe una nuova richiesta di entitlement; se servirà, sarà un nuovo ADR.
 
 **Primo avvio a passaggi.** Deroga alla regola "niente caroselli al primo avvio": l'app senza Screen Time, un'Intenzione e le App consentite non fa nulla, quindi il primo avvio è una configurazione, un passaggio per cosa da impostare (accesso a Tempo di utilizzo, Obiettivo giornaliero, prima Intenzione, prima Sessione, App consentite, widget). Ogni passaggio fa una cosa, si può saltare, e chiede il suo permesso solo quando lo usa: mai in anticipo. Nessun passaggio serve a convincere.
 
