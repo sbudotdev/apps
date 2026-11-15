@@ -4,10 +4,17 @@ import Testing
 
 /// Chi usava l'app con il nome di prima ritrova neve accesa o spenta e impostazioni.
 struct PreviousDefaultsTests {
-    /// Un dominio di UserDefaults usa e getta, cancellato alla fine.
+    /// Domini di UserDefaults usa e getta, cancellati alla fine con il loro file:
+    /// `removePersistentDomain` da solo lascia un .plist vuoto in ~/Library/Preferences.
     private func withSuites(_ count: Int, _ body: ([String], [UserDefaults]) throws -> Void) rethrows {
         let names = (0..<count).map { _ in "test.sbuseasons.\(UUID().uuidString)" }
-        defer { names.forEach { UserDefaults.standard.removePersistentDomain(forName: $0) } }
+        defer {
+            let preferences = URL.libraryDirectory.appending(path: "Preferences")
+            for name in names {
+                UserDefaults.standard.removePersistentDomain(forName: name)
+                try? FileManager.default.removeItem(at: preferences.appending(path: "\(name).plist"))
+            }
+        }
         try body(names, names.map { UserDefaults(suiteName: $0)! })
     }
 
