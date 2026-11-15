@@ -7,18 +7,16 @@ import SpriteKit
 /// un punto della scena = un punto dello schermo.
 final class SnowScene: SKScene {
 
-    // MARK: - Parametri (giocaci pure)
+    // MARK: - Parametri fissi (quelli regolabili sono in Settings.swift)
 
-    /// Raggio entro cui il cursore influenza i fiocchi, in punti.
-    private let cursorRadius: CGFloat = 90
-    /// Quanto forte il cursore "scosta" i fiocchi anche da fermo (pt/s²).
-    private let cursorRepel: CGFloat = 2200
     /// Quanto un movimento veloce del mouse trascina con sé i fiocchi (0…1).
     private let cursorDrag: CGFloat = 0.55
     /// Quanto velocemente la spinta del cursore si esaurisce (più alto = si fermano prima).
     private let damping: CGFloat = 1.8
-    /// Forza massima del vento, in pt/s.
-    private let maxWind: CGFloat = 14
+    /// Raggio (in orizzontale) entro cui il cursore scava nella neve accumulata.
+    private let scoopRadius: CGFloat = 14
+    /// Massimo numero di fiocchi "sciolti" (staccati da un mucchio) in volo insieme.
+    private let maxLoose = 800
 
     // MARK: - Stato
 
@@ -35,23 +33,32 @@ final class SnowScene: SKScene {
         var push: CGVector = .zero
     }
 
+    /// I fiocchi della nevicata: quando arrivano in fondo (o si posano) rinascono in cima.
     private var flakes: [Flake] = []
+    /// Fiocchi staccati da un mucchio: quando si posano o escono spariscono.
+    private var loose: [Flake] = []
+
+    /// Neve posata sulle finestre, per ID di finestra. `rect` è in coordinate della scena.
+    private var piles: [CGWindowID: (pile: SnowPile, rect: CGRect)] = [:]
+    /// Neve posata sopra il Dock. `rect` è in coordinate della scena.
+    private var dock: (pile: SnowPile, rect: CGRect)?
     private let flakeTexture = SnowScene.makeFlakeTexture()
     private let screenOrigin: CGPoint
 
     private var lastUpdateTime: TimeInterval?
     private var elapsed: CGFloat = 0
     private var lastMouse: CGPoint?
+    /// Tempo dall'ultimo aggiornamento dei mucchi (frana + ridisegno).
+    private var pileClock: CGFloat = 0
 
-    var density: Density {
-        didSet { if density != oldValue { rebuildFlakes() } }
-    }
+    /// Quantità e dimensione con cui sono stati creati i fiocchi attuali:
+    /// se nelle impostazioni cambiano, li ricreiamo.
+    private var builtWith: (count: Double, size: Double)?
 
     // MARK: - Init
 
-    init(size: CGSize, screenOrigin: CGPoint, density: Density) {
+    init(size: CGSize, screenOrigin: CGPoint) {
         self.screenOrigin = screenOrigin
-        self.density = density
         super.init(size: size)
         backgroundColor = .clear
         anchorPoint = .zero
@@ -76,30 +83,30 @@ final class SnowScene: SKScene {
     // MARK: - Fiocchi
 
     private func rebuildFlakes() {
-        removeAllChildren()
+        flakes.forEach { $0.node.removeFromParent() }
         guard size.width > 0, size.height > 0 else {
             flakes = []
             return
         }
+        let settings = Settings.shared.values
+        builtWith = (settings.flakeCount, settings.flakeSize)
         let referenceArea: CGFloat = 1440 * 900
-        let count = Int(density.flakesPerReferenceScreen * Double(size.width * size.height / referenceArea))
-        flakes = (0..<max(count, 1)).map { _ in makeFlake(anywhere: true) }
+        let count = Int(settings.flakeCount * Double(size.width * size.height / referenceArea))
+        flakes = (0..<max(count, 1)).map { _ in
+            makeFlake(at: CGPoint(x: .random(in: 0...size.width), y: .random(in: 0...size.height)))
+        }
     }
 
-    /// Crea un fiocco. Con `anywhere` lo piazza in un punto a caso dello schermo
-    /// (all'avvio), altrimenti appena sopra il bordo superiore (quando rinasce).
-    private func makeFlake(anywhere: Bool) -> Flake {
+    /// Crea un fiocco nel punto indicato.
+    private func makeFlake(at position: CGPoint) -> Flake {
         let depth = CGFloat.random(in: 0...1)
-        let radius = 1.5 + depth * 3.5
+        let radius = (1.5 + depth * 3.5) * Settings.shared.values.flakeSize
 
         let node = SKSpriteNode(texture: flakeTexture)
         node.size = CGSize(width: radius * 2, height: radius * 2)
         node.alpha = 0.45 + depth * 0.5
         node.zPosition = depth
-        node.position = CGPoint(
-            x: .random(in: 0...size.width),
-            y: anywhere ? .random(in: 0...size.height) : size.height + radius + .random(in: 0...40)
-        )
+        node.position = position
         addChild(node)
 
         return Flake(
@@ -121,6 +128,74 @@ final class SnowScene: SKScene {
         flake.push = .zero
     }
 
+    /// Fa partire fiocchi sciolti dai punti indicati, con una spinta iniziale.
+    private func spawnLoose(_ points: [CGPoint], push: CGVector = .zero, spread: CGFloat = 20) {
+        for point in points where loose.count < maxLoose {
+            var flake = makeFlake(at: point)
+            flake.push = CGVector(dx: push.dx + .random(in: -spread...spread),
+                                  dy: push.dy + .random(in: 0...spread * 2))
+            loose.append(flake)
+        }
+    }
+
+    // MARK: - Finestre
+
+    /// Riceve finestre e Dock attuali (coordinate globali) e aggiorna i mucchi di neve.
+    func updateWindows(_ edges: [WindowEdge], dock dockFrame: CGRect?) {
+        updateDock(dockFrame)
+        var seen = Set<CGWindowID>()
+        for edge in edges {
+            let r = edge.rect.offsetBy(dx: -screenOrigin.x, dy: -screenOrigin.y)
+            // Solo bordi su questo schermo; escluse le app a schermo intero (bordo in cima).
+            guard r.maxY > 0, r.maxY < size.height - 2, r.maxX > 0, r.minX < size.width else { continue }
+            seen.insert(edge.id)
+            let open = edge.visible.map { ($0.lowerBound - screenOrigin.x)...($0.upperBound - screenOrigin.x) }
+
+            if let old = piles[edge.id], old.rect.minX == r.minX, old.rect.maxY == r.maxY, old.rect.width == r.width {
+                // Ferma: aggiorna solo i tratti coperti/scoperti.
+                spawnLoose(old.pile.setOpen(open))
+            } else {
+                // Nuova, spostata o ridimensionata: la neve vecchia cade, si riparte da zero.
+                if let old = piles[edge.id] { drop(old.pile) }
+                let pile = SnowPile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: windowCornerRadius)
+                _ = pile.setOpen(open)
+                addChild(pile.node)
+                piles[edge.id] = (pile, r)
+            }
+        }
+        for (id, entry) in piles where !seen.contains(id) {
+            drop(entry.pile)
+            piles[id] = nil
+        }
+    }
+
+    private func updateDock(_ frame: CGRect?) {
+        // Il Dock deve stare su questo schermo e in basso (nascosto o di lato: niente neve).
+        // Il bordo superiore va abbassato di `dockInset` per combaciare con la barra visibile.
+        let inset = CGFloat(Settings.shared.values.dockInset)
+        let r = frame.map { CGRect(x: $0.minX - screenOrigin.x, y: $0.minY - screenOrigin.y,
+                                   width: $0.width, height: $0.height - inset) }
+        let onThisScreen = r.map { $0.minY >= -1 && $0.minY < 20 && $0.midX > 0 && $0.midX < size.width && $0.width > $0.height } ?? false
+        if let r, onThisScreen, dock?.rect == r { return }   // fermo: niente da fare
+        if let old = dock { drop(old.pile) }                 // spostato/ridimensionato/sparito: la neve cade
+        dock = nil
+        guard let r, onThisScreen else { return }
+        let pile = SnowPile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: dockCornerRadius)
+        addChild(pile.node)
+        dock = (pile, r)
+    }
+
+    private func drop(_ pile: SnowPile) {
+        spawnLoose(pile.releaseAll(), spread: 10)
+        pile.node.removeFromParent()
+    }
+
+    /// "Sciogli la neve": svuota tutti i mucchi.
+    func meltAll() {
+        piles.values.forEach { $0.pile.clear() }
+        dock?.pile.clear()
+    }
+
     // MARK: - Loop
 
     override func update(_ currentTime: TimeInterval) {
@@ -130,7 +205,17 @@ final class SnowScene: SKScene {
         guard dt > 0 else { return }
         elapsed += dt
 
+        // Le impostazioni si leggono una volta per frame: le modifiche dalla finestra si vedono subito.
+        let settings = Settings.shared.values
+        if let built = builtWith, built != (settings.flakeCount, settings.flakeSize) {
+            rebuildFlakes()
+        }
+        let cursorRadius = CGFloat(settings.cursorRadius)
+        let cursorRepel = CGFloat(settings.cursorRepel)
+        let fallSpeed = CGFloat(settings.fallSpeed)
+
         // Vento globale che cambia lentamente.
+        let maxWind = CGFloat(settings.wind)
         let wind = sin(elapsed * 0.11) * maxWind + sin(elapsed * 0.37) * maxWind * 0.3
 
         // Posizione e velocità del cursore in coordinate della scena.
@@ -145,9 +230,14 @@ final class SnowScene: SKScene {
         let decay = CGFloat(exp(-Double(damping * dt)))
         let dragBlend = min(1, dt * 10)
 
-        for i in flakes.indices {
-            var flake = flakes[i]
+        // Solo i mucchi attivi raccolgono neve.
+        var allPiles: [SnowPile] = settings.accumulate ? piles.values.map(\.pile) : []
+        if settings.groundSnow, let dock { allPiles.append(dock.pile) }
+
+        /// Muove un fiocco di un passo. Restituisce true se si è posato su un mucchio.
+        func move(_ flake: inout Flake) -> Bool {
             var p = flake.node.position
+            let previousY = p.y
 
             // --- Interazione col cursore ---
             let dx = p.x - mouse.x
@@ -175,7 +265,7 @@ final class SnowScene: SKScene {
             let sway = cos(elapsed * flake.swayFrequency * 2 * .pi + flake.phase)
                 * flake.swayAmplitude * flake.swayFrequency
             p.x += (wind * (0.4 + flake.depth) + sway + flake.push.dx) * dt
-            p.y += (-flake.fallSpeed + flake.push.dy) * dt
+            p.y += (-flake.fallSpeed * fallSpeed + flake.push.dy) * dt
 
             // Bordi laterali: chi esce da un lato rientra dall'altro.
             let margin: CGFloat = 20
@@ -184,12 +274,57 @@ final class SnowScene: SKScene {
 
             flake.node.position = p
 
-            // Arrivato in fondo: rinasce in cima.
-            if p.y < -flake.radius {
+            // --- Si posa? Ha attraversato la superficie di un mucchio in questo passo ---
+            for pile in allPiles {
+                if let top = pile.surface(at: p.x), previousY >= top, p.y < top {
+                    pile.add(atX: p.x, radius: flake.radius, growth: CGFloat(settings.growth))
+                    return true
+                }
+            }
+            return false
+        }
+
+        for i in flakes.indices {
+            var flake = flakes[i]
+            // Posato o arrivato in fondo: rinasce in cima.
+            if move(&flake) || flake.node.position.y < -flake.radius {
                 respawn(&flake)
             }
-
             flakes[i] = flake
+        }
+
+        loose = loose.compactMap { flake in
+            var flake = flake
+            let out = flake.node.position.y < -flake.radius || flake.node.position.y > size.height + 60
+            if move(&flake) || out {
+                flake.node.removeFromParent()
+                return nil
+            }
+            return flake
+        }
+
+        // --- Il cursore scava nella neve posata ---
+        let speed = hypot(mouseVelocity.dx, mouseVelocity.dy)
+        if speed > 20, CGRect(origin: .zero, size: size).contains(mouse) {
+            let kick = CGVector(dx: mouseVelocity.dx * 0.4, dy: abs(mouseVelocity.dy) * 0.2 + 60)
+            for pile in allPiles {
+                spawnLoose(pile.scoop(at: mouse, radius: scoopRadius), push: kick, spread: 40)
+            }
+        }
+
+        // La neve posata cambia lentamente: frana e ridisegno 10 volte al secondo bastano
+        // (farlo a ogni frame triplicava la CPU).
+        pileClock += dt
+        if pileClock >= 0.1 {
+            pileClock = 0
+            let maxPile = CGFloat(settings.maxPile)
+            for pile in piles.values.map(\.pile) + (dock.map { [$0.pile] } ?? []) {
+                pile.maxHeight = pile === dock?.pile ? maxPile * 1.75 : maxPile
+                // Accumulo disattivato dalle impostazioni: la neve sparisce.
+                if !allPiles.contains(where: { $0 === pile }) { pile.clear() }
+                pile.settle()
+                pile.redrawIfNeeded()
+            }
         }
     }
 

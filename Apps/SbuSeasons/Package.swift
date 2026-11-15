@@ -10,6 +10,11 @@ let package = Package(
         .executableTarget(
             name: "SbuSeasons",
             path: "Sources/SbuSeasons"
+        ),
+        .testTarget(
+            name: "SbuSeasonsTests",
+            dependencies: ["SbuSeasons"],
+            path: "Tests/SbuSeasonsTests"
         )
     ]
 )
