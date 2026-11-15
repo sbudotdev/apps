@@ -151,13 +151,14 @@ final class SnowScene: SKScene {
             seen.insert(edge.id)
             let open = edge.visible.map { ($0.lowerBound - screenOrigin.x)...($0.upperBound - screenOrigin.x) }
 
-            if let old = piles[edge.id], old.rect.minX == r.minX, old.rect.maxY == r.maxY, old.rect.width == r.width {
+            if let old = piles[edge.id], old.rect.minX == r.minX, old.rect.maxY == r.maxY, old.rect.width == r.width,
+               old.pile.cornerRadius == edge.cornerRadius {
                 // Ferma: aggiorna solo i tratti coperti/scoperti.
                 spawnLoose(old.pile.setOpen(open))
             } else {
-                // Nuova, spostata o ridimensionata: la neve vecchia cade, si riparte da zero.
+                // Nuova, spostata, ridimensionata (o scoperto il raggio giusto): la neve vecchia cade, si riparte da zero.
                 if let old = piles[edge.id] { drop(old.pile) }
-                let pile = SnowPile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: windowCornerRadius)
+                let pile = SnowPile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: edge.cornerRadius)
                 _ = pile.setOpen(open)
                 addChild(pile.node)
                 piles[edge.id] = (pile, r)

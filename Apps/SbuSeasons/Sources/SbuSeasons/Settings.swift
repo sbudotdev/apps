@@ -17,6 +17,8 @@ struct SnowSettings: Codable, Equatable {
     var groundSnow = true       // neve sopra il Dock (nome storico, cambiarlo azzererebbe i salvataggi)
     var growth = 0.9            // neve aggiunta per fiocco posato
     var maxPile = 16.0          // pt (sul Dock arriva a 1,75×)
+    var toolbarCornerRadius = 34.0  // pt: angoli delle app con barra strumenti (Finder, Safari, Note…)
+    var windowCornerRadius = 20.0   // pt: angoli delle altre app (IntelliJ, Chrome…)
     var dockInset = 7.0         // pt: il rettangolo del Dock dato da macOS ha un margine sopra la barra visibile
 }
 
@@ -74,6 +76,13 @@ struct SettingsView: View {
                 slider("Altezza massima", $settings.values.maxPile, 4...40, "%.0f pt")
                 slider("Abbassa neve sul Dock", $settings.values.dockInset, -10...25, "%.0f pt")
             }
+            Section("Angoli delle finestre") {
+                slider("App con barra strumenti", $settings.values.toolbarCornerRadius, 0...60, "%.0f pt")
+                slider("Altre app", $settings.values.windowCornerRadius, 0...60, "%.0f pt")
+                Text("Finder, Safari, Note… hanno angoli più stondati di IntelliJ, Chrome… Se la neve sembra sospesa sugli angoli, aumenta; se affonda nella finestra, diminuisci.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
             Section("Generale") {
                 // Funziona solo dentro SbuSeasons.app (con `swift run` non c'è un bundle).
                 Toggle("Apri al login", isOn: $openAtLogin)
@@ -83,8 +92,7 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(width: 440)
-        .fixedSize()
+        .frame(width: 440, height: 620)   // il contenuto è più alto: si scorre
     }
 
     private func slider(_ title: String, _ value: Binding<Double>, _ range: ClosedRange<Double>, _ format: String) -> some View {
