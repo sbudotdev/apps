@@ -51,8 +51,15 @@ final class Settings {
         didSet { UserDefaults.standard.set(try? JSONEncoder().encode(values), forKey: Self.key) }
     }
 
+    /// La stagione scelta dal menu ❄︎, salvata a parte: "Ripristina…" non la cambia.
+    var seasonID: String {
+        didSet { UserDefaults.standard.set(seasonID, forKey: "season") }
+    }
+    var season: any Season { Seasons.named(seasonID) }
+
     private init() {
         values = SnowSettings(saved: UserDefaults.standard.data(forKey: Self.key))
+        seasonID = UserDefaults.standard.string(forKey: "season") ?? Seasons.all[0].id
     }
 
     func reset() { values = SnowSettings() }

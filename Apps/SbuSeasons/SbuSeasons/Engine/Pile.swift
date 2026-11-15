@@ -1,10 +1,10 @@
 import AppKit
 import SpriteKit
 
-/// La neve posata su un bordo orizzontale (il lato superiore di una finestra, o il fondo dello schermo).
+/// La neve (o ciò che cade nella stagione) posata su un bordo orizzontale (il lato superiore di una finestra, o il fondo dello schermo).
 /// È una "mappa di altezze": una colonna ogni `step` punti, ognuna con la sua altezza di neve.
 /// Coordinate: quelle della scena (locali allo schermo).
-final class SnowPile {
+final class Pile {
 
     static let step = Tuning.pileStep
 
@@ -26,7 +26,8 @@ final class SnowPile {
     let node = SKShapeNode()
 
     /// `cornerRadius`: raggio degli angoli superiori della superficie (0 = spigoli vivi).
-    init(minX: CGFloat, width: CGFloat, baseY: CGFloat, cornerRadius: CGFloat, maxHeight: CGFloat) {
+    /// `color`: il colore della stagione (`Season.pileColor`).
+    init(minX: CGFloat, width: CGFloat, baseY: CGFloat, cornerRadius: CGFloat, maxHeight: CGFloat, color: NSColor) {
         self.minX = minX
         self.baseY = baseY
         self.maxHeight = maxHeight
@@ -43,9 +44,8 @@ final class SnowPile {
         sag = edgeDistance.map { d in d >= r ? 0 : r - (r * r - (r - d) * (r - d)).squareRoot() }
         capacity = edgeDistance.map { d in r > 0 ? min(1, d / r) : 1 }
 
-        // Carta (valore chiaro) anche in aspetto scuro: è neve. Sulle finestre bianche si stacca
-        // perché è appena più calda del bianco. Niente contorno: ridisegnarlo a ogni frame costa molta CPU.
-        node.fillColor = Quaderno.paper.lightColor
+        // Niente contorno: ridisegnarlo a ogni frame costa molta CPU.
+        node.fillColor = color
         node.strokeColor = .clear
         node.lineWidth = 0
         node.zPosition = 2   // sopra i fiocchi (che hanno zPosition 0…1)
