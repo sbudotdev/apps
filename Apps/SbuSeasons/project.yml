@@ -18,7 +18,11 @@ targets:
   SbuSeasons:
     type: application
     platform: macOS
-    sources: [SbuSeasons]
+    sources:
+      - SbuSeasons
+      # Fonts and licences straight from Design/fonts, the same files SbuKit and the site ship.
+      - path: ../../Design/fonts
+        buildPhase: resources
     settings:
       base:
         # Bundle id and name stay provisional until Matteo approves them (MGS-416).
