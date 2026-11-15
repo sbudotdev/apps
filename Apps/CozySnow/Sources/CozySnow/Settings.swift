@@ -88,7 +88,11 @@ struct SettingsView: View {
                 Toggle("Apri al login", isOn: $openAtLogin)
                     .disabled(Bundle.main.bundleIdentifier == nil)
                     .onChange(of: openAtLogin) { _, on in setOpenAtLogin(on) }
-                Button("Ripristina valori predefiniti") { settings.reset() }
+                HStack {
+                    Button("Ripristina valori predefiniti") { settings.reset() }
+                    Spacer()
+                    Button("Esci da CozySnow") { NSApp.terminate(nil) }
+                }
             }
         }
         .formStyle(.grouped)

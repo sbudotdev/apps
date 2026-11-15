@@ -3,7 +3,7 @@ import SwiftUI
 
 /// Crea una finestra di neve per ogni schermo e gestisce il menu ❄︎ nella barra dei menu.
 @MainActor
-final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWindowDelegate {
     private var overlays: [SnowOverlayWindow] = []
     private var statusItem: NSStatusItem?
     private var windowTimer: Timer?
@@ -24,6 +24,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         window.title = "Impostazioni CozySnow"
         window.styleMask = [.titled, .closable]
         window.isReleasedWhenClosed = false
+        window.delegate = self   // per sapere quando viene chiusa
         window.center()
         return window
     }()
@@ -34,6 +35,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             AXIsProcessTrustedWithOptions(["AXTrustedCheckOptionPrompt": true] as CFDictionary)
         }
         setupStatusItem()
+        setupMainMenu()
         rebuildOverlays()
 
         // Se colleghi/scolleghi un monitor o cambi risoluzione, ricreiamo le finestre.
@@ -76,6 +78,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
 
     // MARK: - Menu
+
+    /// Il menu in alto (quello col nome dell'app), visibile mentre le Impostazioni sono aperte.
+    private func setupMainMenu() {
+        let appMenu = NSMenu()
+        appMenu.addItem(NSMenuItem(title: "Chiudi finestra", action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w"))
+        appMenu.addItem(.separator())
+        appMenu.addItem(NSMenuItem(title: "Esci da CozySnow", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        let appItem = NSMenuItem()
+        appItem.submenu = appMenu
+        let mainMenu = NSMenu()
+        mainMenu.addItem(appItem)
+        NSApp.mainMenu = mainMenu
+    }
 
     private func setupStatusItem() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -157,9 +172,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     @objc private func openSettings() {
         // App senza Dock: va "attivata" esplicitamente, altrimenti la finestra resta dietro alle altre.
+        // Mentre le Impostazioni sono aperte, l'app si comporta come una normale:
+        // icona nel Dock, ⌘Tab, menu in alto. Alla chiusura torna invisibile (vedi windowWillClose).
+        NSApp.setActivationPolicy(.regular)
         NSApp.activate()
         settingsWindow.makeKeyAndOrderFront(nil)
         settingsWindow.orderFrontRegardless()   // davanti anche se macOS non ci ha ancora "attivati"
+    }
+
+    func windowWillClose(_ notification: Notification) {
+        NSApp.setActivationPolicy(.accessory)   // via dal Dock: resta solo la neve
     }
 
     /// macOS segnala nell'evento di avvio se l'app è partita come elemento di login.
