@@ -2,7 +2,7 @@ import AppKit
 import CoreText
 import SwiftUI
 
-/// I token del Quaderno (ADR-0013) che servono a CozySnow, copiati da `Design/tokens.json`.
+/// I token del Quaderno (ADR-0013) che servono a Sbu Seasons, copiati da `Design/tokens.json`.
 ///
 /// shortcut: copia a mano perché SbuKit non supporta ancora macOS; `QuadernoTokensTests` la confronta
 /// con `tokens.json`. Quando SbuKit avrà macOS, si usa `SbuTheme` e questo file sparisce.

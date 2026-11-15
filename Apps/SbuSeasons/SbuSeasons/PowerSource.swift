@@ -2,7 +2,7 @@ import Foundation
 import IOKit.ps
 
 extension Notification.Name {
-    static let powerSourceDidChange = Notification.Name("CozySnowPowerSourceDidChange")
+    static let powerSourceDidChange = Notification.Name("SbuSeasonsPowerSourceDidChange")
 }
 
 /// Il Mac va a batteria? Su un Mac fisso (nessuna batteria) è sempre false.

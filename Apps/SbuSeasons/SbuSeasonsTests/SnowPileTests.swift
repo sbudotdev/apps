@@ -1,6 +1,6 @@
 import Testing
 import CoreGraphics
-@testable import CozySnow
+@testable import SbuSeasons
 
 @MainActor
 struct SnowPileTests {

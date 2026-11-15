@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import CozySnow
+@testable import SbuSeasons
 
 /// Le stringhe stanno in `Localizable.xcstrings` (ADR-0022): italiano di sviluppo, più l'inglese.
 struct LocalizationTests {

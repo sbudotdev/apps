@@ -3,9 +3,9 @@ import AppKit
 /// Punto di ingresso: un'app "accessoria" (niente icona nel Dock),
 /// controllata solo dall'icona ❄︎ nella barra dei menu.
 @main
-struct CozySnowApp {
+struct SbuSeasonsApp {
     /// Il nome visibile, da CFBundleDisplayName in project.yml: per rinominare l'app basta cambiare lì.
-    static let name = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? "CozySnow"
+    static let name = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? "Sbu Seasons"
 
     @MainActor
     static func main() {

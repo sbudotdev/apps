@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import CozySnow
+@testable import SbuSeasons
 
 /// SbuKit non c'è su macOS: i valori del Quaderno usati dall'app sono copiati in `Quaderno`.
 /// Questo test li confronta con `Design/tokens.json`, così una modifica ai token non passa inosservata.
