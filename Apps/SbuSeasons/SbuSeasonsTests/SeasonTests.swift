@@ -36,6 +36,16 @@ struct SeasonTests {
         #expect(sprites.allSatisfy { $0.size.width == 14 * Settings.shared.values.flakeSize })
     }
 
+    @Test func choosingTheSameSeasonAgainLeavesTheFlakesWhereTheyAre() {
+        let fake = FakeSeason()
+        let scene = SeasonScene(size: size, screenOrigin: .zero, season: Snow())
+        scene.setSeason(fake)
+        let before = scene.children.map(ObjectIdentifier.init)
+
+        scene.setSeason(fake)
+        #expect(scene.children.map(ObjectIdentifier.init) == before)
+    }
+
     @Test func theSettledParticlesTakeTheColorOfTheSeason() {
         let fake = FakeSeason()
         let scene = SeasonScene(size: size, screenOrigin: .zero, season: fake)

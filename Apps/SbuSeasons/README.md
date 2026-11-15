@@ -86,7 +86,10 @@ I valori predefiniti sono in `SnowSettings` (`Settings.swift`); i parametri fiss
    - `pileColor`: il colore di ciò che si posa sulle finestre e sul Dock;
    - `makeTexture()`: la forma della particella, disegnata una volta;
    - `particle(depth:)`: raggio, opacità, velocità di caduta e oscillazione di una particella (0 = lontana, 1 = vicina).
-2. Aggiungi una riga in `Seasons/Seasons.swift`, nell'ordine in cui la vuoi nel menu. Nient'altro da toccare.
+2. Aggiungi una riga in `Seasons/Seasons.swift`, nell'ordine in cui la vuoi nel menu. Nient'altro da toccare nel codice.
+   Attenzione: alcuni testi parlano ancora solo di neve («Fai nevicare», «Sciogli la neve», le sezioni «Nevicata»
+   e «Neve posata» e «Quantità di fiocchi» nelle Impostazioni). Renderli generici è una decisione di Matteo,
+   da prendere prima che esca la seconda stagione.
 3. I colori e i numeri della stagione stanno nel suo file (un `enum <Nome>Tuning` come `SnowTuning`), non in
    `Design/tokens.json`: sono contenuto, non interfaccia, e li approva Matteo guardando lo screenshot.
 4. `xcodegen`, poi `xcodebuild test -scheme SbuSeasons -destination 'platform=macOS'`, e misura la CPU con la neve
