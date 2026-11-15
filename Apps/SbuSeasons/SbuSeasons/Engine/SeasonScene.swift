@@ -83,9 +83,12 @@ final class SeasonScene: SKScene {
     // MARK: - Stagione
 
     /// Cambia stagione: i fiocchi rinascono con la forma nuova, i mucchi prendono il colore nuovo.
+    /// La stessa stagione di nuovo non fa niente: i fiocchi non saltano.
     func setSeason(_ season: any Season) {
+        guard season.id != self.season.id else { return }
         self.season = season
         flakeTexture = season.makeTexture()
+        for grain in grains { grain.node.texture = flakeTexture }
         for pile in piles.values.map(\.pile) + (dock.map { [$0.pile] } ?? []) { pile.node.fillColor = season.pileColor }
         rebuildFlakes()
     }
