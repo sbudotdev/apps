@@ -5,7 +5,7 @@ import AppKit
 @main
 struct SbuSeasonsApp {
     /// Il nome visibile, da CFBundleDisplayName in project.yml: per rinominare l'app basta cambiare lì.
-    static let name = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? "SbuSeasons"
+    static let name = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? "Sbu Seasons"
 
     @MainActor
     static func main() {

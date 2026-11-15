@@ -25,10 +25,10 @@ targets:
         buildPhase: resources
     settings:
       base:
-        # Bundle id and name stay provisional until Matteo approves them (MGS-416).
-        PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.sbuseasons
+        # Name chosen by Matteo on 15/11 (MGS-415): more seasons and themes may come after the snow.
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.SbuSeasons
         GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_CFBundleDisplayName: SbuSeasons
+        INFOPLIST_KEY_CFBundleDisplayName: Sbu Seasons
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.entertainment
         # Menu bar only: no Dock icon until the settings window opens.
         INFOPLIST_KEY_LSUIElement: YES

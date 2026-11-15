@@ -99,7 +99,7 @@ final class SnowScene: SKScene {
 
         let node = SKSpriteNode(texture: flakeTexture)
         node.size = CGSize(width: radius * 2, height: radius * 2)
-        node.alpha = 0.45 + depth * 0.5
+        node.alpha = Tuning.flakeOpacity.lowerBound + depth * (Tuning.flakeOpacity.upperBound - Tuning.flakeOpacity.lowerBound)
         node.zPosition = depth
         node.position = position
         addChild(node)
@@ -365,8 +365,8 @@ final class SnowScene: SKScene {
             let snow = Quaderno.paper.lightColor, rim = Quaderno.inkMuted.lightColor
             let colors = [
                 snow.cgColor,
-                snow.withAlphaComponent(0.9).cgColor,
-                rim.withAlphaComponent(0.45).cgColor,
+                snow.withAlphaComponent(Tuning.flakeBodyOpacity).cgColor,
+                rim.withAlphaComponent(Tuning.flakeRimOpacity).cgColor,
                 rim.withAlphaComponent(0).cgColor,
             ] as CFArray
             let locations: [CGFloat] = [0, 0.45, 0.75, 1]
