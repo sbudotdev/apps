@@ -20,7 +20,7 @@ struct Summer: Season {
         )
     }
 
-    /// Un seme: il chicco marrone in basso, il gambo e un ventaglio di filamenti bianchi.
+    /// Un seme: il chicco marrone in basso, il gambo e un ventaglio di filamenti bianchi bordati.
     func makeTexture() -> SKTexture {
         let side: CGFloat = 64
         let image = NSImage(size: NSSize(width: side, height: side), flipped: false) { rect in
@@ -28,19 +28,23 @@ struct Summer: Season {
             let seed = CGPoint(x: rect.midX, y: rect.height * 0.18)
             let top = CGPoint(x: rect.midX, y: rect.height * 0.58)
             ctx.setLineCap(.round)
-            ctx.setStrokeColor(SummerTuning.fluff.cgColor)
-            ctx.setLineWidth(1.2)
-            ctx.move(to: seed)
-            ctx.addLine(to: top)
-            ctx.strokePath()
-            ctx.setLineWidth(0.9)
-            let last = CGFloat(SummerTuning.filaments - 1)
-            for i in 0..<SummerTuning.filaments {
-                let angle = CGFloat.pi * (0.08 + 0.84 * CGFloat(i) / last)
-                ctx.move(to: top)
-                ctx.addLine(to: CGPoint(x: top.x + cos(angle) * 26, y: top.y + sin(angle) * 22))
+            // Prima un alone in `ink-muted` (chiaro), poi il bianco sopra: come il bordo della neve,
+            // così i semi si vedono anche sulle finestre bianche (QA MGS-448).
+            for (color, widen) in [(SummerTuning.rim, SummerTuning.rimWidth), (SummerTuning.fluff, 0)] {
+                ctx.setStrokeColor(color.cgColor)
+                ctx.setLineWidth(1.2 + widen)
+                ctx.move(to: seed)
+                ctx.addLine(to: top)
+                ctx.strokePath()
+                ctx.setLineWidth(0.9 + widen)
+                let last = CGFloat(SummerTuning.filaments - 1)
+                for i in 0..<SummerTuning.filaments {
+                    let angle = CGFloat.pi * (0.08 + 0.84 * CGFloat(i) / last)
+                    ctx.move(to: top)
+                    ctx.addLine(to: CGPoint(x: top.x + cos(angle) * 26, y: top.y + sin(angle) * 22))
+                }
+                ctx.strokePath()
             }
-            ctx.strokePath()
             ctx.setFillColor(SummerTuning.seed.cgColor)
             ctx.fillEllipse(in: CGRect(x: seed.x - 2, y: seed.y - 4, width: 4, height: 8))
             return true
@@ -57,7 +61,10 @@ nonisolated enum SummerTuning {
     static let sway: ClosedRange<CGFloat> = 20...50
     static let filaments = 13
     static let fluff = NSColor(white: 1, alpha: 0.75)
+    /// L'alone dei filamenti: `ink-muted` (chiaro) tenue, largo `rimWidth` punti in più del filamento.
+    static let rim = Quaderno.inkMuted.lightColor.withAlphaComponent(0.45)
+    static let rimWidth: CGFloat = 1.4
     static let seed = NSColor(srgbRed: 0.55, green: 0.45, blue: 0.30, alpha: 1)
-    /// I semi posati sulle finestre e sul Dock.
-    static let settled = NSColor(srgbRed: 0.96, green: 0.95, blue: 0.90, alpha: 1)
+    /// I semi posati sulle finestre e sul Dock: `paper` (chiaro), quasi uguale al panna approvato da Matteo (#F5F2E6), ma dai token.
+    static var settled: NSColor { Quaderno.paper.lightColor }
 }
