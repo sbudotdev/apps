@@ -24,6 +24,8 @@ nonisolated enum Quaderno {
     static let titleWidth: CGFloat = 87
     static let cartiglioSize: CGFloat = 11
     static let cartiglioTracking: CGFloat = 0.1
+    /// Lato della cella del reticolo: le misure della finestra Impostazioni ne sono multipli.
+    static let gridCell: CGFloat = 24
 
     /// Le misure sopra, con il nome del token, per il test.
     static let metrics: [String: CGFloat] = [
@@ -34,6 +36,7 @@ nonisolated enum Quaderno {
         "figure-width-mid": titleWidth,
         "cartiglio-size": cartiglioSize,
         "cartiglio-tracking": cartiglioTracking,
+        "grid-cell": gridCell,
     ]
 
     // MARK: Caratteri

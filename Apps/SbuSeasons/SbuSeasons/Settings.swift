@@ -125,7 +125,8 @@ struct SettingsView: View {
         } message: {
             Text("Tutte le impostazioni della neve tornano come al primo avvio.")
         }
-        .frame(width: 440, height: 680)   // il contenuto è più alto: si scorre
+        // A multipli della cella del reticolo (grid-cell). Il contenuto è più alto: si scorre.
+        .frame(width: Quaderno.gridCell * 19, height: Quaderno.gridCell * 28)
     }
 
     /// Titolo e cartiglio, come `SbuScreenTitle` nelle app.
@@ -150,15 +151,15 @@ struct SettingsView: View {
         return "Sbu · \(SbuSeasonsApp.name) · \(day)".uppercased(with: Locale(identifier: "it_IT"))
     }
 
-    private func slider(_ title: String, _ value: Binding<Double>, _ range: ClosedRange<Double>, _ format: String) -> some View {
+    private func slider(_ title: LocalizedStringKey, _ value: Binding<Double>, _ range: ClosedRange<Double>, _ format: String) -> some View {
         LabeledContent(title) {
             HStack {
                 Slider(value: value, in: range)
                 Text(String(format: format, value.wrappedValue))
                     .monospacedDigit()
-                    .frame(width: 60, alignment: .trailing)
+                    .frame(width: Quaderno.gridCell * 3, alignment: .trailing)
             }
-            .frame(width: 230)
+            .frame(width: Quaderno.gridCell * 10)
         }
     }
 
