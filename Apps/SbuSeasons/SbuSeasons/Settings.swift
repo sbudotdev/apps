@@ -59,53 +59,95 @@ final class Settings {
 }
 
 /// La finestra delle impostazioni (si apre dal menu ❄︎ → Impostazioni…).
+/// Quaderno: titolo e cartiglio su carta, poi il `Form` di sistema con i controlli nativi in inchiostro.
 struct SettingsView: View {
     @Bindable private var settings = Settings.shared
     @State private var openAtLogin = SMAppService.mainApp.status == .enabled
+    @State private var confirmsReset = false
 
     var body: some View {
-        Form {
-            Section("Nevicata") {
-                slider("Quantità di fiocchi", $settings.values.flakeCount, 30...800, "%.0f")
-                slider("Dimensione", $settings.values.flakeSize, 0.5...2.5, "%.1f×")
-                slider("Velocità di caduta", $settings.values.fallSpeed, 0.3...2.5, "%.1f×")
-                slider("Vento", $settings.values.wind, 0...80, "%.0f")
-            }
-            Section("Cursore") {
-                slider("Raggio", $settings.values.cursorRadius, 20...250, "%.0f pt")
-                slider("Forza", $settings.values.cursorRepel, 0...6000, "%.0f")
-            }
-            Section("Accumulo") {
-                Toggle("Neve sulle finestre", isOn: $settings.values.accumulate)
-                Toggle("Neve sul Dock", isOn: $settings.values.groundSnow)
-                if settings.values.groundSnow && !AXIsProcessTrusted() {
-                    Button("Serve il permesso Accessibilità: aprilo…") {
-                        NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!)
+        VStack(alignment: .leading, spacing: 0) {
+            header
+            Form {
+                Section("Nevicata") {
+                    slider("Quantità di fiocchi", $settings.values.flakeCount, 30...800, "%.0f")
+                    slider("Dimensione", $settings.values.flakeSize, 0.5...2.5, "%.1f×")
+                    slider("Velocità di caduta", $settings.values.fallSpeed, 0.3...2.5, "%.1f×")
+                    slider("Vento", $settings.values.wind, 0...80, "%.0f")
+                }
+                Section("Cursore") {
+                    slider("Raggio", $settings.values.cursorRadius, 20...250, "%.0f pt")
+                    slider("Forza", $settings.values.cursorRepel, 0...6000, "%.0f")
+                }
+                Section("Neve posata") {
+                    Toggle("Sulle finestre", isOn: $settings.values.accumulate)
+                    Toggle("Sul Dock", isOn: $settings.values.groundSnow)
+                    if settings.values.groundSnow && !AXIsProcessTrusted() {
+                        LabeledContent {
+                            Button("Apri Accessibilità…") {
+                                NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!)
+                            }
+                        } label: {
+                            Text("Per vedere dov'è il Dock serve il permesso Accessibilità.")
+                                .foregroundStyle(Quaderno.inkMuted.color)
+                        }
+                    }
+                    slider("Velocità", $settings.values.growth, 0.1...3, "%.1f")
+                    slider("Altezza massima", $settings.values.maxPile, 4...40, "%.0f pt")
+                    slider("Più in basso sul Dock", $settings.values.dockInset, -10...25, "%.0f pt")
+                }
+                Section {
+                    slider("Con barra strumenti", $settings.values.toolbarCornerRadius, 0...60, "%.0f pt")
+                    slider("Altre app", $settings.values.windowCornerRadius, 0...60, "%.0f pt")
+                } header: {
+                    Text("Angoli delle finestre")
+                } footer: {
+                    Text("Finder, Safari e Note hanno angoli più tondi di Chrome. Se la neve resta sospesa sugli angoli, aumenta; se entra nella finestra, diminuisci.")
+                        .foregroundStyle(Quaderno.inkMuted.color)
+                }
+                Section {
+                    Toggle("Apri al login", isOn: $openAtLogin)
+                        .onChange(of: openAtLogin) { _, on in setOpenAtLogin(on) }
+                    LabeledContent("Valori predefiniti") {
+                        Button("Ripristina…") { confirmsReset = true }
                     }
                 }
-                slider("Velocità di accumulo", $settings.values.growth, 0.1...3, "%.1f")
-                slider("Altezza massima", $settings.values.maxPile, 4...40, "%.0f pt")
-                slider("Abbassa neve sul Dock", $settings.values.dockInset, -10...25, "%.0f pt")
             }
-            Section("Angoli delle finestre") {
-                slider("App con barra strumenti", $settings.values.toolbarCornerRadius, 0...60, "%.0f pt")
-                slider("Altre app", $settings.values.windowCornerRadius, 0...60, "%.0f pt")
-                Text("Finder, Safari, Note… hanno angoli più stondati di IntelliJ, Chrome… Se la neve sembra sospesa sugli angoli, aumenta; se affonda nella finestra, diminuisci.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            Section("Generale") {
-                Toggle("Apri al login", isOn: $openAtLogin)
-                    .onChange(of: openAtLogin) { _, on in setOpenAtLogin(on) }
-                HStack {
-                    Button("Ripristina valori predefiniti") { settings.reset() }
-                    Spacer()
-                    Button("Esci da SbuSeasons") { NSApp.terminate(nil) }
-                }
-            }
+            .formStyle(.grouped)
+            .scrollContentBackground(.hidden)
+            .clipped()   // le righe che scorrono non passano sotto il titolo
         }
-        .formStyle(.grouped)
-        .frame(width: 440, height: 620)   // il contenuto è più alto: si scorre
+        .background(Quaderno.paper.color)
+        .tint(Quaderno.ink.color)
+        .toggleStyle(.switch)
+        .confirmationDialog("Ripristinare i valori predefiniti?", isPresented: $confirmsReset) {
+            Button("Ripristina", role: .destructive) { settings.reset() }
+        } message: {
+            Text("Tutte le impostazioni della neve tornano come al primo avvio.")
+        }
+        .frame(width: 440, height: 680)   // il contenuto è più alto: si scorre
+    }
+
+    /// Titolo e cartiglio, come `SbuScreenTitle` nelle app.
+    private var header: some View {
+        VStack(alignment: .leading, spacing: Quaderno.space1) {
+            Text(verbatim: SbuSeasonsApp.name)
+                .font(Quaderno.titleFont)
+                .foregroundStyle(Quaderno.ink.color)
+                .accessibilityAddTraits(.isHeader)
+            Text(verbatim: Self.cartiglio(on: .now))
+                .font(Quaderno.cartiglioFont)
+                .tracking(Quaderno.cartiglioSize * Quaderno.cartiglioTracking)
+                .foregroundStyle(Quaderno.inkMuted.color)
+        }
+        .padding(.horizontal, Quaderno.space6)
+        .padding(.top, Quaderno.space4)
+    }
+
+    /// `SBU · <NOME> · DOM 15 NOV`: solo metadati, maiuscolo nella stringa (come in SbuKit).
+    static func cartiglio(on date: Date) -> String {
+        let day = date.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "it_IT")))
+        return "Sbu · \(SbuSeasonsApp.name) · \(day)".uppercased(with: Locale(identifier: "it_IT"))
     }
 
     private func slider(_ title: String, _ value: Binding<Double>, _ range: ClosedRange<Double>, _ format: String) -> some View {
