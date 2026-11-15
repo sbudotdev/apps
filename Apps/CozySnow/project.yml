@@ -18,7 +18,11 @@ targets:
   CozySnow:
     type: application
     platform: macOS
-    sources: [CozySnow]
+    sources:
+      - CozySnow
+      # Fonts and licences straight from Design/fonts, the same files SbuKit and the site ship.
+      - path: ../../Design/fonts
+        buildPhase: resources
     settings:
       base:
         # Bundle id and name stay provisional until Matteo approves them (MGS-416).

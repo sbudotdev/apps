@@ -4,6 +4,9 @@ import AppKit
 /// controllata solo dall'icona ❄︎ nella barra dei menu.
 @main
 struct CozySnowApp {
+    /// Il nome visibile, da CFBundleDisplayName in project.yml: per rinominare l'app basta cambiare lì.
+    static let name = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? "CozySnow"
+
     @MainActor
     static func main() {
         let app = NSApplication.shared

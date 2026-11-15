@@ -356,21 +356,22 @@ final class SnowScene: SKScene {
 
     // MARK: - Texture
 
-    /// Un pallino bianco sfumato con un leggerissimo bordo grigio-azzurro,
+    /// Un pallino in `paper` (chiaro) che sfuma ai bordi in `ink-muted` (chiaro),
     /// così la neve resta visibile anche sopra le finestre bianche.
     private static func makeFlakeTexture(diameter: CGFloat = 32) -> SKTexture {
         let size = NSSize(width: diameter, height: diameter)
         let image = NSImage(size: size, flipped: false) { rect in
             guard let ctx = NSGraphicsContext.current?.cgContext else { return false }
+            let snow = Quaderno.paper.lightColor, rim = Quaderno.inkMuted.lightColor
             let colors = [
-                NSColor(white: 1, alpha: 1).cgColor,
-                NSColor(white: 1, alpha: 0.9).cgColor,
-                NSColor(calibratedRed: 0.72, green: 0.80, blue: 0.90, alpha: 0.45).cgColor,
-                NSColor(calibratedRed: 0.72, green: 0.80, blue: 0.90, alpha: 0).cgColor,
+                snow.cgColor,
+                snow.withAlphaComponent(0.9).cgColor,
+                rim.withAlphaComponent(0.45).cgColor,
+                rim.withAlphaComponent(0).cgColor,
             ] as CFArray
             let locations: [CGFloat] = [0, 0.45, 0.75, 1]
             guard let gradient = CGGradient(
-                colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                colorsSpace: CGColorSpace(name: CGColorSpace.sRGB),
                 colors: colors,
                 locations: locations
             ) else { return false }
