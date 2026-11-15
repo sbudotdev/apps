@@ -22,6 +22,24 @@ nonisolated struct SnowSettings: Codable, Equatable {
     var dockInset = 7.0         // pt: il rettangolo del Dock dato da macOS ha un margine sopra la barra visibile
 }
 
+extension SnowSettings {
+    /// Parte dai valori predefiniti e ci sovrappone quelli salvati, uno per uno: un'impostazione
+    /// nuova prende il suo predefinito, e un valore illeggibile non fa perdere gli altri.
+    init(saved data: Data?) {
+        self.init()
+        let saved = data.flatMap { try? JSONSerialization.jsonObject(with: $0) as? [String: Any] } ?? [:]
+        for (key, value) in saved {
+            guard var merged = (try? JSONSerialization.jsonObject(with: JSONEncoder().encode(self))) as? [String: Any]
+            else { return }
+            merged[key] = value
+            if let data = try? JSONSerialization.data(withJSONObject: merged),
+               let decoded = try? JSONDecoder().decode(SnowSettings.self, from: data) {
+                self = decoded
+            }
+        }
+    }
+}
+
 /// Il "contenitore" condiviso: la finestra lo modifica, la scena lo legge a ogni frame.
 /// `@Observable` fa sì che SwiftUI si aggiorni da solo quando cambia.
 @Observable
@@ -34,14 +52,7 @@ final class Settings {
     }
 
     private init() {
-        // Parte dai valori predefiniti e ci sovrappone quelli salvati: così se in futuro
-        // aggiungi un'impostazione nuova, le altre già salvate non vanno perse.
-        let saved = UserDefaults.standard.data(forKey: Self.key)
-            .flatMap { try? JSONSerialization.jsonObject(with: $0) as? [String: Any] } ?? [:]
-        var merged = (try? JSONSerialization.jsonObject(with: JSONEncoder().encode(SnowSettings()))) as? [String: Any] ?? [:]
-        merged.merge(saved) { _, savedValue in savedValue }
-        values = (try? JSONSerialization.data(withJSONObject: merged))
-            .flatMap { try? JSONDecoder().decode(SnowSettings.self, from: $0) } ?? SnowSettings()
+        values = SnowSettings(saved: UserDefaults.standard.data(forKey: Self.key))
     }
 
     func reset() { values = SnowSettings() }
