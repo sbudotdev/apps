@@ -7,6 +7,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private var overlays: [SnowOverlayWindow] = []
     private var statusItem: NSStatusItem?
     private var windowTimer: Timer?
+    private var powerSource: CFRunLoopSource?
 
     // Salvato in UserDefaults, così l'app se lo ricorda al prossimo avvio.
     // (Le altre impostazioni sono in Settings.swift.)
@@ -38,6 +39,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         setupMainMenu()
         rebuildOverlays()
 
+        // A batteria la neve va a 30 fotogrammi al secondo.
+        powerSource = observePowerSource()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(powerSourceDidChange),
+            name: .powerSourceDidChange,
+            object: nil
+        )
+
         // Se colleghi/scolleghi un monitor o cambi risoluzione, ricreiamo le finestre.
         NotificationCenter.default.addObserver(
             self,
@@ -62,9 +72,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         rebuildOverlays()
     }
 
+    @objc private func powerSourceDidChange() {
+        let onBattery = isOnBattery()
+        overlays.forEach { $0.setOnBattery(onBattery) }
+    }
+
     private func rebuildOverlays() {
         overlays.forEach { $0.close() }
         overlays = NSScreen.screens.map { SnowOverlayWindow(screen: $0) }
+        powerSourceDidChange()
         overlays.forEach { $0.setSnowing(isSnowing) }
         refreshWindows()
     }
