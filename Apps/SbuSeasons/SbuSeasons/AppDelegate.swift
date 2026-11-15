@@ -4,7 +4,7 @@ import SwiftUI
 /// Crea una finestra di neve per ogni schermo e gestisce il menu ❄︎ nella barra dei menu.
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWindowDelegate {
-    private var overlays: [SnowOverlayWindow] = []
+    private var overlays: [OverlayWindow] = []
     private var statusItem: NSStatusItem?
     private var windowTimer: Timer?
     private var powerSource: CFRunLoopSource?
@@ -18,6 +18,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     private lazy var toggleItem = NSMenuItem(title: String(localized: "Fai nevicare"), action: nil, keyEquivalent: "s")
     private var densityItems: [NSMenuItem] = []
+    private var seasonItems: [NSMenuItem] = []
 
     /// La finestra Impostazioni: creata la prima volta che serve, poi riusata.
     private lazy var settingsWindow: NSWindow = {
@@ -80,7 +81,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     private func rebuildOverlays() {
         overlays.forEach { $0.close() }
-        overlays = NSScreen.screens.map { SnowOverlayWindow(screen: $0) }
+        overlays = NSScreen.screens.map { OverlayWindow(screen: $0) }
         powerSourceDidChange()
         overlays.forEach { $0.setSnowing(isSnowing) }
         refreshWindows()
@@ -111,7 +112,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     private func setupStatusItem() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        item.button?.image = NSImage(systemSymbolName: "snowflake", accessibilityDescription: SbuSeasonsApp.name)
         item.button?.toolTip = SbuSeasonsApp.name
 
         let menu = NSMenu()
@@ -126,6 +126,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         menu.addItem(meltItem)
 
         menu.addItem(.separator())
+
+        // Stagione: un sottomenu con l'elenco di `Seasons.all`.
+        let seasonMenu = NSMenu()
+        seasonItems = Seasons.all.map { season in
+            let mi = NSMenuItem(title: season.title, action: #selector(selectSeason(_:)), keyEquivalent: "")
+            mi.target = self
+            mi.representedObject = season.id
+            mi.image = NSImage(systemSymbolName: season.symbol, accessibilityDescription: nil)
+            seasonMenu.addItem(mi)
+            return mi
+        }
+        let seasonItem = NSMenuItem(title: String(localized: "Stagione"), action: nil, keyEquivalent: "")
+        seasonItem.submenu = seasonMenu
+        menu.addItem(seasonItem)
 
         let densityHeader = NSMenuItem(title: String(localized: "Intensità"), action: nil, keyEquivalent: "")
         densityHeader.isEnabled = false
@@ -156,6 +170,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     private func updateMenuState() {
         toggleItem.state = isSnowing ? .on : .off
+        let season = Settings.shared.season
+        // L'icona nella barra dei menu segue la stagione.
+        statusItem?.button?.image = NSImage(systemSymbolName: season.symbol, accessibilityDescription: SbuSeasonsApp.name)
+        for mi in seasonItems { mi.state = mi.representedObject as? String == season.id ? .on : .off }
         // Spunta sull'intensità solo se lo slider "Quantità" è esattamente su quel valore.
         let count = Settings.shared.values.flakeCount
         for mi in densityItems {
@@ -175,6 +193,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     @objc private func meltSnow() {
         overlays.forEach { $0.meltAll() }
+    }
+
+    @objc private func selectSeason(_ sender: NSMenuItem) {
+        guard let id = sender.representedObject as? String else { return }
+        Settings.shared.seasonID = id
+        let season = Settings.shared.season
+        overlays.forEach { $0.setSeason(season) }
+        updateMenuState()
     }
 
     @objc private func selectDensity(_ sender: NSMenuItem) {
