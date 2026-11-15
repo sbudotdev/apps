@@ -1,6 +1,6 @@
 # Le app Mac stanno in `Apps/`, come quelle iPhone
 
-**Stato: Proposto** (MGS-416, 15/11/2026). Diventa Accettato quando Matteo lo approva; i punti aperti sono in fondo.
+**Stato: Accettato** da Matteo il 15/11/2026 (MGS-416), con la distribuzione Developer ID + notarizzazione.
 
 Il numero 0019 era già preso da un ADR sul branch di Sbu ZTL (e 0020, 0021 da ZTL e Social), quindi questo è 0022.
 
@@ -13,7 +13,7 @@ La prima app Mac è **SbuSeasons** di Simone Antoniciello: neve sopra tutte le f
 - **Regole di prodotto uguali alle app iPhone**: niente dipendenze di terze parti, analytics, rete, account. Le stringhe in italiano e inglese in `Localizable.xcstrings`.
 - **Permessi di sistema.** Un'app Mac che legge le finestre degli altri (`CGWindowListCopyWindowInfo`) o usa l'API di Accessibilità non può stare nella sandbox; lo dichiara nel `project.yml` (`ENABLE_APP_SANDBOX: NO`) e nel README, con il motivo e cosa smette di funzionare senza il permesso.
 
-## Distribuzione: la sceglie Matteo
+## Distribuzione: Developer ID + notarizzazione (decisa)
 
 | | Developer ID + notarizzazione | Mac App Store |
 |---|---|---|
@@ -25,11 +25,9 @@ La prima app Mac è **SbuSeasons** di Simone Antoniciello: neve sopra tutte le f
 | Account | lo stesso Apple Developer Program del team | lo stesso |
 | Strumenti | `xcodebuild archive` + `notarytool` (skill `asc-notarization`) | fastlane come le app iPhone |
 
-Per SbuSeasons la strada che non toglie funzioni è Developer ID + notarizzazione, con il download da sbu.dev; la pagina sul sito e il controllo degli aggiornamenti sono decisioni a parte (il secondo introdurrebbe una chiamata di rete). Nessuna pubblicazione parte senza l'ok di Matteo.
+Matteo ha scelto **Developer ID + notarizzazione, con il download da sbu.dev**: è la strada che non toglie funzioni. Il Mac App Store resta escluso finché un'app Mac non può stare nella sandbox. La pagina sul sito e il controllo degli aggiornamenti sono decisioni a parte (il secondo introdurrebbe una chiamata di rete). Nessuna firma, notarizzazione o pubblicazione parte senza l'ok di Matteo.
 
-## Punti aperti per Matteo
+## Ancora aperti
 
-1. Approvare questo ADR (cartella in `Apps/`, XcodeGen, `dev.sbu`).
-2. Distribuzione: Developer ID o Mac App Store.
-3. SbuKit su macOS e token per il Mac: aprire i due ticket, o restare per ora senza SbuKit.
-4. Nome, bundle id e icona di SbuSeasons (MGS-417).
+- SbuKit su macOS e token per il Mac: due ticket a parte, da aprire quando il design di SbuSeasons (MGS-417) ne ha bisogno.
+- Nome, bundle id e icona di SbuSeasons (MGS-417).
