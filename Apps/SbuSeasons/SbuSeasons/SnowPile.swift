@@ -26,7 +26,7 @@ final class SnowPile {
     let node = SKShapeNode()
 
     /// `cornerRadius`: raggio degli angoli superiori della superficie (0 = spigoli vivi).
-    init(minX: CGFloat, width: CGFloat, baseY: CGFloat, cornerRadius: CGFloat, maxHeight: CGFloat = pileClearance) {
+    init(minX: CGFloat, width: CGFloat, baseY: CGFloat, cornerRadius: CGFloat, maxHeight: CGFloat) {
         self.minX = minX
         self.baseY = baseY
         self.maxHeight = maxHeight

@@ -160,7 +160,8 @@ final class SnowScene: SKScene {
             } else {
                 // Nuova, spostata, ridimensionata (o scoperto il raggio giusto): la neve vecchia cade, si riparte da zero.
                 if let old = piles[edge.id] { drop(old.pile) }
-                let pile = SnowPile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: edge.cornerRadius)
+                let pile = SnowPile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: edge.cornerRadius,
+                                    maxHeight: CGFloat(Settings.shared.values.maxPile))
                 _ = pile.setOpen(open)
                 addChild(pile.node)
                 piles[edge.id] = (pile, r)
@@ -183,7 +184,8 @@ final class SnowScene: SKScene {
         if let old = dock { drop(old.pile) }                 // spostato/ridimensionato/sparito: la neve cade
         dock = nil
         guard let r, onThisScreen else { return }
-        let pile = SnowPile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: Tuning.dockCornerRadius)
+        let pile = SnowPile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: Tuning.dockCornerRadius,
+                            maxHeight: CGFloat(Settings.shared.values.maxPile) * Tuning.dockPileFactor)
         addChild(pile.node)
         dock = (pile, r)
     }
