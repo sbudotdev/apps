@@ -44,6 +44,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             object: nil
         )
 
+        // Aperta a mano (doppio clic, `open`)? Mostriamo subito le Impostazioni.
+        // All'avvio automatico al login no: lì vogliamo solo la neve.
+        if !launchedAsLoginItem() { openSettings() }
+
         // 8 volte al secondo controlliamo dove sono le finestre (per l'accumulo).
         windowTimer = Timer.scheduledTimer(withTimeInterval: 0.125, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.refreshWindows() }
@@ -155,5 +159,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         // App senza Dock: va "attivata" esplicitamente, altrimenti la finestra resta dietro alle altre.
         NSApp.activate()
         settingsWindow.makeKeyAndOrderFront(nil)
+        settingsWindow.orderFrontRegardless()   // davanti anche se macOS non ci ha ancora "attivati"
+    }
+
+    /// macOS segnala nell'evento di avvio se l'app è partita come elemento di login.
+    private func launchedAsLoginItem() -> Bool {
+        let event = NSAppleEventManager.shared().currentAppleEvent
+        return event?.eventID == kAEOpenApplication
+            && event?.paramDescriptor(forKeyword: keyAEPropData)?.enumCodeValue == keyAELaunchedAsLogInItem
     }
 }

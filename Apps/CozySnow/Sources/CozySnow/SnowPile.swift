@@ -26,6 +26,7 @@ final class SnowPile {
     /// …e quanta parte dell'altezza massima può tenere (verso il bordo la neve scivola via).
     private let capacity: [CGFloat]
     private var dirty = false
+    let cornerRadius: CGFloat
 
     let node = SKShapeNode()
 
@@ -34,6 +35,7 @@ final class SnowPile {
         self.minX = minX
         self.baseY = baseY
         self.maxHeight = maxHeight
+        self.cornerRadius = cornerRadius
         let count = max(1, Int(width / Self.step))
         heights = Array(repeating: 0, count: count)
         open = Array(repeating: true, count: count)
