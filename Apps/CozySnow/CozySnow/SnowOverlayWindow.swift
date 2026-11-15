@@ -35,7 +35,6 @@ final class SnowOverlayWindow: NSWindow {
 
         skView.allowsTransparency = true
         skView.ignoresSiblingOrder = true
-        skView.preferredFramesPerSecond = 60
         contentView = skView
         skView.presentScene(scene)
 
@@ -57,6 +56,10 @@ final class SnowOverlayWindow: NSWindow {
         scene.updateWindows(edges, dock: dock, ceiling: ceiling)
     }
     func meltAll() { scene.meltAll() }
+
+    func setOnBattery(_ onBattery: Bool) {
+        skView.preferredFramesPerSecond = Tuning.framesPerSecond(onBattery: onBattery)
+    }
 
     func setSnowing(_ snowing: Bool) {
         skView.isPaused = !snowing

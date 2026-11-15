@@ -8,6 +8,11 @@ nonisolated enum Tuning {
     /// Ogni quanto si legge dove sono le finestre.
     static let windowRefreshInterval: TimeInterval = 0.125
 
+    // MARK: Animazione
+
+    /// 60 fotogrammi al secondo, 30 a batteria per consumare meno (decisione di Matteo, MGS-416).
+    static func framesPerSecond(onBattery: Bool) -> Int { onBattery ? 30 : 60 }
+
     // MARK: Fiocchi
 
     /// Schermo di riferimento per la quantità di fiocchi: altrove si scala sull'area.
