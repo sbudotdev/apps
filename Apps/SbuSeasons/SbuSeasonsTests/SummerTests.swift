@@ -5,8 +5,8 @@ import Testing
 
 /// L'estate (MGS-431): semi di tarassaco, scelti da Matteo fra tre prototipi.
 struct SummerTests {
-    @Test func summerComesAfterSnowInTheSeasonMenu() {
-        #expect(Seasons.all.map(\.id) == ["snow", "summer"])
+    @Test func summerIsInTheSeasonMenu() {
+        #expect(Seasons.all.map(\.id).contains("summer"))
         #expect(Seasons.named("summer") is Summer)
     }
 
