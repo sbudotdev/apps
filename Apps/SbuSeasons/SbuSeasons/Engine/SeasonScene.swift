@@ -1,11 +1,11 @@
 import AppKit
 import SpriteKit
 
-/// La scena SpriteKit che disegna e muove i fiocchi.
+/// La scena SpriteKit che disegna e muove le particelle della stagione (i "fiocchi").
 ///
 /// Coordinate: origine in basso a sinistra (come SpriteKit e come `NSEvent.mouseLocation`),
 /// un punto della scena = un punto dello schermo.
-final class SnowScene: SKScene {
+final class SeasonScene: SKScene {
 
     // MARK: - Stato
 
@@ -30,15 +30,17 @@ final class SnowScene: SKScene {
         let node: SKSpriteNode
         var velocity: CGVector
         /// Il mucchio da cui è partito: non ci ricade sopra, scende davanti alla finestra.
-        let source: SnowPile?
+        let source: Pile?
     }
     private var grains: [Grain] = []
 
     /// Neve posata sulle finestre, per ID di finestra. `rect` è in coordinate della scena.
-    private var piles: [CGWindowID: (pile: SnowPile, rect: CGRect)] = [:]
+    private var piles: [CGWindowID: (pile: Pile, rect: CGRect)] = [:]
     /// Neve posata sopra il Dock. `rect` è in coordinate della scena.
-    private var dock: (pile: SnowPile, rect: CGRect)?
-    private let flakeTexture = SnowScene.makeFlakeTexture()
+    private var dock: (pile: Pile, rect: CGRect)?
+    /// La stagione: forma, colore e caduta dei fiocchi, colore dei mucchi.
+    private(set) var season: any Season
+    private var flakeTexture: SKTexture
     private let screenOrigin: CGPoint
 
     private var lastUpdateTime: TimeInterval?
@@ -53,8 +55,10 @@ final class SnowScene: SKScene {
 
     // MARK: - Init
 
-    init(size: CGSize, screenOrigin: CGPoint) {
+    init(size: CGSize, screenOrigin: CGPoint, season: any Season) {
         self.screenOrigin = screenOrigin
+        self.season = season
+        flakeTexture = season.makeTexture()
         super.init(size: size)
         backgroundColor = .clear
         anchorPoint = .zero
@@ -76,6 +80,19 @@ final class SnowScene: SKScene {
         }
     }
 
+    // MARK: - Stagione
+
+    /// Cambia stagione: i fiocchi rinascono con la forma nuova, i mucchi prendono il colore nuovo.
+    /// La stessa stagione di nuovo non fa niente: i fiocchi non saltano.
+    func setSeason(_ season: any Season) {
+        guard season.id != self.season.id else { return }
+        self.season = season
+        flakeTexture = season.makeTexture()
+        for grain in grains { grain.node.texture = flakeTexture }
+        for pile in piles.values.map(\.pile) + (dock.map { [$0.pile] } ?? []) { pile.node.fillColor = season.pileColor }
+        rebuildFlakes()
+    }
+
     // MARK: - Fiocchi
 
     private func rebuildFlakes() {
@@ -95,11 +112,12 @@ final class SnowScene: SKScene {
     /// Crea un fiocco nel punto indicato.
     private func makeFlake(at position: CGPoint) -> Flake {
         let depth = CGFloat.random(in: 0...1)
-        let radius = (1.5 + depth * 3.5) * Settings.shared.values.flakeSize
+        let particle = season.particle(depth: depth)
+        let radius = particle.radius * Settings.shared.values.flakeSize
 
         let node = SKSpriteNode(texture: flakeTexture)
         node.size = CGSize(width: radius * 2, height: radius * 2)
-        node.alpha = Tuning.flakeOpacity.lowerBound + depth * (Tuning.flakeOpacity.upperBound - Tuning.flakeOpacity.lowerBound)
+        node.alpha = particle.alpha
         node.zPosition = depth
         node.position = position
         addChild(node)
@@ -108,9 +126,9 @@ final class SnowScene: SKScene {
             node: node,
             radius: radius,
             depth: depth,
-            fallSpeed: 22 + depth * 58,
-            swayAmplitude: .random(in: 8...26),
-            swayFrequency: .random(in: 0.3...0.9),
+            fallSpeed: particle.fallSpeed,
+            swayAmplitude: particle.swayAmplitude,
+            swayFrequency: particle.swayFrequency,
             phase: .random(in: 0...(2 * .pi))
         )
     }
@@ -125,7 +143,7 @@ final class SnowScene: SKScene {
 
     /// Fa partire granelli di polvere dai punti indicati: quasi fermi, con una piccola spinta
     /// orizzontale (`drift` ± `spread`) e un saltello verticale (`pop`). Poi ci pensa la gravità.
-    private func spawnPowder(_ points: [CGPoint], from source: SnowPile? = nil, drift: CGFloat = 0,
+    private func spawnPowder(_ points: [CGPoint], from source: Pile? = nil, drift: CGFloat = 0,
                              spread: CGFloat = 8, pop: ClosedRange<CGFloat> = -5...5) {
         for point in points where grains.count < Tuning.maxGrains {
             let node = SKSpriteNode(texture: flakeTexture)
@@ -163,8 +181,8 @@ final class SnowScene: SKScene {
             } else {
                 // Nuova, spostata, ridimensionata (o scoperto il raggio giusto): la neve vecchia cade, si riparte da zero.
                 if let old = piles[edge.id] { drop(old.pile) }
-                let pile = SnowPile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: edge.cornerRadius,
-                                    maxHeight: maxPile)
+                let pile = Pile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: edge.cornerRadius,
+                                maxHeight: maxPile, color: season.pileColor)
                 _ = pile.setOpen(open)
                 addChild(pile.node)
                 piles[edge.id] = (pile, r)
@@ -187,13 +205,13 @@ final class SnowScene: SKScene {
         if let old = dock { drop(old.pile) }                 // spostato/ridimensionato/sparito: la neve cade
         dock = nil
         guard let r, onThisScreen else { return }
-        let pile = SnowPile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: Tuning.dockCornerRadius,
-                            maxHeight: CGFloat(Settings.shared.values.maxPile) * Tuning.dockPileFactor)
+        let pile = Pile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: Tuning.dockCornerRadius,
+                        maxHeight: CGFloat(Settings.shared.values.maxPile) * Tuning.dockPileFactor, color: season.pileColor)
         addChild(pile.node)
         dock = (pile, r)
     }
 
-    private func drop(_ pile: SnowPile) {
+    private func drop(_ pile: Pile) {
         spawnPowder(pile.releaseAll())
         pile.node.removeFromParent()
     }
@@ -239,7 +257,7 @@ final class SnowScene: SKScene {
         let dragBlend = min(1, dt * 10)
 
         // Solo i mucchi attivi raccolgono neve.
-        var allPiles: [SnowPile] = settings.accumulate ? piles.values.map(\.pile) : []
+        var allPiles: [Pile] = settings.accumulate ? piles.values.map(\.pile) : []
         if settings.groundSnow, let dock { allPiles.append(dock.pile) }
 
         /// Muove un fiocco di un passo. Restituisce true se si è posato su un mucchio.
@@ -352,38 +370,5 @@ final class SnowScene: SKScene {
                 pile.redrawIfNeeded()
             }
         }
-    }
-
-    // MARK: - Texture
-
-    /// Un pallino in `paper` (chiaro) che sfuma ai bordi in `ink-muted` (chiaro),
-    /// così la neve resta visibile anche sopra le finestre bianche.
-    private static func makeFlakeTexture(diameter: CGFloat = 32) -> SKTexture {
-        let size = NSSize(width: diameter, height: diameter)
-        let image = NSImage(size: size, flipped: false) { rect in
-            guard let ctx = NSGraphicsContext.current?.cgContext else { return false }
-            let snow = Quaderno.paper.lightColor, rim = Quaderno.inkMuted.lightColor
-            let colors = [
-                snow.cgColor,
-                snow.withAlphaComponent(Tuning.flakeBodyOpacity).cgColor,
-                rim.withAlphaComponent(Tuning.flakeRimOpacity).cgColor,
-                rim.withAlphaComponent(0).cgColor,
-            ] as CFArray
-            let locations: [CGFloat] = [0, 0.45, 0.75, 1]
-            guard let gradient = CGGradient(
-                colorsSpace: CGColorSpace(name: CGColorSpace.sRGB),
-                colors: colors,
-                locations: locations
-            ) else { return false }
-            let center = CGPoint(x: rect.midX, y: rect.midY)
-            ctx.drawRadialGradient(
-                gradient,
-                startCenter: center, startRadius: 0,
-                endCenter: center, endRadius: rect.width / 2,
-                options: []
-            )
-            return true
-        }
-        return SKTexture(image: image)
     }
 }

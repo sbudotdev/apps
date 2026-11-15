@@ -1,7 +1,8 @@
 import CoreGraphics
 import Foundation
 
-/// I parametri fissi della neve, tutti qui. Quelli regolabili dall'utente sono in `SnowSettings`.
+/// I parametri fissi del motore, uguali per tutte le stagioni. Quelli regolabili dall'utente sono in `SnowSettings`,
+/// quelli di una stagione nel suo file (es. `SnowTuning`).
 nonisolated enum Tuning {
     // MARK: Lettura delle finestre
 
@@ -13,17 +14,12 @@ nonisolated enum Tuning {
     /// 60 fotogrammi al secondo, 30 a batteria per consumare meno (decisione di Matteo, MGS-416).
     static func framesPerSecond(onBattery: Bool) -> Int { onBattery ? 30 : 60 }
 
-    // MARK: Fiocchi
+    // MARK: Particelle
 
     /// Schermo di riferimento per la quantità di fiocchi: altrove si scala sull'area.
     static let referenceScreenArea: CGFloat = 1440 * 900
     /// Quanto un fiocco può uscire di lato prima di rientrare dall'altro.
     static let sideMargin: CGFloat = 20
-    /// Opacità di un fiocco: i lontani più trasparenti, i vicini quasi pieni.
-    static let flakeOpacity: ClosedRange<CGFloat> = 0.45...0.95
-    /// Nella texture del fiocco: opacità della carta a metà raggio e del bordo in inchiostro tenue.
-    static let flakeBodyOpacity: CGFloat = 0.9
-    static let flakeRimOpacity: CGFloat = 0.45
 
     // MARK: Cursore
 

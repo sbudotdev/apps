@@ -4,15 +4,15 @@ import SpriteKit
 /// Finestra trasparente, senza bordi, che copre un intero schermo e sta sopra
 /// alle altre finestre. I click la attraversano (`ignoresMouseEvents`), quindi
 /// le app sotto continuano a funzionare normalmente.
-final class SnowOverlayWindow: NSWindow {
+final class OverlayWindow: NSWindow {
     private let skView: SKView
-    private let scene: SnowScene
+    private let scene: SeasonScene
 
     init(screen: NSScreen) {
         let frame = screen.frame
 
         skView = SKView(frame: NSRect(origin: .zero, size: frame.size))
-        scene = SnowScene(size: frame.size, screenOrigin: frame.origin)
+        scene = SeasonScene(size: frame.size, screenOrigin: frame.origin, season: Settings.shared.season)
 
         super.init(
             contentRect: frame,
@@ -56,6 +56,7 @@ final class SnowOverlayWindow: NSWindow {
         scene.updateWindows(edges, dock: dock, ceiling: ceiling)
     }
     func meltAll() { scene.meltAll() }
+    func setSeason(_ season: any Season) { scene.setSeason(season) }
 
     func setOnBattery(_ onBattery: Bool) {
         skView.preferredFramesPerSecond = Tuning.framesPerSecond(onBattery: onBattery)
