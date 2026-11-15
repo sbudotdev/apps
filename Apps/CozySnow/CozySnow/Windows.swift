@@ -77,12 +77,9 @@ private func hasToolbar(pid: pid_t, rect: CGRect, primaryHeight: CGFloat) -> Boo
     // Accessibilità usa l'origine in ALTO a sinistra: riconvertiamo il rettangolo per confrontarlo.
     let target = CGRect(x: rect.minX, y: primaryHeight - rect.maxY, width: rect.width, height: rect.height)
     for window in windows {
-        var position = CGPoint.zero, size = CGSize.zero
-        guard let p = attribute(window, kAXPositionAttribute), let s = attribute(window, kAXSizeAttribute) else { continue }
-        AXValueGetValue(p as! AXValue, .cgPoint, &position)
-        AXValueGetValue(s as! AXValue, .cgSize, &size)
-        guard abs(position.x - target.minX) < 2, abs(position.y - target.minY) < 2,
-              abs(size.width - target.width) < 2, abs(size.height - target.height) < 2 else { continue }
+        guard let frame = frame(of: window),
+              abs(frame.minX - target.minX) < 2, abs(frame.minY - target.minY) < 2,
+              abs(frame.width - target.width) < 2, abs(frame.height - target.height) < 2 else { continue }
         let children = attribute(window, kAXChildrenAttribute) as? [AXUIElement] ?? []
         return children.contains { attribute($0, kAXRoleAttribute) as? String == kAXToolbarRole }
     }
@@ -124,20 +121,24 @@ func currentDockFrame() -> CGRect? {
 
     // Il Dock è un'app che contiene una "lista" (AXList): è la barra con le icone.
     let app = AXUIElementCreateApplication(dock.processIdentifier)
-    var children: CFTypeRef?
-    guard AXUIElementCopyAttributeValue(app, kAXChildrenAttribute as CFString, &children) == .success,
-          let list = (children as? [AXUIElement])?.first(where: { attribute($0, kAXRoleAttribute) as? String == kAXListRole }),
-          let positionValue = attribute(list, kAXPositionAttribute),
-          let sizeValue = attribute(list, kAXSizeAttribute)
+    guard let list = (attribute(app, kAXChildrenAttribute) as? [AXUIElement])?
+              .first(where: { attribute($0, kAXRoleAttribute) as? String == kAXListRole }),
+          let frame = frame(of: list), frame.width > 0, frame.height > 0
     else { return nil }
-
-    var position = CGPoint.zero
-    var size = CGSize.zero
-    AXValueGetValue(positionValue as! AXValue, .cgPoint, &position)
-    AXValueGetValue(sizeValue as! AXValue, .cgSize, &size)
-    guard size.width > 0, size.height > 0 else { return nil }
     // Accessibilità: origine in ALTO a sinistra, come CoreGraphics.
-    return CGRect(x: position.x, y: primary.frame.height - position.y - size.height, width: size.width, height: size.height)
+    return CGRect(x: frame.minX, y: primary.frame.height - frame.maxY, width: frame.width, height: frame.height)
+}
+
+/// Posizione e dimensione di un elemento (coordinate di Accessibilità, origine in alto a sinistra).
+/// nil se l'app non le dà, o le dà di un tipo inatteso.
+private func frame(of element: AXUIElement) -> CGRect? {
+    guard let p = attribute(element, kAXPositionAttribute), CFGetTypeID(p) == AXValueGetTypeID(),
+          let s = attribute(element, kAXSizeAttribute), CFGetTypeID(s) == AXValueGetTypeID()
+    else { return nil }
+    var position = CGPoint.zero, size = CGSize.zero
+    guard AXValueGetValue(p as! AXValue, .cgPoint, &position),   // tipo controllato sopra
+          AXValueGetValue(s as! AXValue, .cgSize, &size) else { return nil }
+    return CGRect(origin: position, size: size)
 }
 
 private func attribute(_ element: AXUIElement, _ name: String) -> CFTypeRef? {
