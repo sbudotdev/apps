@@ -51,7 +51,11 @@ final class SnowOverlayWindow: NSWindow {
     override var canBecomeKey: Bool { false }
     override var canBecomeMain: Bool { false }
 
-    func updateWindows(_ edges: [WindowEdge], dock: CGRect?) { scene.updateWindows(edges, dock: dock) }
+    func updateWindows(_ edges: [WindowEdge], dock: CGRect?) {
+        // La zona libera si rilegge ogni volta: la barra dei menu può nascondersi o riapparire.
+        let ceiling = (screen?.visibleFrame.maxY ?? frame.maxY) - frame.minY
+        scene.updateWindows(edges, dock: dock, ceiling: ceiling)
+    }
     func meltAll() { scene.meltAll() }
 
     func setSnowing(_ snowing: Bool) {

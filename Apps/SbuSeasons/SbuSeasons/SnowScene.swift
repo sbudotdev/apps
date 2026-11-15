@@ -143,13 +143,16 @@ final class SnowScene: SKScene {
     // MARK: - Finestre
 
     /// Riceve finestre e Dock attuali (coordinate globali) e aggiorna i mucchi di neve.
-    func updateWindows(_ edges: [WindowEdge], dock dockFrame: CGRect?) {
+    /// `ceiling`: dove finisce la zona libera dello schermo, sotto la barra dei menu (coordinate della scena).
+    func updateWindows(_ edges: [WindowEdge], dock dockFrame: CGRect?, ceiling: CGFloat) {
         updateDock(dockFrame)
+        let maxPile = CGFloat(Settings.shared.values.maxPile)
         var seen = Set<CGWindowID>()
         for edge in edges {
             let r = edge.rect.offsetBy(dx: -screenOrigin.x, dy: -screenOrigin.y)
-            // Solo bordi su questo schermo; escluse le app a schermo intero (bordo in cima).
-            guard r.maxY > 0, r.maxY < size.height - 2, r.maxX > 0, r.minX < size.width else { continue }
+            // Solo bordi su questo schermo, con il mucchio sotto la barra dei menu (decisione di Matteo, MGS-416).
+            guard r.maxY > 0, r.maxX > 0, r.minX < size.width,
+                  collectsSnow(edgeTop: r.maxY, pileHeight: maxPile, ceiling: ceiling) else { continue }
             seen.insert(edge.id)
             let open = edge.visible.map { ($0.lowerBound - screenOrigin.x)...($0.upperBound - screenOrigin.x) }
 
@@ -161,7 +164,7 @@ final class SnowScene: SKScene {
                 // Nuova, spostata, ridimensionata (o scoperto il raggio giusto): la neve vecchia cade, si riparte da zero.
                 if let old = piles[edge.id] { drop(old.pile) }
                 let pile = SnowPile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: edge.cornerRadius,
-                                    maxHeight: CGFloat(Settings.shared.values.maxPile))
+                                    maxHeight: maxPile)
                 _ = pile.setOpen(open)
                 addChild(pile.node)
                 piles[edge.id] = (pile, r)
