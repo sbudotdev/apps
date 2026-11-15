@@ -131,11 +131,11 @@ struct SettingsView: View {
     /// Titolo e cartiglio, come `SbuScreenTitle` nelle app.
     private var header: some View {
         VStack(alignment: .leading, spacing: Quaderno.space1) {
-            Text("Neve")
+            Text(verbatim: SbuSeasonsApp.name)
                 .font(Quaderno.titleFont)
                 .foregroundStyle(Quaderno.ink.color)
                 .accessibilityAddTraits(.isHeader)
-            Text(verbatim: cartiglio)
+            Text(verbatim: Self.cartiglio(on: .now))
                 .font(Quaderno.cartiglioFont)
                 .tracking(Quaderno.cartiglioSize * Quaderno.cartiglioTracking)
                 .foregroundStyle(Quaderno.inkMuted.color)
@@ -144,10 +144,10 @@ struct SettingsView: View {
         .padding(.top, Quaderno.space4)
     }
 
-    /// `SBU · NEVE · DOM 15 NOV`: solo metadati, maiuscolo nella stringa (come in SbuKit).
-    private var cartiglio: String {
-        let day = Date.now.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "it_IT")))
-        return "Sbu · Neve · \(day)".uppercased(with: Locale(identifier: "it_IT"))
+    /// `SBU · <NOME> · DOM 15 NOV`: solo metadati, maiuscolo nella stringa (come in SbuKit).
+    static func cartiglio(on date: Date) -> String {
+        let day = date.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "it_IT")))
+        return "Sbu · \(SbuSeasonsApp.name) · \(day)".uppercased(with: Locale(identifier: "it_IT"))
     }
 
     private func slider(_ title: String, _ value: Binding<Double>, _ range: ClosedRange<Double>, _ format: String) -> some View {
