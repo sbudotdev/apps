@@ -52,6 +52,16 @@
         }
       }
     },
+    "Autunno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autumn"
+          }
+        }
+      }
+    },
     "Chiudi finestra": {
       "localizations": {
         "en": {
