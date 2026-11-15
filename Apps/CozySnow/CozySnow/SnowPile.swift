@@ -135,6 +135,11 @@ final class SnowPile {
     /// Ai bordi di un tratto scoperto la neve in eccesso cade giù (si perde).
     func settle() {
         guard !isEmpty else { return }
+        // Altezza massima abbassata dalle impostazioni: la neve in più sparisce.
+        for i in heights.indices where heights[i] > cap(i) {
+            heights[i] = cap(i)
+            dirty = true
+        }
         for i in heights.indices where open[i] {
             let left = i > 0 && open[i - 1] ? heights[i - 1] : 0
             let right = i < heights.count - 1 && open[i + 1] ? heights[i + 1] : 0
