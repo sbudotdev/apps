@@ -15,6 +15,7 @@ struct LocalizationTests {
         ("Stagione", "Season"),
         ("Neve", "Snow"),
         ("Primavera", "Spring"),
+        ("Estate", "Summer"),
         ("Autunno", "Autumn"),
     ])
     func theEnglishTranslationIsInTheBundle(_ italian: String, _ english: String) throws {

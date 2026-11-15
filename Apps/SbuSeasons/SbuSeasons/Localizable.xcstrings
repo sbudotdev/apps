@@ -102,6 +102,16 @@
         }
       }
     },
+    "Estate": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summer"
+          }
+        }
+      }
+    },
     "Esci da %@": {
       "localizations": {
         "en": {
