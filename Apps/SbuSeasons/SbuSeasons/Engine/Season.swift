@@ -17,6 +17,13 @@ protocol Season {
     func makeTexture() -> SKTexture
     /// Una particella nuova. `depth`: 0 = lontana … 1 = vicina.
     func particle(depth: CGFloat) -> Particle
+    /// Quanto aggiunge al mucchio una particella che si posa (× "Velocità di accumulo"), estratto a caso
+    /// a ogni posa: un intervallo largo e basso fa mucchi radi e irregolari.
+    var pileGrowth: ClosedRange<CGFloat> { get }
+}
+
+extension Season {
+    var pileGrowth: ClosedRange<CGFloat> { 1...1 }
 }
 
 /// Com'è e come cade una particella, prima dei moltiplicatori delle Impostazioni.
@@ -29,4 +36,10 @@ nonisolated struct Particle {
     /// Oscillazione laterale: ampiezza in punti, frequenza in oscillazioni al secondo.
     var swayAmplitude: CGFloat
     var swayFrequency: CGFloat
+    /// Rotazione nel piano, in giri al secondo (0 = non gira).
+    var spin: CGFloat = 0
+    /// Ribaltamento, in giri al secondo: la particella si vede di taglio e poi dall'altra faccia (0 = mai).
+    var flip: CGFloat = 0
+    /// Il colore di questa particella sopra la texture (nil = la texture com'è).
+    var tint: NSColor? = nil
 }
