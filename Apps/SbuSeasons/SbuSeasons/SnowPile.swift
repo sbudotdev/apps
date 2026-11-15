@@ -43,9 +43,9 @@ final class SnowPile {
         sag = edgeDistance.map { d in d >= r ? 0 : r - (r * r - (r - d) * (r - d)).squareRoot() }
         capacity = edgeDistance.map { d in r > 0 ? min(1, d / r) : 1 }
 
-        // Bianco appena azzurrato, così si vede anche sulle finestre bianche.
-        // Niente contorno: ridisegnarlo a ogni frame costa molta CPU.
-        node.fillColor = NSColor(calibratedRed: 0.94, green: 0.97, blue: 1.0, alpha: 1)
+        // Carta (valore chiaro) anche in aspetto scuro: è neve. Sulle finestre bianche si stacca
+        // perché è appena più calda del bianco. Niente contorno: ridisegnarlo a ogni frame costa molta CPU.
+        node.fillColor = Quaderno.paper.lightColor
         node.strokeColor = .clear
         node.lineWidth = 0
         node.zPosition = 2   // sopra i fiocchi (che hanno zPosition 0…1)
