@@ -1,7 +1,7 @@
 import Foundation
 
 /// Intensità della nevicata.
-enum Density: Int, CaseIterable {
+nonisolated enum Density: Int, CaseIterable {
     case light, medium, heavy
 
     var title: String {

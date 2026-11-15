@@ -50,8 +50,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         // All'avvio automatico al login no: lì vogliamo solo la neve.
         if !launchedAsLoginItem() { openSettings() }
 
-        // 8 volte al secondo controlliamo dove sono le finestre (per l'accumulo).
-        windowTimer = Timer.scheduledTimer(withTimeInterval: 0.125, repeats: true) { [weak self] _ in
+        // Controlliamo spesso dove sono le finestre (per l'accumulo).
+        windowTimer = Timer.scheduledTimer(withTimeInterval: Tuning.windowRefreshInterval, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.refreshWindows() }
         }
     }

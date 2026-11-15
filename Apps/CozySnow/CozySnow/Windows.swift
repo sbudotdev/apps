@@ -2,7 +2,7 @@ import AppKit
 
 /// Il bordo superiore di una finestra, su cui la neve si può posare.
 /// Coordinate Cocoa globali: origine in basso a sinistra dello schermo principale.
-struct WindowEdge: Equatable {
+nonisolated struct WindowEdge: Equatable {
     let id: CGWindowID
     let rect: CGRect
     /// Tratti (in x) del bordo superiore NON coperti da finestre più in primo piano.
@@ -13,7 +13,7 @@ struct WindowEdge: Equatable {
 
 /// Quanto spazio sopra il bordo occupa la neve: una finestra davanti che arriva
 /// fin lì copre anche il mucchio, quindi quel tratto non deve raccogliere neve.
-let pileClearance: CGFloat = 16
+nonisolated let pileClearance: CGFloat = 16
 
 /// Legge le finestre visibili dal sistema e calcola i loro bordi superiori.
 /// Non serve nessun permesso: posizione e dimensioni sono pubbliche
@@ -95,7 +95,7 @@ private func hasToolbar(pid: pid_t, rect: CGRect, primaryHeight: CGFloat) -> Boo
 
 /// Parte pura (testabile): dato l'elenco fronte→fondo, toglie da ogni bordo superiore
 /// i tratti coperti dalle finestre che stanno davanti.
-func visibleTopEdges(_ windows: [(id: CGWindowID, rect: CGRect)]) -> [WindowEdge] {
+nonisolated func visibleTopEdges(_ windows: [(id: CGWindowID, rect: CGRect)]) -> [WindowEdge] {
     windows.enumerated().map { index, window in
         let y = window.rect.maxY
         var visible = [window.rect.minX...window.rect.maxX]
@@ -107,16 +107,13 @@ func visibleTopEdges(_ windows: [(id: CGWindowID, rect: CGRect)]) -> [WindowEdge
 }
 
 /// `range` meno `cut`: zero, uno o due pezzi.
-private func subtract(_ cut: ClosedRange<CGFloat>, from range: ClosedRange<CGFloat>) -> [ClosedRange<CGFloat>] {
+nonisolated private func subtract(_ cut: ClosedRange<CGFloat>, from range: ClosedRange<CGFloat>) -> [ClosedRange<CGFloat>] {
     guard cut.overlaps(range) else { return [range] }
     var pieces: [ClosedRange<CGFloat>] = []
     if range.lowerBound < cut.lowerBound { pieces.append(range.lowerBound...cut.lowerBound) }
     if cut.upperBound < range.upperBound { pieces.append(cut.upperBound...range.upperBound) }
     return pieces
 }
-
-/// Raggio degli angoli del Dock.
-let dockCornerRadius: CGFloat = 24
 
 /// Il rettangolo del Dock (coordinate Cocoa globali), letto con l'API di Accessibilità.
 /// Il sistema non dà altrimenti la sua larghezza: la "finestra" del Dock copre tutto lo schermo.
