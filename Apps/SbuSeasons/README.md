@@ -47,9 +47,10 @@ Le modifiche si vedono subito (nevica anche sulla finestra Impostazioni, utile p
 | `Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
 | `Settings.swift` | Le impostazioni (salvate in UserDefaults) e la finestra SwiftUI per regolarle |
 | `Density.swift` | Le scorciatoie Leggera / Media / Forte del menu |
+| `Tuning.swift` | I parametri fissi (fisica, cursore, mucchi, lettura delle finestre) |
 | `project.yml` | Progetto XcodeGen: target app (LSUIElement) e test |
 
-I valori predefiniti sono in `SnowSettings` (`Settings.swift`); i pochi parametri fissi in cima a `SnowScene.swift` e `SnowPile.swift`.
+I valori predefiniti sono in `SnowSettings` (`Settings.swift`); i parametri fissi in `Tuning.swift`.
 
 ## Prossimi passi possibili
 

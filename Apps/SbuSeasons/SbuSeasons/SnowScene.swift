@@ -7,20 +7,6 @@ import SpriteKit
 /// un punto della scena = un punto dello schermo.
 final class SnowScene: SKScene {
 
-    // MARK: - Parametri fissi (quelli regolabili sono in Settings.swift)
-
-    /// Quanto un movimento veloce del mouse trascina con sé i fiocchi (0…1).
-    private let cursorDrag: CGFloat = 0.55
-    /// Quanto velocemente la spinta del cursore si esaurisce (più alto = si fermano prima).
-    private let damping: CGFloat = 1.8
-    /// Raggio (in orizzontale) entro cui il cursore scava nella neve accumulata.
-    private let scoopRadius: CGFloat = 14
-    /// Massimo numero di granelli di polvere in volo insieme.
-    private let maxGrains = 1500
-    /// Gravità dei granelli (pt/s²) e attrito dell'aria (più alto = cadono più piano).
-    private let gravity: CGFloat = 520
-    private let airDrag: CGFloat = 1.2
-
     // MARK: - Stato
 
     private struct Flake {
@@ -100,8 +86,7 @@ final class SnowScene: SKScene {
         }
         let settings = Settings.shared.values
         builtWith = (settings.flakeCount, settings.flakeSize)
-        let referenceArea: CGFloat = 1440 * 900
-        let count = Int(settings.flakeCount * Double(size.width * size.height / referenceArea))
+        let count = Int(settings.flakeCount * Double(size.width * size.height / Tuning.referenceScreenArea))
         flakes = (0..<max(count, 1)).map { _ in
             makeFlake(at: CGPoint(x: .random(in: 0...size.width), y: .random(in: 0...size.height)))
         }
@@ -142,7 +127,7 @@ final class SnowScene: SKScene {
     /// orizzontale (`drift` ± `spread`) e un saltello verticale (`pop`). Poi ci pensa la gravità.
     private func spawnPowder(_ points: [CGPoint], from source: SnowPile? = nil, drift: CGFloat = 0,
                              spread: CGFloat = 8, pop: ClosedRange<CGFloat> = -5...5) {
-        for point in points where grains.count < maxGrains {
+        for point in points where grains.count < Tuning.maxGrains {
             let node = SKSpriteNode(texture: flakeTexture)
             let diameter = CGFloat.random(in: 2...4)   // più piccoli dei fiocchi: è polvere
             node.size = CGSize(width: diameter, height: diameter)
@@ -198,7 +183,7 @@ final class SnowScene: SKScene {
         if let old = dock { drop(old.pile) }                 // spostato/ridimensionato/sparito: la neve cade
         dock = nil
         guard let r, onThisScreen else { return }
-        let pile = SnowPile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: dockCornerRadius)
+        let pile = SnowPile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: Tuning.dockCornerRadius)
         addChild(pile.node)
         dock = (pile, r)
     }
@@ -245,7 +230,7 @@ final class SnowScene: SKScene {
         }
         lastMouse = mouse
 
-        let decay = CGFloat(exp(-Double(damping * dt)))
+        let decay = CGFloat(exp(-Double(Tuning.cursorDamping * dt)))
         let dragBlend = min(1, dt * 10)
 
         // Solo i mucchi attivi raccolgono neve.
@@ -271,8 +256,8 @@ final class SnowScene: SKScene {
                 flake.push.dy += dy / distance * repel
 
                 // 2) trascinamento: se muovi il mouse velocemente li "spazzi" via
-                let targetDX = mouseVelocity.dx * cursorDrag
-                let targetDY = mouseVelocity.dy * cursorDrag
+                let targetDX = mouseVelocity.dx * Tuning.cursorDrag
+                let targetDY = mouseVelocity.dy * Tuning.cursorDrag
                 flake.push.dx += (targetDX - flake.push.dx) * strength * dragBlend
                 flake.push.dy += (targetDY - flake.push.dy) * strength * dragBlend
             }
@@ -286,7 +271,7 @@ final class SnowScene: SKScene {
             p.y += (-flake.fallSpeed * fallSpeed + flake.push.dy) * dt
 
             // Bordi laterali: chi esce da un lato rientra dall'altro.
-            let margin: CGFloat = 20
+            let margin = Tuning.sideMargin
             if p.x < -margin { p.x += size.width + margin * 2 }
             if p.x > size.width + margin { p.x -= size.width + margin * 2 }
 
@@ -312,11 +297,11 @@ final class SnowScene: SKScene {
         }
 
         // --- Granelli di polvere: gravità + attrito dell'aria, niente oscillazione ---
-        let drag = CGFloat(exp(-Double(airDrag * dt)))
+        let drag = CGFloat(exp(-Double(Tuning.grainAirDrag * dt)))
         grains = grains.compactMap { grain in
             var grain = grain
             grain.velocity.dx *= drag
-            grain.velocity.dy = grain.velocity.dy * drag - gravity * dt
+            grain.velocity.dy = grain.velocity.dy * drag - Tuning.grainGravity * dt
             var p = grain.node.position
             let previousY = p.y
             p.x += grain.velocity.dx * dt
@@ -344,18 +329,18 @@ final class SnowScene: SKScene {
             // Spinta leggera nella direzione del cursore (limitata, se no i granelli volano via).
             let drift = max(-150, min(150, mouseVelocity.dx * 0.15))
             for pile in allPiles {
-                spawnPowder(pile.scoop(at: mouse, radius: scoopRadius), from: pile, drift: drift, spread: 25, pop: -10...40)
+                spawnPowder(pile.scoop(at: mouse, radius: Tuning.scoopRadius), from: pile, drift: drift, spread: 25, pop: -10...40)
             }
         }
 
         // La neve posata cambia lentamente: frana e ridisegno 10 volte al secondo bastano
         // (farlo a ogni frame triplicava la CPU).
         pileClock += dt
-        if pileClock >= 0.1 {
+        if pileClock >= Tuning.pileSettleInterval {
             pileClock = 0
             let maxPile = CGFloat(settings.maxPile)
             for pile in piles.values.map(\.pile) + (dock.map { [$0.pile] } ?? []) {
-                pile.maxHeight = pile === dock?.pile ? maxPile * 1.75 : maxPile
+                pile.maxHeight = pile === dock?.pile ? maxPile * Tuning.dockPileFactor : maxPile
                 // Accumulo disattivato dalle impostazioni: la neve sparisce.
                 if !allPiles.contains(where: { $0 === pile }) { pile.clear() }
                 pile.settle()

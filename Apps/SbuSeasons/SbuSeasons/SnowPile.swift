@@ -6,12 +6,7 @@ import SpriteKit
 /// Coordinate: quelle della scena (locali allo schermo).
 final class SnowPile {
 
-    // MARK: - Parametri (giocaci pure)
-
-    /// Larghezza di una colonna, in punti.
-    static let step: CGFloat = 2
-    /// Pendenza massima tra due colonne vicine: oltre, la neve "frana" di lato.
-    static let maxSlope: CGFloat = 0.8
+    static let step = Tuning.pileStep
 
     // MARK: - Stato
 
@@ -144,7 +139,7 @@ final class SnowPile {
             let left = i > 0 && open[i - 1] ? heights[i - 1] : 0
             let right = i < heights.count - 1 && open[i + 1] ? heights[i + 1] : 0
             for (neighbor, height) in [(i - 1, left), (i + 1, right)] {
-                let excess = heights[i] - height - Self.maxSlope
+                let excess = heights[i] - height - Tuning.pileMaxSlope
                 guard excess > 0 else { continue }
                 let moved = excess * 0.4
                 heights[i] -= moved

@@ -3,7 +3,7 @@ import ServiceManagement
 
 /// Tutte le impostazioni regolabili, con i valori predefiniti.
 /// Si salvano su disco come un unico blocco JSON in UserDefaults.
-struct SnowSettings: Codable, Equatable {
+nonisolated struct SnowSettings: Codable, Equatable {
     // Nevicata
     var flakeCount = 260.0      // fiocchi su uno schermo da 1440×900 (scalato sull'area)
     var flakeSize = 1.0         // moltiplicatore
