@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import CozySnow
+@testable import SbuSeasons
 
 struct SnowSettingsTests {
     private func json(_ object: [String: Any]) throws -> Data {

@@ -125,13 +125,14 @@ struct SettingsView: View {
         } message: {
             Text("Tutte le impostazioni della neve tornano come al primo avvio.")
         }
-        .frame(width: 440, height: 680)   // il contenuto è più alto: si scorre
+        // A multipli della cella del reticolo (grid-cell). Il contenuto è più alto: si scorre.
+        .frame(width: Quaderno.gridCell * 19, height: Quaderno.gridCell * 28)
     }
 
     /// Titolo e cartiglio, come `SbuScreenTitle` nelle app.
     private var header: some View {
         VStack(alignment: .leading, spacing: Quaderno.space1) {
-            Text(verbatim: CozySnowApp.name)
+            Text(verbatim: SbuSeasonsApp.name)
                 .font(Quaderno.titleFont)
                 .foregroundStyle(Quaderno.ink.color)
                 .accessibilityAddTraits(.isHeader)
@@ -144,21 +145,25 @@ struct SettingsView: View {
         .padding(.top, Quaderno.space4)
     }
 
-    /// `SBU · <NOME> · DOM 15 NOV`: solo metadati, maiuscolo nella stringa (come in SbuKit).
+    /// `SBU · SEASONS · DOM 15 NOV`, la data nella lingua dell'app: solo metadati, maiuscolo nella stringa (come in SbuKit).
     static func cartiglio(on date: Date) -> String {
-        let day = date.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "it_IT")))
-        return "Sbu · \(CozySnowApp.name) · \(day)".uppercased(with: Locale(identifier: "it_IT"))
+        // La lingua dell'app (italiano o inglese), non quella del Mac: tutto il cartiglio nella stessa lingua.
+        let locale = Locale(identifier: Bundle.main.preferredLocalizations.first ?? "it")
+        let day = date.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(locale))
+        // "Sbu Seasons" → "Sbu · Seasons": il marchio una volta sola, come nelle app iPhone.
+        let name = SbuSeasonsApp.name.replacing(#/^Sbu /#, with: "")
+        return "Sbu · \(name) · \(day)".uppercased(with: locale)
     }
 
-    private func slider(_ title: String, _ value: Binding<Double>, _ range: ClosedRange<Double>, _ format: String) -> some View {
+    private func slider(_ title: LocalizedStringKey, _ value: Binding<Double>, _ range: ClosedRange<Double>, _ format: String) -> some View {
         LabeledContent(title) {
             HStack {
                 Slider(value: value, in: range)
                 Text(String(format: format, value.wrappedValue))
                     .monospacedDigit()
-                    .frame(width: 60, alignment: .trailing)
+                    .frame(width: Quaderno.gridCell * 3, alignment: .trailing)
             }
-            .frame(width: 230)
+            .frame(width: Quaderno.gridCell * 10)
         }
     }
 
@@ -169,9 +174,24 @@ struct SettingsView: View {
             if on { try service.register() } else { try service.unregister() }
         } catch {
             // Di solito serve l'approvazione dell'utente: apriamo le Impostazioni di Sistema giuste.
-            NSLog("CozySnow: avvio al login non riuscito: \(error)")
+            NSLog("Sbu Seasons: avvio al login non riuscito: \(error)")
             SMAppService.openSystemSettingsLoginItems()
         }
         openAtLogin = service.status == .enabled
+    }
+}
+
+/// Con il bundle id cambiano anche i UserDefaults dell'app (README, "Dal vecchio nome").
+/// Al primo avvio con il nome nuovo, neve accesa o spenta e impostazioni si copiano dal nome vecchio.
+nonisolated enum PreviousDefaults {
+    /// Dal più recente: il bundle id provvisorio (MGS-416), poi quello della versione di Simone.
+    static let domains = ["dev.sbu.cozysnow", "local.cozysnow"]
+    static let keys = ["settings", "isSnowing"]
+
+    static func migrate(into defaults: UserDefaults = .standard, from domains: [String] = domains) {
+        for key in keys where defaults.object(forKey: key) == nil {
+            let value = domains.lazy.compactMap { UserDefaults(suiteName: $0)?.object(forKey: key) }.first
+            if let value { defaults.set(value, forKey: key) }
+        }
     }
 }

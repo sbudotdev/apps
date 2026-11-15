@@ -1,6 +1,6 @@
 import Testing
 import CoreGraphics
-@testable import CozySnow
+@testable import SbuSeasons
 
 @Test func frontWindowHidesPartOfTheEdgeBehind() {
     let back = (id: CGWindowID(1), rect: CGRect(x: 0, y: 0, width: 400, height: 300))       // bordo a y=300

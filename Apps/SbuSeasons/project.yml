@@ -1,4 +1,4 @@
-name: CozySnow
+name: SbuSeasons
 options:
   bundleIdPrefix: dev.sbu
   deploymentTarget:
@@ -15,20 +15,20 @@ settings:
     SWIFT_APPROACHABLE_CONCURRENCY: YES
     SWIFT_STRICT_CONCURRENCY: complete
 targets:
-  CozySnow:
+  SbuSeasons:
     type: application
     platform: macOS
     sources:
-      - CozySnow
+      - SbuSeasons
       # Fonts and licences straight from Design/fonts, the same files SbuKit and the site ship.
       - path: ../../Design/fonts
         buildPhase: resources
     settings:
       base:
-        # Bundle id and name stay provisional until Matteo approves them (MGS-416).
-        PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.cozysnow
+        # Name chosen by Matteo on 15/11 (MGS-415): more seasons and themes may come after the snow.
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.SbuSeasons
         GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_CFBundleDisplayName: CozySnow
+        INFOPLIST_KEY_CFBundleDisplayName: Sbu Seasons
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.entertainment
         # Menu bar only: no Dock icon until the settings window opens.
         INFOPLIST_KEY_LSUIElement: YES
@@ -38,21 +38,21 @@ targets:
         ENABLE_HARDENED_RUNTIME: YES
         # No sandbox: CGWindowListCopyWindowInfo and the Accessibility API need it off (ADR-0022).
         ENABLE_APP_SANDBOX: NO
-  CozySnowTests:
+  SbuSeasonsTests:
     type: bundle.unit-test
     platform: macOS
-    sources: [CozySnowTests]
+    sources: [SbuSeasonsTests]
     dependencies:
-      - target: CozySnow
+      - target: SbuSeasons
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
         BUNDLE_LOADER: $(TEST_HOST)
-        TEST_HOST: $(BUILT_PRODUCTS_DIR)/CozySnow.app/Contents/MacOS/CozySnow
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/SbuSeasons.app/Contents/MacOS/SbuSeasons
 schemes:
-  CozySnow:
+  SbuSeasons:
     build:
       targets:
-        CozySnow: all
+        SbuSeasons: all
     test:
-      targets: [CozySnowTests]
+      targets: [SbuSeasonsTests]
