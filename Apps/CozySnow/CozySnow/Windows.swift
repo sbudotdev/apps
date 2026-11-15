@@ -103,6 +103,12 @@ nonisolated func visibleTopEdges(_ windows: [(id: CGWindowID, rect: CGRect)], cl
     }
 }
 
+/// Un bordo raccoglie neve solo se il mucchio intero sta sotto `ceiling`, il limite superiore
+/// della zona libera dello schermo (sotto la barra dei menu). Esclude anche le app a schermo intero.
+nonisolated func collectsSnow(edgeTop: CGFloat, pileHeight: CGFloat, ceiling: CGFloat) -> Bool {
+    edgeTop + pileHeight <= ceiling
+}
+
 /// `range` meno `cut`: zero, uno o due pezzi.
 nonisolated private func subtract(_ cut: ClosedRange<CGFloat>, from range: ClosedRange<CGFloat>) -> [ClosedRange<CGFloat>] {
     guard cut.overlaps(range) else { return [range] }
