@@ -3,28 +3,29 @@
 Neve che cade sopra tutte le finestre del Mac, **si accumula sul bordo superiore delle finestre**
 e sul fondo dello schermo, e col cursore la sposti e la sparpagli.
 
-Requisiti: macOS 14+, Xcode o i Command Line Tools (`xcode-select --install`).
+Requisiti: macOS 14+, Xcode 26+, XcodeGen (`brew install xcodegen`).
 
 ## Provarla mentre la sviluppi
 
 ```bash
-cd SbuSeasons
-swift run          # compila e avvia (Ctrl+C per chiudere)
-swift test         # lancia i test
+cd Apps/SbuSeasons
+xcodegen                                   # genera SbuSeasons.xcodeproj da project.yml
+xcodebuild test -scheme SbuSeasons -destination 'platform=macOS'
+open SbuSeasons.xcodeproj                    # schema SbuSeasons, destinazione My Mac, ▶︎
 ```
 
-**Da Xcode**: `File → Open…` → scegli `Package.swift` → schema `SbuSeasons`, destinazione `My Mac` → ▶︎.
+Il progetto Xcode non è nella repo: si rigenera con `xcodegen` dopo ogni cambio a `project.yml` o ai file.
 
-## Costruire la vera app (SbuSeasons.app)
+## Costruire l'app
 
 ```bash
-./build-app.sh     # crea SbuSeasons.app nella cartella del progetto
-open SbuSeasons.app
+xcodebuild -scheme SbuSeasons -configuration Release -derivedDataPath build build
+open build/Build/Products/Release/SbuSeasons.app
 ```
 
-Per tenerla: trascina `SbuSeasons.app` in `/Applicazioni`, avviala da lì e in **Impostazioni…** attiva **Apri al login**.
-La firma è "ad-hoc": va bene sul tuo Mac. Per darla ad altri servono un account Apple Developer,
-la firma "Developer ID" e la notarizzazione (`xcrun notarytool`).
+Senza `SBU_TEAM_ID` la firma è "ad-hoc": va bene sul tuo Mac, ma macOS chiede di nuovo il permesso
+Accessibilità dopo ogni build. Per darla ad altri servono la firma Developer ID e la notarizzazione,
+oppure il Mac App Store: lo decide l'ADR-0022 (`docs/adr/0022-app-mac.md`).
 
 ## Menu ❄︎
 
@@ -46,7 +47,7 @@ Le modifiche si vedono subito (nevica anche sulla finestra Impostazioni, utile p
 | `Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
 | `Settings.swift` | Le impostazioni (salvate in UserDefaults) e la finestra SwiftUI per regolarle |
 | `Density.swift` | Le scorciatoie Leggera / Media / Forte del menu |
-| `Info.plist`, `build-app.sh` | Impacchettamento come .app |
+| `project.yml` | Progetto XcodeGen: target app (LSUIElement) e test |
 
 I valori predefiniti sono in `SnowSettings` (`Settings.swift`); i pochi parametri fissi in cima a `SnowScene.swift` e `SnowPile.swift`.
 
