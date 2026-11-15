@@ -111,6 +111,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private func setupStatusItem() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         item.button?.image = NSImage(systemSymbolName: "snowflake", accessibilityDescription: "SbuSeasons")
+        item.button?.toolTip = "SbuSeasons"
 
         let menu = NSMenu()
         menu.delegate = self   // per aggiornare le spunte ogni volta che si apre
@@ -125,12 +126,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
         menu.addItem(.separator())
 
-        let densityHeader = NSMenuItem(title: "Intensità (scorciatoie)", action: nil, keyEquivalent: "")
+        let densityHeader = NSMenuItem(title: "Intensità", action: nil, keyEquivalent: "")
         densityHeader.isEnabled = false
         menu.addItem(densityHeader)
 
         densityItems = Density.allCases.map { d in
-            let mi = NSMenuItem(title: d.title, action: #selector(selectDensity(_:)), keyEquivalent: "")
+            // ⌘1, ⌘2, ⌘3 nell'ordine del menu, mentre il menu è aperto.
+            let mi = NSMenuItem(title: d.title, action: #selector(selectDensity(_:)), keyEquivalent: "\(d.rawValue + 1)")
             mi.target = self
             mi.tag = d.rawValue
             mi.indentationLevel = 1
@@ -144,7 +146,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         settingsItem.target = self
         menu.addItem(settingsItem)
 
-        menu.addItem(NSMenuItem(title: "Esci", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: "Esci da SbuSeasons", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
 
         item.menu = menu
         statusItem = item
