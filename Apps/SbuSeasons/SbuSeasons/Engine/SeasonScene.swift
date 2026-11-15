@@ -18,6 +18,8 @@ final class SeasonScene: SKScene {
         let swayAmplitude: CGFloat
         let swayFrequency: CGFloat
         let phase: CGFloat
+        let spin: CGFloat
+        let flip: CGFloat
         /// Velocità extra impressa dal cursore, si smorza nel tempo.
         var push: CGVector = .zero
     }
@@ -120,6 +122,10 @@ final class SeasonScene: SKScene {
         node.alpha = particle.alpha
         node.zPosition = depth
         node.position = position
+        if let tint = particle.tint {
+            node.color = tint
+            node.colorBlendFactor = 1
+        }
         addChild(node)
 
         return Flake(
@@ -129,7 +135,9 @@ final class SeasonScene: SKScene {
             fallSpeed: particle.fallSpeed,
             swayAmplitude: particle.swayAmplitude,
             swayFrequency: particle.swayFrequency,
-            phase: .random(in: 0...(2 * .pi))
+            phase: .random(in: 0...(2 * .pi)),
+            spin: particle.spin * 2 * .pi,
+            flip: particle.flip * 2 * .pi
         )
     }
 
@@ -299,11 +307,13 @@ final class SeasonScene: SKScene {
             if p.x > size.width + margin { p.x -= size.width + margin * 2 }
 
             flake.node.position = p
+            if flake.spin != 0 { flake.node.zRotation += flake.spin * dt }
+            if flake.flip != 0 { flake.node.xScale = cos(elapsed * flake.flip + flake.phase) }
 
             // --- Si posa? Ha attraversato la superficie di un mucchio in questo passo ---
             for pile in allPiles {
                 if let top = pile.surface(at: p.x), previousY >= top, p.y < top {
-                    pile.add(atX: p.x, radius: flake.radius, growth: CGFloat(settings.growth))
+                    pile.add(atX: p.x, radius: flake.radius, growth: CGFloat(settings.growth) * .random(in: season.pileGrowth))
                     return true
                 }
             }
