@@ -9,6 +9,7 @@ struct Spring: Season {
     var title: String { String(localized: "Primavera") }
     let symbol = "camera.macro"
     var pileColor: NSColor { SpringTuning.settled }
+    var pileGrowth: ClosedRange<CGFloat> { SpringTuning.pileGrowth }
 
     func particle(depth: CGFloat) -> Particle {
         Particle(
@@ -16,7 +17,9 @@ struct Spring: Season {
             alpha: SpringTuning.opacity.lowerBound + depth * (SpringTuning.opacity.upperBound - SpringTuning.opacity.lowerBound),
             fallSpeed: 9 + depth * 20,
             swayAmplitude: .random(in: SpringTuning.flutter),
-            swayFrequency: .random(in: 0.18...0.45)
+            swayFrequency: .random(in: 0.18...0.45),
+            spin: .random(in: SpringTuning.spin) * (Bool.random() ? 1 : -1),
+            flip: .random(in: SpringTuning.flip)
         )
     }
 
@@ -57,6 +60,11 @@ nonisolated enum SpringTuning {
     static let tilt: CGFloat = .pi / 7
     static let base = NSColor(srgbRed: 0.93, green: 0.62, blue: 0.70, alpha: 1)
     static let tip = NSColor(srgbRed: 0.99, green: 0.89, blue: 0.91, alpha: 1)
+    /// Giri al secondo nel piano e del ribaltamento: piano, un petalo plana.
+    static let spin: ClosedRange<CGFloat> = 0.05...0.25
+    static let flip: ClosedRange<CGFloat> = 0.1...0.35
+    /// Quanto aggiunge al mucchio un petalo posato (la neve 1): uno strato sottile.
+    static let pileGrowth: ClosedRange<CGFloat> = 0.15...0.35
     /// I petali posati sulle finestre e sul Dock.
     static let settled = NSColor(srgbRed: 0.98, green: 0.84, blue: 0.87, alpha: 1)
 }

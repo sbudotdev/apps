@@ -18,3 +18,18 @@ struct SpringTests {
         #expect(SpringTuning.flutter.lowerBound > 26)   // la neve ondeggia fra 8 e 26 pt
     }
 }
+
+extension SpringTests {
+    /// Uno strato sottile: un petalo posato aggiunge al mucchio meno della metà di un fiocco.
+    @Test func petalsSettleInAThinLayer() {
+        #expect(Spring().pileGrowth.upperBound < 0.5)
+        #expect(Spring().pileGrowth.lowerBound > 0)
+    }
+
+    /// I petali girano e si ribaltano piano mentre cadono, non tutti uguali.
+    @Test func petalsTumbleWhileFalling() {
+        let petals = (0..<20).map { _ in Spring().particle(depth: 0.5) }
+        #expect(petals.allSatisfy { $0.spin != 0 && $0.flip > 0 })
+        #expect(Set(petals.map(\.spin)).count > 1)
+    }
+}
