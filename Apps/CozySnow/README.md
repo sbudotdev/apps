@@ -1,7 +1,12 @@
 # CozySnow ❄︎
 
 Neve che cade sopra tutte le finestre del Mac, **si accumula sul bordo superiore delle finestre**
-e sul fondo dello schermo, e col cursore la sposti e la sparpagli.
+e sopra il Dock, e col cursore la sposti e la sparpagli.
+
+**Permessi.** Nessuno per la neve e l'accumulo sulle finestre. Con il permesso Accessibilità
+(Impostazioni di Sistema → Privacy e sicurezza) la neve si posa anche sul Dock e segue gli angoli
+più stondati delle app con barra strumenti. Se il Dock si nasconde o sta di lato, sul fondo non si posa niente.
+L'app non è nella sandbox: senza, macOS non darebbe né le finestre delle altre app né l'Accessibilità.
 
 Requisiti: macOS 14+, Xcode 26+, XcodeGen (`brew install xcodegen`).
 
@@ -30,6 +35,7 @@ oppure il Mac App Store: lo decide l'ADR-0022 (`docs/adr/0022-app-mac.md`).
 ## Menu ❄︎
 
 Fai nevicare (⌘S) · Sciogli la neve (⌘R) · Intensità (scorciatoie) · Impostazioni… (⌘,) · Esci (⌘Q).
+Le scorciatoie funzionano a menu aperto: non sono globali.
 
 **Impostazioni**: quantità, dimensione e velocità dei fiocchi, vento, raggio e forza del cursore,
 accumulo sulle finestre e sul fondo, velocità di accumulo, altezza massima, apri al login, ripristino.
