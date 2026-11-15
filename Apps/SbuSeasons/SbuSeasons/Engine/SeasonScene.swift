@@ -90,7 +90,10 @@ final class SeasonScene: SKScene {
         guard season.id != self.season.id else { return }
         self.season = season
         flakeTexture = season.makeTexture()
-        for grain in grains { grain.node.texture = flakeTexture }
+        for grain in grains {
+            grain.node.texture = flakeTexture
+            grain.node.color = season.pileColor
+        }
         for pile in piles.values.map(\.pile) + (dock.map { [$0.pile] } ?? []) { pile.node.fillColor = season.pileColor }
         rebuildFlakes()
     }
@@ -158,6 +161,9 @@ final class SeasonScene: SKScene {
             let diameter = CGFloat.random(in: 2...4)   // più piccoli dei fiocchi: è polvere
             node.size = CGSize(width: diameter, height: diameter)
             node.alpha = .random(in: 0.8...1)
+            // È un pezzo del mucchio: ha il suo colore (una foglia senza tinta sarebbe bianca).
+            node.color = season.pileColor
+            node.colorBlendFactor = 1
             node.zPosition = 1.5
             node.position = point
             addChild(node)

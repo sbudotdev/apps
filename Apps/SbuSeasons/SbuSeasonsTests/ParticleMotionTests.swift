@@ -62,12 +62,32 @@ struct ParticleMotionTests {
     }
 
     @Test func aSeasonCanLeaveNothingWhenItSettles() {
-        let scene = SeasonScene(size: size, screenOrigin: .zero, season: SpinningSeason())
+        let scene = SeasonScene(size: size, screenOrigin: .zero, season: Snow())
+        scene.setSeason(SpinningSeason())   // senza una view, le particelle nascono qui
         let edge = WindowEdge(id: 1, rect: CGRect(x: 0, y: 0, width: 400, height: 150), visible: [0...400])
         scene.updateWindows([edge], dock: nil, ceiling: 1000)
         var t: TimeInterval = 1
         for _ in 0..<200 { scene.update(t); t += 0.05 }
         let pile = scene.children.compactMap { $0 as? SKShapeNode }.first
         #expect(pile?.path?.boundingBoxOfPath.height ?? 0 < 0.1)
+    }
+
+    @Test func leavesKnockedOffAPileFallAsPileColoredBits() {
+        let scene = SeasonScene(size: size, screenOrigin: .zero, season: Snow())
+        scene.setSeason(Autumn())
+        let edge = WindowEdge(id: 1, rect: CGRect(x: 0, y: 0, width: 400, height: 150), visible: [0...400])
+        scene.updateWindows([edge], dock: nil, ceiling: 1000)
+        var t: TimeInterval = 1
+        for _ in 0..<600 { scene.update(t); t += 0.05 }
+        scene.updateWindows([], dock: nil, ceiling: 1000)   // la finestra si chiude: il mucchio cade
+
+        let bits = scene.children.compactMap { $0 as? SKSpriteNode }.filter { $0.zPosition == 1.5 }   // i granelli: sotto i mucchi, sopra le foglie
+        let rust = Autumn().pileColor
+        #expect(!bits.isEmpty)
+        #expect(bits.allSatisfy { bit in
+            guard let c = bit.color.usingColorSpace(.sRGB) else { return false }
+            return bit.colorBlendFactor == 1 && abs(c.redComponent - rust.redComponent) < 0.01
+                && abs(c.greenComponent - rust.greenComponent) < 0.01 && abs(c.blueComponent - rust.blueComponent) < 0.01
+        })
     }
 }
