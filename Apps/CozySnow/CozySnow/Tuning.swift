@@ -19,6 +19,11 @@ nonisolated enum Tuning {
     static let referenceScreenArea: CGFloat = 1440 * 900
     /// Quanto un fiocco può uscire di lato prima di rientrare dall'altro.
     static let sideMargin: CGFloat = 20
+    /// Opacità di un fiocco: i lontani più trasparenti, i vicini quasi pieni.
+    static let flakeOpacity: ClosedRange<CGFloat> = 0.45...0.95
+    /// Nella texture del fiocco: opacità della carta a metà raggio e del bordo in inchiostro tenue.
+    static let flakeBodyOpacity: CGFloat = 0.9
+    static let flakeRimOpacity: CGFloat = 0.45
 
     // MARK: Cursore
 

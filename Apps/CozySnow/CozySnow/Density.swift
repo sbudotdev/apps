@@ -6,9 +6,9 @@ nonisolated enum Density: Int, CaseIterable {
 
     var title: String {
         switch self {
-        case .light:  return "Leggera"
-        case .medium: return "Media"
-        case .heavy:  return "Forte"
+        case .light:  return String(localized: "Leggera")
+        case .medium: return String(localized: "Media")
+        case .heavy:  return String(localized: "Forte")
         }
     }
 

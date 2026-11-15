@@ -16,13 +16,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         set { UserDefaults.standard.set(newValue, forKey: "isSnowing") }
     }
 
-    private lazy var toggleItem = NSMenuItem(title: "Fai nevicare", action: nil, keyEquivalent: "s")
+    private lazy var toggleItem = NSMenuItem(title: String(localized: "Fai nevicare"), action: nil, keyEquivalent: "s")
     private var densityItems: [NSMenuItem] = []
 
     /// La finestra Impostazioni: creata la prima volta che serve, poi riusata.
     private lazy var settingsWindow: NSWindow = {
         let window = NSWindow(contentViewController: NSHostingController(rootView: SettingsView()))
-        window.title = "Impostazioni \(CozySnowApp.name)"
+        window.title = String(localized: "Impostazioni \(CozySnowApp.name)")
         window.styleMask = [.titled, .closable]
         window.isReleasedWhenClosed = false
         window.delegate = self   // per sapere quando viene chiusa
@@ -98,9 +98,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     /// Il menu in alto (quello col nome dell'app), visibile mentre le Impostazioni sono aperte.
     private func setupMainMenu() {
         let appMenu = NSMenu()
-        appMenu.addItem(NSMenuItem(title: "Chiudi finestra", action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w"))
+        appMenu.addItem(NSMenuItem(title: String(localized: "Chiudi finestra"), action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w"))
         appMenu.addItem(.separator())
-        appMenu.addItem(NSMenuItem(title: "Esci da \(CozySnowApp.name)", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        appMenu.addItem(NSMenuItem(title: String(localized: "Esci da \(CozySnowApp.name)"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         let appItem = NSMenuItem()
         appItem.submenu = appMenu
         let mainMenu = NSMenu()
@@ -120,13 +120,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         toggleItem.action = #selector(toggleSnow)
         menu.addItem(toggleItem)
 
-        let meltItem = NSMenuItem(title: "Sciogli la neve", action: #selector(meltSnow), keyEquivalent: "r")
+        let meltItem = NSMenuItem(title: String(localized: "Sciogli la neve"), action: #selector(meltSnow), keyEquivalent: "r")
         meltItem.target = self
         menu.addItem(meltItem)
 
         menu.addItem(.separator())
 
-        let densityHeader = NSMenuItem(title: "Intensità", action: nil, keyEquivalent: "")
+        let densityHeader = NSMenuItem(title: String(localized: "Intensità"), action: nil, keyEquivalent: "")
         densityHeader.isEnabled = false
         menu.addItem(densityHeader)
 
@@ -142,11 +142,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
         menu.addItem(.separator())
 
-        let settingsItem = NSMenuItem(title: "Impostazioni…", action: #selector(openSettings), keyEquivalent: ",")
+        let settingsItem = NSMenuItem(title: String(localized: "Impostazioni…"), action: #selector(openSettings), keyEquivalent: ",")
         settingsItem.target = self
         menu.addItem(settingsItem)
 
-        menu.addItem(NSMenuItem(title: "Esci da \(CozySnowApp.name)", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: String(localized: "Esci da \(CozySnowApp.name)"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
 
         item.menu = menu
         statusItem = item
