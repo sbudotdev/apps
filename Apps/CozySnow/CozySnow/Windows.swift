@@ -11,10 +11,6 @@ nonisolated struct WindowEdge: Equatable {
     var cornerRadius: CGFloat = 20
 }
 
-/// Quanto spazio sopra il bordo occupa la neve: una finestra davanti che arriva
-/// fin lì copre anche il mucchio, quindi quel tratto non deve raccogliere neve.
-nonisolated let pileClearance: CGFloat = 16
-
 /// Legge le finestre visibili dal sistema e calcola i loro bordi superiori.
 /// Non serve nessun permesso: posizione e dimensioni sono pubbliche
 /// (solo i titoli richiederebbero "Registrazione schermo").
@@ -42,7 +38,7 @@ func currentWindowEdges() -> [WindowEdge] {
     }
     let alive = Set(windows.map(\.id))
     radiusCache = radiusCache.filter { alive.contains($0.key) }   // dimentica le finestre chiuse
-    return zip(visibleTopEdges(windows.map { ($0.id, $0.rect) }), windows).map { edge, window in
+    return zip(visibleTopEdges(windows.map { ($0.id, $0.rect) }, clearance: CGFloat(Settings.shared.values.maxPile)), windows).map { edge, window in
         var edge = edge
         edge.cornerRadius = cornerRadius(of: window.id, pid: window.pid, rect: window.rect, primaryHeight: primaryHeight)
         return edge
@@ -95,11 +91,13 @@ private func hasToolbar(pid: pid_t, rect: CGRect, primaryHeight: CGFloat) -> Boo
 
 /// Parte pura (testabile): dato l'elenco fronte→fondo, toglie da ogni bordo superiore
 /// i tratti coperti dalle finestre che stanno davanti.
-nonisolated func visibleTopEdges(_ windows: [(id: CGWindowID, rect: CGRect)]) -> [WindowEdge] {
+/// `clearance`: quanto spazio sopra il bordo occupa la neve (l'altezza massima del mucchio):
+/// una finestra davanti che arriva fin lì coprirebbe il mucchio, quindi quel tratto non raccoglie neve.
+nonisolated func visibleTopEdges(_ windows: [(id: CGWindowID, rect: CGRect)], clearance: CGFloat) -> [WindowEdge] {
     windows.enumerated().map { index, window in
         let y = window.rect.maxY
         var visible = [window.rect.minX...window.rect.maxX]
-        for front in windows[..<index] where front.rect.minY <= y + pileClearance && front.rect.maxY >= y {
+        for front in windows[..<index] where front.rect.minY <= y + clearance && front.rect.maxY >= y {
             visible = visible.flatMap { subtract(front.rect.minX...front.rect.maxX, from: $0) }
         }
         return WindowEdge(id: window.id, rect: window.rect, visible: visible)
