@@ -44,8 +44,9 @@ sono legati al bundle id: con il nome nuovo vanno dati di nuovo.
 
 ## Menu ❄︎
 
-Fai nevicare (⌘S) · Sciogli la neve (⌘R) · Intensità (scorciatoie) · Impostazioni… (⌘,) · Esci (⌘Q).
+Fai nevicare (⌘S) · Sciogli la neve (⌘R) · Stagione · Intensità (scorciatoie) · Impostazioni… (⌘,) · Esci (⌘Q).
 Le scorciatoie funzionano a menu aperto: non sono globali.
+La stagione scelta si salva (la neve è quella di partenza) e l'icona nella barra dei menu la segue.
 
 **Impostazioni**: quantità, dimensione e velocità dei fiocchi, vento, raggio e forza del cursore,
 accumulo sulle finestre e sul fondo, velocità di accumulo, altezza massima, apri al login, ripristino.
@@ -53,22 +54,49 @@ Le modifiche si vedono subito (nevica anche sulla finestra Impostazioni, utile p
 
 ## Struttura
 
+Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Seasons/<Nome>/`) dice solo che cosa cade.
+
 | File | Cosa fa |
 |---|---|
 | `App.swift` | Punto di ingresso, app senza icona nel Dock |
-| `AppDelegate.swift` | Una finestra di neve per schermo, menu ❄︎, legge le finestre 8 volte al secondo |
-| `SnowOverlayWindow.swift` | Finestra trasparente, sempre sopra, attraversata dai click |
-| `SnowScene.swift` | Fiocchi, vento, cursore, collisione coi mucchi, neve che cade quando muovi una finestra |
-| `SnowPile.swift` | Un mucchio di neve: altezze per colonna, frana, scavo col cursore, disegno |
+| `AppDelegate.swift` | Una finestra per schermo, menu ❄︎ (con Stagione), legge le finestre 8 volte al secondo |
+| `Engine/Season.swift` | Il protocollo `Season` e `Particle`: ciò che una stagione deve dire al motore |
+| `Engine/OverlayWindow.swift` | Finestra trasparente, sempre sopra, attraversata dai click |
+| `Engine/SeasonScene.swift` | Fiocchi, vento, cursore, collisione coi mucchi, neve che cade quando muovi una finestra |
+| `Engine/Pile.swift` | Un mucchio: altezze per colonna, frana, scavo col cursore, disegno |
+| `Engine/Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
+| `Seasons/Seasons.swift` | L'elenco delle stagioni, una riga ciascuna |
+| `Seasons/Snow/Snow.swift` | La neve: forma, colore e caduta dei fiocchi (`SnowTuning`) |
 | `PowerSource.swift` | Batteria o corrente (per i fotogrammi al secondo) |
-| `Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
-| `Settings.swift` | Le impostazioni (salvate in UserDefaults, copiate dal vecchio nome al primo avvio) e la finestra SwiftUI per regolarle |
+| `Settings.swift` | Le impostazioni e la stagione (salvate in UserDefaults, copiate dal vecchio nome al primo avvio) e la finestra SwiftUI per regolarle |
 | `Localizable.xcstrings`, `InfoPlist.xcstrings` | Le stringhe in italiano e inglese; il nome "Sbu Seasons" nel menu dell'app in alto |
 | `Density.swift` | Le scorciatoie Leggera / Media / Forte del menu |
-| `Tuning.swift` | I parametri fissi (fisica, cursore, mucchi, lettura delle finestre) |
+| `Tuning.swift` | I parametri fissi del motore (fisica, cursore, mucchi, lettura delle finestre) |
 | `project.yml` | Progetto XcodeGen: target app (LSUIElement) e test |
 
 I valori predefiniti sono in `SnowSettings` (`Settings.swift`); i parametri fissi in `Tuning.swift`.
+
+## Aggiungere una stagione
+
+1. Crea la cartella `SbuSeasons/Seasons/<Nome>/` con un file `<Nome>.swift` e un tipo che segue `Season`
+   (copia `Snow.swift` come punto di partenza):
+   - `id`: una parola in inglese minuscolo (`"leaves"`); si salva nelle impostazioni, quindi una volta uscita non cambia;
+   - `title`: il nome nel menu, con `String(localized:)`, e la traduzione inglese in `Localizable.xcstrings`;
+   - `symbol`: il simbolo SF per la barra dei menu e per il menu Stagione;
+   - `pileColor`: il colore di ciò che si posa sulle finestre e sul Dock;
+   - `makeTexture()`: la forma della particella, disegnata una volta;
+   - `particle(depth:)`: raggio, opacità, velocità di caduta e oscillazione di una particella (0 = lontana, 1 = vicina).
+2. Aggiungi una riga in `Seasons/Seasons.swift`, nell'ordine in cui la vuoi nel menu. Nient'altro da toccare nel codice.
+   Attenzione: alcuni testi parlano ancora solo di neve («Fai nevicare», «Sciogli la neve», le sezioni «Nevicata»
+   e «Neve posata» e «Quantità di fiocchi» nelle Impostazioni). Renderli generici è una decisione di Matteo,
+   da prendere prima che esca la seconda stagione.
+3. I colori e i numeri della stagione stanno nel suo file (un `enum <Nome>Tuning` come `SnowTuning`), non in
+   `Design/tokens.json`: sono contenuto, non interfaccia, e li approva Matteo guardando lo screenshot.
+4. `xcodegen`, poi `xcodebuild test -scheme SbuSeasons -destination 'platform=macOS'`, e misura la CPU con la neve
+   come riferimento: una stagione non deve consumare di più.
+
+Se a una stagione serve qualcosa che il motore non sa fare (ruotare le particelle, farle rimbalzare…),
+si cambia `Season` e `SeasonScene` in un lavoro a parte, prima, perché tocca tutte le stagioni.
 
 ## Prossimi passi possibili
 
