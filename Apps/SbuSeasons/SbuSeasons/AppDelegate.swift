@@ -31,6 +31,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     }()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        PreviousDefaults.migrate()   // prima di leggere qualsiasi impostazione
         // Per la neve sul Dock serve il permesso Accessibilità: se manca, macOS mostra la richiesta.
         if Settings.shared.values.groundSnow {
             AXIsProcessTrustedWithOptions(["AXTrustedCheckOptionPrompt": true] as CFDictionary)

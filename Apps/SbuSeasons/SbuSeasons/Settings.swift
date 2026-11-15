@@ -148,7 +148,9 @@ struct SettingsView: View {
     /// `SBU · <NOME> · DOM 15 NOV`: solo metadati, maiuscolo nella stringa (come in SbuKit).
     static func cartiglio(on date: Date) -> String {
         let day = date.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "it_IT")))
-        return "Sbu · \(SbuSeasonsApp.name) · \(day)".uppercased(with: Locale(identifier: "it_IT"))
+        // "Sbu Seasons" → "Sbu · Seasons": il marchio una volta sola, come nelle app iPhone.
+        let name = SbuSeasonsApp.name.replacing(#/^Sbu /#, with: "")
+        return "Sbu · \(name) · \(day)".uppercased(with: Locale(identifier: "it_IT"))
     }
 
     private func slider(_ title: LocalizedStringKey, _ value: Binding<Double>, _ range: ClosedRange<Double>, _ format: String) -> some View {
@@ -170,9 +172,24 @@ struct SettingsView: View {
             if on { try service.register() } else { try service.unregister() }
         } catch {
             // Di solito serve l'approvazione dell'utente: apriamo le Impostazioni di Sistema giuste.
-            NSLog("SbuSeasons: avvio al login non riuscito: \(error)")
+            NSLog("Sbu Seasons: avvio al login non riuscito: \(error)")
             SMAppService.openSystemSettingsLoginItems()
         }
         openAtLogin = service.status == .enabled
+    }
+}
+
+/// Con il bundle id cambiano anche i UserDefaults dell'app (README, "Dal vecchio nome").
+/// Al primo avvio con il nome nuovo, neve accesa o spenta e impostazioni si copiano dal nome vecchio.
+nonisolated enum PreviousDefaults {
+    /// Dal più recente: il bundle id provvisorio (MGS-416), poi quello della versione di Simone.
+    static let domains = ["dev.sbu.sbuseasons", "local.sbuseasons"]
+    static let keys = ["settings", "isSnowing"]
+
+    static func migrate(into defaults: UserDefaults = .standard, from domains: [String] = domains) {
+        for key in keys where defaults.object(forKey: key) == nil {
+            let value = domains.lazy.compactMap { UserDefaults(suiteName: $0)?.object(forKey: key) }.first
+            if let value { defaults.set(value, forKey: key) }
+        }
     }
 }

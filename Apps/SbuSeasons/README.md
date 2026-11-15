@@ -1,4 +1,7 @@
-# SbuSeasons ❄︎
+# Sbu Seasons ❄︎
+
+App Mac nella barra dei menu, pensata per più stagioni e temi; oggi c'è l'inverno, con la neve.
+Nasce da l'app di Simone Antoniciello, rinominata Sbu Seasons il 15/11/2026 (MGS-421).
 
 Neve che cade sopra tutte le finestre del Mac, **si accumula sul bordo superiore delle finestre**
 e sopra il Dock, e col cursore la sposti e la sparpagli.
@@ -19,7 +22,7 @@ Requisiti: macOS 14+, Xcode 26+, XcodeGen (`brew install xcodegen`).
 cd Apps/SbuSeasons
 xcodegen                                   # genera SbuSeasons.xcodeproj da project.yml
 xcodebuild test -scheme SbuSeasons -destination 'platform=macOS'
-open SbuSeasons.xcodeproj                    # schema SbuSeasons, destinazione My Mac, ▶︎
+open SbuSeasons.xcodeproj                  # schema SbuSeasons, destinazione My Mac, ▶︎
 ```
 
 Il progetto Xcode non è nella repo: si rigenera con `xcodegen` dopo ogni cambio a `project.yml` o ai file.
@@ -34,6 +37,10 @@ open build/Build/Products/Release/SbuSeasons.app
 Senza `SBU_TEAM_ID` la firma è "ad-hoc": va bene sul tuo Mac, ma macOS chiede di nuovo il permesso
 Accessibilità dopo ogni build. Per darla ad altri servono la firma Developer ID e la notarizzazione,
 con il download da sbu.dev (ADR-0022, `docs/adr/0022-app-mac.md`).
+
+**Dal vecchio nome.** Al primo avvio le impostazioni e "Fai nevicare" salvati con il nome di prima
+si copiano da soli (`PreviousDefaults` in `Settings.swift`). Il permesso Accessibilità e "Apri al login"
+sono legati al bundle id: con il nome nuovo vanno dati di nuovo.
 
 ## Menu ❄︎
 
@@ -55,7 +62,8 @@ Le modifiche si vedono subito (nevica anche sulla finestra Impostazioni, utile p
 | `SnowPile.swift` | Un mucchio di neve: altezze per colonna, frana, scavo col cursore, disegno |
 | `PowerSource.swift` | Batteria o corrente (per i fotogrammi al secondo) |
 | `Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
-| `Settings.swift` | Le impostazioni (salvate in UserDefaults) e la finestra SwiftUI per regolarle |
+| `Settings.swift` | Le impostazioni (salvate in UserDefaults, copiate dal vecchio nome al primo avvio) e la finestra SwiftUI per regolarle |
+| `Localizable.xcstrings` | Le stringhe in italiano e inglese |
 | `Density.swift` | Le scorciatoie Leggera / Media / Forte del menu |
 | `Tuning.swift` | I parametri fissi (fisica, cursore, mucchi, lettura delle finestre) |
 | `project.yml` | Progetto XcodeGen: target app (LSUIElement) e test |
