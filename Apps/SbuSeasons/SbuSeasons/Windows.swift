@@ -121,6 +121,7 @@ func currentDockFrame() -> CGRect? {
 
     // Il Dock è un'app che contiene una "lista" (AXList): è la barra con le icone.
     let app = AXUIElementCreateApplication(dock.processIdentifier)
+    AXUIElementSetMessagingTimeout(app, 0.05)   // un Dock bloccato non deve congelare la neve
     guard let list = (attribute(app, kAXChildrenAttribute) as? [AXUIElement])?
               .first(where: { attribute($0, kAXRoleAttribute) as? String == kAXListRole }),
           let frame = frame(of: list), frame.width > 0, frame.height > 0
