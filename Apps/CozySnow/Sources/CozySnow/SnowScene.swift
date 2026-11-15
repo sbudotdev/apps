@@ -15,8 +15,11 @@ final class SnowScene: SKScene {
     private let damping: CGFloat = 1.8
     /// Raggio (in orizzontale) entro cui il cursore scava nella neve accumulata.
     private let scoopRadius: CGFloat = 14
-    /// Massimo numero di fiocchi "sciolti" (staccati da un mucchio) in volo insieme.
-    private let maxLoose = 800
+    /// Massimo numero di granelli di polvere in volo insieme.
+    private let maxGrains = 1500
+    /// Gravità dei granelli (pt/s²) e attrito dell'aria (più alto = cadono più piano).
+    private let gravity: CGFloat = 520
+    private let airDrag: CGFloat = 1.2
 
     // MARK: - Stato
 
@@ -35,8 +38,15 @@ final class SnowScene: SKScene {
 
     /// I fiocchi della nevicata: quando arrivano in fondo (o si posano) rinascono in cima.
     private var flakes: [Flake] = []
-    /// Fiocchi staccati da un mucchio: quando si posano o escono spariscono.
-    private var loose: [Flake] = []
+    /// Neve staccata da un mucchio (dal cursore o da una finestra che si muove): si sbriciola
+    /// in granelli che cadono per gravità, come polvere, e spariscono quando si posano o escono.
+    private struct Grain {
+        let node: SKSpriteNode
+        var velocity: CGVector
+        /// Il mucchio da cui è partito: non ci ricade sopra, scende davanti alla finestra.
+        let source: SnowPile?
+    }
+    private var grains: [Grain] = []
 
     /// Neve posata sulle finestre, per ID di finestra. `rect` è in coordinate della scena.
     private var piles: [CGWindowID: (pile: SnowPile, rect: CGRect)] = [:]
@@ -128,13 +138,20 @@ final class SnowScene: SKScene {
         flake.push = .zero
     }
 
-    /// Fa partire fiocchi sciolti dai punti indicati, con una spinta iniziale.
-    private func spawnLoose(_ points: [CGPoint], push: CGVector = .zero, spread: CGFloat = 20) {
-        for point in points where loose.count < maxLoose {
-            var flake = makeFlake(at: point)
-            flake.push = CGVector(dx: push.dx + .random(in: -spread...spread),
-                                  dy: push.dy + .random(in: 0...spread * 2))
-            loose.append(flake)
+    /// Fa partire granelli di polvere dai punti indicati: quasi fermi, con una piccola spinta
+    /// orizzontale (`drift` ± `spread`) e un saltello verticale (`pop`). Poi ci pensa la gravità.
+    private func spawnPowder(_ points: [CGPoint], from source: SnowPile? = nil, drift: CGFloat = 0,
+                             spread: CGFloat = 8, pop: ClosedRange<CGFloat> = -5...5) {
+        for point in points where grains.count < maxGrains {
+            let node = SKSpriteNode(texture: flakeTexture)
+            let diameter = CGFloat.random(in: 2...4)   // più piccoli dei fiocchi: è polvere
+            node.size = CGSize(width: diameter, height: diameter)
+            node.alpha = .random(in: 0.8...1)
+            node.zPosition = 1.5
+            node.position = point
+            addChild(node)
+            grains.append(Grain(node: node, velocity: CGVector(dx: drift + .random(in: -spread...spread),
+                                                               dy: .random(in: pop)), source: source))
         }
     }
 
@@ -154,7 +171,7 @@ final class SnowScene: SKScene {
             if let old = piles[edge.id], old.rect.minX == r.minX, old.rect.maxY == r.maxY, old.rect.width == r.width,
                old.pile.cornerRadius == edge.cornerRadius {
                 // Ferma: aggiorna solo i tratti coperti/scoperti.
-                spawnLoose(old.pile.setOpen(open))
+                spawnPowder(old.pile.setOpen(open), from: old.pile)
             } else {
                 // Nuova, spostata, ridimensionata (o scoperto il raggio giusto): la neve vecchia cade, si riparte da zero.
                 if let old = piles[edge.id] { drop(old.pile) }
@@ -187,7 +204,7 @@ final class SnowScene: SKScene {
     }
 
     private func drop(_ pile: SnowPile) {
-        spawnLoose(pile.releaseAll(), spread: 10)
+        spawnPowder(pile.releaseAll())
         pile.node.removeFromParent()
     }
 
@@ -294,22 +311,40 @@ final class SnowScene: SKScene {
             flakes[i] = flake
         }
 
-        loose = loose.compactMap { flake in
-            var flake = flake
-            let out = flake.node.position.y < -flake.radius || flake.node.position.y > size.height + 60
-            if move(&flake) || out {
-                flake.node.removeFromParent()
+        // --- Granelli di polvere: gravità + attrito dell'aria, niente oscillazione ---
+        let drag = CGFloat(exp(-Double(airDrag * dt)))
+        grains = grains.compactMap { grain in
+            var grain = grain
+            grain.velocity.dx *= drag
+            grain.velocity.dy = grain.velocity.dy * drag - gravity * dt
+            var p = grain.node.position
+            let previousY = p.y
+            p.x += grain.velocity.dx * dt
+            p.y += grain.velocity.dy * dt
+            grain.node.position = p
+
+            // Si posa su un mucchio più in basso (aggiunge poca neve: è un granello)…
+            let landed = allPiles.first { pile in
+                guard pile !== grain.source,
+                      let top = pile.surface(at: p.x), previousY >= top, p.y < top else { return false }
+                pile.add(atX: p.x, radius: 1, growth: CGFloat(settings.growth) * 0.3)
+                return true
+            }
+            // …oppure esce dallo schermo: in entrambi i casi sparisce.
+            if landed != nil || p.y < -5 || p.x < -20 || p.x > size.width + 20 {
+                grain.node.removeFromParent()
                 return nil
             }
-            return flake
+            return grain
         }
 
-        // --- Il cursore scava nella neve posata ---
+        // --- Il cursore spazza la neve posata: si sbriciola in polvere che cade ---
         let speed = hypot(mouseVelocity.dx, mouseVelocity.dy)
         if speed > 20, CGRect(origin: .zero, size: size).contains(mouse) {
-            let kick = CGVector(dx: mouseVelocity.dx * 0.4, dy: abs(mouseVelocity.dy) * 0.2 + 60)
+            // Spinta leggera nella direzione del cursore (limitata, se no i granelli volano via).
+            let drift = max(-150, min(150, mouseVelocity.dx * 0.15))
             for pile in allPiles {
-                spawnLoose(pile.scoop(at: mouse, radius: scoopRadius), push: kick, spread: 40)
+                spawnPowder(pile.scoop(at: mouse, radius: scoopRadius), from: pile, drift: drift, spread: 25, pop: -10...40)
             }
         }
 

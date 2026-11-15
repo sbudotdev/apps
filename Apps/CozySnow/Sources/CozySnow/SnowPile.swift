@@ -120,8 +120,8 @@ final class SnowPile {
         dirty = true
     }
 
-    /// Il cursore in `point` scava nella neve entro `radius` (in orizzontale).
-    /// Restituisce i punti da cui far schizzare via fiocchi.
+    /// Il cursore in `point` spazza via la neve entro `radius` (in orizzontale), lasciando una tacca.
+    /// Restituisce i punti da cui far partire i granelli di polvere.
     func scoop(at point: CGPoint, radius: CGFloat) -> [CGPoint] {
         guard point.y > baseY - (sag.max() ?? 0) - 4, point.y < baseY + maxHeight + 4,
               let first = column(at: max(minX, point.x - radius)),
@@ -129,9 +129,8 @@ final class SnowPile {
         else { return [] }
         var released: [CGPoint] = []
         for i in first...last where heights[i] > 0 && point.y < base(i) + heights[i] + 3 {
-            let taken = min(heights[i], 2)
-            released += flakes(column: i, amount: taken)
-            heights[i] -= taken
+            released += flakes(column: i, amount: heights[i])
+            heights[i] = 0
             dirty = true
         }
         return released
@@ -181,11 +180,10 @@ final class SnowPile {
         node.path = path
     }
 
-    /// Una manciata di fiocchi per `amount` punti di neve tolti dalla colonna `i`.
+    /// I granelli in cui si sbriciolano `amount` punti di neve tolti dalla colonna `i`.
     private func flakes(column i: Int, amount: CGFloat) -> [CGPoint] {
-        // ponytail: 1 fiocco ogni ~3 punti di neve per colonna su 3; se serve più "polvere", abbassa il divisore.
-        guard i % 3 == 0 else { return [] }
-        let count = Int((amount / 3).rounded(.up))
+        // ponytail: 1 granello ogni 3 punti di neve, max 3 per colonna; se serve più "polvere", abbassa il divisore.
+        let count = min(3, Int((amount / 3).rounded(.up)))
         return (0..<count).map { _ in CGPoint(x: x(of: i), y: base(i) + .random(in: 0...max(1, heights[i]))) }
     }
 }
