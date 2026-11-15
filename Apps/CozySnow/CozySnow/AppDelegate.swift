@@ -22,7 +22,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     /// La finestra Impostazioni: creata la prima volta che serve, poi riusata.
     private lazy var settingsWindow: NSWindow = {
         let window = NSWindow(contentViewController: NSHostingController(rootView: SettingsView()))
-        window.title = "Impostazioni CozySnow"
+        window.title = "Impostazioni \(CozySnowApp.name)"
         window.styleMask = [.titled, .closable]
         window.isReleasedWhenClosed = false
         window.delegate = self   // per sapere quando viene chiusa
@@ -100,7 +100,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         let appMenu = NSMenu()
         appMenu.addItem(NSMenuItem(title: "Chiudi finestra", action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w"))
         appMenu.addItem(.separator())
-        appMenu.addItem(NSMenuItem(title: "Esci da CozySnow", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        appMenu.addItem(NSMenuItem(title: "Esci da \(CozySnowApp.name)", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         let appItem = NSMenuItem()
         appItem.submenu = appMenu
         let mainMenu = NSMenu()
@@ -110,8 +110,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     private func setupStatusItem() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        item.button?.image = NSImage(systemSymbolName: "snowflake", accessibilityDescription: "CozySnow")
-        item.button?.toolTip = "CozySnow"
+        item.button?.image = NSImage(systemSymbolName: "snowflake", accessibilityDescription: CozySnowApp.name)
+        item.button?.toolTip = CozySnowApp.name
 
         let menu = NSMenu()
         menu.delegate = self   // per aggiornare le spunte ogni volta che si apre
@@ -146,7 +146,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         settingsItem.target = self
         menu.addItem(settingsItem)
 
-        menu.addItem(NSMenuItem(title: "Esci da CozySnow", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: "Esci da \(CozySnowApp.name)", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
 
         item.menu = menu
         statusItem = item
