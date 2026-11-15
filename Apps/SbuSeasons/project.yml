@@ -1,0 +1,54 @@
+name: SbuSeasons
+options:
+  bundleIdPrefix: dev.sbu
+  deploymentTarget:
+    macOS: "14.0"
+  developmentLanguage: it
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "0.2"
+    CURRENT_PROJECT_VERSION: "2"
+    DEVELOPMENT_TEAM: $(SBU_TEAM_ID)
+    SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+    SWIFT_APPROACHABLE_CONCURRENCY: YES
+    SWIFT_STRICT_CONCURRENCY: complete
+targets:
+  SbuSeasons:
+    type: application
+    platform: macOS
+    sources: [SbuSeasons]
+    settings:
+      base:
+        # Bundle id and name stay provisional until Matteo approves them (MGS-416).
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.sbuseasons
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: SbuSeasons
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.entertainment
+        # Menu bar only: no Dock icon until the settings window opens.
+        INFOPLIST_KEY_LSUIElement: YES
+        CODE_SIGN_STYLE: Automatic
+        # Ad-hoc signing when SBU_TEAM_ID is not set, as build-app.sh did.
+        CODE_SIGN_IDENTITY: "-"
+        ENABLE_HARDENED_RUNTIME: YES
+        # No sandbox: CGWindowListCopyWindowInfo and the Accessibility API need it off (ADR-0022).
+        ENABLE_APP_SANDBOX: NO
+  SbuSeasonsTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [SbuSeasonsTests]
+    dependencies:
+      - target: SbuSeasons
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        BUNDLE_LOADER: $(TEST_HOST)
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/SbuSeasons.app/Contents/MacOS/SbuSeasons
+schemes:
+  SbuSeasons:
+    build:
+      targets:
+        SbuSeasons: all
+    test:
+      targets: [SbuSeasonsTests]
