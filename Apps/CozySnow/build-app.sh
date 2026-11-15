@@ -1,0 +1,23 @@
+#!/bin/bash
+# Compila CozySnow in versione ottimizzata e la impacchetta come CozySnow.app.
+set -euo pipefail
+cd "$(dirname "$0")"
+
+# 1. Compila per Apple Silicon e Intel insieme ("universal").
+swift build -c release --arch arm64 --arch x86_64
+
+# 2. Una .app è solo una cartella con questa struttura.
+APP=CozySnow.app
+rm -rf "$APP"
+mkdir -p "$APP/Contents/MacOS"
+cp "$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/CozySnow" "$APP/Contents/MacOS/"
+cp Info.plist "$APP/Contents/"
+
+# 3. Firma. Se c'è un certificato "Apple Development" (Xcode lo crea con il tuo Apple ID) usiamo quello:
+#    la firma resta uguale tra un build e l'altro e macOS non dimentica il permesso Accessibilità.
+#    Altrimenti firma "ad-hoc" (il trattino): funziona, ma il permesso va ridato dopo ogni build.
+IDENTITY=$(security find-identity -v -p codesigning | awk '/Apple Development/ {print $2; exit}')
+codesign --force --sign "${IDENTITY:--}" "$APP"
+echo "Firmata con: ${IDENTITY:-ad-hoc}"
+
+echo "Fatto: $APP  →  open $APP  (oppure trascinala in /Applicazioni)"

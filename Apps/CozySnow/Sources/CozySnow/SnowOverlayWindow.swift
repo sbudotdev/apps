@@ -8,11 +8,11 @@ final class SnowOverlayWindow: NSWindow {
     private let skView: SKView
     private let scene: SnowScene
 
-    init(screen: NSScreen, density: Density) {
+    init(screen: NSScreen) {
         let frame = screen.frame
 
         skView = SKView(frame: NSRect(origin: .zero, size: frame.size))
-        scene = SnowScene(size: frame.size, screenOrigin: frame.origin, density: density)
+        scene = SnowScene(size: frame.size, screenOrigin: frame.origin)
 
         super.init(
             contentRect: frame,
@@ -51,10 +51,8 @@ final class SnowOverlayWindow: NSWindow {
     override var canBecomeKey: Bool { false }
     override var canBecomeMain: Bool { false }
 
-    var density: Density {
-        get { scene.density }
-        set { scene.density = newValue }
-    }
+    func updateWindows(_ edges: [WindowEdge], dock: CGRect?) { scene.updateWindows(edges, dock: dock) }
+    func meltAll() { scene.meltAll() }
 
     func setSnowing(_ snowing: Bool) {
         skView.isPaused = !snowing
