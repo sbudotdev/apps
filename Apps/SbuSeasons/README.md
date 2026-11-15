@@ -63,7 +63,7 @@ Le modifiche si vedono subito (nevica anche sulla finestra Impostazioni, utile p
 | `PowerSource.swift` | Batteria o corrente (per i fotogrammi al secondo) |
 | `Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
 | `Settings.swift` | Le impostazioni (salvate in UserDefaults, copiate dal vecchio nome al primo avvio) e la finestra SwiftUI per regolarle |
-| `Localizable.xcstrings` | Le stringhe in italiano e inglese |
+| `Localizable.xcstrings`, `InfoPlist.xcstrings` | Le stringhe in italiano e inglese; il nome "Sbu Seasons" nel menu dell'app in alto |
 | `Density.swift` | Le scorciatoie Leggera / Media / Forte del menu |
 | `Tuning.swift` | I parametri fissi (fisica, cursore, mucchi, lettura delle finestre) |
 | `project.yml` | Progetto XcodeGen: target app (LSUIElement) e test |

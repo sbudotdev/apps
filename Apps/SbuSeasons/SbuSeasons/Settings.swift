@@ -145,12 +145,14 @@ struct SettingsView: View {
         .padding(.top, Quaderno.space4)
     }
 
-    /// `SBU · <NOME> · DOM 15 NOV`: solo metadati, maiuscolo nella stringa (come in SbuKit).
+    /// `SBU · SEASONS · DOM 15 NOV`, la data nella lingua dell'app: solo metadati, maiuscolo nella stringa (come in SbuKit).
     static func cartiglio(on date: Date) -> String {
-        let day = date.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(Locale(identifier: "it_IT")))
+        // La lingua dell'app (italiano o inglese), non quella del Mac: tutto il cartiglio nella stessa lingua.
+        let locale = Locale(identifier: Bundle.main.preferredLocalizations.first ?? "it")
+        let day = date.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(locale))
         // "Sbu Seasons" → "Sbu · Seasons": il marchio una volta sola, come nelle app iPhone.
         let name = SbuSeasonsApp.name.replacing(#/^Sbu /#, with: "")
-        return "Sbu · \(name) · \(day)".uppercased(with: Locale(identifier: "it_IT"))
+        return "Sbu · \(name) · \(day)".uppercased(with: locale)
     }
 
     private func slider(_ title: LocalizedStringKey, _ value: Binding<Double>, _ range: ClosedRange<Double>, _ format: String) -> some View {
