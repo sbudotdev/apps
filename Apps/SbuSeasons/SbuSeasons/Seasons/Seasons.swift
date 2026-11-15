@@ -4,6 +4,7 @@ enum Seasons {
     static let all: [any Season] = [
         Snow(),
         Spring(),
+        Dandelion(), SummerRain(), Fireflies(),
         Autumn(),
     ]
 
