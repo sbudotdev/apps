@@ -1,0 +1,14 @@
+{
+  "sourceLanguage": "it",
+  "strings": {
+    "CFBundleName": {
+      "comment": "The bold app menu on macOS: without this it shows the product name, SbuSeasons.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Sbu Seasons" } },
+        "it": { "stringUnit": { "state": "translated", "value": "Sbu Seasons" } }
+      }
+    }
+  },
+  "version": "1.0"
+}
