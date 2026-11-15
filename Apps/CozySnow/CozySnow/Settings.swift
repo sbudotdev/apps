@@ -84,9 +84,7 @@ struct SettingsView: View {
                     .foregroundStyle(.secondary)
             }
             Section("Generale") {
-                // Funziona solo dentro CozySnow.app (con `swift run` non c'è un bundle).
                 Toggle("Apri al login", isOn: $openAtLogin)
-                    .disabled(Bundle.main.bundleIdentifier == nil)
                     .onChange(of: openAtLogin) { _, on in setOpenAtLogin(on) }
                 HStack {
                     Button("Ripristina valori predefiniti") { settings.reset() }
