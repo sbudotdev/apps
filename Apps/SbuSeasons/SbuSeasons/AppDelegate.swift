@@ -40,6 +40,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         setupStatusItem()
         setupMainMenu()
         rebuildOverlays()
+        // La stagione cambia dal menu ❄︎ o dalle Impostazioni: neve e icona seguono subito.
+        Settings.shared.observeSeason { [weak self] in self?.seasonDidChange() }
 
         // A batteria la neve va a 30 fotogrammi al secondo.
         powerSource = observePowerSource()
@@ -197,7 +199,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     @objc private func selectSeason(_ sender: NSMenuItem) {
         guard let id = sender.representedObject as? String else { return }
-        Settings.shared.seasonID = id
+        Settings.shared.seasonID = id   // il resto lo fa seasonDidChange
+    }
+
+    private func seasonDidChange() {
         let season = Settings.shared.season
         overlays.forEach { $0.setSeason(season) }
         updateMenuState()
