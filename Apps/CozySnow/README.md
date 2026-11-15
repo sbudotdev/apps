@@ -8,6 +8,9 @@ e sopra il Dock, e col cursore la sposti e la sparpagli.
 più stondati delle app con barra strumenti. Se il Dock si nasconde o sta di lato, sul fondo non si posa niente.
 L'app non è nella sandbox: senza, macOS non darebbe né le finestre delle altre app né l'Accessibilità.
 
+La neve non si posa sui bordi delle finestre attaccati alla barra dei menu (coprirebbe le voci di menu).
+A batteria va a 30 fotogrammi al secondo invece di 60, per consumare meno.
+
 Requisiti: macOS 14+, Xcode 26+, XcodeGen (`brew install xcodegen`).
 
 ## Provarla mentre la sviluppi
@@ -30,7 +33,7 @@ open build/Build/Products/Release/CozySnow.app
 
 Senza `SBU_TEAM_ID` la firma è "ad-hoc": va bene sul tuo Mac, ma macOS chiede di nuovo il permesso
 Accessibilità dopo ogni build. Per darla ad altri servono la firma Developer ID e la notarizzazione,
-oppure il Mac App Store: lo decide l'ADR-0022 (`docs/adr/0022-app-mac.md`).
+con il download da sbu.dev (ADR-0022, `docs/adr/0022-app-mac.md`).
 
 ## Menu ❄︎
 
@@ -50,6 +53,7 @@ Le modifiche si vedono subito (nevica anche sulla finestra Impostazioni, utile p
 | `SnowOverlayWindow.swift` | Finestra trasparente, sempre sopra, attraversata dai click |
 | `SnowScene.swift` | Fiocchi, vento, cursore, collisione coi mucchi, neve che cade quando muovi una finestra |
 | `SnowPile.swift` | Un mucchio di neve: altezze per colonna, frana, scavo col cursore, disegno |
+| `PowerSource.swift` | Batteria o corrente (per i fotogrammi al secondo) |
 | `Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
 | `Settings.swift` | Le impostazioni (salvate in UserDefaults) e la finestra SwiftUI per regolarle |
 | `Density.swift` | Le scorciatoie Leggera / Media / Forte del menu |
