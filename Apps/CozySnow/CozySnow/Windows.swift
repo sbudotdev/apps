@@ -61,8 +61,10 @@ private var radiusCache: [CGWindowID: (toolbar: Bool?, tries: Int)] = [:]
 
 private func toolbarInfo(of id: CGWindowID, pid: pid_t, rect: CGRect, primaryHeight: CGFloat) -> Bool {
     if let known = radiusCache[id]?.toolbar { return known }
+    // Senza permesso non è un tentativo: quando arriva, le finestre già aperte vanno ancora chieste.
+    guard AXIsProcessTrusted() else { return false }
     let tries = (radiusCache[id]?.tries ?? 0) + 1
-    let found = AXIsProcessTrusted() ? hasToolbar(pid: pid, rect: rect, primaryHeight: primaryHeight) : nil
+    let found = hasToolbar(pid: pid, rect: rect, primaryHeight: primaryHeight)
     // Trovata la risposta, o dopo 5 tentativi a vuoto: la teniamo per sempre (per questa finestra).
     radiusCache[id] = (found ?? (tries >= 5 ? false : nil), tries)
     return found ?? false
