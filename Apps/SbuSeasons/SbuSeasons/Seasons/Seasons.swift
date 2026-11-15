@@ -3,6 +3,7 @@
 enum Seasons {
     static let all: [any Season] = [
         Snow(),
+        Autumn(),
     ]
 
     static func named(_ id: String) -> any Season {
