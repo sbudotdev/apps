@@ -51,11 +51,22 @@ final class Settings {
         didSet { UserDefaults.standard.set(try? JSONEncoder().encode(values), forKey: Self.key) }
     }
 
-    /// La stagione scelta dal menu ❄︎, salvata a parte: "Ripristina…" non la cambia.
+    /// La stagione scelta dal menu ❄︎ o dalle Impostazioni, salvata a parte: "Ripristina…" non la cambia.
     var seasonID: String {
         didSet { UserDefaults.standard.set(seasonID, forKey: "season") }
     }
     var season: any Season { Seasons.named(seasonID) }
+
+    /// Chiama `action` dopo ogni cambio di stagione, da qualunque parte arrivi (menu ❄︎ o Impostazioni).
+    func observeSeason(_ action: @escaping @MainActor @Sendable () -> Void) {
+        // withObservationTracking avvisa una volta sola, e prima del cambio: dopo, si riascolta.
+        withObservationTracking { _ = seasonID } onChange: {
+            Task { @MainActor in
+                action()
+                self.observeSeason(action)
+            }
+        }
+    }
 
     private init() {
         values = SnowSettings(saved: UserDefaults.standard.data(forKey: Self.key))
@@ -76,6 +87,14 @@ struct SettingsView: View {
         VStack(alignment: .leading, spacing: 0) {
             header
             Form {
+                Section {
+                    // Le stesse voci, nello stesso ordine, del sottomenu ❄︎ → Stagione.
+                    Picker("Stagione", selection: $settings.seasonID) {
+                        ForEach(Seasons.all, id: \.id) { season in
+                            Label(season.title, systemImage: season.symbol).tag(season.id)
+                        }
+                    }
+                }
                 Section("Nevicata") {
                     slider("Quantità di fiocchi", $settings.values.flakeCount, 30...800, "%.0f")
                     slider("Dimensione", $settings.values.flakeSize, 0.5...2.5, "%.1f×")
