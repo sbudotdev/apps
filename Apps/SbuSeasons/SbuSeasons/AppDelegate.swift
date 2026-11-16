@@ -83,7 +83,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     private func rebuildOverlays() {
         overlays.forEach { $0.close() }
-        overlays = NSScreen.screens.map { OverlayWindow(screen: $0) }
+        overlays = NSScreen.screens.compactMap { OverlayWindow(screen: $0) }
         powerSourceDidChange()
         overlays.forEach { $0.setSnowing(isSnowing) }
         refreshWindows()
