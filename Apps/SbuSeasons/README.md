@@ -43,7 +43,7 @@ con il download da sbu.dev (ADR-0022, `docs/adr/0022-app-mac.md`).
 ## Il .dmg da distribuire
 
 ```bash
-./make-dmg.sh 1.3      # → build/dist/SbuSeasons-1.3.dmg
+./make-dmg.sh 1.3.1    # → build/dist/SbuSeasons-1.3.1.dmg
 ```
 
 Build Release universale (arm64 + x86_64), firma Developer ID, `.dmg` con il collegamento ad Applicazioni,
