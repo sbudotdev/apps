@@ -137,6 +137,16 @@ struct SettingsView: View {
                     LabeledContent("Valori predefiniti") {
                         Button("Ripristina…") { confirmsReset = true }
                     }
+                } footer: {
+                    // Il credito a chi ha scritto l'app da cui nasce Sbu Seasons (Credits.swift).
+                    VStack(alignment: .leading, spacing: Quaderno.space1) {
+                        Text(verbatim: Credits.sentence)
+                            .foregroundStyle(Quaderno.inkMuted.color)
+                        Link(Credits.linkTitle, destination: Credits.url)
+                            .foregroundStyle(Quaderno.ink.color)   // i link sono in inchiostro, non nel blu di sistema
+                            .underline()
+                    }
+                    .padding(.top, Quaderno.space4)
                 }
             }
             .formStyle(.grouped)

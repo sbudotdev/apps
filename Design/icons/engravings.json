@@ -238,5 +238,13 @@
       "it": "Porta di città",
       "en": "City gate"
     }
+  },
+  "seasons": {
+    "accent": "accent-authenticator",
+    "subject": "a single large six-pointed snowflake ice crystal with fern-like branches, flat front view, as in an old scientific plate",
+    "name": {
+      "it": "Fiocco di neve",
+      "en": "Snowflake"
+    }
   }
 }
