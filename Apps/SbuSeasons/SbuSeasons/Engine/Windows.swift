@@ -103,10 +103,13 @@ nonisolated func visibleTopEdges(_ windows: [(id: CGWindowID, rect: CGRect)], cl
     }
 }
 
-/// Un bordo raccoglie neve solo se il mucchio intero sta sotto `ceiling`, il limite superiore
-/// della zona libera dello schermo (sotto la barra dei menu). Esclude anche le app a schermo intero.
-nonisolated func collectsSnow(edgeTop: CGFloat, pileHeight: CGFloat, ceiling: CGFloat) -> Bool {
-    edgeTop + pileHeight <= ceiling
+/// Dove poggia la neve di un bordo alto `edgeTop`, sotto `ceiling` (il limite della zona libera
+/// dello schermo, sotto la barra dei menu). Se il mucchio entrerebbe nella barra, la neve si posa
+/// poco sotto, sopra la barra del titolo, così non copre le voci di menu: molte finestre (e tutte
+/// quelle ingrandite) si aprono attaccate alla barra, e prima lì non si posava niente (MGS-615).
+/// nil se il bordo è sopra la zona libera: app a schermo intero, niente neve.
+nonisolated func pileBase(edgeTop: CGFloat, pileHeight: CGFloat, ceiling: CGFloat) -> CGFloat? {
+    edgeTop > ceiling + 1 ? nil : min(edgeTop, ceiling - pileHeight)   // +1: arrotondamenti dello schermo
 }
 
 /// `range` meno `cut`: zero, uno o due pezzi.

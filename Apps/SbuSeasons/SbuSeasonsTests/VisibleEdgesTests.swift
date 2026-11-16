@@ -27,12 +27,13 @@ import CoreGraphics
     #expect(visibleTopEdges([hovering, back], clearance: 16)[1].visible == [0...100])
 }
 
+// Schermo alto 1080, barra dei menu di 30 pt: la zona libera finisce a 1050 (dati veri, MGS-615).
 @Test(arguments: [
-    (edgeTop: CGFloat(1047), expected: false),  // finestra ingrandita, subito sotto la barra
-    (edgeTop: CGFloat(1040), expected: false),  // il mucchio da 16 pt arriverebbe nella barra
-    (edgeTop: CGFloat(1030), expected: true),   // c'è posto per il mucchio intero
+    (edgeTop: CGFloat(1000), expected: CGFloat?(1000)),  // c'è posto: la neve sta sul bordo
+    (edgeTop: CGFloat(1050), expected: CGFloat?(1034)),  // attaccata alla barra (ingrandita): poco sotto
+    (edgeTop: CGFloat(1040), expected: CGFloat?(1034)),  // il mucchio arriverebbe nella barra: poco sotto
+    (edgeTop: CGFloat(1080), expected: nil),             // schermo intero: niente neve
 ])
-func noSnowOnEdgesThatTouchTheMenuBar(edgeTop: CGFloat, expected: Bool) {
-    // Schermo alto 1080, barra dei menu di 33 pt: la zona libera finisce a 1047.
-    #expect(collectsSnow(edgeTop: edgeTop, pileHeight: 16, ceiling: 1047) == expected)
+func snowSitsJustBelowTheMenuBar(edgeTop: CGFloat, expected: CGFloat?) {
+    #expect(pileBase(edgeTop: edgeTop, pileHeight: 16, ceiling: 1050) == expected)
 }

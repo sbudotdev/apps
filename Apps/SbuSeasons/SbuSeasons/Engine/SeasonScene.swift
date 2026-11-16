@@ -184,18 +184,18 @@ final class SeasonScene: SKScene {
             let r = edge.rect.offsetBy(dx: -screenOrigin.x, dy: -screenOrigin.y)
             // Solo bordi su questo schermo, con il mucchio sotto la barra dei menu (decisione di Matteo, MGS-416).
             guard r.maxY > 0, r.maxX > 0, r.minX < size.width,
-                  collectsSnow(edgeTop: r.maxY, pileHeight: maxPile, ceiling: ceiling) else { continue }
+                  let base = pileBase(edgeTop: r.maxY, pileHeight: maxPile, ceiling: ceiling) else { continue }
             seen.insert(edge.id)
             let open = edge.visible.map { ($0.lowerBound - screenOrigin.x)...($0.upperBound - screenOrigin.x) }
 
-            if let old = piles[edge.id], old.rect.minX == r.minX, old.rect.maxY == r.maxY, old.rect.width == r.width,
+            if let old = piles[edge.id], old.rect.minX == r.minX, old.pile.baseY == base, old.rect.width == r.width,
                old.pile.cornerRadius == edge.cornerRadius {
                 // Ferma: aggiorna solo i tratti coperti/scoperti.
                 spawnPowder(old.pile.setOpen(open), from: old.pile)
             } else {
                 // Nuova, spostata, ridimensionata (o scoperto il raggio giusto): la neve vecchia cade, si riparte da zero.
                 if let old = piles[edge.id] { drop(old.pile) }
-                let pile = Pile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: edge.cornerRadius,
+                let pile = Pile(minX: r.minX, width: r.width, baseY: base, cornerRadius: edge.cornerRadius,
                                 maxHeight: maxPile, color: season.pileColor)
                 _ = pile.setOpen(open)
                 addChild(pile.node)
