@@ -11,7 +11,9 @@ e sopra il Dock, e col cursore la sposti e la sparpagli.
 più stondati delle app con barra strumenti. Se il Dock si nasconde o sta di lato, sul fondo non si posa niente.
 L'app non è nella sandbox: senza, macOS non darebbe né le finestre delle altre app né l'Accessibilità.
 
-La neve non si posa sui bordi delle finestre attaccati alla barra dei menu (coprirebbe le voci di menu).
+Sulle finestre attaccate alla barra dei menu (quelle ingrandite e le tante che si aprono in alto) la neve
+si posa poco sotto, sulla barra del titolo, con la cima che tocca la barra dei menu: così non copre le voci di menu.
+Sulle app a schermo intero non si posa niente.
 A batteria va a 30 fotogrammi al secondo invece di 60, per consumare meno.
 
 Requisiti: macOS 14+, Xcode 26+, XcodeGen (`brew install xcodegen`).
