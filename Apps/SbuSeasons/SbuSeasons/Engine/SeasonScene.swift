@@ -71,6 +71,10 @@ final class SeasonScene: SKScene {
         fatalError("init(coder:) non supportato")
     }
 
+    override func didMove(to view: SKView) {
+        rebuildFlakes()
+    }
+
     override func didChangeSize(_ oldSize: CGSize) {
         super.didChangeSize(oldSize)
         if !flakes.isEmpty && oldSize != size {
@@ -243,8 +247,7 @@ final class SeasonScene: SKScene {
 
         // Le impostazioni si leggono una volta per frame: le modifiche dalla finestra si vedono subito.
         let settings = Settings.shared.values
-        // Senza SKView non arriva `didMove(to:)`: i fiocchi nascono qui, al primo frame.
-        if builtWith.map({ $0 != (settings.flakeCount, settings.flakeSize) }) ?? true {
+        if let built = builtWith, built != (settings.flakeCount, settings.flakeSize) {
             rebuildFlakes()
         }
         let cursorRadius = CGFloat(settings.cursorRadius)
