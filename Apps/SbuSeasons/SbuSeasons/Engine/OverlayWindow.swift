@@ -1,30 +1,17 @@
 import AppKit
-import MetalKit
 import SpriteKit
 
 /// Finestra trasparente, senza bordi, che copre un intero schermo e sta sopra
 /// alle altre finestre. I click la attraversano (`ignoresMouseEvents`), quindi
 /// le app sotto continuano a funzionare normalmente.
-///
-/// Niente `SKView`: SpriteKit muove tutte le `SKView` del processo con un solo display link,
-/// legato a uno schermo. Con due monitor a frequenze diverse (144 e 60 Hz) la vista sull'altro
-/// schermo restava quasi senza frame e la neve lì andava lentissima (MGS-636).
-/// Qui ogni finestra ha il suo display link, che segue il suo schermo, e disegna la scena con `SKRenderer`.
 final class OverlayWindow: NSWindow {
-    private let metalView: MTKView
-    private let renderer: SKRenderer
-    private let commandQueue: MTLCommandQueue
+    private let skView: SKView
     private let scene: SeasonScene
-    private var displayLink: CADisplayLink?
 
     init(screen: NSScreen) {
         let frame = screen.frame
 
-        // shortcut: si fida che il Mac abbia Metal (tutti i Mac con macOS 14 ce l'hanno).
-        let device = MTLCreateSystemDefaultDevice()!
-        metalView = MTKView(frame: NSRect(origin: .zero, size: frame.size), device: device)
-        commandQueue = device.makeCommandQueue()!
-        renderer = SKRenderer(device: device)
+        skView = SKView(frame: NSRect(origin: .zero, size: frame.size))
         scene = SeasonScene(size: frame.size, screenOrigin: frame.origin, season: Settings.shared.season)
 
         super.init(
@@ -46,37 +33,12 @@ final class OverlayWindow: NSWindow {
         // Visibile in tutte le Scrivanie (Spaces) e anche sopra le app a schermo intero.
         collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle, .fullScreenAuxiliary]
 
-        metalView.layer?.isOpaque = false
-        metalView.clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 0)
-        // Disegna solo quando lo chiede il nostro display link.
-        metalView.isPaused = true
-        metalView.enableSetNeedsDisplay = false
-        contentView = metalView
-
-        // La scena è in punti, il disegno in pixel: `.fill` la scala sullo schermo (Retina compreso).
-        scene.scaleMode = .fill
-        renderer.scene = scene
-        renderer.ignoresSiblingOrder = true
+        skView.allowsTransparency = true
+        skView.ignoresSiblingOrder = true
+        contentView = skView
+        skView.presentScene(scene)
 
         setFrame(frame, display: true)
-        let link = metalView.displayLink(target: self, selector: #selector(drawFrame))
-        link.add(to: .main, forMode: .common)
-        displayLink = link
-    }
-
-    @objc private func drawFrame(_ link: CADisplayLink) {
-        renderer.update(atTime: link.timestamp)
-        guard let pass = metalView.currentRenderPassDescriptor, let drawable = metalView.currentDrawable,
-              let commands = commandQueue.makeCommandBuffer() else { return }
-        renderer.render(withViewport: CGRect(origin: .zero, size: metalView.drawableSize),
-                        commandBuffer: commands, renderPassDescriptor: pass)
-        commands.present(drawable)
-        commands.commit()
-    }
-
-    override func close() {
-        displayLink?.invalidate()   // il display link tiene viva la finestra
-        super.close()
     }
 
     // Una finestra borderless di norma viene "spinta" sotto la barra dei menu:
@@ -97,12 +59,11 @@ final class OverlayWindow: NSWindow {
     func setSeason(_ season: any Season) { scene.setSeason(season) }
 
     func setOnBattery(_ onBattery: Bool) {
-        let fps = Float(Tuning.framesPerSecond(onBattery: onBattery))
-        displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: fps, maximum: fps, preferred: fps)
+        skView.preferredFramesPerSecond = Tuning.framesPerSecond(onBattery: onBattery)
     }
 
     func setSnowing(_ snowing: Bool) {
-        displayLink?.isPaused = !snowing
+        skView.isPaused = !snowing
         if snowing {
             orderFrontRegardless()
         } else {
