@@ -143,6 +143,8 @@ struct SettingsView: View {
                         Text(verbatim: Credits.sentence)
                             .foregroundStyle(Quaderno.inkMuted.color)
                         Link(Credits.linkTitle, destination: Credits.url)
+                            .foregroundStyle(Quaderno.ink.color)   // i link sono in inchiostro, non nel blu di sistema
+                            .underline()
                     }
                     .padding(.top, Quaderno.space4)
                 }
