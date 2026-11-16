@@ -29,6 +29,8 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.SbuSeasons
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Sbu Seasons
+        # Icon from Tools/make_icons.py seasons --mac-appiconset (MGS-614).
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.entertainment
         # Menu bar only: no Dock icon until the settings window opens.
         INFOPLIST_KEY_LSUIElement: YES
