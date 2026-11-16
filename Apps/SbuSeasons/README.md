@@ -51,6 +51,11 @@ notarizzazione e `stapler staple`; alla fine `spctl` deve dire `Notarized Develo
 Usa `SBU_TEAM_ID` e la chiave API di App Store Connect di fastlane (`ASC_KEY_PATH`, `ASC_KEY_ID`, `ASC_ISSUER_ID`).
 La 1.3 è nella [release della repo](https://github.com/sbudotdev/SbuSeasons/releases/tag/v1.3).
 
+**1.3.1.** La 1.3 crashava all'avvio su un MacBook (la 1.2 partiva). La 1.3.1 toglie la novità della 1.3
+(un display link per schermo con `SKRenderer`, MGS-636) e torna alla `SKView` della 1.2 (MGS-686).
+Con due monitor a frequenze diverse (per esempio 144 e 60 Hz) la neve torna lenta su uno dei due:
+la correzione dei due monitor si rifà in un ticket a parte.
+
 **Dal vecchio nome.** Al primo avvio le impostazioni e "Fai nevicare" salvati con il nome di prima
 si copiano da soli (`PreviousDefaults` in `Settings.swift`). Il permesso Accessibilità e "Apri al login"
 sono legati al bundle id: con il nome nuovo vanno dati di nuovo.
