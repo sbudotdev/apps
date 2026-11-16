@@ -17,13 +17,14 @@ final class OverlayWindow: NSWindow {
     private let scene: SeasonScene
     private var displayLink: CADisplayLink?
 
-    init(screen: NSScreen) {
+    /// nil se manca la GPU: `MTLCreateSystemDefaultDevice()` può dare nil su un Mac senza schermo attivo
+    /// (un Mac Studio con i monitor spenti). Niente neve su quello schermo fino al prossimo cambio di schermi (MGS-686).
+    init?(screen: NSScreen, device: (any MTLDevice)? = MTLCreateSystemDefaultDevice()) {
+        guard let device, let commandQueue = device.makeCommandQueue() else { return nil }
         let frame = screen.frame
 
-        // shortcut: si fida che il Mac abbia Metal (tutti i Mac con macOS 14 ce l'hanno).
-        let device = MTLCreateSystemDefaultDevice()!
         metalView = MTKView(frame: NSRect(origin: .zero, size: frame.size), device: device)
-        commandQueue = device.makeCommandQueue()!
+        self.commandQueue = commandQueue
         renderer = SKRenderer(device: device)
         scene = SeasonScene(size: frame.size, screenOrigin: frame.origin, season: Settings.shared.season)
 
