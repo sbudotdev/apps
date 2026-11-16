@@ -102,6 +102,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     /// Il menu in alto (quello col nome dell'app), visibile mentre le Impostazioni sono aperte.
     private func setupMainMenu() {
         let appMenu = NSMenu()
+        appMenu.addItem(aboutItem())
+        appMenu.addItem(.separator())
         appMenu.addItem(NSMenuItem(title: String(localized: "Chiudi finestra"), action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w"))
         appMenu.addItem(.separator())
         appMenu.addItem(NSMenuItem(title: String(localized: "Esci da \(SbuSeasonsApp.name)"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
@@ -163,6 +165,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         settingsItem.target = self
         menu.addItem(settingsItem)
 
+        menu.addItem(aboutItem())
         menu.addItem(NSMenuItem(title: String(localized: "Esci da \(SbuSeasonsApp.name)"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
 
         item.menu = menu
@@ -218,6 +221,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         openSettings()
         return true
+    }
+
+    private func aboutItem() -> NSMenuItem {
+        let item = NSMenuItem(title: String(localized: "Informazioni su \(SbuSeasonsApp.name)"), action: #selector(showAbout), keyEquivalent: "")
+        item.target = self
+        return item
+    }
+
+    /// Il pannello standard, con i credits a Simone Antoniciello (Credits.swift).
+    @objc private func showAbout() {
+        NSApp.activate()   // app senza Dock: senza, il pannello resta dietro alle altre finestre
+        NSApp.orderFrontStandardAboutPanel(options: [.credits: Credits.aboutPanel])
     }
 
     @objc private func openSettings() {
