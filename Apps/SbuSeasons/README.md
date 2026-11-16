@@ -43,13 +43,13 @@ con il download da sbu.dev (ADR-0022, `docs/adr/0022-app-mac.md`).
 ## Il .dmg da distribuire
 
 ```bash
-./make-dmg.sh 1.0      # → build/dist/SbuSeasons-1.0.dmg
+./make-dmg.sh 1.2      # → build/dist/SbuSeasons-1.2.dmg
 ```
 
 Build Release universale (arm64 + x86_64), firma Developer ID, `.dmg` con il collegamento ad Applicazioni,
 notarizzazione e `stapler staple`; alla fine `spctl` deve dire `Notarized Developer ID`.
 Usa `SBU_TEAM_ID` e la chiave API di App Store Connect di fastlane (`ASC_KEY_PATH`, `ASC_KEY_ID`, `ASC_ISSUER_ID`).
-La 1.0 è nella [release della repo](https://github.com/sbudotdev/SbuSeasons/releases/tag/v1.0).
+La 1.2 è nella [release della repo](https://github.com/sbudotdev/SbuSeasons/releases/tag/v1.2).
 
 **Dal vecchio nome.** Al primo avvio le impostazioni e "Fai nevicare" salvati con il nome di prima
 si copiano da soli (`PreviousDefaults` in `Settings.swift`). Il permesso Accessibilità e "Apri al login"
