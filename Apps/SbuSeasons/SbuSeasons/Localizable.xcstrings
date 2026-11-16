@@ -182,6 +182,16 @@
         }
       }
     },
+    "Informazioni su %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About %@"
+          }
+        }
+      }
+    },
     "Intensità": {
       "localizations": {
         "en": {
@@ -208,6 +218,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Medium"
+          }
+        }
+      }
+    },
+    "Nata da un'idea di Simone Antoniciello": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Based on an idea by Simone Antoniciello"
           }
         }
       }

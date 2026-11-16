@@ -18,6 +18,7 @@ Usage:
   python3 Tools/make_icons.py level [--appiconset Apps/SbuLevel/SbuLevel/Assets.xcassets/AppIcon.appiconset]
       [--artwork Apps/SbuLevel/SbuLevel/Assets.xcassets/AppIconArtwork.imageset]
   python3 Tools/make_icons.py habits --watch-appiconset Apps/SbuHabits/SbuHabitsWatch/Assets.xcassets/AppIcon.appiconset
+  python3 Tools/make_icons.py seasons --mac-appiconset Apps/SbuSeasons/SbuSeasons/Assets.xcassets/AppIcon.appiconset
   python3 Tools/make_icons.py level --inverse Apps/SbuLevel/SbuLevel/Assets.xcassets/AppIcon-Inversa.appiconset
   python3 Tools/make_icons.py level --generate          # new engraving from Gemini (GEMINI_API_KEY)
   python3 Tools/make_icons.py level --from-image raw.png # engraving from an image you supply
@@ -46,6 +47,7 @@ GRID = 8  # cells per side of the notebook grid under the engraving (128 px at 1
 GRID_LINE = 4  # grid line width at 1024 px
 ZOOM = 1.2  # the engraving is scaled past its frame and cropped at the edges
 INK_TONE = 85  # mean ink alpha inside the subject's silhouette, the same for every app
+MAC_SHAPE = 824  # macOS: side of the rounded square inside the 1024 canvas (Apple's icon grid)
 WATCH_SAFE = 0.70  # watchOS: side of the composed icon, as a fraction of the canvas (inscribed square is 0.707)
 MODEL = "gemini-2.5-flash-image"
 STYLE = (
@@ -219,6 +221,32 @@ def write_watch_appiconset(mask: Image.Image, line: str, ground: str, stop: str,
     (folder / "Contents.json").write_text(json.dumps({"images": [entry], "info": {"author": "xcode", "version": 1}}, indent=2) + "\n")
 
 
+def mac_icon(icon: Image.Image) -> Image.Image:
+    """macOS draws no mask: the light icon goes in the Big Sur rounded square (824 of 1024, radius 185), with its shadow."""
+    side, radius = MAC_SHAPE, round(MAC_SHAPE * 0.225)
+    offset = (CANVAS - side) // 2
+    shape = Image.new("L", (CANVAS, CANVAS), 0)
+    ImageDraw.Draw(shape).rounded_rectangle([offset, offset, offset + side - 1, offset + side - 1], radius, fill=255)
+    out = Image.new("RGBA", (CANVAS, CANVAS), (0, 0, 0, 0))
+    shadow = shape.filter(ImageFilter.GaussianBlur(10)).point(lambda v: v * 77 // 255)  # 30% black, 10 px down
+    out.paste((0, 0, 0, 255), (0, 10), shadow.crop((0, 0, CANVAS, CANVAS - 10)))
+    out.paste(icon.resize((side, side), Image.LANCZOS), (offset, offset), shape.crop((offset, offset, offset + side, offset + side)))
+    return out
+
+
+def write_mac_appiconset(icon: Image.Image, folder: Path) -> None:
+    folder.mkdir(parents=True, exist_ok=True)
+    for old in folder.glob("*.png"):
+        old.unlink()
+    full, images = mac_icon(icon), []
+    for points in (16, 32, 128, 256, 512):
+        for scale in (1, 2):
+            name = f"AppIcon-{points}@{scale}x.png"
+            full.resize((points * scale,) * 2, Image.LANCZOS).save(folder / name)
+            images.append({"filename": name, "idiom": "mac", "scale": f"{scale}x", "size": f"{points}x{points}"})
+    (folder / "Contents.json").write_text(json.dumps({"images": images, "info": {"author": "xcode", "version": 1}}, indent=2) + "\n")
+
+
 def write_artwork(icons: dict, folder: Path) -> None:
     """Same icon for SbuAppIconView, light and dark."""
     folder.mkdir(parents=True, exist_ok=True)
@@ -245,6 +273,7 @@ def main() -> None:
     parser.add_argument("--appiconset", type=Path, help="also write this AppIcon.appiconset")
     parser.add_argument("--artwork", type=Path, help="also write this AppIconArtwork.imageset")
     parser.add_argument("--watch-appiconset", type=Path, help="also write this watchOS AppIcon.appiconset (dark, circle-safe)")
+    parser.add_argument("--mac-appiconset", type=Path, help="also write this macOS AppIcon.appiconset (light, rounded square, 16-1024)")
     parser.add_argument("--inverse", type=Path, help="also write the Inversa alternate icon to this AppIcon-Inversa.appiconset")
     args = parser.parse_args()
 
@@ -282,6 +311,9 @@ def main() -> None:
         on_ink = palette.get(spec["accent"].replace("accent-", "accent-on-ink-"), accent)
         write_appiconset({"light": compose(mask, surface["light"], ink["light"], on_ink["light"], grid["dark"])}, args.inverse)
         print(args.inverse)
+    if args.mac_appiconset:
+        write_mac_appiconset(variants["light"], args.mac_appiconset)
+        print(args.mac_appiconset)
     if args.watch_appiconset:
         write_watch_appiconset(mask, ink["dark"], ink["light"], accent["dark"], grid["dark"], args.watch_appiconset)
         print(args.watch_appiconset)
