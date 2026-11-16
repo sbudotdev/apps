@@ -92,21 +92,26 @@ private func hasToolbar(pid: pid_t, rect: CGRect, primaryHeight: CGFloat) -> Boo
 /// i tratti coperti dalle finestre che stanno davanti.
 /// `clearance`: quanto spazio sopra il bordo occupa la neve (l'altezza massima del mucchio):
 /// una finestra davanti che arriva fin lì coprirebbe il mucchio, quindi quel tratto non raccoglie neve.
+/// Anche una finestra davanti che sta sopra l'area di questa toglie il suo tratto: il fiocco va al bordo
+/// della finestra più in primo piano, se no una finestra ingrandita dietro prende tutta la neve in cima (MGS-628).
 nonisolated func visibleTopEdges(_ windows: [(id: CGWindowID, rect: CGRect)], clearance: CGFloat) -> [WindowEdge] {
     windows.enumerated().map { index, window in
         let y = window.rect.maxY
         var visible = [window.rect.minX...window.rect.maxX]
-        for front in windows[..<index] where front.rect.minY <= y + clearance && front.rect.maxY >= y {
+        for front in windows[..<index] where front.rect.minY <= y + clearance && front.rect.maxY >= window.rect.minY {
             visible = visible.flatMap { subtract(front.rect.minX...front.rect.maxX, from: $0) }
         }
         return WindowEdge(id: window.id, rect: window.rect, visible: visible)
     }
 }
 
-/// Un bordo raccoglie neve solo se il mucchio intero sta sotto `ceiling`, il limite superiore
-/// della zona libera dello schermo (sotto la barra dei menu). Esclude anche le app a schermo intero.
-nonisolated func collectsSnow(edgeTop: CGFloat, pileHeight: CGFloat, ceiling: CGFloat) -> Bool {
-    edgeTop + pileHeight <= ceiling
+/// Dove poggia la neve di un bordo alto `edgeTop`, sotto `ceiling` (il limite della zona libera
+/// dello schermo, sotto la barra dei menu). Se il mucchio entrerebbe nella barra, la neve si posa
+/// poco sotto, sopra la barra del titolo, così non copre le voci di menu: molte finestre (e tutte
+/// quelle ingrandite) si aprono attaccate alla barra, e prima lì non si posava niente (MGS-615).
+/// nil se il bordo è sopra la zona libera: app a schermo intero, niente neve.
+nonisolated func pileBase(edgeTop: CGFloat, pileHeight: CGFloat, ceiling: CGFloat) -> CGFloat? {
+    edgeTop > ceiling + 1 ? nil : min(edgeTop, ceiling - pileHeight)   // +1: arrotondamenti dello schermo
 }
 
 /// `range` meno `cut`: zero, uno o due pezzi.
