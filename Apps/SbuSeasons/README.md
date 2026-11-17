@@ -84,6 +84,7 @@ sono legati al bundle id: con il nome nuovo vanno dati di nuovo.
   La neve segue la finestra a scatti, 8 volte al secondo: tante sono le letture delle finestre.
 - **Palla di vetro.** Scuoti il cursore o una finestra (o «Scuoti la palla di vetro» nel menu): tutta la neve posata
   si alza, i fiocchi salgono, le palle saltano, poi tutto ricade. Dopo una scossa riposa 3 s. Con Riduci movimento no.
+  Mentre tieni ⌥ (d'inverno) il cursore non scuote: passare avanti e indietro sulla neve per raccoglierla non deve portarla via.
 - Menu: «Togli le palle di neve» toglie le palle sciolte (i pupazzi restano); «Sciogli la neve» toglie anche palle e pupazzi.
 - Suoni (se ci sono i file, SBU-56): `palla-di-neve`, `pupazzo`, `palla-di-vetro`.
 

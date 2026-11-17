@@ -50,6 +50,36 @@ struct SnowPlayTests {
         #expect(snowballs(scene).isEmpty)
     }
 
+    @Test func sweepingBackAndForthWithOptionDoesNotShakeTheGlobe() throws {
+        let scene = try snowyScene()
+        // Il caso del QA (SBU-60): passate avanti e indietro tra 200 e 260 a 60 fps, con ⌥.
+        var time: TimeInterval = 0
+        for pass in 0..<6 {
+            for step in 0...15 {
+                let x = pass % 2 == 0 ? 200 + Double(step) * 4 : 260 - Double(step) * 4
+                let point = CGPoint(x: x, y: 404)
+                scene.pointerMoved(to: point, time: time, rolling: true)
+                scene.roll(at: point)
+                time += 1.0 / 60
+            }
+        }
+        #expect(snow(scene) > 2000, "la neve fuori dalle passate resta sulla finestra")
+        #expect(scene.grainCount == 0)
+    }
+
+    @Test func gatheredSnowIsForgottenWhenTheSeasonChanges() throws {
+        let scene = try snowyScene()
+        for x in stride(from: 110.0, through: 160, by: 10) { scene.roll(at: CGPoint(x: x, y: 404)) }
+        #expect(snowballs(scene).isEmpty)
+        scene.setSeason(Summer())
+        scene.setSeason(Snow())
+        scene.updateWindows([window], dock: nil, ceiling: 780)
+        let pile = try #require(scene.pile(for: window.id))
+        for x in stride(from: 101.0, to: 500, by: 2) { pile.add(atX: x, radius: 1, growth: 10) }
+        for x in stride(from: 300.0, through: 340, by: 10) { scene.roll(at: CGPoint(x: x, y: 404)) }
+        #expect(snowballs(scene).isEmpty, "la neve raccolta prima non conta più")
+    }
+
     @Test func onlyWinterMakesSnowballs() throws {
         let scene = try snowyScene()
         scene.setSeason(Summer())

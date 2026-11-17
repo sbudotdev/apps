@@ -115,6 +115,7 @@ final class SeasonScene: SKScene {
         }
         for pile in everyPile { pile.node.fillColor = season.pileColor }
         if !(season is Snow) { meltSnowToys() }
+        gathered = 0
         rebuildFlakes()
     }
 
@@ -276,8 +277,10 @@ final class SeasonScene: SKScene {
         held = nil
     }
 
-    func pointerMoved(to point: CGPoint, time: TimeInterval) {
-        guard pointerShake.add(point, at: time) else { return }
+    /// `rolling`: ⌥ premuto d'inverno, si sta facendo una palla. Passare avanti e indietro sulla neve
+    /// per raccoglierla non è una scossa: se no la palla di vetro porterebbe via la neve (SBU-60).
+    func pointerMoved(to point: CGPoint, time: TimeInterval, rolling: Bool = false) {
+        guard !rolling, pointerShake.add(point, at: time) else { return }
         shakeGlobe()
         toys.forEach { $0.shaken(.pointer) }
     }
@@ -465,7 +468,10 @@ final class SeasonScene: SKScene {
             mouseVelocity = CGVector(dx: (mouse.x - last.x) / dt, dy: (mouse.y - last.y) / dt)
         }
         lastMouse = mouse
-        if CGRect(origin: .zero, size: size).contains(mouse) { pointerMoved(to: mouse, time: currentTime) }
+        let onScreen = CGRect(origin: .zero, size: size).contains(mouse)
+        // ⌥ d'inverno: il cursore raccoglie la neve per una palla, invece di spazzarla o scuotere la palla di vetro.
+        let rolling = onScreen && season is Snow && NSEvent.modifierFlags.contains(.option)
+        if onScreen { pointerMoved(to: mouse, time: currentTime, rolling: rolling) }
 
         let decay = CGFloat(exp(-Double(Tuning.cursorDamping * dt)))
         let dragBlend = min(1, dt * 10)
@@ -582,8 +588,8 @@ final class SeasonScene: SKScene {
         let speed = hypot(mouseVelocity.dx, mouseVelocity.dy)
         if speed > 20, CGRect(origin: .zero, size: size).contains(mouse) {
             // Spinta leggera nella direzione del cursore (limitata, se no i granelli volano via).
-            if NSEvent.modifierFlags.contains(.option) {
-                roll(at: mouse)   // ⌥: la neve spazzata diventa una palla di neve
+            if rolling {
+                roll(at: mouse)
             } else {
                 let drift = max(-150, min(150, mouseVelocity.dx * 0.15))
                 for pile in allPiles {
