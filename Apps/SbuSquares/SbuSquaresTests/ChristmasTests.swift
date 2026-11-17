@@ -62,18 +62,56 @@ struct ChristmasTests {
         #expect(game.score == 0)
     }
 
-    @Test func aNewGameOnChristmasDayIsTheSpecialGame() {
+    private static func freshDefaults() -> UserDefaults {
         let suite = "squares.tests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!
         defaults.removePersistentDomain(forName: suite)
-        let store = GameStore(defaults: defaults, now: Self.date(2026, 11, 17))
+        return defaults
+    }
+
+    @Test func aNewGameOnChristmasDayIsTheSpecialGame() {
+        var today = Self.date(2026, 11, 17)
+        let store = GameStore(defaults: Self.freshDefaults(), now: { today })
         #expect(store.game.board.filledCount == 0)
 
-        store.startNewGame(now: Self.date(2026, 12, 25))
-        #expect(store.game.seed == ChristmasGame.seed(on: Self.date(2026, 12, 25)))
+        today = Self.date(2026, 12, 25)
+        store.startNewGame()
+        #expect(store.game.seed == ChristmasGame.seed(on: today))
         #expect(store.game.board == ChristmasGame.tree)
 
-        store.startNewGame(now: Self.date(2026, 12, 27))
+        today = Self.date(2026, 12, 28)
+        store.startNewGame()
         #expect(store.game.board.filledCount == 0)
+    }
+
+    @Test func theChristmasGameKeepsTheAssistsAndTheShapesLeftInHand() {
+        let defaults = Self.freshDefaults()
+        defaults.set(Game.maxAssists, forKey: "assists")
+        defaults.set([3, 4], forKey: "lastGame.leftInHand")
+        let store = GameStore(defaults: defaults, now: { Self.date(2026, 12, 25) })
+        store.startNewGame()
+        for _ in 0..<500 where !store.game.isOver {
+            let move = (0..<3).lazy.compactMap { slot in
+                store.game.piece(in: slot).flatMap { piece in
+                    Board.allCells.first { store.game.board.canPlace(piece, at: $0) }.map { (slot, $0) }
+                }
+            }.first
+            guard let (slot, cell) = move else { break }
+            store.place(slot: slot, at: cell)
+        }
+        store.endGame()
+        #expect(store.game.isOver)
+        #expect(defaults.integer(forKey: "assists") == Game.maxAssists)
+        #expect(defaults.array(forKey: "lastGame.leftInHand") as? [Int] == [3, 4])
+    }
+
+    @Test(arguments: [UInt64(20_261_225), 20_271_224, 20_261_226])
+    func christmasSeedsAreRecognised(seed: UInt64) {
+        #expect(ChristmasGame.isChristmasSeed(seed))
+    }
+
+    @Test(arguments: [UInt64(20_261_223), 20_261_227, 20_261_125, 7, 1_220_261_225])
+    func otherSeedsAreNot(seed: UInt64) {
+        #expect(!ChristmasGame.isChristmasSeed(seed))
     }
 }

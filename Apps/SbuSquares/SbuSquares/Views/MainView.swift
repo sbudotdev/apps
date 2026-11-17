@@ -54,7 +54,7 @@ struct MainView: View {
                     .sbuAffectsFigure(game.score)
                     .sbuHaptic(.dot, trigger: linesCleared)
                 if game.isOver {
-                    GameOverView(game: game, canTakeBack: store.canTakeBack, takeBack: takeBack, endGame: store.endGame, playAgain: { store.startNewGame() })
+                    GameOverView(game: game, canTakeBack: store.canTakeBack, takeBack: takeBack, endGame: store.endGame, playAgain: store.startNewGame)
                         .transition(SbuMotion.transition(from: .bottom, reduceMotion: reduceMotion))
                 } else {
                     TrayView(game: game, cell: trayCell, drag: drag, selectedSlot: selectedSlot, dragChanged: dragChanged, dragEnded: dragEnded, select: select)
@@ -80,7 +80,7 @@ struct MainView: View {
         // An alert, centered: a confirmation dialog anchors to the toolbar button and floats off it.
         .alert("Iniziare una nuova partita?", isPresented: $isConfirmingNewGame) {
             Button("Annulla", role: .cancel) {}
-            Button("Nuova partita", role: .destructive) { store.startNewGame() }
+            Button("Nuova partita", role: .destructive, action: store.startNewGame)
         } message: {
             Text("Questa partita finisce qui.")
         }

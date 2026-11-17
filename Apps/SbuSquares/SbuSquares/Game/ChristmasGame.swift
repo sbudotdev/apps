@@ -23,6 +23,13 @@ nonisolated enum ChristmasGame {
         return UInt64(year * 10_000 + 1_200 + dayOfMonth)
     }
 
+    /// Whether `seed` is the seed of a Christmas game, 20yy1224 to 20yy1226.
+    ///
+    /// shortcut: a random seed in that range is taken for Christmas too, 1 chance in ~10¹⁶; store a flag on `Game` if it ever matters.
+    static func isChristmasSeed(_ seed: UInt64) -> Bool {
+        (20_000_000...29_999_999).contains(seed) && seed / 100 % 100 == 12 && (24...26).contains(seed % 100)
+    }
+
     /// The day's game, or `nil` outside 24–26 December. It leaves out nothing the last game left
     /// in hand and carries no assists, so it deals the same for everyone.
     static func game(on date: Date, in calendar: Calendar = .current, recordToBeat: Int) -> Game? {

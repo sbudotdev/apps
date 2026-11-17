@@ -4,7 +4,7 @@ import SwiftUI
 /// The game inside the standard Sbu shell.
 struct RootView: View {
     #if DEBUG
-    @State private var store = GameStore(now: ForcedToday.date ?? .now)
+    @State private var store = GameStore(now: { ForcedToday.date ?? .now })
     #else
     @State private var store = GameStore()
     #endif

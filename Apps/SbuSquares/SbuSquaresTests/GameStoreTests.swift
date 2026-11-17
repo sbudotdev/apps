@@ -3,6 +3,9 @@ import Testing
 @testable import SbuSquares
 
 struct GameStoreTests {
+    /// 15 January 2027: an ordinary day, so no test starts from the Christmas game.
+    nonisolated private static let ordinaryDay = Date(timeIntervalSince1970: 1_800_000_000)
+
     private let defaults: UserDefaults
 
     init() {
@@ -24,7 +27,7 @@ struct GameStoreTests {
     }
 
     @Test func theFirstRecordHasNoClosure() {
-        let store = GameStore(defaults: defaults)
+        let store = GameStore(defaults: defaults, now: { Self.ordinaryDay })
         playOut(store)
         store.endGame()
         #expect(store.record == store.game.score)
@@ -33,7 +36,7 @@ struct GameStoreTests {
 
     @Test func beatingAnExistingRecordShowsTheClosure() {
         defaults.set(1, forKey: "record")
-        let store = GameStore(defaults: defaults)
+        let store = GameStore(defaults: defaults, now: { Self.ordinaryDay })
         store.startNewGame()
         playOut(store)
         #expect(!store.isShowingClosure)
@@ -42,15 +45,15 @@ struct GameStoreTests {
     }
 
     @Test func movesAreSavedAndReloaded() throws {
-        let store = GameStore(defaults: defaults)
+        let store = GameStore(defaults: defaults, now: { Self.ordinaryDay })
         let piece = try #require(store.game.piece(in: 0))
         let cell = try #require(Board.allCells.first { store.game.board.canPlace(piece, at: $0) })
         store.place(slot: 0, at: cell)
-        #expect(GameStore(defaults: defaults).game == store.game)
+        #expect(GameStore(defaults: defaults, now: { Self.ordinaryDay }).game == store.game)
     }
 
     @Test func aStuckGameWaitsForTheSecondChance() throws {
-        let store = GameStore(defaults: defaults)
+        let store = GameStore(defaults: defaults, now: { Self.ordinaryDay })
         playOut(store)
         let before = try #require(store.previous)
         #expect(store.canTakeBack)
@@ -68,7 +71,7 @@ struct GameStoreTests {
     }
 
     @Test func theSecondChanceGoesBackToTheStartOfTheTray() throws {
-        let store = GameStore(defaults: defaults)
+        let store = GameStore(defaults: defaults, now: { Self.ordinaryDay })
         let dealt = store.game
         for slot in 0..<2 {
             let piece = try #require(store.game.piece(in: slot))
@@ -79,7 +82,7 @@ struct GameStoreTests {
     }
 
     @Test func theSecondChanceComesOnceAGame() {
-        let store = GameStore(defaults: defaults)
+        let store = GameStore(defaults: defaults, now: { Self.ordinaryDay })
         playOut(store)
         store.takeBack()
         playOut(store)
@@ -89,15 +92,15 @@ struct GameStoreTests {
     }
 
     @Test func theSecondChanceSurvivesARelaunch() {
-        let store = GameStore(defaults: defaults)
+        let store = GameStore(defaults: defaults, now: { Self.ordinaryDay })
         playOut(store)
-        let reloaded = GameStore(defaults: defaults)
+        let reloaded = GameStore(defaults: defaults, now: { Self.ordinaryDay })
         #expect(reloaded.canTakeBack)
         #expect(reloaded.previous == store.previous)
     }
 
     @Test func aNewGameEndsTheOneWaitingForTheSecondChance() {
-        let store = GameStore(defaults: defaults)
+        let store = GameStore(defaults: defaults, now: { Self.ordinaryDay })
         playOut(store)
         let score = store.game.score
         store.startNewGame()
@@ -106,11 +109,10 @@ struct GameStoreTests {
     }
 
     @Test func aLostGameLeavesItsPiecesOutOfTheNextOne() {
-        let store = GameStore(defaults: defaults)
+        let store = GameStore(defaults: defaults, now: { Self.ordinaryDay })
         playOut(store)
         let leftInHand = Set(store.game.leftInHand)
-        // An ordinary day: the Christmas game starts from the same pieces for everyone.
-        store.startNewGame(now: Date(timeIntervalSince1970: 1_800_000_000))
+        store.startNewGame()
         #expect(store.game.assists == 1)
         #expect(Set(store.game.leftInHand).isDisjoint(with: leftInHand))
     }
