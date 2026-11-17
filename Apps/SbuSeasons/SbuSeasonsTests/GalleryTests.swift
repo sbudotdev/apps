@@ -37,12 +37,13 @@ struct GalleryTests {
         return WallpaperMemory(defaults: defaults)
     }
 
-    @Test func itRemembersOnlyTheFirstWallpaper() throws {
+    /// Chi usa la galleria e poi mette a mano una sua foto deve ritrovare quella, non la prima.
+    @Test func itRemembersTheLatestOwnWallpaper() throws {
         let memory = try Self.memory()
-        let mine = URL(filePath: "/Users/me/Pictures/mare.heic")
-        memory.remember(mine, screen: "Studio Display")
-        memory.remember(URL(filePath: "/tmp/01-prima-neve-16x10.jpg"), screen: "Studio Display")
-        #expect(memory.original(screen: "Studio Display") == mine)
+        let latest = URL(filePath: "/Users/me/Pictures/montagna.heic")
+        memory.remember(URL(filePath: "/Users/me/Pictures/mare.heic"), screen: "Studio Display")
+        memory.remember(latest, screen: "Studio Display")
+        #expect(memory.original(screen: "Studio Display") == latest)
         #expect(memory.original(screen: "LG UltraWide") == nil)
     }
 
@@ -60,6 +61,16 @@ struct GalleryTests {
         #expect(copy.deletingLastPathComponent().standardizedFileURL == folder.standardizedFileURL)
         #expect(FileManager.default.contentsEqual(atPath: copy.path, andPath: source.path))
         #expect(try Wallpaper.install(source, in: folder) == copy)   // la seconda volta non si rompe
+    }
+
+    /// Un JPEG aggiornato in una versione nuova dell'app deve sostituire la copia vecchia.
+    @Test func anOutdatedCopyIsReplaced() throws {
+        let folder = FileManager.default.temporaryDirectory.appending(path: "walls-\(UUID().uuidString)")
+        let source = try #require(Wallpaper.all[0].url(for: CGSize(width: 1440, height: 900)))
+        let copy = try Wallpaper.install(source, in: folder)
+        try Data("vecchio".utf8).write(to: copy)
+        #expect(try Wallpaper.install(source, in: folder) == copy)
+        #expect(FileManager.default.contentsEqual(atPath: copy.path, andPath: source.path))
     }
 }
 

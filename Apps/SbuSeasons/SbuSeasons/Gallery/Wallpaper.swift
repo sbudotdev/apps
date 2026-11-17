@@ -34,9 +34,12 @@ struct Wallpaper: Identifiable {
     /// anche se l'app si sposta, si aggiorna o parte da una cartella temporanea (Gatekeeper).
     static func install(_ source: URL, in folder: URL = installFolder) throws -> URL {
         let copy = folder.appending(path: source.lastPathComponent)
-        guard !FileManager.default.fileExists(atPath: copy.path) else { return copy }
-        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
-        try FileManager.default.copyItem(at: source, to: copy)
+        let files = FileManager.default
+        guard !files.contentsEqual(atPath: copy.path, andPath: source.path) else { return copy }
+        // Una copia diversa viene da una versione vecchia dell'app: si sostituisce.
+        if files.fileExists(atPath: copy.path) { try files.removeItem(at: copy) }
+        try files.createDirectory(at: folder, withIntermediateDirectories: true)
+        try files.copyItem(at: source, to: copy)
         return copy
     }
 
@@ -48,15 +51,24 @@ struct Wallpaper: Identifiable {
     static func set(_ wallpaper: Wallpaper, on screen: NSScreen, memory: WallpaperMemory = WallpaperMemory()) throws {
         guard let source = wallpaper.url(for: screen.frame.size) else { return }
         if let current = NSWorkspace.shared.desktopImageURL(for: screen), !current.path.hasPrefix(installFolder.path) {
-            memory.remember(current, screen: screen.localizedName)
+            memory.remember(current, screen: screen.wallpaperKey)
         }
         try NSWorkspace.shared.setDesktopImageURL(try install(source), for: screen)
     }
 
     /// "Lascia il mio schermo com'è": torna lo sfondo che c'era prima della galleria.
     static func restore(on screen: NSScreen, memory: WallpaperMemory = WallpaperMemory()) throws {
-        guard let original = memory.original(screen: screen.localizedName) else { return }
+        guard let original = memory.original(screen: screen.wallpaperKey) else { return }
         try NSWorkspace.shared.setDesktopImageURL(original, for: screen)
-        memory.forget(screen: screen.localizedName)
+        memory.forget(screen: screen.wallpaperKey)
+    }
+}
+
+extension NSScreen {
+    /// Un id stabile dello schermo: due monitor dello stesso modello hanno lo stesso `localizedName`.
+    var wallpaperKey: String {
+        let id = deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID ?? 0
+        guard let uuid = CGDisplayCreateUUIDFromDisplayID(id)?.takeRetainedValue() else { return "\(id)" }
+        return CFUUIDCreateString(nil, uuid) as String
     }
 }

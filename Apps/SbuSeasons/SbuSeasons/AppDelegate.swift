@@ -503,7 +503,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     func windowWillClose(_ notification: Notification) {
         // Via dal Dock quando si chiude l'ultima delle due: resta solo la neve.
         let closing = notification.object as? NSWindow
-        guard ![settingsWindow, galleryWindow].contains(where: { $0 !== closing && $0.isVisible }) else { return }
+        // NSApp.windows e non le due lazy var: leggerle creerebbe una finestra mai aperta.
+        guard !NSApp.windows.contains(where: { $0 !== closing && $0.isVisible && $0.delegate === self }) else { return }
         NSApp.setActivationPolicy(.accessory)
     }
 
