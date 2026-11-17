@@ -76,6 +76,9 @@ final class SeasonScene: SKScene {
     let sky = Sky()
     /// Le gocce sul vetro della stagione.
     let glass = Glass()
+    /// La notte: schermo più scuro e la candela (Impostazioni → Notte). Si ricontrolla una volta al secondo.
+    let night = Night()
+    private var nightClock: CGFloat = .infinity
 
     /// Natale (`Toys/Christmas/`): che giorno è e il diario dei regali, la slitta in volo, la prossima visita.
     var christmas = ChristmasClock()
@@ -114,6 +117,7 @@ final class SeasonScene: SKScene {
         scaleMode = .resizeFill
         addChild(sky)
         addChild(glass)
+        addChild(night)
         glass.set(season.glass)
     }
 
@@ -149,6 +153,7 @@ final class SeasonScene: SKScene {
             meltSnowToys()
             removeWinterPlay(includingCableCar: true)
             removeChristmas()
+            removeFigures()
         }
         if !season.settles { everyPile.forEach { $0.clear() } }
         // La pausa è una voce dei giochi d'inverno: fuori dall'inverno non si potrebbe togliere (QA SBU-63).
@@ -647,6 +652,14 @@ final class SeasonScene: SKScene {
         // --- Nebbia, nuvole, lampi e gocce sul vetro ---
         sky.step(dt: dt, width: size.width, calm: reduceMotion)
         glass.step(dt: dt, size: size, ledges: ledges, amount: intensity, calm: reduceMotion)
+        nightClock += dt
+        if nightClock >= 1 {
+            nightClock = 0
+            let hour = Calendar.current.component(.hour, from: .now)
+            night.set(on: NightClock.isNight(mode: settings.night, startHour: settings.nightStart, hour: hour),
+                      size: size, calm: reduceMotion)
+        }
+        night.step(dt: dt, calm: reduceMotion)
 
         // --- Oggetti: gravità, appoggio sui bordi scoperti, sul Dock o sul fondo dello schermo ---
         if !toys.isEmpty, !toysPaused {
@@ -662,6 +675,7 @@ final class SeasonScene: SKScene {
             }
             buildSnowman()
             stepWinterPlay()
+            stepFigures(mouse: mouse)
         }
         if !toysPaused { stepChristmas(dt: dt, mouse: mouse) }
         wantsMouse = wantsMouse(at: mouse)

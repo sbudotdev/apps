@@ -128,6 +128,26 @@ nonisolated enum Tuning {
     static let gingerbreadJump: CGFloat = 520
     static let maxGingerbreadMen = 3
 
+    // MARK: Personaggi e notte
+
+    /// La volpe svegliata annusa per `foxSniff` s, poi cammina a `foxWalk` pt/s; dopo `foxAwake` s torna a dormire.
+    static let foxSniff: CGFloat = 2.5
+    static let foxAwake: CGFloat = 12
+    static let foxWalk: CGFloat = 40
+    /// La renna cammina a `reindeerWalk` pt/s; il naso si accende col cursore a meno di `reindeerNoseReach` pt.
+    static let reindeerWalk: CGFloat = 26
+    static let reindeerNoseReach: CGFloat = 90
+    /// I semi in una mangiatoia piena; la cincia ne becca uno ogni `titPeck` s.
+    static let feederSeeds = 6
+    static let titPeck: CGFloat = 1.5
+    /// Uno sbuffo di fumo dal camino della baita ogni `smokeInterval` s.
+    static let smokeInterval: CGFloat = 0.7
+    /// Quanto è forte l'alone di una fiamma (lanterna, candela).
+    static let flameGlow: CGFloat = 0.75
+    /// Di notte lo schermo si scurisce di tanto (0 = niente, 1 = nero); la notte finisce alle `nightEnds`.
+    static let nightDim: CGFloat = 0.22
+    static let nightEnds = 6
+
     // MARK: Neve che scivola via
 
     /// Una finestra che si sposta di più tra due letture (pt in 1/8 s, circa 320 pt/s) perde la neve;

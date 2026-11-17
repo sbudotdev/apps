@@ -156,11 +156,37 @@ con il passo di Natale e i comandi), `CountdownPanel.swift`. I numeri in `Tuning
 CPU misurata sul Mac (Release, 60 fps, 30 s per giro, sullo stesso Mac carico di altri processi): con Babbo Natale chiamato
 ogni 7,5 s, due omini che corrono e il conto alla rovescia acceso 17,3%, sola neve 17,4%: nessuna differenza misurabile.
 
+## Personaggi e notte (2.0)
+
+- **Personaggi** (menu ❄︎ → Personaggi, uno per tipo: la voce lo mette sullo schermo del cursore, la seconda volta lo toglie).
+  Sono oggetti come gli altri: si trascinano, cadono e stanno sui bordi delle finestre, sul Dock o sul fondo.
+  - **Volpe**: dorme acciambellata. Un clic la sveglia: annusa 2,5 s, cammina sul suo bordo senza cadere e dopo 12 s torna a dormire.
+  - **Cincia e mangiatoia**: la mangiatoia è vuota. Un clic mette 6 semi, arriva la cincia e ne becca uno ogni 1,5 s; finiti, vola via.
+  - **Baita**: un clic accende il fuoco (la finestra si scalda, dal camino esce il fumo), un altro lo spegne.
+  - **Lanterna**: un clic la accende (fiamma e alone che tremolano), un altro la spegne.
+  - **Renna**: parte sopra la finestra più in alto e ci cammina avanti e indietro. Col cursore a meno di 90 pt il naso
+    si illumina, più forte quanto più è vicino. Un clic la fa girare.
+- **Notte** (Impostazioni → Notte: Mai, Di sera, Sempre). Lo schermo si abbassa un po' (22%) dietro la neve e gli oggetti,
+  e in basso a destra si accende una candela con l'alone e una luce calda sul fondo. «Di sera» va dall'ora scelta
+  (18:00–2:00, 22:00 all'inizio) alle 6 del mattino. Si ricontrolla una volta al secondo e si accende sfumando in 2 s.
+  C'è in tutte le stagioni.
+- Con **Riduci movimento** la volpe non annusa, renna e volpe camminano a metà velocità e senza dondolare, la baita non fa
+  fumo, la cincia sparisce invece di volare via, fiamme e candela non tremolano, la notte arriva senza sfumare.
+- I personaggi sono solo d'inverno, come i giochi: cambiando stagione spariscono. «Metti in pausa i giochi» li ferma.
+- Suoni (se ci sono i file, SBU-56): `volpe`, `cincia`, `baita`, `lanterna`, `renna`.
+- Disegni nostri, forme semplici fatte in codice (`drawnTexture`): si possono sostituire con immagini senza cambiare la logica.
+
+Il codice è in `Toys/Figures/`: `Figures.swift` (i cinque personaggi, `SeedTray`, `Pacing`) e `FigureVisits.swift`
+(l'estensione di `SeasonScene` con i comandi e il passo); la notte è `Engine/Night.swift` (`NightClock` e la candela).
+I numeri in `Tuning.swift`, sezione «Personaggi e notte».
+CPU misurata sul Mac (Release, 60 fps, schermo 1920×1080, neve Media, tempo di CPU su 20 s, 4 giri alternati): con i cinque
+personaggi e la notte accesa 7,7%, sola neve 7,6% (+1%).
+
 ## Menu ❄︎
 
 Fai nevicare (⌘S) · Sciogli la neve (⌘R) · Togli le palle di neve · Scuoti la palla di vetro ·
 Manda lo spazzaneve · Prima il Dock · Prepara la pista da slittino · Monta/Togli la funivia · Pianta un albero di Natale ·
-Togli alberi, neve e slitte · Metti in pausa i giochi ·
+Togli alberi, neve e slitte · Metti in pausa i giochi · Personaggi (Volpe, Cincia e mangiatoia, Baita, Lanterna, Renna) ·
 Fai passare Babbo Natale · Manda l'omino di pan di zenzero · Conto alla rovescia per Natale · Stagione ·
 Intensità (Leggera/Media/Forte con le scorciatoie, e sotto un cursore continuo) · Impostazioni… (⌘,) · Esci (⌘Q).
 Il cursore è lo stesso valore di "Quantità di fiocchi" nelle Impostazioni: muovendolo le particelle in più nascono in cima
@@ -169,7 +195,7 @@ Le scorciatoie funzionano a menu aperto: non sono globali.
 La stagione scelta si salva (la neve è quella di partenza) e l'icona nella barra dei menu la segue.
 
 **Impostazioni**: quantità, dimensione e velocità dei fiocchi, vento, raggio e forza del cursore,
-accumulo sulle finestre e sul fondo, velocità di accumulo, altezza massima, suoni e volume (spenti all'inizio),
+accumulo sulle finestre e sul fondo, velocità di accumulo, altezza massima, suoni e volume (spenti all'inizio), notte (mai, di sera dalle…, sempre),
 apri al login, ripristino.
 Le modifiche si vedono subito (nevica anche sulla finestra Impostazioni, utile per provare) e vengono salvate.
 
@@ -191,6 +217,8 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Engine/Sky.swift` | Banchi a tutto schermo (nebbia, nuvole: pochi sprite grandi e sfumati) e lampi |
 | `Engine/Glass.swift` | Gocce sul vetro: `GlassDrops` (logica, testata) e `Glass` (una sprite per goccia) |
 | `Toys/Christmas/` | Babbo Natale, il regalo, l'omino di pan di zenzero, il conto alla rovescia e le date di Natale |
+| `Toys/Figures/` | I personaggi: volpe, cincia con la mangiatoia, baita, lanterna, renna e i loro comandi (`FigureVisits.swift`) |
+| `Engine/Night.swift` | La notte: quando è notte (`NightClock`), lo schermo più scuro e la candela |
 | `Toys/WinterPlay/` | Spazzaneve, montagnetta, slittino, funivia, albero di Natale e i loro comandi (`WinterPlay.swift`) |
 | `Engine/SoundBoard.swift` | Effetti brevi e sottofondo in loop (`AVAudioPlayer`) |
 | `Engine/Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
