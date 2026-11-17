@@ -105,6 +105,29 @@ nonisolated enum Tuning {
     /// Le palline su un albero, al massimo.
     static let maxBaubles = 40
 
+    // MARK: Natale
+
+    /// Il primo passaggio di Babbo Natale dopo l'avvio (s), poi uno ogni 6–12 minuti; la vigilia ogni 2–4.
+    static let santaFirstVisit: ClosedRange<CGFloat> = 20...60
+    static let santaInterval: ClosedRange<CGFloat> = 360...720
+    static let santaEveInterval: ClosedRange<CGFloat> = 120...240
+    /// Un passaggio su due porta il regalo (finché oggi non l'ha lasciato).
+    static let santaGiftChance = 0.5
+    /// La velocità della slitta (pt/s): uno schermo da 1440 pt in circa 7 s.
+    static let santaSpeed: CGFloat = 200
+    /// L'altezza a cui vola, rispetto alla zona libera sotto la barra dei menu.
+    static let santaAltitude: CGFloat = 0.9
+    /// Quanto resta un regalo aperto prima di sparire (s).
+    static let giftLinger: CGFloat = 3
+    /// L'omino cammina a `gingerbreadWalk` e scappa a `gingerbreadDash` (pt/s) quando il cursore è più vicino
+    /// di `gingerbreadFlee` pt. Si gira `gingerbreadTurn` pt prima della fine del bordo; il salto è `gingerbreadJump` pt/s.
+    static let gingerbreadWalk: CGFloat = 90
+    static let gingerbreadDash: CGFloat = 260
+    static let gingerbreadFlee: CGFloat = 120
+    static let gingerbreadTurn: CGFloat = 10
+    static let gingerbreadJump: CGFloat = 520
+    static let maxGingerbreadMen = 3
+
     // MARK: Neve che scivola via
 
     /// Una finestra che si sposta di più tra due letture (pt in 1/8 s, circa 320 pt/s) perde la neve;
