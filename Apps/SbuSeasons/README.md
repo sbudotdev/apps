@@ -74,7 +74,10 @@ sono legati al bundle id: con il nome nuovo vanno dati di nuovo.
 
 ## Menu ❄︎
 
-Fai nevicare (⌘S) · Sciogli la neve (⌘R) · Stagione · Intensità (scorciatoie) · Impostazioni… (⌘,) · Esci (⌘Q).
+Fai nevicare (⌘S) · Sciogli la neve (⌘R) · Stagione · Intensità (Leggera/Media/Forte con le scorciatoie, e sotto un cursore
+continuo) · Impostazioni… (⌘,) · Esci (⌘Q).
+Il cursore è lo stesso valore di "Quantità di fiocchi" nelle Impostazioni: muovendolo le particelle in più nascono in cima
+e quelle in meno spariscono, quelle che stanno cadendo non saltano.
 Le scorciatoie funzionano a menu aperto: non sono globali.
 La stagione scelta si salva (la neve è quella di partenza) e l'icona nella barra dei menu la segue.
 
@@ -102,6 +105,10 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Seasons/Seasons.swift` | L'elenco delle stagioni, una riga ciascuna |
 | `Seasons/Snow/Snow.swift` | La neve: forma, colore e caduta dei fiocchi (`SnowTuning`) |
 | `Seasons/Summer/Summer.swift` | L'estate: semi di tarassaco, lenti e larghi nell'ondeggiare, si posano color panna (`SummerTuning`) |
+| `Seasons/Spring/Spring.swift`, `Seasons/Autumn/Autumn.swift` | Petali di ciliegio portati dal vento e foglie d'autunno che volteggiano e si posano |
+| `Seasons/Fireflies/Fireflies.swift` | Le lucciole: luci che vagano piano e si accendono e si spengono, non si posano (`FirefliesTuning`) |
+| `Seasons/Meteors/Meteors.swift` | Le stelle cadenti: ogni tanto una scia attraversa il cielo di traverso (`MeteorsTuning`) |
+| `Seasons/Clear/Clear.swift` | Il sereno: non cade niente (per chi vuole solo gli oggetti o lo sfondo) |
 | `PowerSource.swift` | Batteria o corrente (per i fotogrammi al secondo) |
 | `Settings.swift` | Le impostazioni e la stagione (salvate in UserDefaults, copiate dal vecchio nome al primo avvio) e la finestra SwiftUI per regolarle |
 | `Localizable.xcstrings`, `InfoPlist.xcstrings` | Le stringhe in italiano e inglese; il nome "Sbu Seasons" nel menu dell'app in alto |
@@ -159,7 +166,11 @@ in 1,5 s (le finestre si leggono solo 8 volte al secondo). Chi continua a scuote
    - `symbol`: il simbolo SF per la barra dei menu e per il menu Stagione;
    - `pileColor`: il colore di ciò che si posa sulle finestre e sul Dock;
    - `makeTexture()`: la forma della particella, disegnata una volta;
-   - `particle(depth:)`: raggio, opacità, velocità di caduta e oscillazione di una particella (0 = lontana, 1 = vicina).
+   - `particle(depth:)`: raggio, opacità, velocità di caduta e oscillazione di una particella (0 = lontana, 1 = vicina);
+     se serve anche rotazione (`spin`, `flip`), colore (`tint`), andare di traverso orientata (`drift`, `length`),
+     vagare in su e in giù (`bob`), accendersi e spegnersi (`pulse`), aspettare prima di ripassare (`gap`);
+   - se non deve posarsi: `settles = false` (scegliendola, la neve posata si scioglie); se ne servono meno o nessuna:
+     `abundance` (× "Quantità": 0,12 le lucciole, 0,01 le stelle, 0 il sereno).
 2. Aggiungi una riga in `Seasons/Seasons.swift`, nell'ordine in cui la vuoi nel menu. Nient'altro da toccare nel codice.
    Attenzione: alcuni testi parlano ancora solo di neve («Fai nevicare», «Sciogli la neve», le sezioni «Nevicata»
    e «Neve posata» e «Quantità di fiocchi» nelle Impostazioni). Renderli generici è una decisione di Matteo,
@@ -169,7 +180,10 @@ in 1,5 s (le finestre si leggono solo 8 volte al secondo). Chi continua a scuote
 4. `xcodegen`, poi `xcodebuild test -scheme SbuSeasons -destination 'platform=macOS'`, e misura la CPU con la neve
    come riferimento: una stagione non deve consumare di più.
 
-Se a una stagione serve qualcosa che il motore non sa fare (ruotare le particelle, farle rimbalzare…),
+**CPU** (SBU-51, MacBook a corrente, intensità Media, media di 15 s con `ps`): neve 6,2%, autunno 6,6%, primavera 7–8%,
+lucciole 5,1%, stelle cadenti 4,4%, sereno 1,7%. Il motore nuovo non cambia la neve (5,9–6,7% prima, 5,5–6,3% dopo).
+
+Se a una stagione serve qualcosa che il motore non sa fare (farle rimbalzare, strati a tutto schermo…),
 si cambia `Season` e `SeasonScene` in un lavoro a parte, prima, perché tocca tutte le stagioni.
 
 ## Prossimi passi possibili
