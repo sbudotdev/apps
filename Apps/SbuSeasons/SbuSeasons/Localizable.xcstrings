@@ -491,6 +491,36 @@
           }
         }
       }
+    },
+    "Togli le palle di neve": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear the Snowballs"
+          }
+        }
+      }
+    },
+    "Scuoti la palla di vetro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shake the Snow Globe"
+          }
+        }
+      }
+    },
+    "Per fare una palla di neve, tieni premuto ⌥ e passa il cursore sulla neve posata.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To make a snowball, hold ⌥ and move the pointer through settled snow."
+          }
+        }
+      }
     }
   }
 }
