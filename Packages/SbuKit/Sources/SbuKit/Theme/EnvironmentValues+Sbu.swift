@@ -8,6 +8,12 @@ public extension EnvironmentValues {
     /// Whether Sbu haptics play: `false` when the person turned the app's vibration off.
     /// The full stop's `dot`, the `tick` of `.sbuAffectsFigure` and the Closure follow it.
     @Entry var sbuPlaysHaptics = true
+
+    /// The season on screen, `nil` outside every season. Defaults to today's date on the device;
+    /// force it with `.environment(\.sbuSeason, .christmas)` in previews and tests.
+    // shortcut: read once per view update, so an app left open across midnight on 30 Nov / 6 Jan
+    // changes season at its next redraw; add a midnight timer if a season must flip live.
+    @Entry var sbuSeason: SbuSeason? = SbuSeason.active(on: .now)
 }
 
 extension EnvironmentValues {
