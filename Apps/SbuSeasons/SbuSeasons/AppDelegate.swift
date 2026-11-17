@@ -8,6 +8,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private var statusItem: NSStatusItem?
     private var windowTimer: Timer?
     private var powerSource: CFRunLoopSource?
+    private var windowShakes = WindowShakes()
 
     // Salvato in UserDefaults, così l'app se lo ricorda al prossimo avvio.
     // (Le altre impostazioni sono in Settings.swift.)
@@ -52,6 +53,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
             object: nil
         )
 
+        // "Riduci movimento" si può cambiare mentre l'app gira.
+        NSWorkspace.shared.notificationCenter.addObserver(
+            self,
+            selector: #selector(powerSourceDidChange),
+            name: NSWorkspace.accessibilityDisplayOptionsDidChangeNotification,
+            object: nil
+        )
+
         // Se colleghi/scolleghi un monitor o cambi risoluzione, ricreiamo le finestre.
         NotificationCenter.default.addObserver(
             self,
@@ -76,9 +85,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         rebuildOverlays()
     }
 
+    /// Batteria o "Riduci movimento" cambiati: fotogrammi e movimento si adeguano.
     @objc private func powerSourceDidChange() {
         let onBattery = isOnBattery()
-        overlays.forEach { $0.setOnBattery(onBattery) }
+        let reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+        overlays.forEach { $0.setEnergy(onBattery: onBattery, reduceMotion: reduceMotion) }
     }
 
     private func rebuildOverlays() {
@@ -95,6 +106,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         let edges = currentWindowEdges()
         let dock = currentDockFrame()
         overlays.forEach { $0.updateWindows(edges, dock: dock) }
+        let shaken = windowShakes.update(edges, at: ProcessInfo.processInfo.systemUptime)
+        if !shaken.isEmpty { overlays.forEach { $0.windowsShaken(shaken) } }
     }
 
     // MARK: - Menu

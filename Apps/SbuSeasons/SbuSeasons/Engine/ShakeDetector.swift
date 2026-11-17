@@ -1,0 +1,50 @@
+import CoreGraphics
+import Foundation
+
+/// Riconosce uno scuotimento: il punto cambia verso più volte, in fretta, con un tragitto abbastanza lungo.
+/// Si guarda in orizzontale e in verticale, ognuno per conto suo.
+nonisolated struct ShakeDetector {
+    /// Quanti cambi di verso servono, entro quanti secondi, e quanto deve essere lungo ogni tratto.
+    var reversals = 4
+    var window: TimeInterval = 1
+    var minTravel: CGFloat = 40
+
+    private var axes = [Axis(), Axis()]
+    private var times: [TimeInterval] = []
+
+    /// Un punto nuovo. true = scosso (poi si ricomincia a contare).
+    mutating func add(_ point: CGPoint, at time: TimeInterval) -> Bool {
+        if axes[0].reverses(at: point.x, minTravel: minTravel) { times.append(time) }
+        if axes[1].reverses(at: point.y, minTravel: minTravel) { times.append(time) }
+        times.removeAll { time - $0 > window }
+        guard times.count >= reversals else { return false }
+        times = []
+        return true
+    }
+
+    /// Un asse: il punto più lontano raggiunto e il verso in cui si va.
+    private struct Axis {
+        var extreme: CGFloat?
+        var direction: CGFloat = 0
+
+        mutating func reverses(at value: CGFloat, minTravel: CGFloat) -> Bool {
+            guard let extreme else {
+                self.extreme = value
+                return false
+            }
+            let travel = value - extreme
+            if direction == 0 || travel * direction > 0 {
+                // Stesso verso (o il primo): l'estremo va avanti. Il primo verso conta solo oltre `minTravel`.
+                if direction != 0 || abs(travel) >= minTravel {
+                    direction = travel > 0 ? 1 : -1
+                    self.extreme = value
+                }
+                return false
+            }
+            guard abs(travel) >= minTravel else { return false }
+            direction = -direction
+            self.extreme = value
+            return true
+        }
+    }
+}
