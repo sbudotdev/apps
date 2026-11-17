@@ -19,6 +19,14 @@ struct ShakeDetectorTests {
         #expect(feed(&detector, xs: [0, 80, 0, 80, 0, 80, 0], step: 0.08))
     }
 
+    @Test func shakingOnAndOnIsOneShake() {
+        var detector = ShakeDetector()
+        let xs = (0..<12).map { CGFloat($0 % 2 * 80) }
+        var count = 0
+        for (i, x) in xs.enumerated() where detector.add(CGPoint(x: x, y: 100), at: TimeInterval(i) * 0.08) { count += 1 }
+        #expect(count == 1)
+    }
+
     @Test func aLongStraightMoveIsNot() {
         var detector = ShakeDetector()
         #expect(!feed(&detector, xs: stride(from: 0, through: 1200, by: 60).map { $0 }, step: 0.02))

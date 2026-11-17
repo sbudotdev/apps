@@ -64,8 +64,9 @@ nonisolated enum Tuning {
     static let toyFriction: CGFloat = 4
     /// Sotto questa velocità (pt/s) un oggetto che cade non rimbalza più: si ferma.
     static let toyMinBounce: CGFloat = 80
-    /// Il lancio più veloce (pt/s): oltre, l'oggetto sparirebbe dallo schermo in un attimo.
-    static let toyMaxThrow: CGFloat = 2500
+    /// Il lancio più veloce (pt/s): così un oggetto lanciato in alto sale al massimo di circa 800 pt
+    /// e non sparisce oltre il bordo dello schermo.
+    static let toyMaxThrow: CGFloat = 1500
     /// Entro questo tragitto (pt) tra pressione e rilascio è un clic, non un trascinamento.
     static let clickSlop: CGFloat = 4
 }

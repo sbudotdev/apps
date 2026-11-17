@@ -11,14 +11,17 @@ nonisolated struct ShakeDetector {
 
     private var axes = [Axis(), Axis()]
     private var times: [TimeInterval] = []
+    /// Dopo una scossa si aspetta `window` secondi: chi continua a scuotere fa una scossa sola.
+    private var quietUntil: TimeInterval = -.infinity
 
     /// Un punto nuovo. true = scosso (poi si ricomincia a contare).
     mutating func add(_ point: CGPoint, at time: TimeInterval) -> Bool {
         if axes[0].reverses(at: point.x, minTravel: minTravel) { times.append(time) }
         if axes[1].reverses(at: point.y, minTravel: minTravel) { times.append(time) }
         times.removeAll { time - $0 > window }
-        guard times.count >= reversals else { return false }
+        guard times.count >= reversals, time >= quietUntil else { return false }
         times = []
+        quietUntil = time + window
         return true
     }
 
