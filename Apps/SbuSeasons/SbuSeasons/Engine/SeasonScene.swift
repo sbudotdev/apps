@@ -46,7 +46,7 @@ final class SeasonScene: SKScene {
     private let screenOrigin: CGPoint
 
     private var lastUpdateTime: TimeInterval?
-    private var elapsed: CGFloat = 0
+    private(set) var elapsed: CGFloat = 0
     private var lastMouse: CGPoint?
     /// Tempo dall'ultimo aggiornamento dei mucchi (frana + ridisegno).
     private var pileClock: CGFloat = 0
@@ -238,7 +238,8 @@ final class SeasonScene: SKScene {
 
     // MARK: - Loop
 
-    override func update(_ currentTime: TimeInterval) {
+    /// Un passo della simulazione. Lo chiama il display link della finestra, non SpriteKit (vedi `OverlayWindow`).
+    func step(at currentTime: TimeInterval) {
         // dt limitato: dopo una pausa o un rallentamento non vogliamo salti enormi.
         let dt = CGFloat(min(currentTime - (lastUpdateTime ?? currentTime), 1.0 / 20.0))
         lastUpdateTime = currentTime
