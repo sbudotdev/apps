@@ -135,7 +135,7 @@ struct SettingsView: View {
                         .foregroundStyle(Quaderno.inkMuted.color)
                 }
                 Section("Suoni") {
-                    Toggle("Suoni", isOn: $settings.values.sounds)
+                    Toggle("Riproduci i suoni", isOn: $settings.values.sounds)
                     slider("Volume", $settings.values.soundVolume, 0...100, "%.0f%%")
                         .disabled(!settings.values.sounds)
                 }

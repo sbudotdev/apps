@@ -211,6 +211,8 @@ final class SeasonScene: SKScene {
     func wantsMouse(at point: CGPoint) -> Bool {
         held != nil || toy(at: point) != nil
     }
+    /// `wantsMouse` nel punto del cursore, ricalcolato a ogni passo.
+    private(set) var wantsMouse = false
 
     /// Pressione del mouse: prende l'oggetto sotto il punto. false = non c'è niente.
     @discardableResult
@@ -436,11 +438,14 @@ final class SeasonScene: SKScene {
         }
 
         // --- Oggetti: gravità, appoggio sui bordi scoperti, sul Dock o sul fondo dello schermo ---
-        let toyLedges = ledges + [Ledge(y: 0, span: 0...size.width)]
-        for toy in toys {
-            toy.body.step(dt: dt, ledges: toyLedges, width: size.width, bounce: reduceMotion ? 0 : toy.bounce)
-            toy.node.position = toy.body.position
+        if !toys.isEmpty {
+            let toyLedges = ledges + [Ledge(y: 0, span: 0...size.width)]
+            for toy in toys {
+                toy.body.step(dt: dt, ledges: toyLedges, width: size.width, bounce: reduceMotion ? 0 : toy.bounce)
+                toy.node.position = toy.body.position
+            }
         }
+        wantsMouse = wantsMouse(at: mouse)
 
         // --- Granelli di polvere: gravità + attrito dell'aria, niente oscillazione ---
         let drag = CGFloat(exp(-Double(Tuning.grainAirDrag * dt)))

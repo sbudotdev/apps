@@ -16,6 +16,7 @@ final class OverlayWindow: NSPanel {
     private let skView: SKView
     private let scene: SeasonScene
     private var displayLink: CADisplayLink?
+    private var takesMouse = false
 
     init(screen: NSScreen) {
         let frame = screen.frame
@@ -56,10 +57,12 @@ final class OverlayWindow: NSPanel {
 
     @objc private func step(_ link: CADisplayLink) {
         scene.step(at: link.targetTimestamp)
-        // Il mouse si prende solo sopra un oggetto: si ricontrolla a ogni fotogramma, dove il cursore è già letto.
-        let global = NSEvent.mouseLocation
-        let wants = scene.wantsMouse(at: CGPoint(x: global.x - frame.minX, y: global.y - frame.minY))
-        if ignoresMouseEvents == wants { ignoresMouseEvents = !wants }
+        // Il mouse si prende solo sopra un oggetto: la scena lo ricontrolla a ogni fotogramma.
+        // Lo stato si tiene qui: leggere `ignoresMouseEvents` a ogni fotogramma costava CPU.
+        if scene.wantsMouse != takesMouse {
+            takesMouse = scene.wantsMouse
+            ignoresMouseEvents = !takesMouse
+        }
     }
 
     override func close() {
@@ -100,7 +103,10 @@ final class OverlayWindow: NSPanel {
     func setSnowing(_ snowing: Bool) {
         skView.isPaused = !snowing
         displayLink?.isPaused = !snowing
-        if !snowing { ignoresMouseEvents = true }
+        if !snowing {
+            takesMouse = false
+            ignoresMouseEvents = true
+        }
         if snowing {
             orderFrontRegardless()
         } else {
