@@ -20,6 +20,9 @@ nonisolated struct SnowSettings: Codable, Equatable {
     var toolbarCornerRadius = 34.0  // pt: angoli delle app con barra strumenti (Finder, Safari, Note…)
     var windowCornerRadius = 20.0   // pt: angoli delle altre app (IntelliJ, Chrome…)
     var dockInset = 7.0         // pt: il rettangolo del Dock dato da macOS ha un margine sopra la barra visibile
+    // Suoni (SoundBoard): spenti finché non li accendi
+    var sounds = false
+    var soundVolume = 60.0      // %
 }
 
 extension SnowSettings {
@@ -131,6 +134,13 @@ struct SettingsView: View {
                     Text("Finder, Safari e Note hanno angoli più tondi di Chrome. Se la neve resta sospesa sugli angoli, aumenta; se entra nella finestra, diminuisci.")
                         .foregroundStyle(Quaderno.inkMuted.color)
                 }
+                Section("Suoni") {
+                    Toggle("Riproduci i suoni", isOn: $settings.values.sounds)
+                    slider("Volume", $settings.values.soundVolume, 0...100, "%.0f%%")
+                        .disabled(!settings.values.sounds)
+                }
+                .onChange(of: settings.values.sounds) { SoundBoard.shared.settingsChanged() }
+                .onChange(of: settings.values.soundVolume) { SoundBoard.shared.settingsChanged() }
                 Section {
                     Toggle("Apri al login", isOn: $openAtLogin)
                         .onChange(of: openAtLogin) { _, on in setOpenAtLogin(on) }

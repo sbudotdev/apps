@@ -51,6 +51,19 @@ final class SeasonScene: SKScene {
     /// Tempo dall'ultimo aggiornamento dei mucchi (frana + ridisegno).
     private var pileClock: CGFloat = 0
 
+    /// Gli oggetti con cui giocare, nell'ordine in cui si disegnano (l'ultimo è davanti).
+    private(set) var toys: [Toy] = []
+    /// Dove possono stare in piedi gli oggetti: i tratti scoperti dei bordi e il Dock (senza il fondo).
+    private var ledges: [Ledge] = []
+    /// L'oggetto in mano al cursore: dove l'ha preso, dov'è partito, l'ultima posizione e la velocità del lancio.
+    private var held: (toy: Toy, grip: CGVector, start: CGPoint, last: CGPoint, time: TimeInterval, velocity: CGVector)?
+    private var pointerShake = ShakeDetector()
+
+    /// "Riduci movimento" di macOS: metà dei fiocchi, niente vento, oscillazione, rotazione, lanci o rimbalzi.
+    var reduceMotion = false {
+        didSet { if reduceMotion != oldValue, !flakes.isEmpty { rebuildFlakes() } }
+    }
+
     /// Quantità e dimensione con cui sono stati creati i fiocchi attuali:
     /// se nelle impostazioni cambiano, li ricreiamo.
     private var builtWith: (count: Double, size: Double)?
@@ -108,7 +121,8 @@ final class SeasonScene: SKScene {
         }
         let settings = Settings.shared.values
         builtWith = (settings.flakeCount, settings.flakeSize)
-        let count = Int(settings.flakeCount * Double(size.width * size.height / Tuning.referenceScreenArea))
+        let calm = reduceMotion ? Tuning.reducedMotionFlakes : 1
+        let count = Int(settings.flakeCount * Double(size.width * size.height / Tuning.referenceScreenArea * calm))
         flakes = (0..<max(count, 1)).map { _ in
             makeFlake(at: CGPoint(x: .random(in: 0...size.width), y: .random(in: 0...size.height)))
         }
@@ -172,6 +186,95 @@ final class SeasonScene: SKScene {
         }
     }
 
+    var flakeCount: Int { flakes.count }
+
+    // MARK: - Oggetti
+
+    func add(_ toy: Toy) {
+        toys.append(toy)
+        addChild(toy.node)
+    }
+
+    func remove(_ toy: Toy) {
+        toys.removeAll { $0 === toy }
+        toy.node.removeFromParent()
+        if held?.toy === toy { held = nil }
+    }
+
+    /// L'oggetto sotto il punto, il più in primo piano.
+    func toy(at point: CGPoint) -> Toy? {
+        toys.last { $0.frame.contains(point) }
+    }
+
+    /// La finestra deve prendere il mouse? Solo sopra un oggetto, o mentre se ne trascina uno:
+    /// altrove i clic passano alle app sotto (README, "Clic sugli oggetti").
+    func wantsMouse(at point: CGPoint) -> Bool {
+        held != nil || toy(at: point) != nil
+    }
+    /// `wantsMouse` nel punto del cursore, ricalcolato a ogni passo.
+    private(set) var wantsMouse = false
+
+    /// Pressione del mouse: prende l'oggetto sotto il punto. false = non c'è niente.
+    @discardableResult
+    func grab(at point: CGPoint, time: TimeInterval) -> Bool {
+        guard let toy = toy(at: point) else { return false }
+        let feet = toy.body.position
+        held = (toy, CGVector(dx: point.x - feet.x, dy: point.y - feet.y), point, point, time, .zero)
+        toy.body.hold(at: feet)
+        // Davanti agli altri oggetti.
+        toys.removeAll { $0 === toy }
+        toys.append(toy)
+        toy.node.zPosition = 2 + CGFloat(toys.count) * 0.001
+        return true
+    }
+
+    func drag(to point: CGPoint, time: TimeInterval) {
+        guard var held else { return }
+        let dt = time - held.time
+        if dt > 0 {
+            // Media mobile: il lancio segue gli ultimi movimenti, non solo l'ultimo scatto.
+            let now = CGVector(dx: (point.x - held.last.x) / dt, dy: (point.y - held.last.y) / dt)
+            held.velocity = CGVector(dx: held.velocity.dx * 0.3 + now.dx * 0.7, dy: held.velocity.dy * 0.3 + now.dy * 0.7)
+        }
+        held.last = point
+        held.time = time
+        held.toy.body.hold(at: CGPoint(x: point.x - held.grip.dx, y: point.y - held.grip.dy))
+        held.toy.node.position = held.toy.body.position
+        self.held = held
+    }
+
+    /// Rilascio: un clic se il mouse non si è quasi mosso, se no un lancio (con Riduci movimento cade dritto).
+    func letGo(at point: CGPoint, time: TimeInterval) {
+        // Fermo da un po' prima di lasciarlo: nessun lancio. Va letto prima di `drag`, che aggiorna `held.time`.
+        let stale = held.map { time - $0.time > 0.1 } ?? false
+        drag(to: point, time: time)
+        guard let held else { return }
+        self.held = nil
+        let isClick = hypot(point.x - held.start.x, point.y - held.start.y) < Tuning.clickSlop
+        held.toy.body.release(velocity: isClick || stale || reduceMotion ? .zero : held.velocity)
+        if isClick { held.toy.clicked() }
+    }
+
+    /// Il cursore si è mosso su questo schermo: se è stato scosso, lo sanno tutti gli oggetti.
+    /// La neve si ferma mentre trascini: l'oggetto cade lì, e la finestra non resta col mouse preso.
+    func dropHeld() {
+        held?.toy.body.release(velocity: .zero)
+        held = nil
+    }
+
+    func pointerMoved(to point: CGPoint, time: TimeInterval) {
+        if pointerShake.add(point, at: time) { toys.forEach { $0.shaken(.pointer) } }
+    }
+
+    /// Finestre scosse (le riconosce `AppDelegate`, una volta per tutti gli schermi).
+    func windowsShaken(_ ids: Set<CGWindowID>) {
+        for id in ids { toys.forEach { $0.shaken(.window(id)) } }
+    }
+
+    override func mouseDown(with event: NSEvent) { grab(at: event.location(in: self), time: event.timestamp) }
+    override func mouseDragged(with event: NSEvent) { drag(to: event.location(in: self), time: event.timestamp) }
+    override func mouseUp(with event: NSEvent) { letGo(at: event.location(in: self), time: event.timestamp) }
+
     // MARK: - Finestre
 
     /// Riceve finestre e Dock attuali (coordinate globali) e aggiorna i mucchi di neve.
@@ -180,6 +283,7 @@ final class SeasonScene: SKScene {
         updateDock(dockFrame)
         let maxPile = CGFloat(Settings.shared.values.maxPile)
         var seen = Set<CGWindowID>()
+        ledges = dock.map { [Ledge(y: $0.rect.maxY, span: $0.rect.minX...$0.rect.maxX)] } ?? []
         for edge in edges {
             let r = edge.rect.offsetBy(dx: -screenOrigin.x, dy: -screenOrigin.y)
             // Solo bordi su questo schermo, con il mucchio sotto la barra dei menu (decisione di Matteo, MGS-416).
@@ -187,6 +291,8 @@ final class SeasonScene: SKScene {
                   let base = pileBase(edgeTop: r.maxY, pileHeight: maxPile, ceiling: ceiling) else { continue }
             seen.insert(edge.id)
             let open = edge.visible.map { ($0.lowerBound - screenOrigin.x)...($0.upperBound - screenOrigin.x) }
+            // Gli oggetti stanno dove si posa la neve: sui tratti scoperti, sotto la barra dei menu.
+            ledges += open.map { Ledge(y: base, span: $0) }
 
             if let old = piles[edge.id], old.rect.minX == r.minX, old.pile.baseY == base, old.rect.width == r.width,
                old.pile.cornerRadius == edge.cornerRadius {
@@ -256,7 +362,7 @@ final class SeasonScene: SKScene {
         let fallSpeed = CGFloat(settings.fallSpeed)
 
         // Vento globale che cambia lentamente.
-        let maxWind = CGFloat(settings.wind)
+        let maxWind = reduceMotion ? 0 : CGFloat(settings.wind)
         let wind = sin(elapsed * 0.11) * maxWind + sin(elapsed * 0.37) * maxWind * 0.3
 
         // Posizione e velocità del cursore in coordinate della scena.
@@ -267,6 +373,7 @@ final class SeasonScene: SKScene {
             mouseVelocity = CGVector(dx: (mouse.x - last.x) / dt, dy: (mouse.y - last.y) / dt)
         }
         lastMouse = mouse
+        if CGRect(origin: .zero, size: size).contains(mouse) { pointerMoved(to: mouse, time: currentTime) }
 
         let decay = CGFloat(exp(-Double(Tuning.cursorDamping * dt)))
         let dragBlend = min(1, dt * 10)
@@ -303,7 +410,7 @@ final class SeasonScene: SKScene {
             flake.push.dy *= decay
 
             // --- Movimento naturale ---
-            let sway = cos(elapsed * flake.swayFrequency * 2 * .pi + flake.phase)
+            let sway = reduceMotion ? 0 : cos(elapsed * flake.swayFrequency * 2 * .pi + flake.phase)
                 * flake.swayAmplitude * flake.swayFrequency
             p.x += (wind * (0.4 + flake.depth) + sway + flake.push.dx) * dt
             p.y += (-flake.fallSpeed * fallSpeed + flake.push.dy) * dt
@@ -314,8 +421,8 @@ final class SeasonScene: SKScene {
             if p.x > size.width + margin { p.x -= size.width + margin * 2 }
 
             flake.node.position = p
-            if flake.spin != 0 { flake.node.zRotation += flake.spin * dt }
-            if flake.flip != 0 { flake.node.xScale = cos(elapsed * flake.flip + flake.phase) }
+            if flake.spin != 0, !reduceMotion { flake.node.zRotation += flake.spin * dt }
+            if flake.flip != 0, !reduceMotion { flake.node.xScale = cos(elapsed * flake.flip + flake.phase) }
 
             // --- Si posa? Ha attraversato la superficie di un mucchio in questo passo ---
             for pile in allPiles {
@@ -335,6 +442,16 @@ final class SeasonScene: SKScene {
             }
             flakes[i] = flake
         }
+
+        // --- Oggetti: gravità, appoggio sui bordi scoperti, sul Dock o sul fondo dello schermo ---
+        if !toys.isEmpty {
+            let toyLedges = ledges + [Ledge(y: 0, span: 0...size.width)]
+            for toy in toys {
+                toy.body.step(dt: dt, ledges: toyLedges, width: size.width, bounce: reduceMotion ? 0 : toy.bounce)
+                toy.node.position = toy.body.position
+            }
+        }
+        wantsMouse = wantsMouse(at: mouse)
 
         // --- Granelli di polvere: gravità + attrito dell'aria, niente oscillazione ---
         let drag = CGFloat(exp(-Double(Tuning.grainAirDrag * dt)))

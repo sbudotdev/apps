@@ -1,0 +1,70 @@
+import CoreGraphics
+import Foundation
+import Testing
+@testable import SbuSeasons
+
+/// Scuotere: avanti e indietro più volte, in fretta. Un movimento normale non conta.
+struct ShakeDetectorTests {
+    /// Punti avanti e indietro in orizzontale, `step` secondi l'uno dall'altro.
+    private func feed(_ detector: inout ShakeDetector, xs: [CGFloat], step: TimeInterval) -> Bool {
+        var shaken = false
+        for (i, x) in xs.enumerated() where detector.add(CGPoint(x: x, y: 100), at: TimeInterval(i) * step) {
+            shaken = true
+        }
+        return shaken
+    }
+
+    @Test func backAndForthQuicklyIsAShake() {
+        var detector = ShakeDetector()
+        #expect(feed(&detector, xs: [0, 80, 0, 80, 0, 80, 0], step: 0.08))
+    }
+
+    @Test func shakingOnAndOnIsOneShake() {
+        var detector = ShakeDetector()
+        let xs = (0..<12).map { CGFloat($0 % 2 * 80) }
+        var count = 0
+        for (i, x) in xs.enumerated() where detector.add(CGPoint(x: x, y: 100), at: TimeInterval(i) * 0.08) { count += 1 }
+        #expect(count == 1)
+    }
+
+    @Test func aShakeThenStillnessIsOneShake() {
+        var detector = ShakeDetector()
+        var count = 0
+        // 0,9 s avanti e indietro di 300 pt ogni 60 ms, a 60 Hz; poi fermo per 2 s.
+        for frame in 0..<Int(2.9 * 60) {
+            let t = TimeInterval(frame) / 60
+            let x: CGFloat = t < 0.9 ? (Int(t / 0.06) % 2 == 0 ? 0 : 300) : 0
+            if detector.add(CGPoint(x: x, y: 100), at: t) { count += 1 }
+        }
+        #expect(count == 1)
+    }
+
+    @Test func aLongStraightMoveIsNot() {
+        var detector = ShakeDetector()
+        #expect(!feed(&detector, xs: stride(from: 0, through: 1200, by: 60).map { $0 }, step: 0.02))
+    }
+
+    @Test func slowBackAndForthIsNot() {
+        var detector = ShakeDetector()
+        #expect(!feed(&detector, xs: [0, 80, 0, 80, 0, 80, 0], step: 0.6))
+    }
+
+    @Test func tinyWobblesAreNot() {
+        var detector = ShakeDetector()
+        #expect(!feed(&detector, xs: [0, 10, 0, 10, 0, 10, 0, 10, 0], step: 0.05))
+    }
+
+    @Test func aWindowShakenBetweenTwoReadsIsFound() {
+        var shakes = WindowShakes()
+        func edge(_ x: CGFloat) -> WindowEdge {
+            WindowEdge(id: 7, rect: CGRect(x: x, y: 100, width: 300, height: 200), visible: [x...(x + 300)])
+        }
+        var found: Set<CGWindowID> = []
+        // Le finestre si leggono 8 volte al secondo.
+        for (i, x) in [0, 90, 0, 90, 0, 90].enumerated() {
+            found.formUnion(shakes.update([edge(CGFloat(x)), WindowEdge(id: 8, rect: .zero, visible: [])],
+                                          at: TimeInterval(i) * Tuning.windowRefreshInterval))
+        }
+        #expect(found == [7])
+    }
+}

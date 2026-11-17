@@ -17,6 +17,9 @@ struct LocalizationTests {
         ("Primavera", "Spring"),
         ("Estate", "Summer"),
         ("Autunno", "Autumn"),
+        ("Suoni", "Sounds"),
+        ("Volume", "Volume"),
+        ("Riproduci i suoni", "Play Sounds"),
         ("Informazioni su %@", "About %@"),
         ("Nata da un'idea di Simone Antoniciello", "Based on an idea by Simone Antoniciello"),
     ])
