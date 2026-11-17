@@ -114,7 +114,7 @@ final class Sky: SKNode {
         }
         if let at = thunder, clock >= at {
             thunder = nil
-            SoundBoard.shared.play("tuono")
+            if !calm { SoundBoard.shared.play("tuono") }   // Riduci movimento acceso durante il lampo: niente tuono
         }
         let level = calm ? 0 : strike.map { Lightning.flash(at: clock - $0) * lightning.strength } ?? 0
         guard level != flash else { return }

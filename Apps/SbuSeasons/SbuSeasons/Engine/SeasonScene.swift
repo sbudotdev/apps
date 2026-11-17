@@ -79,7 +79,11 @@ final class SeasonScene: SKScene {
 
     /// "Riduci movimento" di macOS: metà dei fiocchi, niente vento, oscillazione, rotazione, lanci o rimbalzi.
     var reduceMotion = false {
-        didSet { if reduceMotion != oldValue, !flakes.isEmpty { rebuildFlakes() } }
+        didSet {
+            guard reduceMotion != oldValue else { return }
+            // Senza particelle (nebbia, nuvole) `rebuildFlakes` non serve, ma i banchi vanno ricontati lo stesso.
+            if flakes.isEmpty { sky.set(season, size: size, amount: skyAmount) } else { rebuildFlakes() }
+        }
     }
 
     /// Quantità e dimensione con cui sono stati creati i fiocchi attuali:
@@ -147,7 +151,7 @@ final class SeasonScene: SKScene {
         }
         let settings = Settings.shared.values
         builtWith = (settings.flakeCount, settings.flakeSize)
-        sky.set(season, size: size, amount: intensity * (reduceMotion ? Tuning.reducedMotionFlakes : 1))
+        sky.set(season, size: size, amount: skyAmount)
         guard size.width > 0, size.height > 0 else {
             flakes.forEach { $0.node.removeFromParent() }
             flakes = []
@@ -170,6 +174,9 @@ final class SeasonScene: SKScene {
 
     /// L'intensità rispetto a "Media": banchi e gocce sul vetro la seguono come le particelle.
     private var intensity: CGFloat { CGFloat(Settings.shared.values.flakeCount / SnowSettings().flakeCount) }
+
+    /// Quanti banchi rispetto a "Media": seguono l'intensità, e con Riduci movimento sono la metà.
+    private var skyAmount: CGFloat { intensity * (reduceMotion ? Tuning.reducedMotionFlakes : 1) }
 
     /// Crea un fiocco nel punto indicato.
     private func makeFlake(at position: CGPoint) -> Flake {
