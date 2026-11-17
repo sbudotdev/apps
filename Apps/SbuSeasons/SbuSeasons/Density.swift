@@ -12,6 +12,9 @@ nonisolated enum Density: Int, CaseIterable {
         }
     }
 
+    /// Il cursore dell'intensità, nel menu e nelle Impostazioni ("Quantità di fiocchi").
+    static let range: ClosedRange<Double> = 30...800
+
     /// Numero di fiocchi per uno schermo di riferimento da 1440×900 punti.
     /// Su schermi più grandi o più piccoli il numero viene scalato in proporzione all'area.
     var flakesPerReferenceScreen: Double {
