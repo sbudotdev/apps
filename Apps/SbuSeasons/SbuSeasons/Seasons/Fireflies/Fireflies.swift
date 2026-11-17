@@ -14,7 +14,7 @@ struct Fireflies: Season {
 
     func particle(depth: CGFloat) -> Particle {
         Particle(
-            radius: 4 + depth * 5,
+            radius: 8 + depth * 8,
             alpha: FirefliesTuning.opacity.lowerBound + depth * (FirefliesTuning.opacity.upperBound - FirefliesTuning.opacity.lowerBound),
             fallSpeed: .random(in: FirefliesTuning.sink),
             swayAmplitude: .random(in: FirefliesTuning.wander),
@@ -30,9 +30,9 @@ struct Fireflies: Season {
         let image = NSImage(size: NSSize(width: side, height: side), flipped: false) { rect in
             guard let ctx = NSGraphicsContext.current?.cgContext else { return false }
             let colors = [FirefliesTuning.spark.cgColor, FirefliesTuning.core.cgColor,
-                          FirefliesTuning.core.withAlphaComponent(0.25).cgColor, NSColor.clear.cgColor] as CFArray
+                          FirefliesTuning.core.withAlphaComponent(0.4).cgColor, NSColor.clear.cgColor] as CFArray
             guard let gradient = CGGradient(colorsSpace: CGColorSpace(name: CGColorSpace.sRGB), colors: colors,
-                                            locations: [0, 0.18, 0.45, 1]) else { return false }
+                                            locations: [0, 0.2, 0.5, 1]) else { return false }
             let center = CGPoint(x: rect.midX, y: rect.midY)
             ctx.drawRadialGradient(gradient, startCenter: center, startRadius: 0, endCenter: center,
                                    endRadius: side / 2, options: [])
