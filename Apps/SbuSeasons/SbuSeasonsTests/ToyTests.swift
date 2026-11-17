@@ -90,6 +90,25 @@ struct ToyTests {
         }
     }
 
+    @Test func lettingGoAfterHoldingStillDropsItStraight() {
+        let scene = scene()
+        let ball = TestBall(at: CGPoint(x: 300, y: 0))
+        scene.add(ball)
+        _ = scene.grab(at: CGPoint(x: 300, y: 20), time: 0)
+        scene.drag(to: CGPoint(x: 320, y: 220), time: 0.016)
+        scene.drag(to: CGPoint(x: 340, y: 420), time: 0.032)
+        scene.letGo(at: CGPoint(x: 340, y: 420), time: 1.0)
+        #expect(ball.body.velocity == .zero)
+    }
+
+    @Test func pausingWhileDraggingLetsGoOfTheMouse() {
+        let scene = scene()
+        scene.add(TestBall(at: CGPoint(x: 300, y: 0)))
+        _ = scene.grab(at: CGPoint(x: 300, y: 20), time: 0)
+        scene.dropHeld()
+        #expect(!scene.wantsMouse(at: CGPoint(x: 900, y: 700)))
+    }
+
     @Test func shakingThePointerReachesTheToys() {
         let scene = scene()
         let ball = TestBall(at: CGPoint(x: 300, y: 0))

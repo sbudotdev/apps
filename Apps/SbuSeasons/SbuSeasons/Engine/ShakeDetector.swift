@@ -16,10 +16,15 @@ nonisolated struct ShakeDetector {
 
     /// Un punto nuovo. true = scosso (poi si ricomincia a contare).
     mutating func add(_ point: CGPoint, at time: TimeInterval) -> Bool {
-        if axes[0].reverses(at: point.x, minTravel: minTravel) { times.append(time) }
-        if axes[1].reverses(at: point.y, minTravel: minTravel) { times.append(time) }
+        let reversedX = axes[0].reverses(at: point.x, minTravel: minTravel)
+        let reversedY = axes[1].reverses(at: point.y, minTravel: minTravel)
+        // Durante la pausa dopo una scossa i cambi di verso non contano: se no, a pausa finita,
+        // quelli dello stesso gesto farebbero una seconda scossa a cursore fermo.
+        guard time >= quietUntil else { return false }
+        if reversedX { times.append(time) }
+        if reversedY { times.append(time) }
         times.removeAll { time - $0 > window }
-        guard times.count >= reversals, time >= quietUntil else { return false }
+        guard times.count >= reversals else { return false }
         times = []
         quietUntil = time + window
         return true
