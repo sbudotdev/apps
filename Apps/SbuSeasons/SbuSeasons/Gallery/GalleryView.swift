@@ -5,7 +5,7 @@ import SwiftUI
 /// "Lascia il mio schermo com'è". Con l'effetto consigliato acceso, cambia anche la stagione.
 struct GalleryView: View {
     @State private var selection = Wallpaper.all[0].id
-    @State private var screenName = NSScreen.main?.localizedName ?? ""
+    @State private var screenKey = NSScreen.main?.wallpaperKey ?? ""
     @State private var failure = ""
     @State private var fails = false
     /// Quante volte si è tornati allo sfondo di prima: aggiorna "Lascia il mio schermo com'è".
@@ -13,7 +13,7 @@ struct GalleryView: View {
     @AppStorage("galleryUsesEffect") private var usesEffect = true
 
     private var screen: NSScreen? {
-        NSScreen.screens.first { $0.localizedName == screenName } ?? NSScreen.main
+        NSScreen.screens.first { $0.wallpaperKey == screenKey } ?? NSScreen.main
     }
 
     private var chosen: Wallpaper { Wallpaper.all.first { $0.id == selection } ?? Wallpaper.all[0] }
@@ -64,7 +64,6 @@ struct GalleryView: View {
             }
         }
         .buttonStyle(.plain)
-        .accessibilityElement(children: .ignore)
         .accessibilityLabel(wallpaper.title)
         .accessibilityValue(Text("Effetto consigliato: \(effect.title)"))
         .accessibilityAddTraits(isChosen ? .isSelected : [])
@@ -73,8 +72,8 @@ struct GalleryView: View {
     private var controls: some View {
         HStack(spacing: Quaderno.space4) {
             if NSScreen.screens.count > 1 {
-                Picker("Schermo", selection: $screenName) {
-                    ForEach(NSScreen.screens, id: \.localizedName) { Text($0.localizedName).tag($0.localizedName) }
+                Picker("Schermo", selection: $screenKey) {
+                    ForEach(NSScreen.screens, id: \.wallpaperKey) { Text($0.localizedName).tag($0.wallpaperKey) }
                 }
                 .fixedSize()
             }
@@ -92,7 +91,7 @@ struct GalleryView: View {
 
     private var canRestore: Bool {
         _ = restores
-        return screen.flatMap { WallpaperMemory().original(screen: $0.localizedName) } != nil
+        return screen.flatMap { WallpaperMemory().original(screen: $0.wallpaperKey) } != nil
     }
 
     private func apply() {
