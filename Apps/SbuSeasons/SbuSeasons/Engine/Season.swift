@@ -24,12 +24,60 @@ protocol Season {
     var settles: Bool { get }
     /// Quante particelle rispetto a "Quantità" (1 = tante quante dice l'intensità, 0 = nessuna).
     var abundance: Double { get }
+    /// Banchi a tutto schermo che scorrono piano (nebbia, nuvole). Vuoto = nessuno.
+    var banks: [Bank] { get }
+    /// Lampi lontani che illuminano le nuvole. nil = mai.
+    var lightning: Lightning? { get }
+    /// Gocce sul vetro dello schermo. nil = niente.
+    var glass: GlassRain? { get }
 }
 
 extension Season {
     var pileGrowth: ClosedRange<CGFloat> { 1...1 }
     var settles: Bool { true }
     var abundance: Double { 1 }
+    var banks: [Bank] { [] }
+    var lightning: Lightning? { nil }
+    var glass: GlassRain? { nil }
+}
+
+/// Un tipo di banco che attraversa lo schermo da sinistra a destra: strati di nebbia o nuvole.
+/// Il disegno (bianco, poi tinto con `color`) è del motore (`Sky`).
+nonisolated struct Bank {
+    enum Shape { case mist, cloud }
+    var shape: Shape
+    /// Quanti su uno schermo largo 1440 pt, a intensità "Media" (scalati su larghezza e intensità).
+    var count: Int
+    /// Dove sta il centro, in frazioni dell'altezza dello schermo (0 = fondo, 1 = cima).
+    var band: ClosedRange<CGFloat>
+    /// Altezza in punti; la larghezza è `height × aspect`.
+    var height: ClosedRange<CGFloat>
+    var aspect: ClosedRange<CGFloat>
+    /// Velocità verso destra, in pt/s.
+    var speed: ClosedRange<CGFloat>
+    var alpha: ClosedRange<CGFloat>
+    var color: NSColor
+}
+
+/// Lampi lontani: ogni tanto le nuvole si illuminano due volte di fila, poi il tuono (se ci sono i suoni).
+nonisolated struct Lightning {
+    /// Secondi tra un lampo e l'altro.
+    var every: ClosedRange<CGFloat>
+    /// Quanto si illuminano le nuvole e il cielo (0…1).
+    var strength: CGFloat
+}
+
+/// Pioggia sul vetro: gocce che si posano, si uniscono, scorrono giù e cadono dai bordi (`GlassDrops`).
+nonisolated struct GlassRain {
+    /// Gocce nuove al secondo su uno schermo di riferimento, a intensità "Media".
+    var beads: CGFloat
+    /// Raggio di una goccia appena posata, in punti.
+    var size: ClosedRange<CGFloat>
+    /// Da questo raggio una goccia è troppo pesante e scorre giù.
+    var slide: CGFloat
+    /// Massimo di gocce sul vetro su uno schermo di riferimento: oltre, la pioggia cade su quelle che ci sono.
+    var most: Int
+    var color: NSColor
 }
 
 /// Com'è e come cade una particella, prima dei moltiplicatori delle Impostazioni.

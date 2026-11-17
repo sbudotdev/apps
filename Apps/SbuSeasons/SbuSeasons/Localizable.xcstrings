@@ -851,6 +851,46 @@
           }
         }
       }
+    },
+    "Pioggia sul vetro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rain on the Glass"
+          }
+        }
+      }
+    },
+    "Temporale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thunderstorm"
+          }
+        }
+      }
+    },
+    "Nebbia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mist"
+          }
+        }
+      }
+    },
+    "Nuvole": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clouds"
+          }
+        }
+      }
     }
   }
 }
