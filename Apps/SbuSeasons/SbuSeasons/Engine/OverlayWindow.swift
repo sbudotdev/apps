@@ -3,25 +3,30 @@ import SpriteKit
 
 /// Finestra trasparente, senza bordi, che copre un intero schermo e sta sopra
 /// alle altre finestre. I click la attraversano (`ignoresMouseEvents`), quindi
-/// le app sotto continuano a funzionare normalmente.
+/// le app sotto continuano a funzionare normalmente; solo sopra un oggetto con cui giocare
+/// la finestra prende il mouse (README, "Clic sugli oggetti").
+///
+/// È un pannello "non attivante": cliccare un oggetto non porta l'app davanti e non toglie
+/// la tastiera all'app che stai usando.
 ///
 /// La `SKView` disegna, ma la scena la muove un display link della finestra, che segue il suo schermo.
 /// Con due schermi a frequenze diverse (144 e 60 Hz) SpriteKit chiamava `update` solo sulla scena
 /// dello schermo più lento e sull'altro la neve si fermava o andava lentissima (SBU-19).
-final class OverlayWindow: NSWindow {
+final class OverlayWindow: NSPanel {
     private let skView: SKView
     private let scene: SeasonScene
     private var displayLink: CADisplayLink?
+    private var takesMouse = false
 
     init(screen: NSScreen) {
         let frame = screen.frame
 
-        skView = SKView(frame: NSRect(origin: .zero, size: frame.size))
+        skView = OverlaySKView(frame: NSRect(origin: .zero, size: frame.size))
         scene = SeasonScene(size: frame.size, screenOrigin: frame.origin, season: Settings.shared.season)
 
         super.init(
             contentRect: frame,
-            styleMask: [.borderless],
+            styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: false
         )
@@ -31,6 +36,7 @@ final class OverlayWindow: NSWindow {
         hasShadow = false
         ignoresMouseEvents = true
         isReleasedWhenClosed = false
+        hidesOnDeactivate = false   // un pannello di norma sparisce quando l'app non è davanti
 
         // Sopra le finestre normali e sopra il Dock, sotto i menu a tendina.
         level = .statusBar
@@ -51,6 +57,12 @@ final class OverlayWindow: NSWindow {
 
     @objc private func step(_ link: CADisplayLink) {
         scene.step(at: link.targetTimestamp)
+        // Il mouse si prende solo sopra un oggetto: la scena lo ricontrolla a ogni fotogramma.
+        // Lo stato si tiene qui: leggere `ignoresMouseEvents` a ogni fotogramma costava CPU.
+        if scene.wantsMouse != takesMouse {
+            takesMouse = scene.wantsMouse
+            ignoresMouseEvents = !takesMouse
+        }
     }
 
     override func close() {
@@ -77,9 +89,13 @@ final class OverlayWindow: NSWindow {
     /// Il tempo simulato della neve su questo schermo.
     var elapsed: CGFloat { scene.elapsed }
     func setSeason(_ season: any Season) { scene.setSeason(season) }
+    func add(_ toy: Toy) { scene.add(toy) }
+    func windowsShaken(_ ids: Set<CGWindowID>) { scene.windowsShaken(ids) }
 
-    func setOnBattery(_ onBattery: Bool) {
-        let fps = Tuning.framesPerSecond(onBattery: onBattery)
+    /// Batteria e "Riduci movimento": in entrambi i casi meno fotogrammi; con Riduci movimento anche meno movimento.
+    func setEnergy(onBattery: Bool, reduceMotion: Bool) {
+        scene.reduceMotion = reduceMotion
+        let fps = Tuning.framesPerSecond(onBattery: onBattery, reduceMotion: reduceMotion)
         skView.preferredFramesPerSecond = fps
         displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: Float(fps), maximum: Float(fps), preferred: Float(fps))
     }
@@ -87,10 +103,21 @@ final class OverlayWindow: NSWindow {
     func setSnowing(_ snowing: Bool) {
         skView.isPaused = !snowing
         displayLink?.isPaused = !snowing
+        if !snowing {
+            scene.dropHeld()
+            takesMouse = false
+            ignoresMouseEvents = true
+        }
         if snowing {
             orderFrontRegardless()
         } else {
             orderOut(nil)
         }
     }
+}
+
+/// La `SKView` prende anche il primo clic: la finestra non diventa mai attiva, e senza questo
+/// il clic su un oggetto servirebbe solo ad "attivarla" e andrebbe perso.
+private final class OverlaySKView: SKView {
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 }
