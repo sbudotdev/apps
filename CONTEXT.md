@@ -80,7 +80,7 @@ Il rettangolo `ink` (raggio 14) della **Chiusura**, l'unica superficie scura olt
 _Avoid_: card scura, banner
 
 **Stagione** (_Season_):
-Un periodo dell'anno in cui le **App Sbu** possono cambiare qualcosa, scritto nella build e acceso solo dalla data del telefono. Per ora solo Natale, dal 1/12 al 6/1 compresi (ADR-0019).
+Un periodo dell'anno in cui le **App Sbu** possono cambiare qualcosa, scritto nella build e acceso solo dalla data del telefono. Per ora solo Natale, dal 1/12 al 6/1 compresi (ADR-0023).
 _Avoid_: tema, evento, campagna
 
 **Promesse** (_Promises_):

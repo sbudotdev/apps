@@ -1,7 +1,7 @@
 import Foundation
 
 /// A time of year when the apps may dress up, shipped in the build and switched on by the date
-/// alone (ADR-0019): no network, nothing saved.
+/// alone (ADR-0023): no network, nothing saved.
 nonisolated public enum SbuSeason: String, CaseIterable, Sendable {
     /// From 1 December to 6 January, both included.
     case christmas

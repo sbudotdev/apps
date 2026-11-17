@@ -3,7 +3,7 @@ import SwiftUI
 import Testing
 @testable import SbuKit
 
-/// Seasons come from the date alone (ADR-0019): Christmas from 1 December to 6 January, both included.
+/// Seasons come from the date alone (ADR-0023): Christmas from 1 December to 6 January, both included.
 struct SeasonTests {
     private static func date(_ year: Int, _ month: Int, _ day: Int, hour: Int = 12, in calendar: Calendar) -> Date {
         calendar.date(from: DateComponents(year: year, month: month, day: day, hour: hour))!
