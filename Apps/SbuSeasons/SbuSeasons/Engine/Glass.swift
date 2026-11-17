@@ -18,6 +18,8 @@ nonisolated struct Drop: Equatable {
 nonisolated struct GlassDrops {
     let rain: GlassRain
     private(set) var drops: [Drop] = []
+    /// Le gocce sparite nell'ultimo passo (unite a un'altra o uscite): chi le disegna toglie le loro sprite.
+    private(set) var removed: [Int] = []
     private var nextID = 0
     private var due: CGFloat = 0
 
@@ -44,6 +46,7 @@ nonisolated struct GlassDrops {
 
     /// Un passo. `amount`: intensità rispetto a "Media"; `ledges`: i bordi da cui una goccia cade; `calm`: Riduci movimento.
     mutating func step(dt: CGFloat, size: CGSize, ledges: [Ledge], amount: CGFloat, calm: Bool) {
+        removed = []
         guard size.width > 0, size.height > 0 else { return }
         let area = size.width * size.height / Tuning.referenceScreenArea
         // Nuove gocce.
@@ -98,9 +101,15 @@ nonisolated struct GlassDrops {
                 gone.insert(j)
             }
         }
-        if !gone.isEmpty { drops = drops.enumerated().filter { !gone.contains($0.offset) }.map(\.element) }
-        // Fuori dallo schermo (in fondo o di lato): sparita.
-        drops.removeAll { $0.position.y < -$0.radius * 4 || $0.position.x < -20 || $0.position.x > size.width + 20 }
+        // Unite a un'altra o fuori dallo schermo (in fondo o di lato): sparite.
+        for (i, drop) in drops.enumerated()
+        where gone.contains(i) || drop.position.y < -drop.radius * 4 || drop.position.x < -20 || drop.position.x > size.width + 20 {
+            removed.append(drop.id)
+        }
+        if !removed.isEmpty {
+            let ids = Set(removed)
+            drops.removeAll { ids.contains($0.id) }
+        }
         for (point, radius) in trail where radius >= 0.6 {
             drops.append(Drop(id: nextID, position: point, radius: radius))
             nextID += 1
@@ -135,9 +144,10 @@ final class Glass: SKNode {
         guard var model, let texture else { return }
         model.step(dt: dt, size: size, ledges: ledges, amount: amount, calm: calm)
         self.model = model
-        var alive = Set<Int>()
+        for id in model.removed {
+            nodes.removeValue(forKey: id)?.removeFromParent()
+        }
         for drop in model.drops {
-            alive.insert(drop.id)
             let node = nodes[drop.id] ?? {
                 let node = SKSpriteNode(texture: texture)
                 node.zPosition = 1.7   // davanti alle particelle, dietro ai mucchi e agli oggetti
@@ -148,12 +158,6 @@ final class Glass: SKNode {
             node.position = drop.position
             let stretch = 1 + min(drop.speed / (drop.falling ? 300 : 150), drop.falling ? 1.5 : 0.6)
             node.size = CGSize(width: drop.radius * 2, height: drop.radius * 2 * stretch)
-        }
-        if alive.count < nodes.count {
-            for (id, node) in nodes where !alive.contains(id) {
-                node.removeFromParent()
-                nodes[id] = nil
-            }
         }
     }
 

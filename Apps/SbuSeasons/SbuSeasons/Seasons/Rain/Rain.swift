@@ -23,6 +23,6 @@ struct Rain: Season {
 nonisolated enum RainTuning {
     /// L'acqua: un azzurro grigio, quasi trasparente nella goccia.
     static let water = NSColor(srgbRed: 0.72, green: 0.8, blue: 0.88, alpha: 1)
-    /// Con "Media" 14 gocce al secondo su uno schermo da 1440×900, al massimo 260 sul vetro.
-    static let glass = GlassRain(beads: 14, size: 1.5...4, slide: 5, most: 260, color: water)
+    /// Con "Media" 30 gocce al secondo su uno schermo da 1440×900, al massimo 400 sul vetro.
+    static let glass = GlassRain(beads: 30, size: 2...5, slide: 7, most: 400, color: water)
 }
