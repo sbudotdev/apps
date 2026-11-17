@@ -81,6 +81,30 @@ nonisolated enum Tuning {
     /// Tre palle tutte entro questa distanza (pt, tra i piedi) diventano un pupazzo.
     static let snowmanReach: CGFloat = 40
 
+    // MARK: Spazzaneve, slittino, funivia, albero
+
+    /// La velocità dello spazzaneve (pt/s): un Dock di 800 pt in circa 5 s.
+    static let ploughSpeed: CGFloat = 150
+    /// Quanta neve prende lo spazzaneve per lato, dal centro (`Snowplough.blade`): da dietro le ruote alla lama.
+    static let ploughBlade: CGFloat = 20
+    /// Sotto questi granelli raccolti lo spazzaneve non lascia la montagnetta.
+    static let moundMinSnow = 10
+    /// Le montagnette sullo schermo, al massimo: oltre sparisce la più vecchia.
+    static let maxMounds = 6
+    /// Lo slittino frena pochissimo: scivola fino in fondo al bordo e scende sul prossimo.
+    static let sledFriction: CGFloat = 0.15
+    /// La spinta di un clic sullo slittino (pt/s).
+    static let sledPush: CGFloat = 380
+    static let maxSleds = 3
+    /// La stazione della funivia: un palo sul fondo, a sinistra (pt dal bordo e altezza).
+    static let cableStationX: CGFloat = 40
+    static let cablePylonHeight: CGFloat = 60
+    /// La velocità della cabina sul cavo (pt/s).
+    static let cableSpeed: CGFloat = 70
+    static let maxTrees = 5
+    /// Le palline su un albero, al massimo.
+    static let maxBaubles = 40
+
     // MARK: Neve che scivola via
 
     /// Una finestra che si sposta di più tra due letture (pt in 1/8 s, circa 320 pt/s) perde la neve;

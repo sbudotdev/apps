@@ -83,8 +83,8 @@ nonisolated func snowmanTrio(_ balls: [CGPoint], within distance: CGFloat) -> [I
     return nil
 }
 
-/// Una texture disegnata una volta con AppKit (origine in basso a sinistra).
-private func drawnTexture(size: CGSize, _ draw: @escaping (CGRect) -> Void) -> SKTexture {
+/// Una texture disegnata una volta con AppKit (origine in basso a sinistra). La usano tutti gli oggetti.
+func drawnTexture(size: CGSize, _ draw: @escaping (CGRect) -> Void) -> SKTexture {
     SKTexture(image: NSImage(size: size, flipped: false) { rect in
         draw(rect)
         return true
