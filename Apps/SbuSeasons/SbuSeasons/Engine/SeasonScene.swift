@@ -61,9 +61,9 @@ final class SeasonScene: SKScene {
     /// Gli oggetti con cui giocare, nell'ordine in cui si disegnano (l'ultimo è davanti).
     private(set) var toys: [Toy] = []
     /// Dove possono stare in piedi gli oggetti: i tratti scoperti dei bordi e il Dock (senza il fondo).
-    private var ledges: [Ledge] = []
+    private(set) var ledges: [Ledge] = []
     /// Dove comincia la barra dei menu (coordinate della scena): un oggetto non sta in piedi dove la coprirebbe.
-    private var ceiling: CGFloat?
+    private(set) var ceiling: CGFloat?
     /// L'oggetto in mano al cursore: dove l'ha preso, dov'è partito, l'ultima posizione e la velocità del lancio.
     private var held: (toy: Toy, grip: CGVector, start: CGPoint, last: CGPoint, time: TimeInterval, velocity: CGVector)?
     private var pointerShake = ShakeDetector()
@@ -71,6 +71,11 @@ final class SeasonScene: SKScene {
     private var gathered = 0
     /// Quando è stata scossa l'ultima volta la palla di vetro (tempo della scena).
     private var lastGlobe = -CGFloat.infinity
+
+    /// "Metti in pausa i giochi": gli oggetti stanno fermi dove sono e non si prendono col mouse.
+    var toysPaused = false {
+        didSet { if toysPaused { dropHeld() } }
+    }
 
     /// "Riduci movimento" di macOS: metà dei fiocchi, niente vento, oscillazione, rotazione, lanci o rimbalzi.
     var reduceMotion = false {
@@ -121,8 +126,13 @@ final class SeasonScene: SKScene {
             grain.node.color = season.pileColor
         }
         for pile in everyPile { pile.node.fillColor = season.pileColor }
-        if !(season is Snow) { meltSnowToys() }
+        if !(season is Snow) {
+            meltSnowToys()
+            removeWinterPlay(includingCableCar: true)
+        }
         if !season.settles { everyPile.forEach { $0.clear() } }
+        // La pausa è una voce dei giochi d'inverno: fuori dall'inverno non si potrebbe togliere (QA SBU-63).
+        toysPaused = false
         gathered = 0
         rebuildFlakes()
     }
@@ -235,8 +245,12 @@ final class SeasonScene: SKScene {
     var highestGrain: CGFloat { grains.map(\.node.position.y).max() ?? 0 }
     /// La neve posata su una finestra.
     func pile(for id: CGWindowID) -> Pile? { piles[id]?.pile }
+    /// La neve posata sul Dock.
+    var dockPile: Pile? { dock?.pile }
+    /// Il bordo del Dock su cui stanno gli oggetti.
+    var dockLedge: Ledge? { dock.map { Ledge(y: $0.rect.maxY, span: $0.rect.minX...$0.rect.maxX) } }
     /// Tutti i mucchi: finestre e Dock.
-    private var everyPile: [Pile] { piles.values.map(\.pile) + (dock.map { [$0.pile] } ?? []) }
+    var everyPile: [Pile] { piles.values.map(\.pile) + (dock.map { [$0.pile] } ?? []) }
 
     // MARK: - Oggetti
 
@@ -259,7 +273,7 @@ final class SeasonScene: SKScene {
     /// La finestra deve prendere il mouse? Solo sopra un oggetto, o mentre se ne trascina uno:
     /// altrove i clic passano alle app sotto (README, "Clic sugli oggetti").
     func wantsMouse(at point: CGPoint) -> Bool {
-        held != nil || toy(at: point) != nil
+        !toysPaused && (held != nil || toy(at: point) != nil)
     }
     /// `wantsMouse` nel punto del cursore, ricalcolato a ogni passo.
     private(set) var wantsMouse = false
@@ -267,7 +281,7 @@ final class SeasonScene: SKScene {
     /// Pressione del mouse: prende l'oggetto sotto il punto. false = non c'è niente.
     @discardableResult
     func grab(at point: CGPoint, time: TimeInterval) -> Bool {
-        guard let toy = toy(at: point) else { return false }
+        guard !toysPaused, let toy = toy(at: point) else { return false }
         let feet = toy.body.position
         held = (toy, CGVector(dx: point.x - feet.x, dy: point.y - feet.y), point, point, time, .zero)
         toy.body.hold(at: feet)
@@ -302,7 +316,10 @@ final class SeasonScene: SKScene {
         self.held = nil
         let isClick = hypot(point.x - held.start.x, point.y - held.start.y) < Tuning.clickSlop
         held.toy.body.release(velocity: isClick || stale || reduceMotion ? .zero : held.velocity)
-        if isClick { held.toy.clicked() }
+        if isClick {
+            let feet = held.toy.body.position
+            held.toy.clicked(at: CGPoint(x: point.x - feet.x, y: point.y - feet.y))
+        }
     }
 
     /// Il cursore si è mosso su questo schermo: se è stato scosso, lo sanno tutti gli oggetti.
@@ -400,7 +417,7 @@ final class SeasonScene: SKScene {
         updateDock(dockFrame)
         let maxPile = CGFloat(Settings.shared.values.maxPile)
         var seen = Set<CGWindowID>()
-        ledges = dock.map { [Ledge(y: $0.rect.maxY, span: $0.rect.minX...$0.rect.maxX)] } ?? []
+        ledges = dockLedge.map { [$0] } ?? []
         for edge in edges {
             let r = edge.rect.offsetBy(dx: -screenOrigin.x, dy: -screenOrigin.y)
             // Solo bordi su questo schermo, con il mucchio sotto la barra dei menu (decisione di Matteo, MGS-416).
@@ -596,7 +613,7 @@ final class SeasonScene: SKScene {
         }
 
         // --- Oggetti: gravità, appoggio sui bordi scoperti, sul Dock o sul fondo dello schermo ---
-        if !toys.isEmpty {
+        if !toys.isEmpty, !toysPaused {
             let toyLedges = ledges + [Ledge(y: 0, span: 0...size.width)]
             for toy in toys {
                 // Sulle finestre attaccate alla barra dei menu un oggetto alto la coprirebbe: lì non si ferma.
@@ -608,6 +625,7 @@ final class SeasonScene: SKScene {
                 toy.step(dt: dt)
             }
             buildSnowman()
+            stepWinterPlay()
         }
         wantsMouse = wantsMouse(at: mouse)
 
