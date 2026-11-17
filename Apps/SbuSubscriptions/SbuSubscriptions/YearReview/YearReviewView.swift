@@ -57,6 +57,8 @@ struct YearReviewView: View {
     @ViewBuilder private var figure: some View {
         VStack(alignment: .leading, spacing: SbuTheme.gridCell) {
             SbuScreenTitle("Il tuo \(review.year) in abbonamenti", cartiglio: "Sbu · \(String(localized: "Abbonamenti")) · \(review.year)")
+                // Longer than a tab's title, it wraps on two lines: never squeezed to one.
+                .fixedSize(horizontal: false, vertical: true)
             if let first = review.spent.first {
                 SbuFigure(value: first.value.formatted(.currency(code: first.currencyCode)), context: Text(context))
             } else {
