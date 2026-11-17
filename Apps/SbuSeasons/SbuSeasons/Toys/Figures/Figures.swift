@@ -192,6 +192,9 @@ final class Feeder: Figure {
     override func clicked() {
         tray.fill()
         drawSeeds()
+        // Ferma il volo via ancora in corso, se no al frame dopo la cincia torna invisibile.
+        tit.removeAllActions()
+        tit.position = Self.perch
         tit.alpha = 1
         SoundBoard.shared.play("cincia")
     }
