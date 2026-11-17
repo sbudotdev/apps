@@ -72,6 +72,13 @@ final class SeasonScene: SKScene {
     /// Quando è stata scossa l'ultima volta la palla di vetro (tempo della scena).
     private var lastGlobe = -CGFloat.infinity
 
+    /// Natale (`Toys/Christmas/`): che giorno è e il diario dei regali, la slitta in volo, la prossima visita.
+    var christmas = ChristmasClock()
+    var santa: Santa?
+    var nextSantaVisit: CGFloat?
+    /// I passaggi di Babbo Natale su questo schermo (dal menu o da solo).
+    var santaVisits = 0
+
     /// "Metti in pausa i giochi": gli oggetti stanno fermi dove sono e non si prendono col mouse.
     var toysPaused = false {
         didSet { if toysPaused { dropHeld() } }
@@ -129,6 +136,7 @@ final class SeasonScene: SKScene {
         if !(season is Snow) {
             meltSnowToys()
             removeWinterPlay(includingCableCar: true)
+            removeChristmas()
         }
         if !season.settles { everyPile.forEach { $0.clear() } }
         // La pausa è una voce dei giochi d'inverno: fuori dall'inverno non si potrebbe togliere (QA SBU-63).
@@ -627,6 +635,7 @@ final class SeasonScene: SKScene {
             buildSnowman()
             stepWinterPlay()
         }
+        if !toysPaused { stepChristmas(dt: dt, mouse: mouse) }
         wantsMouse = wantsMouse(at: mouse)
 
         // --- Granelli di polvere: gravità + attrito dell'aria, niente oscillazione ---
