@@ -2,6 +2,8 @@
 
 v1 · 17 novembre 2026 · SBU-36. Reel, TikTok, Shorts. Verticale 1080×1920, 32-34 s, voce di Matteo. Valgono le regole di `marketing/social/tiktok-instagram.md` e del piano (§Mossa 4): niente emoji né punti esclamativi, sempre "sbu.dev", mai "copia" o "clone", nessun logo né schermata di altre app.
 
+**Approvato da Matteo il 17/11/2026** (SBU-37): copione così com'è, Sbu Subscriptions, riprese con i dati di esempio, R1 e R4 nella settimana del 17/11, R2 e R3 il 2-3/12.
+
 ## L'app: Sbu Subscriptions
 
 Il gancio dice "costa X € l'anno": serve un prezzo annuale vero. Ce l'ha Subscriptions, non Squares.
