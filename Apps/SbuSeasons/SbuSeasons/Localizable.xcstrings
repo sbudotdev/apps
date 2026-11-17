@@ -212,6 +212,16 @@
         }
       }
     },
+    "Lucciole": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fireflies"
+          }
+        }
+      }
+    },
     "Media": {
       "localizations": {
         "en": {
@@ -352,12 +362,32 @@
         }
       }
     },
+    "Sereno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear Skies"
+          }
+        }
+      }
+    },
     "Stagione": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Season"
+          }
+        }
+      }
+    },
+    "Stelle cadenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shooting Stars"
           }
         }
       }

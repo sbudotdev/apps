@@ -25,6 +25,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     private lazy var toggleItem = NSMenuItem(title: String(localized: "Fai nevicare"), action: nil, keyEquivalent: "s")
     private var densityItems: [NSMenuItem] = []
+    /// L'intensità continua, sotto Leggera/Media/Forte: è lo stesso valore di "Quantità di fiocchi".
+    private lazy var intensitySlider: NSSlider = {
+        let slider = NSSlider(value: Settings.shared.values.flakeCount, minValue: Density.range.lowerBound,
+                              maxValue: Density.range.upperBound, target: self, action: #selector(intensityChanged(_:)))
+        slider.isContinuous = true
+        slider.controlSize = .small
+        slider.setAccessibilityLabel(String(localized: "Intensità"))
+        return slider
+    }()
     private var seasonItems: [NSMenuItem] = []
     /// I giochi d'inverno: spenti nelle altre stagioni.
     private var winterItems: [NSMenuItem] = []
@@ -195,6 +204,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
             menu.addItem(mi)
             return mi
         }
+        // Rientrato come le voci sopra; la larghezza la allarga il menu.
+        let sliderRow = NSView(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
+        intensitySlider.frame = NSRect(x: 30, y: 2, width: 156, height: 20)
+        intensitySlider.autoresizingMask = [.width]
+        sliderRow.addSubview(intensitySlider)
+        let sliderItem = NSMenuItem()
+        sliderItem.view = sliderRow
+        menu.addItem(sliderItem)
 
         menu.addItem(.separator())
 
@@ -255,6 +272,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         for mi in densityItems {
             mi.state = Density(rawValue: mi.tag)?.flakesPerReferenceScreen == count ? .on : .off
         }
+        intensitySlider.doubleValue = count
     }
 
     func menuNeedsUpdate(_ menu: NSMenu) {
@@ -285,6 +303,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     }
 
     @objc private func sendPlough() {
+        // Uno solo in giro, anche con più schermi (ogni scena controlla solo la sua).
+        guard !overlays.contains(where: { $0.scene.toys.contains { $0 is Snowplough } }) else { return }
         let overlay = ploughDockFirst ? overlays.first(where: \.hasDock) ?? currentOverlay : currentOverlay
         overlay?.scene.sendPlough(dockFirst: ploughDockFirst)
     }
@@ -327,6 +347,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     @objc private func selectDensity(_ sender: NSMenuItem) {
         guard let density = Density(rawValue: sender.tag) else { return }
         Settings.shared.values.flakeCount = density.flakesPerReferenceScreen
+    }
+
+    /// Le particelle in più nascono in cima e quelle in meno spariscono: chi sta cadendo non salta.
+    @objc private func intensityChanged(_ sender: NSSlider) {
+        Settings.shared.values.flakeCount = sender.doubleValue.rounded()
+        updateMenuState()
     }
 
     /// Riaprire l'app mentre è già in esecuzione (doppio clic, `open SbuSeasons.app`) apre le Impostazioni.
