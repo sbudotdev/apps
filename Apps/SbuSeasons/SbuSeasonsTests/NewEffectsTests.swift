@@ -31,7 +31,7 @@ struct NewEffectsTests {
     @Test func theNewEffectsAreInTheSeasonMenuAfterTheOldOnes() {
         let ids = Seasons.all.map(\.id)
         #expect(Array(ids.prefix(4)) == ["snow", "spring", "summer", "autumn"])
-        #expect(Array(ids.dropFirst(4)) == ["fireflies", "meteors", "clear"])
+        #expect(Array(ids.dropFirst(4)) == ["rain", "storm", "mist", "clouds", "fireflies", "meteors", "clear"])
         #expect(Seasons.named("fireflies") is Fireflies)
         #expect(Seasons.named("meteors") is Meteors)
         #expect(Seasons.named("clear") is Clear)

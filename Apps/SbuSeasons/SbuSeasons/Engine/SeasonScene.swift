@@ -72,6 +72,11 @@ final class SeasonScene: SKScene {
     /// Quando è stata scossa l'ultima volta la palla di vetro (tempo della scena).
     private var lastGlobe = -CGFloat.infinity
 
+    /// Nebbia, nuvole e lampi della stagione.
+    let sky = Sky()
+    /// Le gocce sul vetro della stagione.
+    let glass = Glass()
+
     /// Natale (`Toys/Christmas/`): che giorno è e il diario dei regali, la slitta in volo, la prossima visita.
     var christmas = ChristmasClock()
     var santa: Santa?
@@ -86,7 +91,11 @@ final class SeasonScene: SKScene {
 
     /// "Riduci movimento" di macOS: metà dei fiocchi, niente vento, oscillazione, rotazione, lanci o rimbalzi.
     var reduceMotion = false {
-        didSet { if reduceMotion != oldValue, !flakes.isEmpty { rebuildFlakes() } }
+        didSet {
+            guard reduceMotion != oldValue else { return }
+            // Senza particelle (nebbia, nuvole) `rebuildFlakes` non serve, ma i banchi vanno ricontati lo stesso.
+            if flakes.isEmpty { sky.set(season, size: size, amount: skyAmount) } else { rebuildFlakes() }
+        }
     }
 
     /// Quantità e dimensione con cui sono stati creati i fiocchi attuali:
@@ -103,6 +112,9 @@ final class SeasonScene: SKScene {
         backgroundColor = .clear
         anchorPoint = .zero
         scaleMode = .resizeFill
+        addChild(sky)
+        addChild(glass)
+        glass.set(season.glass)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -142,6 +154,7 @@ final class SeasonScene: SKScene {
         // La pausa è una voce dei giochi d'inverno: fuori dall'inverno non si potrebbe togliere (QA SBU-63).
         toysPaused = false
         gathered = 0
+        glass.set(season.glass)
         rebuildFlakes()
     }
 
@@ -156,6 +169,7 @@ final class SeasonScene: SKScene {
         }
         let settings = Settings.shared.values
         builtWith = (settings.flakeCount, settings.flakeSize)
+        sky.set(season, size: size, amount: skyAmount)
         guard size.width > 0, size.height > 0 else {
             flakes.forEach { $0.node.removeFromParent() }
             flakes = []
@@ -175,6 +189,12 @@ final class SeasonScene: SKScene {
             flakes.append(flake)
         }
     }
+
+    /// L'intensità rispetto a "Media": banchi e gocce sul vetro la seguono come le particelle.
+    private var intensity: CGFloat { CGFloat(Settings.shared.values.flakeCount / SnowSettings().flakeCount) }
+
+    /// Quanti banchi rispetto a "Media": seguono l'intensità, e con Riduci movimento sono la metà.
+    private var skyAmount: CGFloat { intensity * (reduceMotion ? Tuning.reducedMotionFlakes : 1) }
 
     /// Crea un fiocco nel punto indicato.
     private func makeFlake(at position: CGPoint) -> Flake {
@@ -216,10 +236,14 @@ final class SeasonScene: SKScene {
 
     private func respawn(_ flake: inout Flake) {
         // Chi va di traverso comincia ad andarci a `extent` sopra lo schermo (vedi `move`): parte spostato
-        // all'indietro di quel tratto, così entra sempre dal bordo in alto, nei 7/10 da cui arriva: attraversa il cielo.
-        let lead = flake.drift / max(flake.fallSpeed, 1) * flake.extent
-        let entry: ClosedRange<CGFloat> = flake.drift > 0 ? 0...(size.width * 0.7)
-            : flake.drift < 0 ? (size.width * 0.3)...size.width : 0...size.width
+        // all'indietro di quel tratto. Una stella (più di lato che in giù) entra dal bordo in alto, nei 7/10
+        // da cui arriva: attraversa il cielo. La pioggia obliqua entra anche da sopra il lato da cui viene,
+        // così copre tutto lo schermo.
+        let slope = flake.drift / max(flake.fallSpeed, 1)
+        let lead = slope * flake.extent
+        let travel = slope * size.height
+        let entry: ClosedRange<CGFloat> = abs(slope) <= 1 ? min(0, -travel)...max(size.width, size.width - travel)
+            : flake.drift > 0 ? 0...(size.width * 0.7) : (size.width * 0.3)...size.width
         flake.node.position = CGPoint(
             x: .random(in: entry) - lead,
             y: size.height + flake.extent + .random(in: 0...40) + .random(in: 0...max(flake.gap, 0))
@@ -619,6 +643,10 @@ final class SeasonScene: SKScene {
             }
             flakes[i] = flake
         }
+
+        // --- Nebbia, nuvole, lampi e gocce sul vetro ---
+        sky.step(dt: dt, width: size.width, calm: reduceMotion)
+        glass.step(dt: dt, size: size, ledges: ledges, amount: intensity, calm: reduceMotion)
 
         // --- Oggetti: gravità, appoggio sui bordi scoperti, sul Dock o sul fondo dello schermo ---
         if !toys.isEmpty, !toysPaused {
