@@ -18,12 +18,16 @@ struct MainView: View {
     /// The cycle or category sections folded, by title.
     @State private var collapsed: Set<String> = []
     @State private var opened: Subscription?
+    /// The year whose review you closed: it comes back next December.
+    @AppStorage("yearReview.closed") private var closedReviewYear = 0
+    @State private var review: YearReview?
     @Environment(AppRouter.self) private var router
     @Environment(ReceivedLists.self) private var received
 
     var body: some View {
         // ponytail: "today" is read on each render, not at midnight; the app redraws whenever it comes back.
-        let today = Date.now
+        let today = Self.today
+        let reviewYear = YearReview.year(on: today, closed: closedReviewYear)
         let filter = HomeFilter(list: listFilter, category: categoryFilter, paymentMethod: methodFilter)
         let shown = subscriptions.filter { filter.matches($0) }
         let figureGroups = SubscriptionGroups(shown, on: today)
@@ -42,6 +46,15 @@ struct MainView: View {
                     .sbuPaper(grid: true)
                     .listRowInsets(EdgeInsets())
                     .listRowBackground(Color.clear)
+                }
+                if let reviewYear {
+                    Section {
+                        YearReviewRow(year: reviewYear) {
+                            review = YearReview(year: reviewYear, entries: subscriptions.map { $0.yearReviewEntry() }, calendar: .current)
+                        } close: {
+                            closedReviewYear = reviewYear
+                        }
+                    }
                 }
             }
             if !subscriptions.isEmpty, !search.isEmpty, groups.isEmpty {
@@ -121,9 +134,22 @@ struct MainView: View {
         .onChange(of: router.pending, initial: true) {
             follow(router.pending)
         }
+        .sheet(item: $review) { review in
+            YearReviewView(review: review)
+        }
         .sheet(isPresented: $isAdding) {
             AddSubscriptionSheet(currency: currency)
         }
+    }
+
+    /// Today; in DEBUG `-SBU_TODAY 2026-12-10` shows another day, for screenshots of the year review out of season.
+    private static var today: Date {
+        #if DEBUG
+        if let day = UserDefaults.standard.string(forKey: "SBU_TODAY"), let date = try? Date(day, strategy: .iso8601.year().month().day()) {
+            return date
+        }
+        #endif
+        return .now
     }
 
     private func rows(_ subscriptions: [Subscription], today: Date) -> some View {

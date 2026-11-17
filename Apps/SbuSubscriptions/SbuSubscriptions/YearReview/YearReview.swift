@@ -2,7 +2,7 @@ import Foundation
 
 /// "Il tuo 2026 in abbonamenti": what you paid in a calendar year, in each subscription's own currency, and what
 /// renews the January after. Shown from 1 December to 15 January, from the date alone, as the seasons (ADR-0023).
-nonisolated struct YearReview {
+nonisolated struct YearReview: Identifiable {
     /// One subscription, as the review reads it.
     struct Entry {
         var name: String
@@ -27,6 +27,7 @@ nonisolated struct YearReview {
     }
 
     let year: Int
+    var id: Int { year }
     /// What you paid in the year, one total per currency, largest first: never added up across currencies.
     let spent: [Amount]
     /// The first January payment of each active subscription, by date.
@@ -59,15 +60,17 @@ nonisolated struct YearReview {
         januaryRenewals = renewals.sorted { ($0.date, $0.name) < ($1.date, $1.name) }
     }
 
-    /// The year to look back at on `date`: this year in December, last year until 15 January, otherwise `nil`.
-    static func year(on date: Date, in calendar: Calendar = .current) -> Int? {
+    /// The year to look back at on `date`: this year in December, last year until 15 January, otherwise `nil`;
+    /// also `nil` once you closed that year's review.
+    static func year(on date: Date, closed closedYear: Int = 0, in calendar: Calendar = .current) -> Int? {
         let day = gregorian(calendar).dateComponents([.year, .month, .day], from: date)
         guard let year = day.year else { return nil }
-        switch (day.month, day.day) {
-        case (12, _): return year
-        case (1, let dayOfMonth?) where dayOfMonth <= 15: return year - 1
-        default: return nil
+        let reviewed: Int? = switch (day.month, day.day) {
+        case (12, _): year
+        case (1, let dayOfMonth?) where dayOfMonth <= 15: year - 1
+        default: nil
         }
+        return reviewed == closedYear ? nil : reviewed
     }
 
     /// Years are always Gregorian, in the time zone of `calendar`: "Il tuo 2026" on every calendar system.

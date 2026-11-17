@@ -39,6 +39,12 @@ struct YearReviewTests {
         #expect(YearReview.year(on: day(2026, 7, 15), in: calendar) == nil)
     }
 
+    @Test func closedForTheYearItStaysHiddenUntilNextDecember() {
+        #expect(YearReview.year(on: day(2026, 12, 10), closed: 2026, in: calendar) == nil)
+        #expect(YearReview.year(on: day(2027, 1, 10), closed: 2026, in: calendar) == nil)
+        #expect(YearReview.year(on: day(2027, 12, 1), closed: 2026, in: calendar) == 2027)
+    }
+
     // MARK: What you spent
 
     @Test func aMonthlyPlanPaysTwelveTimesInTheYear() {
