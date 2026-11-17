@@ -86,6 +86,8 @@ final class OverlayWindow: NSPanel {
         scene.updateWindows(edges, dock: dock, ceiling: ceiling)
     }
     func meltAll() { scene.meltAll() }
+    func clearSnowballs() { scene.clearSnowballs() }
+    func shakeGlobe() { scene.shakeGlobe() }
     /// Il tempo simulato della neve su questo schermo.
     var elapsed: CGFloat { scene.elapsed }
     func setSeason(_ season: any Season) { scene.setSeason(season) }

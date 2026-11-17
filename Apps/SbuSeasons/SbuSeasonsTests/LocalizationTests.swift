@@ -23,6 +23,8 @@ struct LocalizationTests {
         ("Suoni", "Sounds"),
         ("Volume", "Volume"),
         ("Riproduci i suoni", "Play Sounds"),
+        ("Togli le palle di neve", "Clear the Snowballs"),
+        ("Scuoti la palla di vetro", "Shake the Snow Globe"),
         ("Informazioni su %@", "About %@"),
         ("Nata da un'idea di Simone Antoniciello", "Based on an idea by Simone Antoniciello"),
     ])

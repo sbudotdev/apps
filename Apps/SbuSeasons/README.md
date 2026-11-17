@@ -72,10 +72,29 @@ gli oggetti veri arrivano nei ticket dopo). `MARKETING_VERSION` è già 2.0.
 si copiano da soli (`PreviousDefaults` in `Settings.swift`). Il permesso Accessibilità e "Apri al login"
 sono legati al bundle id: con il nome nuovo vanno dati di nuovo.
 
+## Giocare con la neve (2.0)
+
+- **Palle di neve.** Tieni premuto ⌥ e passa il cursore sulla neve posata: la neve raccolta sparisce dal bordo e,
+  quando basta (`Tuning.snowballSnow`, circa 15 cm di finestra piena), sotto il cursore nasce una palla. Si prende
+  e si lancia col mouse, rimbalza un po' e rotola lungo i bordi finché cade. Al massimo 12 sullo schermo: oltre
+  sparisce la più vecchia. Solo d'inverno: cambiando stagione palle e pupazzi si sciolgono.
+- **Pupazzo.** Tre palle ferme a meno di 40 pt l'una dall'altra diventano un pupazzo di neve. Una palla in mano non conta.
+- **Neve che scivola via.** Se sposti piano una finestra la neve resta sopra e la segue; se la trascini veloce
+  (più di 40 pt in un ottavo di secondo, circa 320 pt/s) o la ridimensioni, la neve scivola giù come polvere.
+  La neve segue la finestra a scatti, 8 volte al secondo: tante sono le letture delle finestre.
+- **Palla di vetro.** Scuoti il cursore o una finestra (o «Scuoti la palla di vetro» nel menu): tutta la neve posata
+  si alza, i fiocchi salgono, le palle saltano, poi tutto ricade. Dopo una scossa riposa 3 s. Con Riduci movimento no.
+  Mentre tieni ⌥ (d'inverno) il cursore non scuote: passare avanti e indietro sulla neve per raccoglierla non deve portarla via.
+- Menu: «Togli le palle di neve» toglie le palle sciolte (i pupazzi restano); «Sciogli la neve» toglie anche palle e pupazzi.
+- Suoni (se ci sono i file, SBU-56): `palla-di-neve`, `pupazzo`, `palla-di-vetro`.
+
+Il codice: `Toys/Snowball/Snowball.swift` (palla, pupazzo, quando tre palle fanno un pupazzo), e in `SeasonScene`
+le sezioni «Palle di neve e pupazzo» e «Palla di vetro». La neve che segue la finestra è `Pile.carry`.
+
 ## Menu ❄︎
 
-Fai nevicare (⌘S) · Sciogli la neve (⌘R) · Stagione · Intensità (Leggera/Media/Forte con le scorciatoie, e sotto un cursore
-continuo) · Impostazioni… (⌘,) · Esci (⌘Q).
+Fai nevicare (⌘S) · Sciogli la neve (⌘R) · Togli le palle di neve · Scuoti la palla di vetro · Stagione ·
+Intensità (Leggera/Media/Forte con le scorciatoie, e sotto un cursore continuo) · Impostazioni… (⌘,) · Esci (⌘Q).
 Il cursore è lo stesso valore di "Quantità di fiocchi" nelle Impostazioni: muovendolo le particelle in più nascono in cima
 e quelle in meno spariscono, quelle che stanno cadendo non saltano.
 Le scorciatoie funzionano a menu aperto: non sono globali.
@@ -100,6 +119,7 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Engine/Pile.swift` | Un mucchio: altezze per colonna, frana, scavo col cursore, disegno |
 | `Engine/Toy.swift`, `Engine/ToyBody.swift`, `Engine/Ledge.swift` | Gli oggetti con cui giocare: disegno, fisica (gravità, appoggio, lancio), i bordi su cui stanno |
 | `Engine/ShakeDetector.swift`, `Engine/WindowShakes.swift`, `Engine/Shake.swift` | Cursore e finestre scossi |
+| `Toys/Snowball/Snowball.swift` | Palla di neve (rotola), pupazzo, `snowmanTrio` |
 | `Engine/SoundBoard.swift` | Effetti brevi e sottofondo in loop (`AVAudioPlayer`) |
 | `Engine/Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
 | `Seasons/Seasons.swift` | L'elenco delle stagioni, una riga ciascuna |
@@ -151,6 +171,7 @@ arriva alla finestra sotto; il trascinamento e il lancio funzionano.
 2. Sovrascrivi quello che serve: `clicked()` (clic), `shaken(_:)` (`.pointer` o `.window(id)` scossi), `bounce`.
 3. Aggiungilo con `SeasonScene.add(_:)` (dall'app: `OverlayWindow.add(_:)`). Il motore lo fa cadere e lo posa sui
    tratti scoperti dei bordi delle finestre, sul Dock o sul fondo dello schermo; se la finestra si sposta o si chiude, cade.
+   Dove coprirebbe la barra dei menu (un oggetto più alto della neve, su una finestra attaccata alla barra) non si ferma e cade più giù.
 4. I suoni: `SoundBoard.shared.play("nome")` per un effetto, `startAmbience("nome")` per il sottofondo.
    Il file `nome.caf` (o `.m4a`, `.wav`, `.aiff`, `.mp3`) va in `SbuSeasons/`; se manca, non suona e non succede niente.
 
@@ -188,9 +209,5 @@ si cambia `Season` e `SeasonScene` in un lavoro a parte, prima, perché tocca tu
 
 ## Prossimi passi possibili
 
-- Gli oggetti stanno in piedi sul bordo dove si posa la neve: sulle finestre attaccate alla barra dei menu un oggetto
-  alto può coprirla. Da sistemare con il primo oggetto vero, quando si sa quanto è alto.
-
-- Palle di neve con ⌥ e pupazzo di neve
 - Sfondo natalizio automatico (`NSWorkspace.shared.setDesktopImageURL`)
 - Icona dell'app
