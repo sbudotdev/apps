@@ -108,7 +108,7 @@ struct WeatherTests {
         let banks = scene.sky.bankNodes
         #expect(banks.count >= 3)
         #expect(banks.allSatisfy { $0.position.y < size.height * 0.4 })
-        #expect(banks.allSatisfy { $0.alpha < 0.5 })   // sotto si deve poter lavorare
+        #expect(banks.allSatisfy { $0.alpha < 0.7 })   // con la texture già leggera: sotto si deve poter lavorare
         let before = banks.map(\.position.x)
         run(scene, steps: 20)
         let moved = zip(before, banks.map(\.position.x)).map { $1 - $0 }
@@ -162,11 +162,18 @@ struct WeatherTests {
 
     /// La pioggia del temporale cade di traverso ma copre tutto lo schermo, anche il lato da cui viene.
     @Test func stormRainCoversTheWholeScreen() {
-        let scene = scene(Storm())
-        run(scene, steps: 100)
-        let drops = scene.children.compactMap { $0 as? SKSpriteNode }.map(\.position).filter { $0.y > 0 && $0.y < size.height }
-        #expect(drops.contains { $0.x < size.width * 0.15 })
-        #expect(drops.contains { $0.x > size.width * 0.85 })
+        let wide = CGSize(width: 1440, height: 900)
+        let scene = SeasonScene(size: wide, screenOrigin: .zero, season: Clear())
+        scene.setSeason(Storm())
+        var seen: [CGPoint] = []
+        var t: TimeInterval = 1
+        for _ in 0..<100 {
+            scene.step(at: t); t += 0.05
+            seen += scene.children.compactMap { $0 as? SKSpriteNode }.map(\.position).filter { $0.y > 0 && $0.y < wide.height }
+        }
+        // In ogni decimo dello schermo, da sinistra a destra, passa la pioggia.
+        let columns = Set(seen.filter { $0.x >= 0 && $0.x < wide.width }.map { Int($0.x / wide.width * 10) })
+        #expect(columns == Set(0..<10))
     }
 
     @Test func rainOnTheGlassMakesDropsAndNothingFalls() {

@@ -138,26 +138,29 @@ final class Sky: SKNode {
     private static let mist: [SKTexture] = (0..<3).map { _ in
         draw(NSSize(width: 256, height: 64)) { ctx, rect in
             // Qualche ellisse sfumata, lunga e bassa, una sull'altra: uno strato irregolare.
-            for _ in 0..<5 {
-                let w = rect.width * .random(in: 0.35...0.6), h = rect.height * .random(in: 0.5...0.9)
-                puff(ctx, CGRect(x: .random(in: 0...(rect.width - w)), y: (rect.height - h) / 2 + .random(in: -6...6),
-                                 width: w, height: h), alpha: .random(in: 0.5...0.9))
+            // Tante ellissi lunghe, basse e leggere che si sovrappongono: uno strato continuo, più denso al centro.
+            // Tutte dentro il disegno: un'ellisse tagliata dal bordo si vedrebbe come uno spigolo.
+            for _ in 0..<12 {
+                let w = rect.width * .random(in: 0.45...0.85), h = rect.height * .random(in: 0.35...0.65)
+                puff(ctx, CGRect(x: .random(in: 0...(rect.width - w)), y: .random(in: 0...(rect.height - h)),
+                                 width: w, height: h), alpha: .random(in: 0.25...0.45))
             }
         }
     }
 
     private static let clouds: [SKTexture] = (0..<3).map { _ in
         draw(NSSize(width: 256, height: 128)) { ctx, rect in
-            // Un cumulo: una fila di sbuffi in basso, due o tre più grandi sopra.
+            // Un cumulo: una fila di sbuffi in basso, due o tre più grandi sopra, tutti dentro il disegno
+            // (un'ellisse tagliata dal bordo si vedrebbe come uno spigolo).
             for i in 0..<6 {
-                let d = rect.height * .random(in: 0.45...0.6)
-                let x = rect.width * (0.08 + CGFloat(i) * 0.14) + .random(in: -6...6)
-                puff(ctx, CGRect(x: x - d / 2 + 20, y: rect.height * 0.12, width: d * 1.3, height: d), alpha: 0.9)
+                let h = rect.height * .random(in: 0.4...0.5), w = h * 1.3
+                let x = (rect.width - w) * CGFloat(i) / 5
+                puff(ctx, CGRect(x: x, y: rect.height * .random(in: 0.05...0.15), width: w, height: h), alpha: 0.9)
             }
             for _ in 0..<3 {
-                let d = rect.height * .random(in: 0.6...0.85)
-                puff(ctx, CGRect(x: .random(in: rect.width * 0.2...rect.width * 0.65), y: rect.height * 0.2,
-                                 width: d, height: d), alpha: 0.85)
+                let d = rect.height * .random(in: 0.55...0.75)
+                puff(ctx, CGRect(x: .random(in: rect.width * 0.15...(rect.width * 0.85 - d)),
+                                 y: .random(in: rect.height * 0.15...(rect.height - d)), width: d, height: d), alpha: 0.85)
             }
         }
     }

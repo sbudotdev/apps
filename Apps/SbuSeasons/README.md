@@ -1,6 +1,7 @@
 # Sbu Seasons ❄︎
 
-App Mac nella barra dei menu, pensata per più stagioni e temi; oggi c'è l'inverno, con la neve, e l'estate, con i semi di tarassaco.
+App Mac nella barra dei menu, pensata per più stagioni e temi: neve, primavera, estate, autunno, pioggia sul vetro, temporale, nebbia, nuvole,
+lucciole, stelle cadenti e sereno.
 Nasce da CozySnow di Simone Antoniciello, rinominata Sbu Seasons il 15/11/2026 (MGS-421).
 
 Neve che cade sopra tutte le finestre del Mac, **si accumula sul bordo superiore delle finestre**
@@ -88,6 +89,22 @@ sono legati al bundle id: con il nome nuovo vanno dati di nuovo.
 - Menu: «Togli le palle di neve» toglie le palle sciolte (i pupazzi restano); «Sciogli la neve» toglie anche palle e pupazzi.
 - Suoni (se ci sono i file, SBU-56): `palla-di-neve`, `pupazzo`, `palla-di-vetro`.
 
+## Pioggia, temporale, nebbia, nuvole (2.0)
+
+- **Pioggia sul vetro.** Lo schermo è il vetro di una finestra: le gocce si posano a caso, quelle che si toccano
+  si uniscono (le aree si sommano), e quando una è abbastanza grossa scorre giù, sempre più veloce quanto più è pesante,
+  raccoglie le gocce che incontra e lascia dietro goccioline. Arrivata sul bordo scoperto di una finestra o sul Dock
+  cade giù libera; in fondo allo schermo sparisce. Quando il vetro è pieno, la pioggia cade sulle gocce che ci sono.
+- **Temporale.** Pioggia forte e obliqua (copre tutto lo schermo, anche il lato da cui viene), nuvole scure in cima,
+  gocce sul vetro, e ogni 6–18 s un lampo lontano: due bagliori che illuminano le nuvole e il cielo dietro, poi,
+  1,5–4 s dopo, il tuono (suono `tuono`, se c'è il file, SBU-56).
+- **Nebbia.** Tre strati bassi e sfumati, uno sopra l'altro, che scorrono verso destra a velocità diverse.
+- **Nuvole.** Banchi bianchi che attraversano piano la parte alta dello schermo; usciti a destra rientrano da sinistra.
+- L'intensità (menu e "Quantità") cambia quante gocce cadono sul vetro e quanti banchi ci sono.
+- Con **Riduci movimento**: niente lampi (è luce che lampeggia), banchi al 40% della velocità e la metà dei banchi,
+  metà delle gocce nuove, che scorrono a metà velocità e senza zigzag.
+- Niente si posa sulle finestre: scegliendo una di queste stagioni la neve posata si scioglie.
+
 Il codice: `Toys/Snowball/Snowball.swift` (palla, pupazzo, quando tre palle fanno un pupazzo), e in `SeasonScene`
 le sezioni «Palle di neve e pupazzo» e «Palla di vetro». La neve che segue la finestra è `Pile.carry`.
 
@@ -120,6 +137,8 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Engine/Toy.swift`, `Engine/ToyBody.swift`, `Engine/Ledge.swift` | Gli oggetti con cui giocare: disegno, fisica (gravità, appoggio, lancio), i bordi su cui stanno |
 | `Engine/ShakeDetector.swift`, `Engine/WindowShakes.swift`, `Engine/Shake.swift` | Cursore e finestre scossi |
 | `Toys/Snowball/Snowball.swift` | Palla di neve (rotola), pupazzo, `snowmanTrio` |
+| `Engine/Sky.swift` | Banchi a tutto schermo (nebbia, nuvole: pochi sprite grandi e sfumati) e lampi |
+| `Engine/Glass.swift` | Gocce sul vetro: `GlassDrops` (logica, testata) e `Glass` (una sprite per goccia) |
 | `Engine/SoundBoard.swift` | Effetti brevi e sottofondo in loop (`AVAudioPlayer`) |
 | `Engine/Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
 | `Seasons/Seasons.swift` | L'elenco delle stagioni, una riga ciascuna |
@@ -128,6 +147,8 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Seasons/Spring/Spring.swift`, `Seasons/Autumn/Autumn.swift` | Petali di ciliegio portati dal vento e foglie d'autunno che volteggiano e si posano |
 | `Seasons/Fireflies/Fireflies.swift` | Le lucciole: luci che vagano piano e si accendono e si spengono, non si posano (`FirefliesTuning`) |
 | `Seasons/Meteors/Meteors.swift` | Le stelle cadenti: ogni tanto una scia attraversa il cielo di traverso (`MeteorsTuning`) |
+| `Seasons/Rain/Rain.swift`, `Seasons/Storm/Storm.swift` | Pioggia sul vetro; temporale: pioggia obliqua, nuvole scure, lampi |
+| `Seasons/Mist/Mist.swift`, `Seasons/Clouds/Clouds.swift` | Nebbia in strati bassi; nuvole in alto |
 | `Seasons/Clear/Clear.swift` | Il sereno: non cade niente (per chi vuole solo gli oggetti o lo sfondo) |
 | `PowerSource.swift` | Batteria o corrente (per i fotogrammi al secondo) |
 | `Settings.swift` | Le impostazioni e la stagione (salvate in UserDefaults, copiate dal vecchio nome al primo avvio) e la finestra SwiftUI per regolarle |
@@ -191,7 +212,9 @@ in 1,5 s (le finestre si leggono solo 8 volte al secondo). Chi continua a scuote
      se serve anche rotazione (`spin`, `flip`), colore (`tint`), andare di traverso orientata (`drift`, `length`),
      vagare in su e in giù (`bob`), accendersi e spegnersi (`pulse`), aspettare prima di ripassare (`gap`);
    - se non deve posarsi: `settles = false` (scegliendola, la neve posata si scioglie); se ne servono meno o nessuna:
-     `abundance` (× "Quantità": 0,12 le lucciole, 0,01 le stelle, 0 il sereno).
+     `abundance` (× "Quantità": 0,12 le lucciole, 0,01 le stelle, 0 il sereno);
+   - se servono: `banks` (strati di nebbia o nuvole che scorrono, `Bank`), `lightning` (lampi, `Lightning`),
+     `glass` (gocce sul vetro, `GlassRain`). Qualunque stagione li può usare, anche insieme alle particelle.
 2. Aggiungi una riga in `Seasons/Seasons.swift`, nell'ordine in cui la vuoi nel menu. Nient'altro da toccare nel codice.
    Attenzione: alcuni testi parlano ancora solo di neve («Fai nevicare», «Sciogli la neve», le sezioni «Nevicata»
    e «Neve posata» e «Quantità di fiocchi» nelle Impostazioni). Renderli generici è una decisione di Matteo,
@@ -204,7 +227,11 @@ in 1,5 s (le finestre si leggono solo 8 volte al secondo). Chi continua a scuote
 **CPU** (SBU-51, MacBook a corrente, intensità Media, media di 15 s con `ps`): neve 6,2%, autunno 6,6%, primavera 7–8%,
 lucciole 5,1%, stelle cadenti 4,4%, sereno 1,7%. Il motore nuovo non cambia la neve (5,9–6,7% prima, 5,5–6,3% dopo).
 
-Se a una stagione serve qualcosa che il motore non sa fare (farle rimbalzare, strati a tutto schermo…),
+**CPU della 2.0 meteo** (SBU-52, Mac a corrente, schermo 1920×1080, intensità Media, tempo di CPU su 20 s, media di 4 giri
+alternati con la neve): neve 9,1%, temporale 9,5% (+4%), pioggia sul vetro 8,7%, nebbia 6,0%, nuvole 5,5%.
+Le misure dello stesso effetto variano di ±1,5 punti da un giro all'altro: per confrontare, alterna sempre con la neve.
+
+Se a una stagione serve qualcosa che il motore non sa fare (farle rimbalzare…),
 si cambia `Season` e `SeasonScene` in un lavoro a parte, prima, perché tocca tutte le stagioni.
 
 ## Prossimi passi possibili

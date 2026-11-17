@@ -60,6 +60,6 @@ nonisolated enum StormTuning {
                              speed: 14...26, alpha: 0.5...0.7, color: NSColor(srgbRed: 0.36, green: 0.39, blue: 0.45, alpha: 1))
     /// Un lampo ogni 6–18 s.
     static let lightning = Lightning(every: 6...18, strength: 1)
-    /// Il doppio della pioggia sul vetro.
-    static let glass = GlassRain(beads: 28, size: 1.5...4.5, slide: 5, most: 320, color: RainTuning.water)
+    /// Più pioggia sul vetro, e gocce più grosse: scorrono prima. Meno gocce ferme della pioggia, che qui cade anche davanti.
+    static let glass = GlassRain(beads: 45, size: 2...5.5, slide: 7, most: 220, color: RainTuning.water)
 }
