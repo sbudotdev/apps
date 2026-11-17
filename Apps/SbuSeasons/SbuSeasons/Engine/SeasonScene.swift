@@ -189,10 +189,13 @@ final class SeasonScene: SKScene {
     }
 
     private func respawn(_ flake: inout Flake) {
-        // Chi va di traverso parte più in là, dalla parte da cui arriva: così attraversa tutto lo schermo.
-        let travel = flake.drift / max(flake.fallSpeed, 1) * size.height
+        // Chi va di traverso comincia ad andarci a `extent` sopra lo schermo (vedi `move`): parte spostato
+        // all'indietro di quel tratto, così entra sempre dal bordo in alto, nei 7/10 da cui arriva: attraversa il cielo.
+        let lead = flake.drift / max(flake.fallSpeed, 1) * flake.extent
+        let entry: ClosedRange<CGFloat> = flake.drift > 0 ? 0...(size.width * 0.7)
+            : flake.drift < 0 ? (size.width * 0.3)...size.width : 0...size.width
         flake.node.position = CGPoint(
-            x: .random(in: -max(travel, 0)...(size.width - min(travel, 0))),
+            x: .random(in: entry) - lead,
             y: size.height + flake.extent + .random(in: 0...40) + .random(in: 0...max(flake.gap, 0))
         )
         flake.push = .zero
@@ -447,12 +450,17 @@ final class SeasonScene: SKScene {
             // Vagare in su e in giù a un ritmo diverso dall'ondeggiare: il percorso non si ripete.
             let bob = reduceMotion || flake.bob == 0 ? 0 : sin(elapsed * flake.swayFrequency * 1.3 * .pi + flake.phase * 2)
                 * flake.bob * flake.swayFrequency
-            p.x += (wind * (0.4 + flake.depth) + sway + flake.drift * fallSpeed + flake.push.dx) * dt
+            // Chi va di traverso ci va solo in vista: mentre aspetta sopra lo schermo (`gap`) scende dritto,
+            // senza vento né drift, se no uscirebbe di lato prima di farsi vedere.
+            let waiting = flake.drift != 0 && p.y > size.height + flake.extent
+            if !waiting { p.x += (wind * (0.4 + flake.depth) + sway + flake.drift * fallSpeed + flake.push.dx) * dt }
             p.y += (-flake.fallSpeed * fallSpeed + bob + flake.push.dy) * dt
 
             if flake.drift != 0 {
-                // Va di traverso: uscito di lato è finito, rinasce in cima (il chiamante lo vede sotto lo schermo).
-                if flake.drift < 0 ? p.x < -flake.extent : p.x > size.width + flake.extent { p.y = -flake.extent - 1 }
+                // Va di traverso: uscito di lato (in vista, non mentre aspetta sopra) è finito,
+                // rinasce in cima (il chiamante lo vede sotto lo schermo).
+                let out = flake.drift < 0 ? p.x < -flake.extent : p.x > size.width + flake.extent
+                if out, p.y <= size.height + flake.extent { p.y = -flake.extent - 1 }
             } else {
                 // Bordi laterali: chi esce da un lato rientra dall'altro.
                 let margin = Tuning.sideMargin
