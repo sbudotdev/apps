@@ -17,7 +17,7 @@ func snowKeepsTimeOnTwoScreensWithDifferentRefreshRates() throws {
 
     let overlays = NSScreen.screens.map { OverlayWindow(screen: $0) }
     defer { overlays.forEach { $0.close() } }
-    overlays.forEach { $0.setOnBattery(false); $0.setSnowing(true) }
+    overlays.forEach { $0.setEnergy(onBattery: false, reduceMotion: false); $0.setSnowing(true) }
     RunLoop.main.run(until: .now.addingTimeInterval(0.5))
 
     let start = overlays.map(\.elapsed)

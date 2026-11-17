@@ -9,7 +9,7 @@ import Testing
 func overlayStartsAndDrawsOnBatteryOrPower(onBattery: Bool) throws {
     let screen = try #require(NSScreen.screens.first)
     let overlay = OverlayWindow(screen: screen)
-    overlay.setOnBattery(onBattery)
+    overlay.setEnergy(onBattery: onBattery, reduceMotion: false)
     overlay.setSnowing(true)
     RunLoop.main.run(until: .now.addingTimeInterval(0.5))
     overlay.close()

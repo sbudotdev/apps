@@ -11,8 +11,14 @@ nonisolated enum Tuning {
 
     // MARK: Animazione
 
-    /// 60 fotogrammi al secondo, 30 a batteria per consumare meno (decisione di Matteo, MGS-416).
-    static func framesPerSecond(onBattery: Bool) -> Int { onBattery ? 30 : 60 }
+    /// 60 fotogrammi al secondo, 30 a batteria per consumare meno (decisione di Matteo, MGS-416)
+    /// e con "Riduci movimento" di macOS, che chiede meno movimento.
+    static func framesPerSecond(onBattery: Bool, reduceMotion: Bool) -> Int { onBattery || reduceMotion ? 30 : 60 }
+
+    // MARK: Riduci movimento
+
+    /// Con "Riduci movimento" cade questa parte dei fiocchi, senza vento, oscillazione né rotazione.
+    static let reducedMotionFlakes: CGFloat = 0.5
 
     // MARK: Particelle
 
@@ -50,4 +56,16 @@ nonisolated enum Tuning {
     static let dockCornerRadius: CGFloat = 24
     /// Ogni quanto i mucchi franano e si ridisegnano (a ogni frame triplicava la CPU).
     static let pileSettleInterval: CGFloat = 0.1
+
+    // MARK: Oggetti
+
+    /// Gravità degli oggetti (pt/s²) e attrito quando poggiano su un bordo (più alto = si fermano prima).
+    static let toyGravity: CGFloat = 1400
+    static let toyFriction: CGFloat = 4
+    /// Sotto questa velocità (pt/s) un oggetto che cade non rimbalza più: si ferma.
+    static let toyMinBounce: CGFloat = 80
+    /// Il lancio più veloce (pt/s): oltre, l'oggetto sparirebbe dallo schermo in un attimo.
+    static let toyMaxThrow: CGFloat = 2500
+    /// Entro questo tragitto (pt) tra pressione e rilascio è un clic, non un trascinamento.
+    static let clickSlop: CGFloat = 4
 }
