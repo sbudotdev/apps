@@ -43,15 +43,16 @@ struct WeatherTests {
         var glass = GlassDrops(rain: rain)
         glass.bead(at: CGPoint(x: 200, y: 280), radius: 6)
         glass.bead(at: CGPoint(x: 200, y: 150), radius: 3)
-        glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: false)
-        let start = glass.drops.first { $0.radius >= 6 }?.position.y ?? 0
+        // Si segue la goccia grossa per `id`: le goccioline che lascia dietro restano più in alto.
+        let heavy = glass.drops[0].id
+        let start = glass.drops[0].position.y
         var merged = false
         for _ in 0..<60 {
             glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: false)
             if !glass.drops.contains(where: { $0.position.y > 140 && $0.position.y < 160 && $0.radius == 3 }) { merged = true }
         }
         #expect(merged)
-        #expect((glass.drops.map(\.position.y).max() ?? 0) < start)
+        #expect((glass.drops.first { $0.id == heavy }?.position.y ?? -1) < start)
         for _ in 0..<200 { glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: false) }
         #expect(!glass.drops.contains { $0.radius >= 4 })   // la goccia grossa è uscita in fondo
     }
@@ -158,6 +159,17 @@ struct WeatherTests {
         var brightest: CGFloat = 0
         for i in 0..<800 { scene.step(at: 1 + Double(i) * 0.05); brightest = max(brightest, scene.sky.flash) }
         #expect(brightest == 0)
+    }
+
+    /// Riduci movimento acceso con l'app aperta: anche senza particelle (nebbia) i banchi diventano meno.
+    @Test func reduceMotionThinsTheBanksEvenWithoutParticles() {
+        let scene = SeasonScene(size: CGSize(width: 1440, height: 900), screenOrigin: .zero, season: Clear())
+        scene.setSeason(Mist())
+        let before = scene.sky.bankNodes.count
+        scene.reduceMotion = true
+        #expect(scene.sky.bankNodes.count < before)
+        scene.reduceMotion = false
+        #expect(scene.sky.bankNodes.count == before)
     }
 
     /// La pioggia del temporale cade di traverso ma copre tutto lo schermo, anche il lato da cui viene.
