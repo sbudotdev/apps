@@ -20,6 +20,13 @@ final class SeasonScene: SKScene {
         let phase: CGFloat
         let spin: CGFloat
         let flip: CGFloat
+        let alpha: CGFloat
+        let drift: CGFloat
+        let bob: CGFloat
+        let pulse: CGFloat
+        let gap: CGFloat
+        /// Mezza diagonale lunga del disegno: quando è del tutto fuori dallo schermo.
+        let extent: CGFloat
         /// Velocità extra impressa dal cursore, si smorza nel tempo.
         var push: CGVector = .zero
     }
@@ -108,23 +115,38 @@ final class SeasonScene: SKScene {
             grain.node.color = season.pileColor
         }
         for pile in piles.values.map(\.pile) + (dock.map { [$0.pile] } ?? []) { pile.node.fillColor = season.pileColor }
+        if !season.settles { meltAll() }
         rebuildFlakes()
     }
 
     // MARK: - Fiocchi
 
-    private func rebuildFlakes() {
-        flakes.forEach { $0.node.removeFromParent() }
-        guard size.width > 0, size.height > 0 else {
+    /// Ricrea le particelle. `keeping`: tiene quelle che ci sono e ne toglie o ne aggiunge (in cima) fino al numero
+    /// giusto: così il cursore dell'intensità non fa saltare quelle che stanno cadendo.
+    private func rebuildFlakes(keeping: Bool = false) {
+        if !keeping {
+            flakes.forEach { $0.node.removeFromParent() }
             flakes = []
-            return
         }
         let settings = Settings.shared.values
         builtWith = (settings.flakeCount, settings.flakeSize)
+        guard size.width > 0, size.height > 0 else {
+            flakes.forEach { $0.node.removeFromParent() }
+            flakes = []
+            return
+        }
         let calm = reduceMotion ? Tuning.reducedMotionFlakes : 1
-        let count = Int(settings.flakeCount * Double(size.width * size.height / Tuning.referenceScreenArea * calm))
-        flakes = (0..<max(count, 1)).map { _ in
-            makeFlake(at: CGPoint(x: .random(in: 0...size.width), y: .random(in: 0...size.height)))
+        let exact = settings.flakeCount * season.abundance * Double(size.width * size.height / Tuning.referenceScreenArea * calm)
+        let count = season.abundance > 0 ? max(Int(exact), 1) : 0
+        if flakes.count > count {
+            flakes[count...].forEach { $0.node.removeFromParent() }
+            flakes.removeLast(flakes.count - count)
+        }
+        while flakes.count < count {
+            var flake = makeFlake(at: CGPoint(x: .random(in: 0...size.width), y: .random(in: 0...size.height)))
+            // Chi aspetta il suo turno (le stelle) e chi arriva dopo partono da sopra lo schermo.
+            if keeping || flake.gap > 0 { respawn(&flake) }
+            flakes.append(flake)
         }
     }
 
@@ -139,6 +161,8 @@ final class SeasonScene: SKScene {
         node.alpha = particle.alpha
         node.zPosition = depth
         node.position = position
+        if particle.length != 1 { node.size.width *= particle.length }
+        if particle.drift != 0 { node.zRotation = atan2(-particle.fallSpeed, particle.drift) }
         if let tint = particle.tint {
             node.color = tint
             node.colorBlendFactor = 1
@@ -154,14 +178,22 @@ final class SeasonScene: SKScene {
             swayFrequency: particle.swayFrequency,
             phase: .random(in: 0...(2 * .pi)),
             spin: particle.spin * 2 * .pi,
-            flip: particle.flip * 2 * .pi
+            flip: particle.flip * 2 * .pi,
+            alpha: particle.alpha,
+            drift: particle.drift,
+            bob: particle.bob,
+            pulse: particle.pulse * 2 * .pi,
+            gap: particle.gap,
+            extent: max(node.size.width, node.size.height) / 2
         )
     }
 
     private func respawn(_ flake: inout Flake) {
+        // Chi va di traverso parte più in là, dalla parte da cui arriva: così attraversa tutto lo schermo.
+        let travel = flake.drift / max(flake.fallSpeed, 1) * size.height
         flake.node.position = CGPoint(
-            x: .random(in: 0...size.width),
-            y: size.height + flake.radius + .random(in: 0...40)
+            x: .random(in: -max(travel, 0)...(size.width - min(travel, 0))),
+            y: size.height + flake.extent + .random(in: 0...40) + .random(in: 0...max(flake.gap, 0))
         )
         flake.push = .zero
     }
@@ -355,7 +387,7 @@ final class SeasonScene: SKScene {
         // Le impostazioni si leggono una volta per frame: le modifiche dalla finestra si vedono subito.
         let settings = Settings.shared.values
         if let built = builtWith, built != (settings.flakeCount, settings.flakeSize) {
-            rebuildFlakes()
+            rebuildFlakes(keeping: built.size == settings.flakeSize)
         }
         let cursorRadius = CGFloat(settings.cursorRadius)
         let cursorRepel = CGFloat(settings.cursorRepel)
@@ -412,19 +444,33 @@ final class SeasonScene: SKScene {
             // --- Movimento naturale ---
             let sway = reduceMotion ? 0 : cos(elapsed * flake.swayFrequency * 2 * .pi + flake.phase)
                 * flake.swayAmplitude * flake.swayFrequency
-            p.x += (wind * (0.4 + flake.depth) + sway + flake.push.dx) * dt
-            p.y += (-flake.fallSpeed * fallSpeed + flake.push.dy) * dt
+            // Vagare in su e in giù a un ritmo diverso dall'ondeggiare: il percorso non si ripete.
+            let bob = reduceMotion || flake.bob == 0 ? 0 : sin(elapsed * flake.swayFrequency * 1.3 * .pi + flake.phase * 2)
+                * flake.bob * flake.swayFrequency
+            p.x += (wind * (0.4 + flake.depth) + sway + flake.drift * fallSpeed + flake.push.dx) * dt
+            p.y += (-flake.fallSpeed * fallSpeed + bob + flake.push.dy) * dt
 
-            // Bordi laterali: chi esce da un lato rientra dall'altro.
-            let margin = Tuning.sideMargin
-            if p.x < -margin { p.x += size.width + margin * 2 }
-            if p.x > size.width + margin { p.x -= size.width + margin * 2 }
+            if flake.drift != 0 {
+                // Va di traverso: uscito di lato è finito, rinasce in cima (il chiamante lo vede sotto lo schermo).
+                if flake.drift < 0 ? p.x < -flake.extent : p.x > size.width + flake.extent { p.y = -flake.extent - 1 }
+            } else {
+                // Bordi laterali: chi esce da un lato rientra dall'altro.
+                let margin = Tuning.sideMargin
+                if p.x < -margin { p.x += size.width + margin * 2 }
+                if p.x > size.width + margin { p.x -= size.width + margin * 2 }
+            }
 
             flake.node.position = p
             if flake.spin != 0, !reduceMotion { flake.node.zRotation += flake.spin * dt }
             if flake.flip != 0, !reduceMotion { flake.node.xScale = cos(elapsed * flake.flip + flake.phase) }
+            if flake.pulse != 0 {
+                // Una lucciola: quasi spenta per un po', poi si accende piano.
+                let glow = 0.5 + 0.5 * sin(elapsed * flake.pulse + flake.phase)
+                flake.node.alpha = flake.alpha * (0.1 + 0.9 * glow * glow)
+            }
 
             // --- Si posa? Ha attraversato la superficie di un mucchio in questo passo ---
+            guard season.settles else { return false }
             for pile in allPiles {
                 if let top = pile.surface(at: p.x), previousY >= top, p.y < top {
                     pile.add(atX: p.x, radius: flake.radius, growth: CGFloat(settings.growth) * .random(in: season.pileGrowth))
@@ -437,7 +483,7 @@ final class SeasonScene: SKScene {
         for i in flakes.indices {
             var flake = flakes[i]
             // Posato o arrivato in fondo: rinasce in cima.
-            if move(&flake) || flake.node.position.y < -flake.radius {
+            if move(&flake) || flake.node.position.y < -flake.extent {
                 respawn(&flake)
             }
             flakes[i] = flake

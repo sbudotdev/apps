@@ -6,6 +6,9 @@ enum Seasons {
         Spring(),
         Summer(),
         Autumn(),
+        Fireflies(),
+        Meteors(),
+        Clear(),
     ]
 
     static func named(_ id: String) -> any Season {
