@@ -31,14 +31,15 @@ nonisolated struct ToyBody: Equatable {
     }
 
     /// Un passo. `ledges`: dove si può posare; `width`: la larghezza dello schermo, da cui non esce;
-    /// `bounce`: quanta velocità resta dopo un urto (0 = si ferma subito).
-    mutating func step(dt: CGFloat, ledges: [Ledge], width: CGFloat, bounce: CGFloat) {
+    /// `bounce`: quanta velocità resta dopo un urto (0 = si ferma subito); `friction`: quanto frena sul bordo.
+    mutating func step(dt: CGFloat, ledges: [Ledge], width: CGFloat, bounce: CGFloat,
+                       friction: CGFloat = Tuning.toyFriction) {
         guard !isHeld else { return }
         let previous = position
         isResting = velocity.dy <= 0 && ledges.contains { abs($0.y - position.y) < 0.5 && $0.span.contains(position.x) }
         if isResting {
             // In piedi: scivola un po' e si ferma. Se esce dal bordo, al passo dopo cade.
-            velocity = CGVector(dx: velocity.dx * CGFloat(exp(-Double(Tuning.toyFriction * dt))), dy: 0)
+            velocity = CGVector(dx: velocity.dx * CGFloat(exp(-Double(friction * dt))), dy: 0)
             position.x += velocity.dx * dt
         } else {
             velocity.dy -= Tuning.toyGravity * dt

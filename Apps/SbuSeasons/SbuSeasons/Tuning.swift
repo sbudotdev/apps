@@ -69,4 +69,28 @@ nonisolated enum Tuning {
     static let toyMaxThrow: CGFloat = 1500
     /// Entro questo tragitto (pt) tra pressione e rilascio è un clic, non un trascinamento.
     static let clickSlop: CGFloat = 4
+
+    // MARK: Palle di neve e pupazzo
+
+    /// Quanti granelli di neve posata (`Pile.scoop`) servono per una palla: circa 15 cm di finestra piena.
+    static let snowballSnow = 120
+    /// Le palle sciolte sullo schermo, al massimo: oltre sparisce la più vecchia.
+    static let maxSnowballs = 12
+    /// Una palla rotola: frena meno di un oggetto qualunque.
+    static let snowballFriction: CGFloat = 0.8
+    /// Tre palle tutte entro questa distanza (pt, tra i piedi) diventano un pupazzo.
+    static let snowmanReach: CGFloat = 40
+
+    // MARK: Neve che scivola via
+
+    /// Una finestra che si sposta di più tra due letture (pt in 1/8 s, circa 320 pt/s) perde la neve;
+    /// più piano, la neve resta sopra e la segue.
+    static let slideOffDistance: CGFloat = 40
+
+    // MARK: Palla di vetro
+
+    /// La spinta verso l'alto della neve quando si scuote la palla di vetro (pt/s).
+    static let globeLift: ClosedRange<CGFloat> = 250...650
+    /// Dopo una scossa la palla di vetro riposa per qualche secondo: chi continua a scuotere non la rifà subito.
+    static let globeRest: CGFloat = 3
 }

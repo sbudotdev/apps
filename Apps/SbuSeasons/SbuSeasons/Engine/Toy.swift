@@ -9,6 +9,8 @@ class Toy {
     var body: ToyBody
     /// Quanto rimbalza quando cade su un bordo (0 = per niente). Con Riduci movimento non rimbalza mai.
     var bounce: CGFloat = 0
+    /// Quanto in fretta si ferma quando poggia su un bordo (più basso = scivola o rotola più lontano).
+    var friction: CGFloat = Tuning.toyFriction
 
     init(node: SKSpriteNode, at position: CGPoint) {
         self.node = node
@@ -23,6 +25,9 @@ class Toy {
         CGRect(x: body.position.x - node.size.width / 2, y: body.position.y,
                width: node.size.width, height: node.size.height)
     }
+
+    /// Dopo ogni passo del motore: per animare il disegno (una palla che gira mentre rotola).
+    func step(dt: CGFloat) {}
 
     /// Clic senza trascinare.
     func clicked() {}

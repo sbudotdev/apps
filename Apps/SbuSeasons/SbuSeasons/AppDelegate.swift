@@ -142,6 +142,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         meltItem.target = self
         menu.addItem(meltItem)
 
+        let clearItem = NSMenuItem(title: String(localized: "Togli le palle di neve"), action: #selector(clearSnowballs), keyEquivalent: "")
+        clearItem.target = self
+        clearItem.toolTip = String(localized: "Per fare una palla di neve, tieni premuto ⌥ e passa il cursore sulla neve posata.")
+        menu.addItem(clearItem)
+
+        // La palla di vetro si scuote anche dal menu: non tutti possono scuotere il mouse.
+        let globeItem = NSMenuItem(title: String(localized: "Scuoti la palla di vetro"), action: #selector(shakeGlobe), keyEquivalent: "")
+        globeItem.target = self
+        menu.addItem(globeItem)
+
         menu.addItem(.separator())
 
         // Stagione: un sottomenu con l'elenco di `Seasons.all`.
@@ -211,6 +221,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     @objc private func meltSnow() {
         overlays.forEach { $0.meltAll() }
+    }
+
+    @objc private func clearSnowballs() {
+        overlays.forEach { $0.clearSnowballs() }
+    }
+
+    @objc private func shakeGlobe() {
+        overlays.forEach { $0.shakeGlobe() }
     }
 
     @objc private func selectSeason(_ sender: NSMenuItem) {

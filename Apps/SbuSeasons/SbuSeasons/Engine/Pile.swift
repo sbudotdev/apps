@@ -109,6 +109,14 @@ final class Pile {
         return released
     }
 
+    /// La finestra si è spostata piano: la neve di `other` (una finestra larga uguale) resta sopra e viene qui.
+    /// Da chiamare prima di `setOpen`, che fa cadere quella finita sotto un'altra finestra.
+    func carry(_ other: Pile) {
+        guard other.heights.count == heights.count else { return }
+        heights = other.heights
+        dirty = true
+    }
+
     func clear() {
         guard !isEmpty else { return }
         heights = heights.map { _ in 0 }
