@@ -99,6 +99,23 @@ struct WinterGamesTests {
         #expect(sled.body.position.x > x + 50)
     }
 
+    @Test func withReduceMotionClickingTheSledDoesNotPushIt() throws {
+        let scene = scene(reduceMotion: true)
+        let sled = try #require(scene.setUpSledRun())
+        run(scene, seconds: 0.2)
+        let x = sled.body.position.x
+        sled.clicked(at: CGPoint(x: 0, y: 5))
+        run(scene, from: 1, seconds: 0.5)
+        #expect(sled.body.position.x == x)
+    }
+
+    @Test func changingSeasonEndsThePause() {
+        let scene = scene()
+        scene.toysPaused = true
+        scene.setSeason(Summer())
+        #expect(!scene.toysPaused, "fuori dall'inverno la voce della pausa è spenta: non si potrebbe togliere")
+    }
+
     @Test func withoutWindowsTheSledStartsOnTheFloor() throws {
         let scene = scene()
         let sled = try #require(scene.setUpSledRun())

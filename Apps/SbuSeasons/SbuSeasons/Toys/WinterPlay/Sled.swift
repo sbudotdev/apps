@@ -17,6 +17,8 @@ final class Sled: Toy {
     }
 
     override func clicked() {
+        // Con Riduci movimento i lanci cadono dritti: anche il clic non lo spinge (QA SBU-63).
+        guard (node.scene as? SeasonScene)?.reduceMotion != true else { return }
         body.velocity.dx = Tuning.sledPush * node.xScale
         SoundBoard.shared.play("slittino")
     }
