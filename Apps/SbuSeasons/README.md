@@ -43,7 +43,7 @@ con il download da sbu.dev (ADR-0022, `docs/adr/0022-app-mac.md`).
 ## Il .dmg da distribuire
 
 ```bash
-./make-dmg.sh 1.3.1    # → build/dist/SbuSeasons-1.3.1.dmg
+./make-dmg.sh 1.4    # → build/dist/SbuSeasons-1.4.dmg
 ```
 
 Build Release universale (arm64 + x86_64), firma Developer ID, `.dmg` con il collegamento ad Applicazioni,
@@ -55,6 +55,12 @@ La 1.3 è nella [release della repo](https://github.com/sbudotdev/SbuSeasons/rel
 (un display link per schermo con `SKRenderer`, MGS-636) e torna alla `SKView` della 1.2 (MGS-686).
 Con due monitor a frequenze diverse (per esempio 144 e 60 Hz) la neve torna lenta su uno dei due:
 la correzione dei due monitor si rifà in un ticket a parte.
+
+**1.4 (7).** La neve va alla stessa velocità su due monitor a frequenze diverse, senza toccare la `SKView` (SBU-19).
+SpriteKit chiamava `update` solo sulla scena dello schermo più lento: sull'altro la neve si fermava,
+o andava a metà velocità a batteria. Ora ogni finestra prende un display link dalla sua `SKView`,
+che segue il suo schermo, e muove lei la scena (`SeasonScene.step(at:)`); la `SKView` disegna come nella 1.2.
+Il test `TwoScreensTests` lo prova con uno schermo virtuale a una frequenza diversa da quello principale.
 
 **Dal vecchio nome.** Al primo avvio le impostazioni e "Fai nevicare" salvati con il nome di prima
 si copiano da soli (`PreviousDefaults` in `Settings.swift`). Il permesso Accessibilità e "Apri al login"
@@ -79,7 +85,7 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `App.swift` | Punto di ingresso, app senza icona nel Dock |
 | `AppDelegate.swift` | Una finestra per schermo, menu ❄︎ (con Stagione), legge le finestre 8 volte al secondo |
 | `Engine/Season.swift` | Il protocollo `Season` e `Particle`: ciò che una stagione deve dire al motore |
-| `Engine/OverlayWindow.swift` | Finestra trasparente, sempre sopra, attraversata dai click |
+| `Engine/OverlayWindow.swift` | Finestra trasparente, sempre sopra, attraversata dai click; il suo display link muove la scena |
 | `Engine/SeasonScene.swift` | Fiocchi, vento, cursore, collisione coi mucchi, neve che cade quando muovi una finestra |
 | `Engine/Pile.swift` | Un mucchio: altezze per colonna, frana, scavo col cursore, disegno |
 | `Engine/Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
