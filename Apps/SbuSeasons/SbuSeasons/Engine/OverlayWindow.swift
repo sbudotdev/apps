@@ -104,6 +104,7 @@ final class OverlayWindow: NSPanel {
         skView.isPaused = !snowing
         displayLink?.isPaused = !snowing
         if !snowing {
+            scene.dropHeld()
             takesMouse = false
             ignoresMouseEvents = true
         }

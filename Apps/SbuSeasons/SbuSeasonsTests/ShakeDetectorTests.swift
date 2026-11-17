@@ -27,6 +27,18 @@ struct ShakeDetectorTests {
         #expect(count == 1)
     }
 
+    @Test func aShakeThenStillnessIsOneShake() {
+        var detector = ShakeDetector()
+        var count = 0
+        // 0,9 s avanti e indietro di 300 pt ogni 60 ms, a 60 Hz; poi fermo per 2 s.
+        for frame in 0..<Int(2.9 * 60) {
+            let t = TimeInterval(frame) / 60
+            let x: CGFloat = t < 0.9 ? (Int(t / 0.06) % 2 == 0 ? 0 : 300) : 0
+            if detector.add(CGPoint(x: x, y: 100), at: t) { count += 1 }
+        }
+        #expect(count == 1)
+    }
+
     @Test func aLongStraightMoveIsNot() {
         var detector = ShakeDetector()
         #expect(!feed(&detector, xs: stride(from: 0, through: 1200, by: 60).map { $0 }, step: 0.02))

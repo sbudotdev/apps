@@ -245,17 +245,23 @@ final class SeasonScene: SKScene {
 
     /// Rilascio: un clic se il mouse non si è quasi mosso, se no un lancio (con Riduci movimento cade dritto).
     func letGo(at point: CGPoint, time: TimeInterval) {
+        // Fermo da un po' prima di lasciarlo: nessun lancio. Va letto prima di `drag`, che aggiorna `held.time`.
+        let stale = held.map { time - $0.time > 0.1 } ?? false
         drag(to: point, time: time)
         guard let held else { return }
         self.held = nil
         let isClick = hypot(point.x - held.start.x, point.y - held.start.y) < Tuning.clickSlop
-        // Fermo da un po' prima di lasciarlo: nessun lancio.
-        let stale = time - held.time > 0.1
         held.toy.body.release(velocity: isClick || stale || reduceMotion ? .zero : held.velocity)
         if isClick { held.toy.clicked() }
     }
 
     /// Il cursore si è mosso su questo schermo: se è stato scosso, lo sanno tutti gli oggetti.
+    /// La neve si ferma mentre trascini: l'oggetto cade lì, e la finestra non resta col mouse preso.
+    func dropHeld() {
+        held?.toy.body.release(velocity: .zero)
+        held = nil
+    }
+
     func pointerMoved(to point: CGPoint, time: TimeInterval) {
         if pointerShake.add(point, at: time) { toys.forEach { $0.shaken(.pointer) } }
     }
