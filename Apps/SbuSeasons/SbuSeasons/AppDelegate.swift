@@ -40,6 +40,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private var dockFirstItem: NSMenuItem?
     private var cableCarItem: NSMenuItem?
     private var pauseItem: NSMenuItem?
+    private var countdownItem: NSMenuItem?
+    /// Il conto alla rovescia per Natale: creato la prima volta che si accende.
+    private var countdownPanel: CountdownPanel?
+
+    /// "Conto alla rovescia per Natale" acceso: si ricorda al prossimo avvio.
+    private var showsCountdown: Bool {
+        get { UserDefaults.standard.bool(forKey: "showsCountdown") }
+        set { UserDefaults.standard.set(newValue, forKey: "showsCountdown") }
+    }
 
     /// La finestra Impostazioni: creata la prima volta che serve, poi riusata.
     private lazy var settingsWindow: NSWindow = {
@@ -61,6 +70,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         setupStatusItem()
         setupMainMenu()
         rebuildOverlays()
+        if showsCountdown { setCountdownVisible(true) }
         // La stagione cambia dal menu ❄︎ o dalle Impostazioni: neve e icona seguono subito.
         Settings.shared.observeSeason { [weak self] in self?.seasonDidChange() }
 
@@ -176,6 +186,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         menu.addItem(.separator())
         addWinterGames(to: menu)
         menu.addItem(.separator())
+        addChristmas(to: menu)
+        menu.addItem(.separator())
 
         // Stagione: un sottomenu con l'elenco di `Seasons.all`.
         let seasonMenu = NSMenu()
@@ -255,12 +267,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         pauseItem = pause
     }
 
+    /// Babbo Natale, l'omino di pan di zenzero (solo d'inverno, come i giochi) e il conto alla rovescia (sempre).
+    private func addChristmas(to menu: NSMenu) {
+        let santa = NSMenuItem(title: String(localized: "Fai passare Babbo Natale"), action: #selector(sendSanta), keyEquivalent: "")
+        santa.toolTip = String(localized: "Dal 1° dicembre al 6 gennaio passa da solo ogni tanto, quando nevica, e la vigilia più spesso. Lascia un regalo al giorno su una finestra o sul Dock: fai clic per aprirlo.")
+        let man = NSMenuItem(title: String(localized: "Manda l'omino di pan di zenzero"), action: #selector(sendGingerbreadMan), keyEquivalent: "")
+        man.toolTip = String(localized: "Corre lungo il Dock: prova a prenderlo col cursore.")
+        let countdown = NSMenuItem(title: String(localized: "Conto alla rovescia per Natale"), action: #selector(toggleCountdown), keyEquivalent: "")
+        countdown.toolTip = String(localized: "Un pannellino sulla scrivania con giorni, ore e minuti. Trascinalo dove vuoi.")
+        for mi in [santa, man, countdown] {
+            mi.target = self
+            menu.addItem(mi)
+        }
+        winterItems += [santa, man]
+        countdownItem = countdown
+    }
+
     private func updateMenuState() {
         toggleItem.state = isSnowing ? .on : .off
         let winter = Settings.shared.season is Snow
         for mi in winterItems { mi.isEnabled = winter }
         dockFirstItem?.state = ploughDockFirst ? .on : .off
         pauseItem?.state = overlays.first?.toysPaused == true ? .on : .off
+        countdownItem?.state = showsCountdown ? .on : .off
         cableCarItem?.title = overlays.contains(where: \.hasCableCar)
             ? String(localized: "Togli la funivia") : String(localized: "Monta la funivia")
         let season = Settings.shared.season
@@ -325,6 +354,31 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
             currentOverlay?.scene.setUpCableCar()
         }
         updateMenuState()
+    }
+
+    @objc private func sendSanta() {
+        // Uno alla volta, anche con più schermi.
+        guard !overlays.contains(where: { $0.scene.santa != nil }) else { return }
+        currentOverlay?.scene.sendSanta()
+    }
+
+    @objc private func sendGingerbreadMan() {
+        (overlays.first(where: \.hasDock) ?? currentOverlay)?.scene.sendGingerbreadMan()
+    }
+
+    @objc private func toggleCountdown() {
+        showsCountdown.toggle()
+        setCountdownVisible(showsCountdown)
+        updateMenuState()
+    }
+
+    private func setCountdownVisible(_ visible: Bool) {
+        if visible {
+            if countdownPanel == nil { countdownPanel = CountdownPanel() }
+            countdownPanel?.orderFrontRegardless()
+        } else {
+            countdownPanel?.orderOut(nil)
+        }
     }
 
     @objc private func togglePause() {
