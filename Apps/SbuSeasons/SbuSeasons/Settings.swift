@@ -99,7 +99,7 @@ struct SettingsView: View {
                     }
                 }
                 Section("Nevicata") {
-                    slider("Quantità di fiocchi", $settings.values.flakeCount, 30...800, "%.0f")
+                    slider("Quantità di fiocchi", $settings.values.flakeCount, Density.range, "%.0f")
                     slider("Dimensione", $settings.values.flakeSize, 0.5...2.5, "%.1f×")
                     slider("Velocità di caduta", $settings.values.fallSpeed, 0.3...2.5, "%.1f×")
                     slider("Vento", $settings.values.wind, 0...80, "%.0f")

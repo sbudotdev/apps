@@ -20,10 +20,16 @@ protocol Season {
     /// Quanto aggiunge al mucchio una particella che si posa (× "Velocità di accumulo"), estratto a caso
     /// a ogni posa: un intervallo largo e basso fa mucchi radi e irregolari.
     var pileGrowth: ClosedRange<CGFloat> { get }
+    /// false = le particelle non si posano mai (lucciole, stelle cadenti); scegliendola, la neve posata si scioglie.
+    var settles: Bool { get }
+    /// Quante particelle rispetto a "Quantità" (1 = tante quante dice l'intensità, 0 = nessuna).
+    var abundance: Double { get }
 }
 
 extension Season {
     var pileGrowth: ClosedRange<CGFloat> { 1...1 }
+    var settles: Bool { true }
+    var abundance: Double { 1 }
 }
 
 /// Com'è e come cade una particella, prima dei moltiplicatori delle Impostazioni.
@@ -42,4 +48,15 @@ nonisolated struct Particle {
     var flip: CGFloat = 0
     /// Il colore di questa particella sopra la texture (nil = la texture com'è).
     var tint: NSColor? = nil
+    /// Velocità orizzontale propria in pt/s (una stella cadente va di traverso). Con `drift` la particella
+    /// è orientata dove va, e quando esce di lato rinasce invece di rientrare dall'altra parte.
+    var drift: CGFloat = 0
+    /// Vagare in su e in giù, in punti, alla frequenza dell'oscillazione (le lucciole).
+    var bob: CGFloat = 0
+    /// Si accende e si spegne, in volte al secondo (0 = luce fissa).
+    var pulse: CGFloat = 0
+    /// Lunghezza rispetto alla larghezza: 1 = tonda, 8 = una scia lunga 8 volte quanto è alta.
+    var length: CGFloat = 1
+    /// Quanti punti sopra lo schermo rinasce in più: l'attesa prima di rivederla (una stella "ogni tanto").
+    var gap: CGFloat = 0
 }
