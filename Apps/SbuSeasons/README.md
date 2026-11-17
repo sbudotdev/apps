@@ -111,11 +111,40 @@ Spazzaneve, montagnetta, slittino, funivia e albero sono in `Toys/WinterPlay/`, 
 CPU misurata sul Mac (Release, 60 fps, 30 s alternati): con albero, slittino, funivia e spazzaneve circa il 7% in più
 della sola neve (9,6% contro 9,0%).
 
+## Natale (2.0)
+
+- **Babbo Natale** con la slitta e due renne attraversa il cielo, poco sotto la barra dei menu. Dal 1° dicembre
+  al 6 gennaio (le stesse date del Natale delle app iPhone) passa da solo quando nevica: la prima volta tra 20 s e 1 minuto
+  dall'avvio, poi ogni 6–12 minuti. Si chiama anche dal menu («Fai passare Babbo Natale»), in qualunque giorno d'inverno.
+- **Un regalo al giorno.** Babbo Natale lo lascia cadere su un bordo di finestra o sul Dock (senza, sul fondo): da solo
+  un passaggio su due, dal menu sempre, finché oggi non l'ha lasciato. Il giorno si salva (`lastGiftDay` in UserDefaults),
+  quindi uno al giorno anche riavviando l'app e con più schermi. Un clic lo apre: stelline, e salta fuori un omino di pan
+  di zenzero. Aperto resta 3 s e poi sparisce.
+- **Vigilia** (24/12): passa ogni 2–4 minuti e il primo passaggio porta sicuramente il regalo.
+- **Omino di pan di zenzero** («Manda l'omino di pan di zenzero»). Parte dal bordo sinistro del Dock (senza Dock, dal fondo)
+  e corre avanti e indietro sul suo bordo senza cadere. Se il cursore arriva a meno di 120 pt scappa più veloce; messo
+  all'angolo salta oltre il cursore. Preso con un clic, sparisce tra le stelline. Al massimo 3.
+- **Conto alla rovescia per Natale** (voce del menu, si ricorda al riavvio): un pannellino sulla scrivania, sopra le icone e
+  sotto le finestre delle app, con giorni, ore e minuti alla mezzanotte del 25 dicembre; il giorno di Natale «Buon Natale!».
+  Si sposta trascinandolo e ricorda dove l'hai messo. Si aggiorna una volta al minuto.
+- Con **Riduci movimento** la slitta non attraversa lo schermo (il regalo cade dritto dove sarebbe arrivato), l'omino
+  cammina piano, non salta e non dondola, le stelline non si allargano.
+- Babbo Natale e l'omino sono solo d'inverno, come i giochi; cambiando stagione slitta, regali e omini spariscono.
+  «Metti in pausa i giochi» ferma anche loro.
+- Suoni (se ci sono i file, SBU-56): `babbo-natale`, `regalo`, `omino`, `omino-preso`.
+
+Il codice è in `Toys/Christmas/`: `Christmas.swift` (date, conto alla rovescia, `GiftDiary`, quando passa e se porta il regalo),
+`ChristmasCast.swift` (Babbo Natale, regalo, omino e la sua corsa), `ChristmasVisits.swift` (l'estensione di `SeasonScene`
+con il passo di Natale e i comandi), `CountdownPanel.swift`. I numeri in `Tuning.swift`, sezione «Natale».
+CPU misurata sul Mac (Release, 60 fps, 30 s per giro, sullo stesso Mac carico di altri processi): con Babbo Natale chiamato
+ogni 7,5 s, due omini che corrono e il conto alla rovescia acceso 17,3%, sola neve 17,4%: nessuna differenza misurabile.
+
 ## Menu ❄︎
 
 Fai nevicare (⌘S) · Sciogli la neve (⌘R) · Togli le palle di neve · Scuoti la palla di vetro ·
 Manda lo spazzaneve · Prima il Dock · Prepara la pista da slittino · Monta/Togli la funivia · Pianta un albero di Natale ·
-Togli alberi, neve e slitte · Metti in pausa i giochi · Stagione ·
+Togli alberi, neve e slitte · Metti in pausa i giochi ·
+Fai passare Babbo Natale · Manda l'omino di pan di zenzero · Conto alla rovescia per Natale · Stagione ·
 Intensità (Leggera/Media/Forte con le scorciatoie, e sotto un cursore continuo) · Impostazioni… (⌘,) · Esci (⌘Q).
 Il cursore è lo stesso valore di "Quantità di fiocchi" nelle Impostazioni: muovendolo le particelle in più nascono in cima
 e quelle in meno spariscono, quelle che stanno cadendo non saltano.
@@ -142,6 +171,7 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Engine/Toy.swift`, `Engine/ToyBody.swift`, `Engine/Ledge.swift` | Gli oggetti con cui giocare: disegno, fisica (gravità, appoggio, lancio), i bordi su cui stanno |
 | `Engine/ShakeDetector.swift`, `Engine/WindowShakes.swift`, `Engine/Shake.swift` | Cursore e finestre scossi |
 | `Toys/Snowball/Snowball.swift` | Palla di neve (rotola), pupazzo, `snowmanTrio` |
+| `Toys/Christmas/` | Babbo Natale, il regalo, l'omino di pan di zenzero, il conto alla rovescia e le date di Natale |
 | `Toys/WinterPlay/` | Spazzaneve, montagnetta, slittino, funivia, albero di Natale e i loro comandi (`WinterPlay.swift`) |
 | `Engine/SoundBoard.swift` | Effetti brevi e sottofondo in loop (`AVAudioPlayer`) |
 | `Engine/Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
