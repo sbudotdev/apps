@@ -5,6 +5,7 @@ import SpriteKit
 struct Snow: Season {
     static let id = "snow"
     var id: String { Self.id }
+    var ambience: String? { "vento" }
     var title: String { String(localized: "Neve") }
     let symbol = "snowflake"
     /// Carta (valore chiaro) anche in aspetto scuro: è neve. Sulle finestre bianche si stacca
