@@ -891,6 +891,186 @@
           }
         }
       }
+    },
+    "Baita": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log Cabin"
+          }
+        }
+      }
+    },
+    "Cammina sopra le finestre. Avvicina il cursore: il naso si illumina.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Walks along the tops of your windows. Bring the pointer close and its nose lights up."
+          }
+        }
+      }
+    },
+    "Candela e luce bassa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Candle and Dim Light"
+          }
+        }
+      }
+    },
+    "Cincia e mangiatoia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tit and Bird Feeder"
+          }
+        }
+      }
+    },
+    "Dalle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From"
+          }
+        }
+      }
+    },
+    "Di sera": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the Evening"
+          }
+        }
+      }
+    },
+    "Dorme acciambellata: fai clic per svegliarla. Annusa, fa due passi e torna a dormire.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Curled up asleep: click to wake it. It sniffs around, takes a little walk and goes back to sleep."
+          }
+        }
+      }
+    },
+    "Fai clic per accendere il fuoco: la finestra si scalda e dal camino esce il fumo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click to light the fire: the window glows and smoke rises from the chimney."
+          }
+        }
+      }
+    },
+    "Fai clic per accenderla o spegnerla.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click to light it or put it out."
+          }
+        }
+      }
+    },
+    "Fai clic sulla mangiatoia per mettere i semi: arriva la cincia a beccarli.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click the feeder to put out seeds: a tit comes to peck at them."
+          }
+        }
+      }
+    },
+    "Lanterna": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lantern"
+          }
+        }
+      }
+    },
+    "Lo schermo si scurisce un po' e in basso a destra si accende una candela. Di sera vuol dire dall'ora scelta fino alle 6.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The screen dims a little and a candle lights up in the bottom right corner. In the evening means from the chosen hour until 6 am."
+          }
+        }
+      }
+    },
+    "Mai": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never"
+          }
+        }
+      }
+    },
+    "Notte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Night"
+          }
+        }
+      }
+    },
+    "Personaggi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Characters"
+          }
+        }
+      }
+    },
+    "Renna": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reindeer"
+          }
+        }
+      }
+    },
+    "Sempre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Always"
+          }
+        }
+      }
+    },
+    "Volpe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fox"
+          }
+        }
+      }
     }
   }
 }

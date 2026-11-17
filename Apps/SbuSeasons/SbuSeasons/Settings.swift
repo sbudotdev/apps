@@ -23,6 +23,9 @@ nonisolated struct SnowSettings: Codable, Equatable {
     // Suoni (SoundBoard): spenti finché non li accendi
     var sounds = false
     var soundVolume = 60.0      // %
+    // Notte: schermo più scuro e la candela, dalle `nightStart` al mattino o sempre
+    var night = NightMode.off
+    var nightStart = 22         // ora
 }
 
 extension SnowSettings {
@@ -141,6 +144,24 @@ struct SettingsView: View {
                 }
                 .onChange(of: settings.values.sounds) { SoundBoard.shared.settingsChanged() }
                 .onChange(of: settings.values.soundVolume) { SoundBoard.shared.settingsChanged() }
+                Section {
+                    Picker("Candela e luce bassa", selection: $settings.values.night) {
+                        Text("Mai").tag(NightMode.off)
+                        Text("Di sera").tag(NightMode.late)
+                        Text("Sempre").tag(NightMode.always)
+                    }
+                    Picker("Dalle", selection: $settings.values.nightStart) {
+                        ForEach([18, 19, 20, 21, 22, 23, 0, 1, 2], id: \.self) { hour in
+                            Text(verbatim: String(format: "%02d:00", hour)).tag(hour)
+                        }
+                    }
+                    .disabled(settings.values.night != .late)
+                } header: {
+                    Text("Notte")
+                } footer: {
+                    Text("Lo schermo si scurisce un po' e in basso a destra si accende una candela. Di sera vuol dire dall'ora scelta fino alle 6.")
+                        .foregroundStyle(Quaderno.inkMuted.color)
+                }
                 Section {
                     Toggle("Apri al login", isOn: $openAtLogin)
                         .onChange(of: openAtLogin) { _, on in setOpenAtLogin(on) }

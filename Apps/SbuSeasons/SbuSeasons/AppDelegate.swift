@@ -40,6 +40,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private var dockFirstItem: NSMenuItem?
     private var cableCarItem: NSMenuItem?
     private var pauseItem: NSMenuItem?
+    /// Le voci dei personaggi, con la spunta se il personaggio c'è.
+    private var figureItems: [(item: NSMenuItem, kind: FigureKind)] = []
     private var countdownItem: NSMenuItem?
     /// Il conto alla rovescia per Natale: creato la prima volta che si accende.
     private var countdownPanel: CountdownPanel?
@@ -185,6 +187,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
         menu.addItem(.separator())
         addWinterGames(to: menu)
+        addFigures(to: menu)
         menu.addItem(.separator())
         addChristmas(to: menu)
         menu.addItem(.separator())
@@ -267,6 +270,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         pauseItem = pause
     }
 
+    /// "Personaggi": un sottomenu con una voce per tipo, che lo mette o lo toglie.
+    private func addFigures(to menu: NSMenu) {
+        let submenu = NSMenu()
+        figureItems = FigureKind.allCases.map { kind in
+            let mi = NSMenuItem(title: kind.title, action: #selector(toggleFigure(_:)), keyEquivalent: "")
+            mi.target = self
+            mi.toolTip = kind.tip
+            submenu.addItem(mi)
+            return (mi, kind)
+        }
+        let item = NSMenuItem(title: String(localized: "Personaggi"), action: nil, keyEquivalent: "")
+        item.submenu = submenu
+        menu.addItem(item)
+        winterItems.append(item)
+    }
+
     /// Babbo Natale, l'omino di pan di zenzero (solo d'inverno, come i giochi) e il conto alla rovescia (sempre).
     private func addChristmas(to menu: NSMenu) {
         let santa = NSMenuItem(title: String(localized: "Fai passare Babbo Natale"), action: #selector(sendSanta), keyEquivalent: "")
@@ -289,6 +308,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         for mi in winterItems { mi.isEnabled = winter }
         dockFirstItem?.state = ploughDockFirst ? .on : .off
         pauseItem?.state = overlays.first?.toysPaused == true ? .on : .off
+        for (mi, kind) in figureItems { mi.state = overlays.contains { $0.scene.hasFigure(kind) } ? .on : .off }
         countdownItem?.state = showsCountdown ? .on : .off
         cableCarItem?.title = overlays.contains(where: \.hasCableCar)
             ? String(localized: "Togli la funivia") : String(localized: "Monta la funivia")
@@ -340,6 +360,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     @objc private func toggleDockFirst() {
         ploughDockFirst.toggle()
+        updateMenuState()
+    }
+
+    /// Se c'è (su qualunque schermo) lo toglie, se no lo mette sullo schermo del cursore.
+    @objc private func toggleFigure(_ sender: NSMenuItem) {
+        guard let kind = figureItems.first(where: { $0.item === sender })?.kind else { return }
+        if overlays.contains(where: { $0.scene.hasFigure(kind) }) {
+            overlays.filter { $0.scene.hasFigure(kind) }.forEach { $0.scene.toggleFigure(kind) }
+        } else {
+            currentOverlay?.scene.toggleFigure(kind)
+        }
         updateMenuState()
     }
 
