@@ -87,7 +87,23 @@ sono legati al bundle id: con il nome nuovo vanno dati di nuovo.
   si alza, i fiocchi salgono, le palle saltano, poi tutto ricade. Dopo una scossa riposa 3 s. Con Riduci movimento no.
   Mentre tieni ⌥ (d'inverno) il cursore non scuote: passare avanti e indietro sulla neve per raccoglierla non deve portarla via.
 - Menu: «Togli le palle di neve» toglie le palle sciolte (i pupazzi restano); «Sciogli la neve» toglie anche palle e pupazzi.
-- Suoni (se ci sono i file, SBU-56): `palla-di-neve`, `pupazzo`, `palla-di-vetro`.
+- **Spazzaneve** («Manda lo spazzaneve»). Con «Prima il Dock» (acceso all'inizio) parte dal Dock, se no dalla finestra
+  più in alto. Va verso destra a 150 pt/s e raccoglie la neve sotto di sé, che cresce davanti alla lama; finito un bordo
+  cade su quello sotto e continua, fino al fondo e fuori dallo schermo. Lì la neve raccolta resta: una montagnetta
+  (al massimo 6). Uno alla volta.
+- **Slittino** («Prepara la pista da slittino»). Compare in cima alla finestra più in alto (senza finestre, sul fondo).
+  Lo lanci trascinandolo, o un clic lo spinge avanti; frena pochissimo, quindi arriva in fondo al bordo e scende sul
+  prossimo: la pista sono i bordi delle finestre. Al massimo 3.
+- **Funivia** («Monta la funivia»). Un palo sul fondo a sinistra e un gancio d'ottone col cavo: trascina il gancio sul
+  bordo di una finestra (o sul Dock) e la cabina corre avanti e indietro sul cavo. Se la finestra si sposta il gancio cade
+  e la cabina torna al palo. «Togli la funivia» la smonta. Una per schermo.
+- **Albero di Natale** («Pianta un albero di Natale»). Sul fondo, in un punto a caso; un clic su un ramo appende una
+  pallina proprio lì (colori a turno, al massimo 40), e si trascina come gli altri oggetti. Al massimo 5 alberi.
+- «Togli alberi, neve e slitte»: alberi, montagnette, slittini e spazzaneve (palle e funivia hanno il loro comando).
+  «Metti in pausa i giochi»: gli oggetti stanno fermi dove sono e non si prendono col mouse; la neve continua.
+- I giochi si fanno sullo schermo del cursore; lo spazzaneve con «Prima il Dock» su quello del Dock. Solo d'inverno:
+  nelle altre stagioni le voci sono spente e cambiando stagione i giochi spariscono.
+- Suoni (se ci sono i file, SBU-56): `palla-di-neve`, `pupazzo`, `palla-di-vetro`, `spazzaneve`, `slittino`, `funivia`, `pallina`.
 
 ## Pioggia, temporale, nebbia, nuvole (2.0)
 
@@ -107,10 +123,45 @@ sono legati al bundle id: con il nome nuovo vanno dati di nuovo.
 
 Il codice: `Toys/Snowball/Snowball.swift` (palla, pupazzo, quando tre palle fanno un pupazzo), e in `SeasonScene`
 le sezioni «Palle di neve e pupazzo» e «Palla di vetro». La neve che segue la finestra è `Pile.carry`.
+Spazzaneve, montagnetta, slittino, funivia e albero sono in `Toys/WinterPlay/`, con i comandi del menu in `WinterPlay.swift`
+(un'estensione di `SeasonScene`); i numeri in `Tuning.swift`, sezione «Spazzaneve, slittino, funivia, albero».
+CPU misurata sul Mac (Release, 60 fps, 30 s alternati): con albero, slittino, funivia e spazzaneve circa il 7% in più
+della sola neve (9,6% contro 9,0%).
+
+## Natale (2.0)
+
+- **Babbo Natale** con la slitta e due renne attraversa il cielo, poco sotto la barra dei menu. Dal 1° dicembre
+  al 6 gennaio (le stesse date del Natale delle app iPhone) passa da solo quando nevica: la prima volta tra 20 s e 1 minuto
+  dall'avvio, poi ogni 6–12 minuti. Si chiama anche dal menu («Fai passare Babbo Natale»), in qualunque giorno d'inverno.
+- **Un regalo al giorno.** Babbo Natale lo lascia cadere su un bordo di finestra o sul Dock (senza, sul fondo): da solo
+  un passaggio su due, dal menu sempre, finché oggi non l'ha lasciato. Il giorno si salva (`lastGiftDay` in UserDefaults),
+  quindi uno al giorno anche riavviando l'app e con più schermi. Un clic lo apre: stelline, e salta fuori un omino di pan
+  di zenzero. Aperto resta 3 s e poi sparisce.
+- **Vigilia** (24/12): passa ogni 2–4 minuti e il primo passaggio porta sicuramente il regalo.
+- **Omino di pan di zenzero** («Manda l'omino di pan di zenzero»). Parte dal bordo sinistro del Dock (senza Dock, dal fondo)
+  e corre avanti e indietro sul suo bordo senza cadere. Se il cursore arriva a meno di 120 pt scappa più veloce; messo
+  all'angolo salta oltre il cursore. Preso con un clic, sparisce tra le stelline. Al massimo 3.
+- **Conto alla rovescia per Natale** (voce del menu, si ricorda al riavvio): un pannellino sulla scrivania, sopra le icone e
+  sotto le finestre delle app, con giorni, ore e minuti alla mezzanotte del 25 dicembre; il giorno di Natale «Buon Natale!».
+  Si sposta trascinandolo e ricorda dove l'hai messo. Si aggiorna una volta al minuto.
+- Con **Riduci movimento** la slitta non attraversa lo schermo (il regalo cade dritto dove sarebbe arrivato), l'omino
+  cammina piano, non salta e non dondola, le stelline non si allargano.
+- Babbo Natale e l'omino sono solo d'inverno, come i giochi; cambiando stagione slitta, regali e omini spariscono.
+  «Metti in pausa i giochi» ferma anche loro.
+- Suoni (se ci sono i file, SBU-56): `babbo-natale`, `regalo`, `omino`, `omino-preso`.
+
+Il codice è in `Toys/Christmas/`: `Christmas.swift` (date, conto alla rovescia, `GiftDiary`, quando passa e se porta il regalo),
+`ChristmasCast.swift` (Babbo Natale, regalo, omino e la sua corsa), `ChristmasVisits.swift` (l'estensione di `SeasonScene`
+con il passo di Natale e i comandi), `CountdownPanel.swift`. I numeri in `Tuning.swift`, sezione «Natale».
+CPU misurata sul Mac (Release, 60 fps, 30 s per giro, sullo stesso Mac carico di altri processi): con Babbo Natale chiamato
+ogni 7,5 s, due omini che corrono e il conto alla rovescia acceso 17,3%, sola neve 17,4%: nessuna differenza misurabile.
 
 ## Menu ❄︎
 
-Fai nevicare (⌘S) · Sciogli la neve (⌘R) · Togli le palle di neve · Scuoti la palla di vetro · Stagione ·
+Fai nevicare (⌘S) · Sciogli la neve (⌘R) · Togli le palle di neve · Scuoti la palla di vetro ·
+Manda lo spazzaneve · Prima il Dock · Prepara la pista da slittino · Monta/Togli la funivia · Pianta un albero di Natale ·
+Togli alberi, neve e slitte · Metti in pausa i giochi ·
+Fai passare Babbo Natale · Manda l'omino di pan di zenzero · Conto alla rovescia per Natale · Stagione ·
 Intensità (Leggera/Media/Forte con le scorciatoie, e sotto un cursore continuo) · Impostazioni… (⌘,) · Esci (⌘Q).
 Il cursore è lo stesso valore di "Quantità di fiocchi" nelle Impostazioni: muovendolo le particelle in più nascono in cima
 e quelle in meno spariscono, quelle che stanno cadendo non saltano.
@@ -139,6 +190,8 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Toys/Snowball/Snowball.swift` | Palla di neve (rotola), pupazzo, `snowmanTrio` |
 | `Engine/Sky.swift` | Banchi a tutto schermo (nebbia, nuvole: pochi sprite grandi e sfumati) e lampi |
 | `Engine/Glass.swift` | Gocce sul vetro: `GlassDrops` (logica, testata) e `Glass` (una sprite per goccia) |
+| `Toys/Christmas/` | Babbo Natale, il regalo, l'omino di pan di zenzero, il conto alla rovescia e le date di Natale |
+| `Toys/WinterPlay/` | Spazzaneve, montagnetta, slittino, funivia, albero di Natale e i loro comandi (`WinterPlay.swift`) |
 | `Engine/SoundBoard.swift` | Effetti brevi e sottofondo in loop (`AVAudioPlayer`) |
 | `Engine/Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
 | `Seasons/Seasons.swift` | L'elenco delle stagioni, una riga ciascuna |
@@ -189,7 +242,7 @@ arriva alla finestra sotto; il trascinamento e il lancio funzionano.
 
 1. Una sottoclasse di `Toy` nella cartella della sua funzione (per esempio `Toys/Snowball/`), con il suo `SKSpriteNode`
    (l'àncora è il centro in basso: `position` è dove poggiano i piedi).
-2. Sovrascrivi quello che serve: `clicked()` (clic), `shaken(_:)` (`.pointer` o `.window(id)` scossi), `bounce`.
+2. Sovrascrivi quello che serve: `clicked()` (clic), `clicked(at:)` (clic con il punto rispetto ai piedi, per l'albero), `shaken(_:)` (`.pointer` o `.window(id)` scossi), `bounce`.
 3. Aggiungilo con `SeasonScene.add(_:)` (dall'app: `OverlayWindow.add(_:)`). Il motore lo fa cadere e lo posa sui
    tratti scoperti dei bordi delle finestre, sul Dock o sul fondo dello schermo; se la finestra si sposta o si chiude, cade.
    Dove coprirebbe la barra dei menu (un oggetto più alto della neve, su una finestra attaccata alla barra) non si ferma e cade più giù.

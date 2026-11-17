@@ -17,6 +17,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         set { UserDefaults.standard.set(newValue, forKey: "isSnowing") }
     }
 
+    /// "Prima il Dock": lo spazzaneve parte dal Dock (se no dalla finestra più in alto).
+    private var ploughDockFirst: Bool {
+        get { UserDefaults.standard.object(forKey: "ploughDockFirst") as? Bool ?? true }
+        set { UserDefaults.standard.set(newValue, forKey: "ploughDockFirst") }
+    }
+
     private lazy var toggleItem = NSMenuItem(title: String(localized: "Fai nevicare"), action: nil, keyEquivalent: "s")
     private var densityItems: [NSMenuItem] = []
     /// L'intensità continua, sotto Leggera/Media/Forte: è lo stesso valore di "Quantità di fiocchi".
@@ -29,6 +35,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         return slider
     }()
     private var seasonItems: [NSMenuItem] = []
+    /// I giochi d'inverno: spenti nelle altre stagioni.
+    private var winterItems: [NSMenuItem] = []
+    private var dockFirstItem: NSMenuItem?
+    private var cableCarItem: NSMenuItem?
+    private var pauseItem: NSMenuItem?
+    private var countdownItem: NSMenuItem?
+    /// Il conto alla rovescia per Natale: creato la prima volta che si accende.
+    private var countdownPanel: CountdownPanel?
+
+    /// "Conto alla rovescia per Natale" acceso: si ricorda al prossimo avvio.
+    private var showsCountdown: Bool {
+        get { UserDefaults.standard.bool(forKey: "showsCountdown") }
+        set { UserDefaults.standard.set(newValue, forKey: "showsCountdown") }
+    }
 
     /// La finestra Impostazioni: creata la prima volta che serve, poi riusata.
     private lazy var settingsWindow: NSWindow = {
@@ -50,6 +70,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         setupStatusItem()
         setupMainMenu()
         rebuildOverlays()
+        if showsCountdown { setCountdownVisible(true) }
         // La stagione cambia dal menu ❄︎ o dalle Impostazioni: neve e icona seguono subito.
         Settings.shared.observeSeason { [weak self] in self?.seasonDidChange() }
 
@@ -142,6 +163,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
         let menu = NSMenu()
         menu.delegate = self   // per aggiornare le spunte ogni volta che si apre
+        menu.autoenablesItems = false   // i giochi d'inverno si spengono a mano fuori dall'inverno (`updateMenuState`)
 
         toggleItem.target = self
         toggleItem.action = #selector(toggleSnow)
@@ -161,6 +183,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         globeItem.target = self
         menu.addItem(globeItem)
 
+        menu.addItem(.separator())
+        addWinterGames(to: menu)
+        menu.addItem(.separator())
+        addChristmas(to: menu)
         menu.addItem(.separator())
 
         // Stagione: un sottomenu con l'elenco di `Seasons.all`.
@@ -213,8 +239,59 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         updateMenuState()
     }
 
+    /// Spazzaneve, slittino, funivia, albero, "Togli alberi, neve e slitte", "Metti in pausa i giochi".
+    private func addWinterGames(to menu: NSMenu) {
+        func item(_ title: String, _ action: Selector, tip: String? = nil) -> NSMenuItem {
+            let mi = NSMenuItem(title: title, action: action, keyEquivalent: "")
+            mi.target = self
+            mi.toolTip = tip
+            menu.addItem(mi)
+            return mi
+        }
+        let plough = item(String(localized: "Manda lo spazzaneve"), #selector(sendPlough),
+                          tip: String(localized: "Pulisce il bordo su cui corre e scende di bordo in bordo. La neve raccolta resta in una montagnetta."))
+        let dockFirst = item(String(localized: "Prima il Dock"), #selector(toggleDockFirst),
+                             tip: String(localized: "Acceso: parte dal Dock. Spento: parte dalla finestra più in alto."))
+        dockFirst.indentationLevel = 1
+        let sled = item(String(localized: "Prepara la pista da slittino"), #selector(setUpSledRun),
+                        tip: String(localized: "Lancia lo slittino trascinandolo, o fai clic per spingerlo: scende di bordo in bordo."))
+        let cableCar = item(String(localized: "Monta la funivia"), #selector(toggleCableCar),
+                            tip: String(localized: "Trascina il gancio sul bordo di una finestra: la cabina corre sul cavo."))
+        let tree = item(String(localized: "Pianta un albero di Natale"), #selector(plantTree),
+                        tip: String(localized: "Fai clic sui rami per appendere le palline. Trascina l'albero per spostarlo."))
+        let clear = item(String(localized: "Togli alberi, neve e slitte"), #selector(clearWinterPlay))
+        let pause = item(String(localized: "Metti in pausa i giochi"), #selector(togglePause))
+        winterItems = [plough, dockFirst, sled, cableCar, tree, clear, pause]
+        dockFirstItem = dockFirst
+        cableCarItem = cableCar
+        pauseItem = pause
+    }
+
+    /// Babbo Natale, l'omino di pan di zenzero (solo d'inverno, come i giochi) e il conto alla rovescia (sempre).
+    private func addChristmas(to menu: NSMenu) {
+        let santa = NSMenuItem(title: String(localized: "Fai passare Babbo Natale"), action: #selector(sendSanta), keyEquivalent: "")
+        santa.toolTip = String(localized: "Dal 1° dicembre al 6 gennaio passa da solo ogni tanto, quando nevica, e la vigilia più spesso. Lascia un regalo al giorno su una finestra o sul Dock: fai clic per aprirlo.")
+        let man = NSMenuItem(title: String(localized: "Manda l'omino di pan di zenzero"), action: #selector(sendGingerbreadMan), keyEquivalent: "")
+        man.toolTip = String(localized: "Corre lungo il Dock: prova a prenderlo col cursore.")
+        let countdown = NSMenuItem(title: String(localized: "Conto alla rovescia per Natale"), action: #selector(toggleCountdown), keyEquivalent: "")
+        countdown.toolTip = String(localized: "Un pannellino sulla scrivania con giorni, ore e minuti. Trascinalo dove vuoi.")
+        for mi in [santa, man, countdown] {
+            mi.target = self
+            menu.addItem(mi)
+        }
+        winterItems += [santa, man]
+        countdownItem = countdown
+    }
+
     private func updateMenuState() {
         toggleItem.state = isSnowing ? .on : .off
+        let winter = Settings.shared.season is Snow
+        for mi in winterItems { mi.isEnabled = winter }
+        dockFirstItem?.state = ploughDockFirst ? .on : .off
+        pauseItem?.state = overlays.first?.toysPaused == true ? .on : .off
+        countdownItem?.state = showsCountdown ? .on : .off
+        cableCarItem?.title = overlays.contains(where: \.hasCableCar)
+            ? String(localized: "Togli la funivia") : String(localized: "Monta la funivia")
         let season = Settings.shared.season
         // L'icona nella barra dei menu segue la stagione.
         statusItem?.button?.image = NSImage(systemSymbolName: season.symbol, accessibilityDescription: SbuSeasonsApp.name)
@@ -247,6 +324,67 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     @objc private func shakeGlobe() {
         overlays.forEach { $0.shakeGlobe() }
+    }
+
+    /// Lo schermo su cui si gioca: quello del cursore (cioè del menu appena usato).
+    private var currentOverlay: OverlayWindow? {
+        overlays.first { $0.frame.contains(NSEvent.mouseLocation) } ?? overlays.first
+    }
+
+    @objc private func sendPlough() {
+        // Uno solo in giro, anche con più schermi (ogni scena controlla solo la sua).
+        guard !overlays.contains(where: { $0.scene.toys.contains { $0 is Snowplough } }) else { return }
+        let overlay = ploughDockFirst ? overlays.first(where: \.hasDock) ?? currentOverlay : currentOverlay
+        overlay?.scene.sendPlough(dockFirst: ploughDockFirst)
+    }
+
+    @objc private func toggleDockFirst() {
+        ploughDockFirst.toggle()
+        updateMenuState()
+    }
+
+    @objc private func setUpSledRun() { currentOverlay?.scene.setUpSledRun() }
+    @objc private func plantTree() { currentOverlay?.scene.plantTree() }
+    @objc private func clearWinterPlay() { overlays.forEach { $0.scene.clearWinterPlay() } }
+
+    @objc private func toggleCableCar() {
+        if overlays.contains(where: \.hasCableCar) {
+            overlays.forEach { $0.scene.removeCableCar() }
+        } else {
+            currentOverlay?.scene.setUpCableCar()
+        }
+        updateMenuState()
+    }
+
+    @objc private func sendSanta() {
+        // Uno alla volta, anche con più schermi.
+        guard !overlays.contains(where: { $0.scene.santa != nil }) else { return }
+        currentOverlay?.scene.sendSanta()
+    }
+
+    @objc private func sendGingerbreadMan() {
+        (overlays.first(where: \.hasDock) ?? currentOverlay)?.scene.sendGingerbreadMan()
+    }
+
+    @objc private func toggleCountdown() {
+        showsCountdown.toggle()
+        setCountdownVisible(showsCountdown)
+        updateMenuState()
+    }
+
+    private func setCountdownVisible(_ visible: Bool) {
+        if visible {
+            if countdownPanel == nil { countdownPanel = CountdownPanel() }
+            countdownPanel?.orderFrontRegardless()
+        } else {
+            countdownPanel?.orderOut(nil)
+        }
+    }
+
+    @objc private func togglePause() {
+        let paused = !(overlays.first?.toysPaused ?? false)
+        overlays.forEach { $0.scene.toysPaused = paused }
+        updateMenuState()
     }
 
     @objc private func selectSeason(_ sender: NSMenuItem) {
