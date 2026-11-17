@@ -14,7 +14,8 @@ import SpriteKit
 /// dello schermo più lento e sull'altro la neve si fermava o andava lentissima (SBU-19).
 final class OverlayWindow: NSPanel {
     private let skView: SKView
-    private let scene: SeasonScene
+    /// La scena: i giochi d'inverno del menu la chiamano direttamente (`SeasonScene`, `Toys/WinterPlay/WinterPlay.swift`).
+    let scene: SeasonScene
     private var displayLink: CADisplayLink?
     private var takesMouse = false
 
@@ -92,6 +93,9 @@ final class OverlayWindow: NSPanel {
     var elapsed: CGFloat { scene.elapsed }
     func setSeason(_ season: any Season) { scene.setSeason(season) }
     func add(_ toy: Toy) { scene.add(toy) }
+    var hasDock: Bool { scene.dockLedge != nil }
+    var hasCableCar: Bool { scene.hasCableCar }
+    var toysPaused: Bool { scene.toysPaused }
     func windowsShaken(_ ids: Set<CGWindowID>) { scene.windowsShaken(ids) }
 
     /// Batteria e "Riduci movimento": in entrambi i casi meno fotogrammi; con Riduci movimento anche meno movimento.

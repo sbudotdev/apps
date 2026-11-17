@@ -25,6 +25,9 @@ struct LocalizationTests {
         ("Riproduci i suoni", "Play Sounds"),
         ("Togli le palle di neve", "Clear the Snowballs"),
         ("Scuoti la palla di vetro", "Shake the Snow Globe"),
+        ("Manda lo spazzaneve", "Send the Snowplough"),
+        ("Togli la funivia", "Remove the Cable Car"),
+        ("Metti in pausa i giochi", "Pause the Toys"),
         ("Informazioni su %@", "About %@"),
         ("Nata da un'idea di Simone Antoniciello", "Based on an idea by Simone Antoniciello"),
     ])
