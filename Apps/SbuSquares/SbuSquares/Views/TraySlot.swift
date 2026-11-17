@@ -14,10 +14,12 @@ struct TraySlot: View {
     let isSelected: Bool
     let select: () -> Void
 
+    @Environment(\.sbuSeason) private var season
+
     var body: some View {
         ZStack {
             if let piece {
-                PieceShape(piece: piece, cell: cell, color: PieceTone.color(tone))
+                PieceShape(piece: piece, cell: cell, color: PieceTone.color(tone, in: season))
                     .opacity(isDragged ? 0 : fits ? 1 : 0.3)
                     .padding(SbuTheme.space2)
                     .overlay {

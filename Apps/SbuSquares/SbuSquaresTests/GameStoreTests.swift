@@ -109,7 +109,8 @@ struct GameStoreTests {
         let store = GameStore(defaults: defaults)
         playOut(store)
         let leftInHand = Set(store.game.leftInHand)
-        store.startNewGame()
+        // An ordinary day: the Christmas game starts from the same pieces for everyone.
+        store.startNewGame(now: Date(timeIntervalSince1970: 1_800_000_000))
         #expect(store.game.assists == 1)
         #expect(Set(store.game.leftInHand).isDisjoint(with: leftInHand))
     }
