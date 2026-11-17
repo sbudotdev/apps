@@ -20,6 +20,10 @@ struct YearReviewTests {
                          stoppedOn: stoppedOn, isActive: isActive, price: priceOn ?? { _ in price })
     }
 
+    func makeReview(entries: [YearReview.Entry], calendar: Calendar, today: Date? = nil, mainCurrency: String = "EUR") -> YearReview {
+        YearReview(year: 2026, entries: entries, through: today ?? day(2027, 1, 10), mainCurrency: mainCurrency, calendar: calendar)
+    }
+
     // MARK: When it shows
 
     @Test(arguments: [
@@ -48,40 +52,40 @@ struct YearReviewTests {
     // MARK: What you spent
 
     @Test func aMonthlyPlanPaysTwelveTimesInTheYear() {
-        let review = YearReview(year: 2026, entries: [entry(start: day(2025, 3, 10))], calendar: calendar)
+        let review = makeReview(entries: [entry(start: day(2025, 3, 10))], calendar: calendar)
         #expect(review.spent == [YearReview.Amount(currencyCode: "EUR", value: 120)])
     }
 
     @Test func aYearlyPlanPaysOnceInTheYear() {
-        let review = YearReview(year: 2026, entries: [entry(price: 80, start: day(2024, 9, 1), cycle: .yearly)], calendar: calendar)
+        let review = makeReview(entries: [entry(price: 80, start: day(2024, 9, 1), cycle: .yearly)], calendar: calendar)
         #expect(review.spent == [YearReview.Amount(currencyCode: "EUR", value: 80)])
     }
 
     @Test func aWeeklyPlanPaysEveryWeekOfTheYear() {
         // Thursday 1 January 2026: 53 Thursdays in 2026.
-        let review = YearReview(year: 2026, entries: [entry(price: 2, start: day(2026, 1, 1), cycle: .weekly)], calendar: calendar)
+        let review = makeReview(entries: [entry(price: 2, start: day(2026, 1, 1), cycle: .weekly)], calendar: calendar)
         #expect(review.spent == [YearReview.Amount(currencyCode: "EUR", value: 106)])
     }
 
     @Test func aPlanStartedMidYearCountsOnlyFromItsStart() {
-        let review = YearReview(year: 2026, entries: [entry(start: day(2026, 7, 20))], calendar: calendar)
+        let review = makeReview(entries: [entry(start: day(2026, 7, 20))], calendar: calendar)
         #expect(review.spent == [YearReview.Amount(currencyCode: "EUR", value: 60)], "July to December")
     }
 
     @Test func aStoppedPlanCountsUpToTheDayItStopped() {
-        let review = YearReview(year: 2026, entries: [entry(start: day(2025, 1, 5), stoppedOn: day(2026, 4, 10), isActive: false)],
+        let review = makeReview(entries: [entry(start: day(2025, 1, 5), stoppedOn: day(2026, 4, 10), isActive: false)],
                                 calendar: calendar)
         #expect(review.spent == [YearReview.Amount(currencyCode: "EUR", value: 40)], "January to April")
     }
 
     @Test func eachPaymentAtItsPriceThatDay() {
         let rise = day(2026, 7, 1)
-        let review = YearReview(year: 2026, entries: [entry(start: day(2025, 1, 1)) { $0 < rise ? 10 : 12 }], calendar: calendar)
+        let review = makeReview(entries: [entry(start: day(2025, 1, 1)) { $0 < rise ? 10 : 12 }], calendar: calendar)
         #expect(review.spent == [YearReview.Amount(currencyCode: "EUR", value: 132)])
     }
 
     @Test func eachCurrencyKeepsItsOwnTotalLargestFirst() {
-        let review = YearReview(year: 2026, entries: [
+        let review = makeReview(entries: [
             entry("Film", price: 10, start: day(2025, 1, 1)),
             entry("Design", price: 12, currency: "USD", start: day(2025, 1, 1)),
             entry("Giornale", price: 50, start: day(2025, 6, 1), cycle: .yearly),
@@ -92,15 +96,34 @@ struct YearReviewTests {
         ])
     }
 
+    @Test func inDecemberOnlyWhatYouAlreadyPaidCounts() {
+        let review = makeReview(entries: [entry(start: day(2025, 1, 20))], calendar: calendar, today: day(2026, 12, 10, hour: 9))
+        #expect(review.spent == [YearReview.Amount(currencyCode: "EUR", value: 110)], "January to November: 20 December is still to come")
+        #expect(review.januaryRenewals.map(\.date) == [day(2027, 1, 20)])
+    }
+
+    @Test func aPaymentDueTodayCounts() {
+        let review = makeReview(entries: [entry(start: day(2025, 1, 10))], calendar: calendar, today: day(2026, 12, 10, hour: 9))
+        #expect(review.spent == [YearReview.Amount(currencyCode: "EUR", value: 120)])
+    }
+
+    @Test func yourMainCurrencyComesFirstEvenWhenSmaller() {
+        let review = makeReview(entries: [
+            entry("Film", price: 25, start: day(2025, 1, 1)),
+            entry("Anime", price: 1000, currency: "JPY", start: day(2025, 1, 1)),
+        ], calendar: calendar)
+        #expect(review.spent.map(\.currencyCode) == ["EUR", "JPY"])
+    }
+
     @Test func noSubscriptionsIsAnEmptyReview() {
-        let review = YearReview(year: 2026, entries: [], calendar: calendar)
+        let review = makeReview(entries: [], calendar: calendar)
         #expect(review.isEmpty)
         #expect(review.spent.isEmpty)
         #expect(review.januaryRenewals.isEmpty)
     }
 
     @Test func aPlanThatPaidNothingInTheYearLeavesNoTotal() {
-        let review = YearReview(year: 2026, entries: [entry(start: day(2027, 3, 1))], calendar: calendar)
+        let review = makeReview(entries: [entry(start: day(2027, 3, 1))], calendar: calendar)
         #expect(review.spent.isEmpty)
         #expect(!review.isEmpty, "You still have a subscription")
     }
@@ -108,7 +131,7 @@ struct YearReviewTests {
     // MARK: What renews in January
 
     @Test func listsTheFirstJanuaryPaymentOfEachActivePlanByDate() {
-        let review = YearReview(year: 2026, entries: [
+        let review = makeReview(entries: [
             entry("Musica", start: day(2025, 3, 20)),
             entry("Giornale", price: 80, start: day(2024, 1, 8), cycle: .yearly),
             entry("Corsa", price: 2, start: day(2026, 1, 1), cycle: .weekly),

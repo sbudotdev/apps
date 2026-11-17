@@ -24,7 +24,7 @@ final class YearReviewFlowTests: XCTestCase {
         review.lifetime = .keepAlways
         add(review)
         try audit(app, "riepilogo")
-        app.buttons["Chiudi"].firstMatch.tap()
+        app.buttons["closeReviewSheet"].tap()
         XCTAssertTrue(row.waitForExistence(timeout: 5))
     }
 

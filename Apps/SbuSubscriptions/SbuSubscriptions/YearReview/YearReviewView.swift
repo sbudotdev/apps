@@ -48,6 +48,7 @@ struct YearReviewView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Chiudi") { dismiss() }
+                        .accessibilityIdentifier("closeReviewSheet")
                 }
             }
         }
@@ -75,12 +76,13 @@ struct YearReviewView: View {
 }
 
 #Preview("Light") {
-    YearReviewView(review: YearReview(year: 2026, entries: Subscription.demo().map { $0.yearReviewEntry() }, calendar: .current))
+    YearReviewView(review: YearReview(year: 2026, entries: Subscription.demo().map { $0.yearReviewEntry() }, through: .now,
+                                    mainCurrency: "EUR", calendar: .current))
         .environment(\.sbuAccent, .subscriptions)
 }
 
 #Preview("Dark") {
-    YearReviewView(review: YearReview(year: 2026, entries: [], calendar: .current))
+    YearReviewView(review: YearReview(year: 2026, entries: [], through: .now, mainCurrency: "EUR", calendar: .current))
         .environment(\.sbuAccent, .subscriptions)
         .preferredColorScheme(.dark)
 }

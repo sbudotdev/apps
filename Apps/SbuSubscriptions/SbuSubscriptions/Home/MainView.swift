@@ -50,7 +50,8 @@ struct MainView: View {
                 if let reviewYear {
                     Section {
                         YearReviewRow(year: reviewYear) {
-                            review = YearReview(year: reviewYear, entries: subscriptions.map { $0.yearReviewEntry() }, calendar: .current)
+                            review = YearReview(year: reviewYear, entries: subscriptions.map { $0.yearReviewEntry() }, through: today,
+                                            mainCurrency: currency.mainCurrency, calendar: .current)
                         } close: {
                             closedReviewYear = reviewYear
                         }

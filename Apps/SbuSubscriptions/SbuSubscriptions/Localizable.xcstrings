@@ -1721,6 +1721,16 @@
         }
       }
     },
+    "Nascondi il riepilogo" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hide the review"
+          }
+        }
+      }
+    },
     "Nel %lld non hai pagato abbonamenti." : {
       "localizations" : {
         "en" : {

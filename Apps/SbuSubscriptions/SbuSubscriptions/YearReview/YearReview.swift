@@ -28,26 +28,29 @@ nonisolated struct YearReview: Identifiable {
 
     let year: Int
     var id: Int { year }
-    /// What you paid in the year, one total per currency, largest first: never added up across currencies.
+    /// What you paid in the year up to today, one total per currency, never added up across currencies:
+    /// your main currency first, then the others largest first.
     let spent: [Amount]
     /// The first January payment of each active subscription, by date.
     let januaryRenewals: [Renewal]
     /// No subscription at all.
     let isEmpty: Bool
 
-    init(year: Int, entries: [Entry], calendar: Calendar) {
+    init(year: Int, entries: [Entry], through today: Date, mainCurrency: String, calendar: Calendar) {
         self.year = year
         isEmpty = entries.isEmpty
         let gregorian = Self.gregorian(calendar)
         let start = gregorian.date(from: DateComponents(year: year, month: 1, day: 1)) ?? .distantPast
         let nextYear = gregorian.date(from: DateComponents(year: year + 1, month: 1, day: 1)) ?? .distantFuture
+        // Payments still to come in December aren't spent yet.
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: today)) ?? today
         let february = gregorian.date(from: DateComponents(year: year + 1, month: 2, day: 1)) ?? .distantFuture
 
         var totals: [String: Decimal] = [:]
         var renewals: [Renewal] = []
         for entry in entries {
             let end = entry.stoppedOn.flatMap { calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: $0)) }
-            for payment in entry.schedule.payments(from: start, to: min(end ?? nextYear, nextYear), in: calendar) {
+            for payment in entry.schedule.payments(from: start, to: min(end ?? nextYear, nextYear, tomorrow), in: calendar) {
                 totals[entry.currencyCode, default: 0] += entry.price(payment)
             }
             if entry.isActive, let first = entry.schedule.payments(from: nextYear, to: february, in: calendar).first {
@@ -56,7 +59,7 @@ nonisolated struct YearReview: Identifiable {
             }
         }
         spent = totals.map { Amount(currencyCode: $0.key, value: $0.value) }
-            .sorted { ($0.value, $1.currencyCode) > ($1.value, $0.currencyCode) }
+            .sorted { ($0.currencyCode == mainCurrency ? 1 : 0, $0.value, $1.currencyCode) > ($1.currencyCode == mainCurrency ? 1 : 0, $1.value, $0.currencyCode) }
         januaryRenewals = renewals.sorted { ($0.date, $0.name) < ($1.date, $1.name) }
     }
 

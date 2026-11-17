@@ -16,7 +16,7 @@ struct YearReviewRow: View {
                     .contentShape(.rect)
             }
             .accessibilityIdentifier("yearReview")
-            Button("Chiudi", systemImage: "xmark", action: close)
+            Button("Nascondi il riepilogo", systemImage: "xmark", action: close)
                 .labelStyle(.iconOnly)
                 .foregroundStyle(SbuTheme.inkMuted)
                 .accessibilityIdentifier("closeYearReview")
