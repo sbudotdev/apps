@@ -2,6 +2,8 @@
 
 v1 · 17 novembre 2026 · SBU-36. Va con `copione.md`. Tempo totale: circa 30 minuti.
 
+**Date confermate da Matteo il 17/11 (SBU-44):** R1 e R4 entro domenica 22/11, R2 e R3 il 2-3/12.
+
 ## Quando si può girare
 
 - **R1 e R4** (tu in camera e la voce): quando vuoi, anche subito.
