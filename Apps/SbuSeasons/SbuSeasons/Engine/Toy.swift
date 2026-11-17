@@ -32,6 +32,10 @@ class Toy {
     /// Clic senza trascinare.
     func clicked() {}
 
+    /// Clic senza trascinare, nel punto `point` rispetto ai piedi (per un albero: su quale ramo).
+    /// Di norma chiama `clicked()`.
+    func clicked(at point: CGPoint) { clicked() }
+
     /// Il cursore o una finestra sono stati scossi.
     func shaken(_ shake: Shake) {}
 }

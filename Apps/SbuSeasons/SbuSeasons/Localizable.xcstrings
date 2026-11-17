@@ -522,6 +522,336 @@
         }
       }
     },
+    "Acceso: parte dal Dock. Spento: parte dalla finestra più in alto.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On: it starts on the Dock. Off: it starts on the highest window."
+          }
+        }
+      }
+    },
+    "Fai clic sui rami per appendere le palline. Trascina l'albero per spostarlo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click the branches to add baubles. Drag the tree to move it."
+          }
+        }
+      }
+    },
+    "Lancia lo slittino trascinandolo, o fai clic per spingerlo: scende di bordo in bordo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag the sled to throw it, or click to push it: it slides down from edge to edge."
+          }
+        }
+      }
+    },
+    "Manda lo spazzaneve": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send the Snowplough"
+          }
+        }
+      }
+    },
+    "Metti in pausa i giochi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause the Toys"
+          }
+        }
+      }
+    },
+    "Monta la funivia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Build a Cable Car"
+          }
+        }
+      }
+    },
+    "Pianta un albero di Natale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Put Up a Christmas Tree"
+          }
+        }
+      }
+    },
+    "Prepara la pista da slittino": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make a Sled Run"
+          }
+        }
+      }
+    },
+    "Prima il Dock": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dock First"
+          }
+        }
+      }
+    },
+    "Pulisce il bordo su cui corre e scende di bordo in bordo. La neve raccolta resta in una montagnetta.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It clears the edge it drives on and drops down from edge to edge. The snow it gathers is left in a little heap."
+          }
+        }
+      }
+    },
+    "Togli alberi, neve e slitte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove Trees, Snow Heaps and Sleds"
+          }
+        }
+      }
+    },
+    "Togli la funivia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove the Cable Car"
+          }
+        }
+      }
+    },
+    "Trascina il gancio sul bordo di una finestra: la cabina corre sul cavo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag the hook onto the edge of a window: the cabin rides along the cable."
+          }
+        }
+      }
+    },
+    "%lld giorni": {
+      "localizations": {
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld giorno"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld giorni"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld day"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld days"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld minuti": {
+      "localizations": {
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld minuto"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld minuti"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld minute"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld minutes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld ore": {
+      "localizations": {
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld ora"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld ore"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld hour"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld hours"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Buon Natale!": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merry Christmas!"
+          }
+        }
+      }
+    },
+    "Conto alla rovescia per Natale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Christmas Countdown"
+          }
+        }
+      }
+    },
+    "Corre lungo il Dock: prova a prenderlo col cursore.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "He runs along the Dock: try to catch him with the pointer."
+          }
+        }
+      }
+    },
+    "Dal 1° dicembre al 6 gennaio passa da solo ogni tanto, quando nevica, e la vigilia più spesso. Lascia un regalo al giorno su una finestra o sul Dock: fai clic per aprirlo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From 1 December to 6 January he flies by now and then while it snows, more often on Christmas Eve. He leaves one gift a day on a window or the Dock: click to open it."
+          }
+        }
+      }
+    },
+    "Fai passare Babbo Natale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Call Santa Over"
+          }
+        }
+      }
+    },
+    "Manda l'omino di pan di zenzero": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send the Gingerbread Man"
+          }
+        }
+      }
+    },
+    "Natale tra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Christmas in"
+          }
+        }
+      }
+    },
+    "Un pannellino sulla scrivania con giorni, ore e minuti. Trascinalo dove vuoi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A small panel on the desktop with days, hours and minutes. Drag it wherever you like."
+          }
+        }
+      }
+    },
     "Pioggia sul vetro": {
       "localizations": {
         "en": {

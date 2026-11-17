@@ -81,6 +81,53 @@ nonisolated enum Tuning {
     /// Tre palle tutte entro questa distanza (pt, tra i piedi) diventano un pupazzo.
     static let snowmanReach: CGFloat = 40
 
+    // MARK: Spazzaneve, slittino, funivia, albero
+
+    /// La velocità dello spazzaneve (pt/s): un Dock di 800 pt in circa 5 s.
+    static let ploughSpeed: CGFloat = 150
+    /// Quanta neve prende lo spazzaneve per lato, dal centro (`Snowplough.blade`): da dietro le ruote alla lama.
+    static let ploughBlade: CGFloat = 20
+    /// Sotto questi granelli raccolti lo spazzaneve non lascia la montagnetta.
+    static let moundMinSnow = 10
+    /// Le montagnette sullo schermo, al massimo: oltre sparisce la più vecchia.
+    static let maxMounds = 6
+    /// Lo slittino frena pochissimo: scivola fino in fondo al bordo e scende sul prossimo.
+    static let sledFriction: CGFloat = 0.15
+    /// La spinta di un clic sullo slittino (pt/s).
+    static let sledPush: CGFloat = 380
+    static let maxSleds = 3
+    /// La stazione della funivia: un palo sul fondo, a sinistra (pt dal bordo e altezza).
+    static let cableStationX: CGFloat = 40
+    static let cablePylonHeight: CGFloat = 60
+    /// La velocità della cabina sul cavo (pt/s).
+    static let cableSpeed: CGFloat = 70
+    static let maxTrees = 5
+    /// Le palline su un albero, al massimo.
+    static let maxBaubles = 40
+
+    // MARK: Natale
+
+    /// Il primo passaggio di Babbo Natale dopo l'avvio (s), poi uno ogni 6–12 minuti; la vigilia ogni 2–4.
+    static let santaFirstVisit: ClosedRange<CGFloat> = 20...60
+    static let santaInterval: ClosedRange<CGFloat> = 360...720
+    static let santaEveInterval: ClosedRange<CGFloat> = 120...240
+    /// Un passaggio su due porta il regalo (finché oggi non l'ha lasciato).
+    static let santaGiftChance = 0.5
+    /// La velocità della slitta (pt/s): uno schermo da 1440 pt in circa 7 s.
+    static let santaSpeed: CGFloat = 200
+    /// L'altezza a cui vola, rispetto alla zona libera sotto la barra dei menu.
+    static let santaAltitude: CGFloat = 0.9
+    /// Quanto resta un regalo aperto prima di sparire (s).
+    static let giftLinger: CGFloat = 3
+    /// L'omino cammina a `gingerbreadWalk` e scappa a `gingerbreadDash` (pt/s) quando il cursore è più vicino
+    /// di `gingerbreadFlee` pt. Si gira `gingerbreadTurn` pt prima della fine del bordo; il salto è `gingerbreadJump` pt/s.
+    static let gingerbreadWalk: CGFloat = 90
+    static let gingerbreadDash: CGFloat = 260
+    static let gingerbreadFlee: CGFloat = 120
+    static let gingerbreadTurn: CGFloat = 10
+    static let gingerbreadJump: CGFloat = 520
+    static let maxGingerbreadMen = 3
+
     // MARK: Neve che scivola via
 
     /// Una finestra che si sposta di più tra due letture (pt in 1/8 s, circa 320 pt/s) perde la neve;
