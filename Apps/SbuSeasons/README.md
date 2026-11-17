@@ -15,6 +15,9 @@ Sulle finestre attaccate alla barra dei menu (quelle ingrandite e le tante che s
 si posa poco sotto, sulla barra del titolo, con la cima che tocca la barra dei menu: così non copre le voci di menu.
 Sulle app a schermo intero non si posa niente.
 A batteria va a 30 fotogrammi al secondo invece di 60, per consumare meno.
+Con **Riduci movimento** di macOS (Accessibilità → Schermo) va anche lei a 30 fotogrammi, cade metà dei fiocchi,
+senza vento, oscillazione né rotazione, e gli oggetti non si lanciano e non rimbalzano: cadono dritti.
+L'impostazione si segue anche mentre l'app è aperta.
 
 Requisiti: macOS 14+, Xcode 26+, XcodeGen (`brew install xcodegen`).
 
@@ -62,6 +65,9 @@ o andava a metà velocità a batteria. Ora ogni finestra prende un display link 
 che segue il suo schermo, e muove lei la scena (`SeasonScene.step(at:)`); la `SKView` disegna come nella 1.2.
 Il test `TwoScreensTests` lo prova con uno schermo virtuale a una frequenza diversa da quello principale.
 
+**2.0 (in corso, branch `app/seasons-2`).** Oggetti con cui giocare sopra le finestre, suoni, scuotere (SBU-49 è il motore,
+gli oggetti veri arrivano nei ticket dopo). `MARKETING_VERSION` è già 2.0.
+
 **Dal vecchio nome.** Al primo avvio le impostazioni e "Fai nevicare" salvati con il nome di prima
 si copiano da soli (`PreviousDefaults` in `Settings.swift`). Il permesso Accessibilità e "Apri al login"
 sono legati al bundle id: con il nome nuovo vanno dati di nuovo.
@@ -73,7 +79,8 @@ Le scorciatoie funzionano a menu aperto: non sono globali.
 La stagione scelta si salva (la neve è quella di partenza) e l'icona nella barra dei menu la segue.
 
 **Impostazioni**: quantità, dimensione e velocità dei fiocchi, vento, raggio e forza del cursore,
-accumulo sulle finestre e sul fondo, velocità di accumulo, altezza massima, apri al login, ripristino.
+accumulo sulle finestre e sul fondo, velocità di accumulo, altezza massima, suoni e volume (spenti all'inizio),
+apri al login, ripristino.
 Le modifiche si vedono subito (nevica anche sulla finestra Impostazioni, utile per provare) e vengono salvate.
 
 ## Struttura
@@ -88,6 +95,9 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Engine/OverlayWindow.swift` | Finestra trasparente, sempre sopra, attraversata dai click; il suo display link muove la scena |
 | `Engine/SeasonScene.swift` | Fiocchi, vento, cursore, collisione coi mucchi, neve che cade quando muovi una finestra |
 | `Engine/Pile.swift` | Un mucchio: altezze per colonna, frana, scavo col cursore, disegno |
+| `Engine/Toy.swift`, `Engine/ToyBody.swift`, `Engine/Ledge.swift` | Gli oggetti con cui giocare: disegno, fisica (gravità, appoggio, lancio), i bordi su cui stanno |
+| `Engine/ShakeDetector.swift`, `Engine/WindowShakes.swift`, `Engine/Shake.swift` | Cursore e finestre scossi |
+| `Engine/SoundBoard.swift` | Effetti brevi e sottofondo in loop (`AVAudioPlayer`) |
 | `Engine/Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
 | `Seasons/Seasons.swift` | L'elenco delle stagioni, una riga ciascuna |
 | `Seasons/Snow/Snow.swift` | La neve: forma, colore e caduta dei fiocchi (`SnowTuning`) |
@@ -100,6 +110,45 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `project.yml` | Progetto XcodeGen: target app (LSUIElement) e test |
 
 I valori predefiniti sono in `SnowSettings` (`Settings.swift`); i parametri fissi in `Tuning.swift`.
+
+## Clic sugli oggetti
+
+La finestra della neve copre tutto lo schermo e sta sopra alle altre, ma i clic la attraversano
+(`ignoresMouseEvents = true`): il Mac si usa come se non ci fosse. Per cliccare e trascinare un oggetto,
+la finestra deve prendere il mouse **solo** sopra l'oggetto.
+
+Come: a ogni fotogramma la scena legge già dove è il cursore (serve ai fiocchi). Con quella posizione guarda
+se sotto c'è un oggetto, o se ne stai trascinando uno (`SeasonScene.wantsMouse`). Solo allora la finestra mette
+`ignoresMouseEvents = false`; appena il cursore esce torna `true`. Il valore si cambia solo quando cambia: leggere
+`ignoresMouseEvents` a ogni fotogramma costava CPU.
+
+Perché così e non un monitor globale degli eventi (`NSEvent.addGlobalMonitorForEvents`): un monitor globale vede i clic
+ma non li può fermare, quindi il clic arriverebbe anche all'app sotto l'oggetto; per fermarli servirebbe un event tap,
+che chiede il permesso "Monitoraggio input". Così invece non serve nessun permesso e il clic va solo a uno dei due.
+
+Dettagli:
+- la finestra è un `NSPanel` "non attivante": cliccare un oggetto non porta Sbu Seasons davanti e non toglie la tastiera
+  all'app che usi; la `SKView` accetta il primo clic (`acceptsFirstMouse`), se no il primo clic andrebbe perso;
+- clic = pressione e rilascio a meno di 4 pt (`Tuning.clickSlop`): l'oggetto riceve `clicked()`; più lontano è un
+  trascinamento, e al rilascio l'oggetto parte con la velocità del mouse (fermo da più di 0,1 s: cade dritto);
+- limite: tra un fotogramma e l'altro (16 ms) il cursore può arrivare sull'oggetto e cliccare prima che la finestra
+  prenda il mouse; in quel caso il clic va all'app sotto. Con un movimento normale non succede.
+
+Provato sul Mac: il clic sull'oggetto arriva all'oggetto e l'app davanti resta davanti; il clic fuori dall'oggetto
+arriva alla finestra sotto; il trascinamento e il lancio funzionano.
+
+## Aggiungere un oggetto
+
+1. Una sottoclasse di `Toy` nella cartella della sua funzione (per esempio `Toys/Snowball/`), con il suo `SKSpriteNode`
+   (l'àncora è il centro in basso: `position` è dove poggiano i piedi).
+2. Sovrascrivi quello che serve: `clicked()` (clic), `shaken(_:)` (`.pointer` o `.window(id)` scossi), `bounce`.
+3. Aggiungilo con `SeasonScene.add(_:)` (dall'app: `OverlayWindow.add(_:)`). Il motore lo fa cadere e lo posa sui
+   tratti scoperti dei bordi delle finestre, sul Dock o sul fondo dello schermo; se la finestra si sposta o si chiude, cade.
+4. I suoni: `SoundBoard.shared.play("nome")` per un effetto, `startAmbience("nome")` per il sottofondo.
+   Il file `nome.caf` (o `.m4a`, `.wav`, `.aiff`, `.mp3`) va in `SbuSeasons/`; se manca, non suona e non succede niente.
+
+Scuotere: il cursore va avanti e indietro 4 volte in 1 s, di almeno 40 pt (`ShakeDetector`); una finestra 3 volte
+in 1,5 s (le finestre si leggono solo 8 volte al secondo). Chi continua a scuotere fa una scossa sola.
 
 ## Aggiungere una stagione
 
@@ -124,6 +173,9 @@ Se a una stagione serve qualcosa che il motore non sa fare (ruotare le particell
 si cambia `Season` e `SeasonScene` in un lavoro a parte, prima, perché tocca tutte le stagioni.
 
 ## Prossimi passi possibili
+
+- Gli oggetti stanno in piedi sul bordo dove si posa la neve: sulle finestre attaccate alla barra dei menu un oggetto
+  alto può coprirla. Da sistemare con il primo oggetto vero, quando si sa quanto è alto.
 
 - Palle di neve con ⌥ e pupazzo di neve
 - Sfondo natalizio automatico (`NSWorkspace.shared.setDesktopImageURL`)

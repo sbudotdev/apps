@@ -19,6 +19,7 @@ struct LocalizationTests {
         ("Autunno", "Autumn"),
         ("Suoni", "Sounds"),
         ("Volume", "Volume"),
+        ("Riproduci i suoni", "Play Sounds"),
         ("Informazioni su %@", "About %@"),
         ("Nata da CozySnow di Simone Antoniciello", "Born from CozySnow by Simone Antoniciello"),
     ])
