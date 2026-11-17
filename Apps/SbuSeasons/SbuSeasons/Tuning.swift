@@ -116,7 +116,7 @@ nonisolated enum Tuning {
     /// La velocità della slitta (pt/s): uno schermo da 1440 pt in circa 7 s.
     static let santaSpeed: CGFloat = 200
     /// L'altezza a cui vola, rispetto alla zona libera sotto la barra dei menu.
-    static let santaAltitude: CGFloat = 0.82
+    static let santaAltitude: CGFloat = 0.9
     /// Quanto resta un regalo aperto prima di sparire (s).
     static let giftLinger: CGFloat = 3
     /// L'omino cammina a `gingerbreadWalk` e scappa a `gingerbreadDash` (pt/s) quando il cursore è più vicino

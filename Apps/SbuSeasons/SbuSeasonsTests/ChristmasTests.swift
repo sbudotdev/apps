@@ -101,9 +101,21 @@ struct ChristmasTests {
         #expect(scene.santa == nil, "ha attraversato il cielo ed è uscito")
         let gift = try #require(toys(scene, Gift.self).first)
         #expect(gift.body.isResting)
-        #expect(scene.ledges.contains { $0.y == gift.body.position.y }, "sta su una finestra o sul Dock")
+        #expect(scene.ledges.contains { abs($0.y - gift.body.position.y) < 0.5 }, "sta su una finestra o sul Dock")
         let again = try #require(scene.sendSanta())
         #expect(!again.carriesGift, "oggi il regalo l'ha già lasciato")
+    }
+
+    @Test func twoSantasOnTwoScreensLeaveOnlyOneGift() {
+        let diary = diary()
+        let screens = [scene(), scene()]
+        for scene in screens {
+            scene.christmas.diary = diary
+            scene.updateWindows([], dock: dockFrame, ceiling: 780)
+            #expect(scene.sendSanta()?.carriesGift == true, "partono insieme: per entrambe oggi il regalo c'è ancora")
+        }
+        for scene in screens { run(scene, seconds: 12) }
+        #expect(screens.map { toys($0, Gift.self).count }.reduce(0, +) == 1)
     }
 
     @Test func santaComesByHimselfOnlyAtChristmasTime() {

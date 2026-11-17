@@ -41,7 +41,9 @@ extension SeasonScene {
         return .random(in: ledge.span.lowerBound + margin...ledge.span.upperBound - margin)
     }
 
+    /// Il diario si ricontrolla qui, non solo alla partenza: con due schermi due slitte possono volare insieme.
     private func dropGift(at point: CGPoint) {
+        guard christmas.diary.canGive(on: christmas.now()) else { return }
         add(Gift(at: point))
         christmas.diary.recordGift(on: christmas.now())
     }
