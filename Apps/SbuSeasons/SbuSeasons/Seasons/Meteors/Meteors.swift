@@ -62,7 +62,7 @@ nonisolated enum MeteorsTuning {
     static let slant: ClosedRange<CGFloat> = 1.5...2.2
     /// Lunghezza della scia rispetto al suo spessore.
     static let length: ClosedRange<CGFloat> = 28...44
-    /// Quanti punti "sopra lo schermo" rinasce: a quella velocità, un'attesa di 10–35 s prima di ripassare.
+    /// Quanti punti "sopra lo schermo" rinasce: a quella velocità, un'attesa di 8–45 s prima di ripassare.
     static let gap: ClosedRange<CGFloat> = 3_000...12_000
     /// La testa, quasi bianca, e la scia, azzurrina.
     static let head = NSColor(srgbRed: 1, green: 0.98, blue: 0.92, alpha: 1)

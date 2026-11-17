@@ -112,9 +112,12 @@ struct NewEffectsTests {
         let scene = SeasonScene(size: size, screenOrigin: .zero, season: Snow())
         scene.setSeason(Meteors())
         let star = try #require(particles(scene).first)
+        // Aspetta che arrivi in cielo: sopra lo schermo scende dritta.
+        var t: TimeInterval = 1
+        while star.position.y > size.height - 20 { scene.step(at: t); t += 0.05 }
         let start = star.position
-        scene.step(at: 1)
-        scene.step(at: 1.05)
+        scene.step(at: t)
+        scene.step(at: t + 0.05)
         let dx = star.position.x - start.x, dy = star.position.y - start.y
         #expect(dy < -10)
         #expect(abs(dx) > 10)
@@ -122,6 +125,30 @@ struct NewEffectsTests {
         let heading = atan2(dy, dx)
         #expect(abs(remainder(star.zRotation - heading, 2 * .pi)) < 0.3)
         #expect(star.size.width > star.size.height * 4)
+    }
+
+    /// Mentre aspetta sopra lo schermo non va di lato: ogni giro finisce con la stella che attraversa il cielo
+    /// (uscita di lato o dal fondo), mai uscita di lato quando era ancora sopra, invisibile.
+    @Test func everyShootingStarShowsUpAfterItsWait() throws {
+        let scene = SeasonScene(size: size, screenOrigin: .zero, season: Snow())
+        scene.setSeason(Meteors())
+        let star = try #require(particles(scene).first)
+        let sky = CGRect(origin: .zero, size: size)
+        var seen = false, laps = 0, t: TimeInterval = 1
+        var lastY = star.position.y
+        var lastPos = star.position
+        for _ in 0..<12_000 {
+            scene.step(at: t); t += 0.05
+            if sky.contains(star.position) { seen = true }
+            if star.position.y > lastY + 50 {   // è rinata in cima: il giro prima doveva vedersi
+                #expect(seen, "giro \(laps): uscita in \(lastPos) senza farsi vedere")
+                seen = false
+                laps += 1
+            }
+            lastY = star.position.y
+            lastPos = star.position
+        }
+        #expect(laps >= 3)
     }
 
     @Test func shootingStarsNeverSettle() {
