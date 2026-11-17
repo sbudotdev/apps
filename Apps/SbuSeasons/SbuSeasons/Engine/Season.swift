@@ -30,6 +30,8 @@ protocol Season {
     var lightning: Lightning? { get }
     /// Gocce sul vetro dello schermo. nil = niente.
     var glass: GlassRain? { get }
+    /// Il sottofondo in loop (`vento`, `pioggia`), se i suoni sono accesi. nil = silenzio.
+    var ambience: String? { get }
 }
 
 extension Season {
@@ -39,6 +41,7 @@ extension Season {
     var banks: [Bank] { [] }
     var lightning: Lightning? { nil }
     var glass: GlassRain? { nil }
+    var ambience: String? { nil }
 }
 
 /// Un tipo di banco che attraversa lo schermo da sinistra a destra: strati di nebbia o nuvole.

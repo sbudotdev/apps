@@ -353,6 +353,7 @@ final class SeasonScene: SKScene {
         self.held = nil
         let isClick = hypot(point.x - held.start.x, point.y - held.start.y) < Tuning.clickSlop
         held.toy.body.release(velocity: isClick || stale || reduceMotion ? .zero : held.velocity)
+        if held.toy is Snowball, held.toy.body.velocity != .zero { SoundBoard.shared.play("palla-di-neve-lancio") }
         if isClick {
             let feet = held.toy.body.position
             held.toy.clicked(at: CGPoint(x: point.x - feet.x, y: point.y - feet.y))
@@ -390,7 +391,7 @@ final class SeasonScene: SKScene {
         guard gathered >= Tuning.snowballSnow else { return }
         gathered = 0
         makeSnowball(at: point)
-        SoundBoard.shared.play("palla-di-neve")
+        SoundBoard.shared.play("passo-neve")   // la neve stretta scricchiola come sotto i passi
     }
 
     @discardableResult
@@ -668,8 +669,13 @@ final class SeasonScene: SKScene {
                 // Sulle finestre attaccate alla barra dei menu un oggetto alto la coprirebbe: lì non si ferma.
                 let room = (ceiling ?? size.height) - toy.node.size.height
                 let fit = toyLedges.contains { $0.y > room } ? toyLedges.filter { $0.y <= room } : toyLedges
+                let falling = toy.body.velocity.dy
                 toy.body.step(dt: dt, ledges: fit, width: size.width, bounce: reduceMotion ? 0 : toy.bounce,
                               friction: toy.friction)
+                // Una palla che arriva forte su un bordo fa "puf"; quelle che rotolano o rimbalzano piano no.
+                if toy is Snowball, falling < -Tuning.toyMinBounce * 2, toy.body.velocity.dy >= 0 {
+                    SoundBoard.shared.play("palla-di-neve-colpo")
+                }
                 toy.node.position = toy.body.position
                 toy.step(dt: dt)
             }

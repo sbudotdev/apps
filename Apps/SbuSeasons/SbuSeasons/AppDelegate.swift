@@ -63,6 +63,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         return window
     }()
 
+    /// La finestra Sfondi: creata la prima volta che serve, poi riusata.
+    private lazy var galleryWindow: NSWindow = {
+        let window = NSWindow(contentViewController: NSHostingController(rootView: GalleryView()))
+        window.title = String(localized: "Sfondi")
+        window.styleMask = [.titled, .closable, .resizable]
+        window.isReleasedWhenClosed = false
+        window.delegate = self
+        window.center()
+        return window
+    }()
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         PreviousDefaults.migrate()   // prima di leggere qualsiasi impostazione
         // Per la neve sul Dock serve il permesso Accessibilità: se manca, macOS mostra la richiesta.
@@ -73,6 +84,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         setupMainMenu()
         rebuildOverlays()
         if showsCountdown { setCountdownVisible(true) }
+        updateAmbience()
         // La stagione cambia dal menu ❄︎ o dalle Impostazioni: neve e icona seguono subito.
         Settings.shared.observeSeason { [weak self] in self?.seasonDidChange() }
 
@@ -230,6 +242,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
         menu.addItem(.separator())
 
+        let galleryItem = NSMenuItem(title: String(localized: "Sfondi…"), action: #selector(openGallery), keyEquivalent: "")
+        galleryItem.target = self
+        galleryItem.toolTip = String(localized: "Dieci sfondi per la scrivania, ognuno con il suo effetto.")
+        menu.addItem(galleryItem)
+
         let settingsItem = NSMenuItem(title: String(localized: "Impostazioni…"), action: #selector(openSettings), keyEquivalent: ",")
         settingsItem.target = self
         menu.addItem(settingsItem)
@@ -331,7 +348,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     @objc private func toggleSnow() {
         isSnowing.toggle()
         overlays.forEach { $0.setSnowing(isSnowing) }
+        updateAmbience()
         updateMenuState()
+    }
+
+    /// Il sottofondo della stagione (vento, pioggia), solo mentre cade qualcosa.
+    private func updateAmbience() {
+        SoundBoard.shared.setAmbience(isSnowing ? Settings.shared.season.ambience : nil)
     }
 
     @objc private func meltSnow() {
@@ -426,6 +449,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private func seasonDidChange() {
         let season = Settings.shared.season
         overlays.forEach { $0.setSeason(season) }
+        updateAmbience()
         updateMenuState()
     }
 
@@ -459,6 +483,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         NSApp.orderFrontStandardAboutPanel(options: [.credits: Credits.aboutPanel])
     }
 
+    @objc private func openGallery() {
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate()
+        galleryWindow.makeKeyAndOrderFront(nil)
+        galleryWindow.orderFrontRegardless()
+    }
+
     @objc private func openSettings() {
         // App senza Dock: va "attivata" esplicitamente, altrimenti la finestra resta dietro alle altre.
         // Mentre le Impostazioni sono aperte, l'app si comporta come una normale:
@@ -470,7 +501,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     }
 
     func windowWillClose(_ notification: Notification) {
-        NSApp.setActivationPolicy(.accessory)   // via dal Dock: resta solo la neve
+        // Via dal Dock quando si chiude l'ultima delle due: resta solo la neve.
+        let closing = notification.object as? NSWindow
+        guard ![settingsWindow, galleryWindow].contains(where: { $0 !== closing && $0.isVisible }) else { return }
+        NSApp.setActivationPolicy(.accessory)
     }
 
     /// macOS segnala nell'evento di avvio se l'app è partita come elemento di login.
