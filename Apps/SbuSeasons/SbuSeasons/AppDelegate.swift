@@ -23,9 +23,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         set { UserDefaults.standard.set(newValue, forKey: "ploughDockFirst") }
     }
 
-    private lazy var toggleItem = NSMenuItem(title: String(localized: "Fai nevicare"), action: nil, keyEquivalent: "s")
+    private lazy var toggleItem = NSMenuItem(title: String(localized: "Mostra l'effetto"), action: nil, keyEquivalent: "s")
+    private var behindItem: NSMenuItem?
+    private var soundsItem: NSMenuItem?
+    private var nightItems: [NSMenuItem] = []
     private var densityItems: [NSMenuItem] = []
-    /// L'intensità continua, sotto Leggera/Media/Forte: è lo stesso valore di "Quantità di fiocchi".
+    /// L'intensità continua, sotto Leggera/Media/Forte: è lo stesso valore di "Quantità" nelle Impostazioni.
     private lazy var intensitySlider: NSSlider = {
         let slider = NSSlider(value: Settings.shared.values.flakeCount, minValue: Density.range.lowerBound,
                               maxValue: Density.range.upperBound, target: self, action: #selector(intensityChanged(_:)))
@@ -62,6 +65,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         window.center()
         return window
     }()
+
+    /// Il tour di benvenuto: creato la prima volta che serve, poi riusato.
+    private lazy var tourWindow: NSWindow = {
+        let window = NSWindow(contentViewController: makeTour())
+        window.title = String(localized: "Tour di benvenuto")
+        window.styleMask = [.titled, .closable]
+        window.isReleasedWhenClosed = false
+        window.delegate = self
+        window.center()
+        return window
+    }()
+
+    /// Un tour nuovo, che parte dalla prima pagina.
+    private func makeTour() -> NSHostingController<TourView> {
+        NSHostingController(rootView: TourView { [weak self] in
+            self?.tourWindow.performClose(nil)
+        })
+    }
 
     /// La finestra Sfondi: creata la prima volta che serve, poi riusata.
     private lazy var galleryWindow: NSWindow = {
@@ -113,9 +134,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
             object: nil
         )
 
-        // Aperta a mano (doppio clic, `open`)? Mostriamo subito le Impostazioni.
+        // La prima volta il tour di benvenuto. Poi, aperta a mano (doppio clic, `open`), le Impostazioni.
         // All'avvio automatico al login no: lì vogliamo solo la neve.
-        if !launchedAsLoginItem() { openSettings() }
+        if TourProgress.shared.opensAtLaunch {
+            TourProgress.shared.markSeen()
+            openTour()
+        } else if !launchedAsLoginItem() {
+            openSettings()
+        }
 
         // Controlliamo spesso dove sono le finestre (per l'accumulo).
         windowTimer = Timer.scheduledTimer(withTimeInterval: Tuning.windowRefreshInterval, repeats: true) { [weak self] _ in
@@ -139,6 +165,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private func rebuildOverlays() {
         overlays.forEach { $0.close() }
         overlays = NSScreen.screens.map { OverlayWindow(screen: $0) }
+        for overlay in overlays { overlay.scene.onGlobeShaken = { TourProgress.shared.complete(.shakeGlobe) } }
         powerSourceDidChange()
         overlays.forEach { $0.setSnowing(isSnowing) }
         refreshWindows()
@@ -179,32 +206,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         menu.delegate = self   // per aggiornare le spunte ogni volta che si apre
         menu.autoenablesItems = false   // i giochi d'inverno si spengono a mano fuori dall'inverno (`updateMenuState`)
 
+        // Nell'ordine: effetto, intensità, giochi, Natale, notte, sfondi, suoni, impostazioni.
         toggleItem.target = self
         toggleItem.action = #selector(toggleSnow)
         menu.addItem(toggleItem)
 
-        let meltItem = NSMenuItem(title: String(localized: "Sciogli la neve"), action: #selector(meltSnow), keyEquivalent: "r")
-        meltItem.target = self
-        menu.addItem(meltItem)
-
-        let clearItem = NSMenuItem(title: String(localized: "Togli le palle di neve"), action: #selector(clearSnowballs), keyEquivalent: "")
-        clearItem.target = self
-        clearItem.toolTip = String(localized: "Per fare una palla di neve, tieni premuto ⌥ e passa il cursore sulla neve posata.")
-        menu.addItem(clearItem)
-
-        // La palla di vetro si scuote anche dal menu: non tutti possono scuotere il mouse.
-        let globeItem = NSMenuItem(title: String(localized: "Scuoti la palla di vetro"), action: #selector(shakeGlobe), keyEquivalent: "")
-        globeItem.target = self
-        menu.addItem(globeItem)
-
-        menu.addItem(.separator())
-        addWinterGames(to: menu)
-        addFigures(to: menu)
-        menu.addItem(.separator())
-        addChristmas(to: menu)
-        menu.addItem(.separator())
-
-        // Stagione: un sottomenu con l'elenco di `Seasons.all`.
+        // Effetto: un sottomenu con l'elenco di `Seasons.all`.
         let seasonMenu = NSMenu()
         seasonItems = Seasons.all.map { season in
             let mi = NSMenuItem(title: season.title, action: #selector(selectSeason(_:)), keyEquivalent: "")
@@ -214,10 +221,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
             seasonMenu.addItem(mi)
             return mi
         }
-        let seasonItem = NSMenuItem(title: String(localized: "Stagione"), action: nil, keyEquivalent: "")
-        seasonItem.submenu = seasonMenu
-        menu.addItem(seasonItem)
+        menu.addItem(submenu(String(localized: "Effetto"), seasonMenu))
 
+        let behind = NSMenuItem(title: String(localized: "Dietro le finestre"), action: #selector(toggleBehindWindows), keyEquivalent: "")
+        behind.target = self
+        behind.toolTip = String(localized: "Gli effetti restano sulla scrivania, sotto le finestre delle app.")
+        menu.addItem(behind)
+        behindItem = behind
+
+        let meltItem = NSMenuItem(title: String(localized: "Togli quello che si è posato"), action: #selector(meltSnow), keyEquivalent: "r")
+        meltItem.target = self
+        menu.addItem(meltItem)
+
+        menu.addItem(.separator())
         let densityHeader = NSMenuItem(title: String(localized: "Intensità"), action: nil, keyEquivalent: "")
         densityHeader.isEnabled = false
         menu.addItem(densityHeader)
@@ -241,15 +257,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         menu.addItem(sliderItem)
 
         menu.addItem(.separator())
+        menu.addItem(submenu(String(localized: "Giochi"), toysMenu()))
+        menu.addItem(submenu(String(localized: "Natale"), christmasMenu()))
+        menu.addItem(submenu(String(localized: "Notte"), nightMenu()))
 
         let galleryItem = NSMenuItem(title: String(localized: "Sfondi…"), action: #selector(openGallery), keyEquivalent: "")
         galleryItem.target = self
         galleryItem.toolTip = String(localized: "Dieci sfondi per la scrivania, ognuno con il suo effetto.")
         menu.addItem(galleryItem)
 
+        let sounds = NSMenuItem(title: String(localized: "Suoni"), action: #selector(toggleSounds), keyEquivalent: "")
+        sounds.target = self
+        sounds.toolTip = String(localized: "Il volume è nelle Impostazioni.")
+        menu.addItem(sounds)
+        soundsItem = sounds
+
+        menu.addItem(.separator())
         let settingsItem = NSMenuItem(title: String(localized: "Impostazioni…"), action: #selector(openSettings), keyEquivalent: ",")
         settingsItem.target = self
         menu.addItem(settingsItem)
+
+        let tourItem = NSMenuItem(title: String(localized: "Tour di benvenuto…"), action: #selector(openTour), keyEquivalent: "")
+        tourItem.target = self
+        menu.addItem(tourItem)
 
         menu.addItem(aboutItem())
         menu.addItem(NSMenuItem(title: String(localized: "Esci da \(SbuSeasonsApp.name)"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
@@ -259,8 +289,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         updateMenuState()
     }
 
-    /// Spazzaneve, slittino, funivia, albero, "Togli alberi, neve e slitte", "Metti in pausa i giochi".
-    private func addWinterGames(to menu: NSMenu) {
+    /// Una voce con il suo sottomenu. I giochi d'inverno si spengono a mano fuori dall'inverno (`updateMenuState`).
+    private func submenu(_ title: String, _ menu: NSMenu) -> NSMenuItem {
+        menu.autoenablesItems = false
+        let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+        item.submenu = menu
+        return item
+    }
+
+    /// Giochi: palle di neve e palla di vetro, poi quelli d'inverno (spazzaneve, slittino, funivia, albero) e i personaggi.
+    private func toysMenu() -> NSMenu {
+        let menu = NSMenu()
         func item(_ title: String, _ action: Selector, tip: String? = nil) -> NSMenuItem {
             let mi = NSMenuItem(title: title, action: action, keyEquivalent: "")
             mi.target = self
@@ -268,6 +307,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
             menu.addItem(mi)
             return mi
         }
+        _ = item(String(localized: "Togli le palle di neve"), #selector(clearSnowballs),
+                 tip: String(localized: "Per fare una palla di neve, tieni premuto ⌥ e passa il cursore sulla neve posata."))
+        // La palla di vetro si scuote anche dal menu: non tutti possono scuotere il mouse.
+        _ = item(String(localized: "Scuoti la palla di vetro"), #selector(shakeGlobe))
+        menu.addItem(.separator())
         let plough = item(String(localized: "Manda lo spazzaneve"), #selector(sendPlough),
                           tip: String(localized: "Pulisce il bordo su cui corre e scende di bordo in bordo. La neve raccolta resta in una montagnetta."))
         let dockFirst = item(String(localized: "Prima il Dock"), #selector(toggleDockFirst),
@@ -285,26 +329,26 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         dockFirstItem = dockFirst
         cableCarItem = cableCar
         pauseItem = pause
-    }
 
-    /// "Personaggi": un sottomenu con una voce per tipo, che lo mette o lo toglie.
-    private func addFigures(to menu: NSMenu) {
-        let submenu = NSMenu()
+        menu.addItem(.separator())
+        // Personaggi: una voce per tipo, che lo mette o lo toglie.
+        let figures = NSMenu()
         figureItems = FigureKind.allCases.map { kind in
             let mi = NSMenuItem(title: kind.title, action: #selector(toggleFigure(_:)), keyEquivalent: "")
             mi.target = self
             mi.toolTip = kind.tip
-            submenu.addItem(mi)
+            figures.addItem(mi)
             return (mi, kind)
         }
-        let item = NSMenuItem(title: String(localized: "Personaggi"), action: nil, keyEquivalent: "")
-        item.submenu = submenu
-        menu.addItem(item)
-        winterItems.append(item)
+        let figuresItem = submenu(String(localized: "Personaggi"), figures)
+        menu.addItem(figuresItem)
+        winterItems.append(figuresItem)
+        return menu
     }
 
     /// Babbo Natale, l'omino di pan di zenzero (solo d'inverno, come i giochi) e il conto alla rovescia (sempre).
-    private func addChristmas(to menu: NSMenu) {
+    private func christmasMenu() -> NSMenu {
+        let menu = NSMenu()
         let santa = NSMenuItem(title: String(localized: "Fai passare Babbo Natale"), action: #selector(sendSanta), keyEquivalent: "")
         santa.toolTip = String(localized: "Dal 1° dicembre al 6 gennaio passa da solo ogni tanto, quando nevica, e la vigilia più spesso. Lascia un regalo al giorno su una finestra o sul Dock: fai clic per aprirlo.")
         let man = NSMenuItem(title: String(localized: "Manda l'omino di pan di zenzero"), action: #selector(sendGingerbreadMan), keyEquivalent: "")
@@ -317,6 +361,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         }
         winterItems += [santa, man]
         countdownItem = countdown
+        return menu
+    }
+
+    /// Notte: le stesse tre scelte delle Impostazioni. L'ora di inizio resta nelle Impostazioni.
+    private func nightMenu() -> NSMenu {
+        let menu = NSMenu()
+        let titles: [NightMode: String] = [
+            .off: String(localized: "Mai"),
+            .late: String(localized: "Di sera"),
+            .always: String(localized: "Sempre"),
+        ]
+        nightItems = NightMode.allCases.map { mode in
+            let mi = NSMenuItem(title: titles[mode] ?? "", action: #selector(selectNight(_:)), keyEquivalent: "")
+            mi.target = self
+            mi.representedObject = mode.rawValue
+            menu.addItem(mi)
+            return mi
+        }
+        return menu
     }
 
     private func updateMenuState() {
@@ -327,6 +390,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         pauseItem?.state = overlays.first?.toysPaused == true ? .on : .off
         for (mi, kind) in figureItems { mi.state = overlays.contains { $0.scene.hasFigure(kind) } ? .on : .off }
         countdownItem?.state = showsCountdown ? .on : .off
+        let values = Settings.shared.values
+        behindItem?.state = values.behindWindows ? .on : .off
+        soundsItem?.state = values.sounds ? .on : .off
+        for mi in nightItems { mi.state = mi.representedObject as? String == values.night.rawValue ? .on : .off }
         cableCarItem?.title = overlays.contains(where: \.hasCableCar)
             ? String(localized: "Togli la funivia") : String(localized: "Monta la funivia")
         let season = Settings.shared.season
@@ -355,6 +422,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     /// Il sottofondo della stagione (vento, pioggia), solo mentre cade qualcosa.
     private func updateAmbience() {
         SoundBoard.shared.setAmbience(isSnowing ? Settings.shared.season.ambience : nil)
+    }
+
+    @objc private func toggleBehindWindows() {
+        Settings.shared.values.behindWindows.toggle()   // le finestre lo leggono al prossimo fotogramma
+        updateMenuState()
+    }
+
+    @objc private func toggleSounds() {
+        Settings.shared.values.sounds.toggle()
+        SoundBoard.shared.settingsChanged()
+        updateMenuState()
+    }
+
+    @objc private func selectNight(_ sender: NSMenuItem) {
+        guard let mode = (sender.representedObject as? String).flatMap(NightMode.init(rawValue:)) else { return }
+        Settings.shared.values.night = mode
+        updateMenuState()
     }
 
     @objc private func meltSnow() {
@@ -447,6 +531,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     }
 
     private func seasonDidChange() {
+        TourProgress.shared.complete(.changeEffect)
         let season = Settings.shared.season
         overlays.forEach { $0.setSeason(season) }
         updateAmbience()
@@ -483,6 +568,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         NSApp.orderFrontStandardAboutPanel(options: [.credits: Credits.aboutPanel])
     }
 
+    @objc private func openTour() {
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate()
+        // riaperto dopo Inizia o Salta: ricomincia dalla prima pagina, non da dove era rimasto
+        if !tourWindow.isVisible { tourWindow.contentViewController = makeTour() }
+        tourWindow.makeKeyAndOrderFront(nil)
+        tourWindow.orderFrontRegardless()
+    }
+
     @objc private func openGallery() {
         NSApp.setActivationPolicy(.regular)
         NSApp.activate()
@@ -501,9 +595,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     }
 
     func windowWillClose(_ notification: Notification) {
-        // Via dal Dock quando si chiude l'ultima delle due: resta solo la neve.
+        // Via dal Dock quando si chiude l'ultima delle nostre finestre: resta solo la neve.
         let closing = notification.object as? NSWindow
-        // NSApp.windows e non le due lazy var: leggerle creerebbe una finestra mai aperta.
+        // NSApp.windows e non le lazy var: leggerle creerebbe una finestra mai aperta.
         guard !NSApp.windows.contains(where: { $0 !== closing && $0.isVisible && $0.delegate === self }) else { return }
         NSApp.setActivationPolicy(.accessory)
     }
