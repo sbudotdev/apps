@@ -1,6 +1,6 @@
 import AppKit
 
-/// Sbu Seasons nasce da l'app di Simone Antoniciello: il credito sta nel pannello Informazioni e nelle Impostazioni.
+/// Sbu Seasons nasce da un'idea di Simone Antoniciello: il credito sta nel pannello Informazioni e nelle Impostazioni.
 nonisolated enum Credits {
     static let sentence = String(localized: "Nata da un'idea di Simone Antoniciello")
     static let url = URL(string: "https://github.com/antonsimo")!

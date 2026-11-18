@@ -2,7 +2,7 @@
 
 App Mac nella barra dei menu, pensata per più stagioni e temi: neve, primavera, estate, autunno, pioggia sul vetro, temporale, nebbia, nuvole,
 lucciole, stelle cadenti e sereno.
-Nasce da l'app di Simone Antoniciello, rinominata Sbu Seasons il 15/11/2026 (MGS-421).
+Nasce da un'idea di Simone Antoniciello (MGS-421).
 
 Neve che cade sopra tutte le finestre del Mac, **si accumula sul bordo superiore delle finestre**
 e sopra il Dock, e col cursore la sposti e la sparpagli.
@@ -81,10 +81,6 @@ Il test `TwoScreensTests` lo prova con uno schermo virtuale a una frequenza dive
 
 **2.0 (8).** Oggetti con cui giocare sopra le finestre, stagioni nuove, Natale, personaggi, sfondi, suoni e menu nuovo
 (SBU-49…SBU-57, vedi «Novità della 2.0»). Rilasciata da `main` (SBU-72).
-
-**Dal vecchio nome.** Al primo avvio le impostazioni e "Fai nevicare" salvati con il nome di prima
-si copiano da soli (`PreviousDefaults` in `Settings.swift`). Il permesso Accessibilità e "Apri al login"
-sono legati al bundle id: con il nome nuovo vanno dati di nuovo.
 
 ## Giocare con la neve (2.0)
 
@@ -268,7 +264,7 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Seasons/Mist/Mist.swift`, `Seasons/Clouds/Clouds.swift` | Nebbia in strati bassi; nuvole in alto |
 | `Seasons/Clear/Clear.swift` | Il sereno: non cade niente (per chi vuole solo gli oggetti o lo sfondo) |
 | `PowerSource.swift` | Batteria o corrente (per i fotogrammi al secondo) |
-| `Settings.swift` | Le impostazioni e la stagione (salvate in UserDefaults, copiate dal vecchio nome al primo avvio) e la finestra SwiftUI per regolarle |
+| `Settings.swift` | Le impostazioni e la stagione (salvate in UserDefaults) e la finestra SwiftUI per regolarle |
 | `Localizable.xcstrings`, `InfoPlist.xcstrings` | Le stringhe in italiano e inglese; il nome "Sbu Seasons" nel menu dell'app in alto |
 | `Density.swift` | Le scorciatoie Leggera / Media / Forte del menu |
 | `Tuning.swift` | I parametri fissi del motore (fisica, cursore, mucchi, lettura delle finestre) |
