@@ -22,6 +22,19 @@ L'impostazione si segue anche mentre l'app è aperta.
 
 Requisiti: macOS 14+, Xcode 26+, XcodeGen (`brew install xcodegen`).
 
+## Novità della 2.0
+
+- **Stagioni nuove:** pioggia sul vetro, temporale, nebbia, nuvole, lucciole, stelle cadenti e sereno; l'intensità ora ha anche un cursore continuo.
+- **Giocare con la neve:** palle di neve da lanciare, pupazzo, neve che scivola dalle finestre, palla di vetro da scuotere,
+  spazzaneve, slittino, funivia e albero di Natale.
+- **Natale:** Babbo Natale con la slitta, omino di pan di zenzero, conto alla rovescia.
+- **Personaggi e notte:** volpe, cincia, baita, lanterna, renna; la notte con la candela.
+- **Sfondi e suoni:** dieci sfondi "Il borgo" (anche per schermi ultrawide) e suoni brevi creati a codice, spenti finché non li accendi.
+- **Menu rifatto** con un tour di benvenuto e l'opzione «Dietro le finestre».
+- Si clicca solo sugli oggetti, il resto dello schermo resta tuo; con Riduci movimento tutto si calma.
+
+I dettagli sono nelle sezioni (2.0) qui sotto.
+
 ## Provarla mentre la sviluppi
 
 ```bash
@@ -47,13 +60,13 @@ con il download da sbu.dev (ADR-0022, `docs/adr/0022-app-mac.md`).
 ## Il .dmg da distribuire
 
 ```bash
-./make-dmg.sh 1.4    # → build/dist/SbuSeasons-1.4.dmg
+./make-dmg.sh 2.0    # → build/dist/SbuSeasons-2.0.dmg
 ```
 
 Build Release universale (arm64 + x86_64), firma Developer ID, `.dmg` con il collegamento ad Applicazioni,
 notarizzazione e `stapler staple`; alla fine `spctl` deve dire `Notarized Developer ID`.
 Usa `SBU_TEAM_ID` e la chiave API di App Store Connect di fastlane (`ASC_KEY_PATH`, `ASC_KEY_ID`, `ASC_ISSUER_ID`).
-La 1.3 è nella [release della repo](https://github.com/sbudotdev/SbuSeasons/releases/tag/v1.3).
+Le versioni sono nelle [release della repo](https://github.com/sbudotdev/SbuSeasons/releases); l'ultima è la [2.0](https://github.com/sbudotdev/SbuSeasons/releases/tag/v2.0).
 
 **1.3.1.** La 1.3 crashava all'avvio su un MacBook (la 1.2 partiva). La 1.3.1 toglie la novità della 1.3
 (un display link per schermo con `SKRenderer`, MGS-636) e torna alla `SKView` della 1.2 (MGS-686).
@@ -66,8 +79,8 @@ o andava a metà velocità a batteria. Ora ogni finestra prende un display link 
 che segue il suo schermo, e muove lei la scena (`SeasonScene.step(at:)`); la `SKView` disegna come nella 1.2.
 Il test `TwoScreensTests` lo prova con uno schermo virtuale a una frequenza diversa da quello principale.
 
-**2.0 (in corso, branch `app/seasons-2`).** Oggetti con cui giocare sopra le finestre, suoni, scuotere (SBU-49 è il motore,
-gli oggetti veri arrivano nei ticket dopo). `MARKETING_VERSION` è già 2.0.
+**2.0 (8).** Oggetti con cui giocare sopra le finestre, stagioni nuove, Natale, personaggi, sfondi, suoni e menu nuovo
+(SBU-49…SBU-57, vedi «Novità della 2.0»). Rilasciata da `main` (SBU-72).
 
 **Dal vecchio nome.** Al primo avvio le impostazioni e "Fai nevicare" salvati con il nome di prima
 si copiano da soli (`PreviousDefaults` in `Settings.swift`). Il permesso Accessibilità e "Apri al login"
