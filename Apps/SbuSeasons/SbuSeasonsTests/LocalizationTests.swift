@@ -7,12 +7,19 @@ struct LocalizationTests {
     private static let english = Bundle.main.path(forResource: "en", ofType: "lproj").flatMap(Bundle.init(path:))
 
     @Test(arguments: [
-        ("Fai nevicare", "Let It Snow"),
+        ("Mostra l'effetto", "Show the Effect"),
+        ("Effetto", "Effect"),
+        ("Dietro le finestre", "Behind Windows"),
+        ("Togli quello che si è posato", "Clear What Has Settled"),
+        ("Giochi", "Toys"),
+        ("Natale", "Christmas"),
+        ("Tour di benvenuto…", "Welcome Tour…"),
+        ("Da provare adesso", "Try These Now"),
+        ("%lld di %lld", "%lld of %lld"),
         ("Esci da %@", "Quit %@"),
         ("Impostazioni…", "Settings…"),
         ("Leggera", "Light"),
-        ("Quantità di fiocchi", "Number of Flakes"),
-        ("Stagione", "Season"),
+        ("Quantità", "Amount"),
         ("Neve", "Snow"),
         ("Primavera", "Spring"),
         ("Estate", "Summer"),

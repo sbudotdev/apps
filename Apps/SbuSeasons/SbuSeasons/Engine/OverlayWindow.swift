@@ -18,6 +18,7 @@ final class OverlayWindow: NSPanel {
     let scene: SeasonScene
     private var displayLink: CADisplayLink?
     private var takesMouse = false
+    private var behindWindows = false
 
     init(screen: NSScreen) {
         let frame = screen.frame
@@ -39,8 +40,7 @@ final class OverlayWindow: NSPanel {
         isReleasedWhenClosed = false
         hidesOnDeactivate = false   // un pannello di norma sparisce quando l'app non è davanti
 
-        // Sopra le finestre normali e sopra il Dock, sotto i menu a tendina.
-        level = .statusBar
+        level = Self.level(behindWindows: false)
 
         // Visibile in tutte le Scrivanie (Spaces) e anche sopra le app a schermo intero.
         collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle, .fullScreenAuxiliary]
@@ -56,7 +56,18 @@ final class OverlayWindow: NSPanel {
         displayLink = link
     }
 
+    /// Sopra: sopra le finestre normali e sopra il Dock, sotto i menu a tendina.
+    /// Dietro: appena sopra lo sfondo e le icone della scrivania, sotto tutte le finestre delle app.
+    static func level(behindWindows: Bool) -> NSWindow.Level {
+        behindWindows ? NSWindow.Level(Int(CGWindowLevelForKey(.desktopIconWindow)) + 1) : .statusBar
+    }
+
     @objc private func step(_ link: CADisplayLink) {
+        // Dal menu ❄︎ o dalle Impostazioni: confrontare un Bool a ogni fotogramma costa niente.
+        if Settings.shared.values.behindWindows != behindWindows {
+            behindWindows.toggle()
+            level = Self.level(behindWindows: behindWindows)
+        }
         scene.step(at: link.targetTimestamp)
         // Il mouse si prende solo sopra un oggetto: la scena lo ricontrolla a ogni fotogramma.
         // Lo stato si tiene qui: leggere `ignoresMouseEvents` a ogni fotogramma costava CPU.
