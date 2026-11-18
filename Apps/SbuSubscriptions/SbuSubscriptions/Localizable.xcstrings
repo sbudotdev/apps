@@ -651,6 +651,16 @@
         }
       }
     },
+    "Ce n'è uno che non usi più? Annullalo prima che si rinnovi." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One you no longer use? Cancel it before it renews."
+          }
+        }
+      }
+    },
     "Cerca" : {
       "localizations" : {
         "en" : {
@@ -1311,6 +1321,16 @@
         }
       }
     },
+    "Il tuo %lld in abbonamenti" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your %lld in subscriptions"
+          }
+        }
+      }
+    },
     "Importa %lld" : {
       "localizations" : {
         "en" : {
@@ -1701,6 +1721,26 @@
         }
       }
     },
+    "Nascondi il riepilogo" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hide the review"
+          }
+        }
+      }
+    },
+    "Nel %lld non hai pagato abbonamenti." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You paid for no subscriptions in %lld."
+          }
+        }
+      }
+    },
     "Nel file non trovo le colonne del nome e del prezzo." : {
       "localizations" : {
         "en" : {
@@ -1787,6 +1827,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No payments coming."
+          }
+        }
+      }
+    },
+    "Nessun rinnovo a gennaio" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing renews in January"
           }
         }
       }
@@ -2741,6 +2791,16 @@
         }
       }
     },
+    "Si rinnovano a gennaio" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Renewing in January"
+          }
+        }
+      }
+    },
     "Simbolo" : {
       "localizations" : {
         "en" : {
@@ -3217,6 +3277,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "today"
+          }
+        }
+      }
+    },
+    "spesi nel %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "spent in %lld"
+          }
+        }
+      }
+    },
+    "spesi nel %lld · più %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "spent in %lld · plus %@"
           }
         }
       }
