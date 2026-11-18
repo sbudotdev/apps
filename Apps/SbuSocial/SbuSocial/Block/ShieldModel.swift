@@ -42,7 +42,6 @@ final class ShieldModel {
         commit()
     }
 
-    /// The Shield's switch.
     var isOn: Bool {
         get { settings.isOn }
         set {
