@@ -2,7 +2,7 @@
 
 Free iOS apps and games from [sbu.dev](https://sbu.dev). Each app remakes a single paid utility from the top of the App Store, each game one of the most played free games without its ads: no subscription, no in-app purchases, no account, no ads, no tracking, data only on the device. sbu.dev's third branch, [Software](https://sbu.dev/software), remakes enterprise software as open source; its first project, Sbu Commerce, lives in its own repo.
 
-**On the App Store:** [Sbu Subscriptions](https://apps.apple.com/app/id6780154928), a free alternative to Orbit, and [Sbu Scanner](https://apps.apple.com/app/id6772572337), QR codes and barcodes without ads. One new app a week; the rest are below.
+**On the App Store:** [Sbu Subscriptions](https://apps.apple.com/app/id6780154928), a free alternative to Orbit; [Sbu Scanner](https://apps.apple.com/app/id6772572337), QR codes and barcodes without ads; and [Sbu Find](https://apps.apple.com/app/id6823934135), a free alternative to Find Air. **For the Mac:** [Sbu Seasons](https://sbu.dev/en/seasons): snow falls over your Mac's windows and settles on their edges and on the Dock. One new app a week; the rest are below.
 
 <p>
   <a href="https://sbu.dev/en/apps/subscriptions"><img src="https://sbu.dev/og/subscriptions.png" width="49%" alt="Sbu Subscriptions: what your subscriptions cost, and no renewal surprises you"></a>
@@ -64,7 +64,7 @@ Specs come only from public App Store data. Nothing here decompiles or extracts 
 |---|---|---|---|
 | [Sbu Subscriptions](Apps/SbuSubscriptions) | `accent-subscriptions` | Orbit | [App Store](https://apps.apple.com/app/id6780154928) |
 | [Sbu Scanner](Apps/SbuScanner) | `accent-scanner` | QR Reader for iPhone | [App Store](https://apps.apple.com/app/id6772572337) |
-| [Sbu Find](Apps/SbuFind) | `accent-find` | Find Air | In App Review |
+| [Sbu Find](Apps/SbuFind) | `accent-find` | Find Air | [App Store](https://apps.apple.com/app/id6823934135) |
 | [Sbu Habits](Apps/SbuHabits) | `accent-habits` | Streaks | In App Review |
 | [Sbu Noise](Apps/SbuNoise) | `accent-noise` | White Noise | In App Review |
 | [Sbu Speed](Apps/SbuSpeed) | `accent-speed` | Speedometer 55 Pro. GPS kit. | TestFlight |
@@ -81,6 +81,7 @@ Specs come only from public App Store data. Nothing here decompiles or extracts 
 | [Sbu Meds](Apps/SbuMeds) | `accent-meds` | Medisafe | In development |
 | [Sbu Remote](Apps/SbuRemote) | `accent-remote` | TV Remote - Universal Control | In development |
 | [Sbu Level](Apps/SbuLevel) | `accent-level` | Clinometer + bubble level | In development |
+| [Sbu Seasons](Apps/SbuSeasons) | — | — (Mac menu-bar app) | [Download](https://sbu.dev/en/seasons) |
 
 Live, in review and coming apps, with their pages: [sbu.dev](https://sbu.dev).
 
