@@ -178,6 +178,16 @@ struct PassagesTests {
         #expect(ScreenRoute.order(frames, heading: -1) == [1, 2, 0])
     }
 
+    @Test func aLaptopUnderAWiderOffCentreMonitorIsInTheSameColumn() {
+        let frames = [
+            CGRect(x: 200, y: 0, width: 1512, height: 982),       // MacBook in basso, spostato a destra
+            CGRect(x: -400, y: 982, width: 2560, height: 1440),   // monitor più largo sopra, non centrato
+            CGRect(x: 2200, y: 0, width: 1920, height: 1080),     // monitor a destra
+        ]
+        #expect(ScreenRoute.order(frames, heading: 1) == [1, 0, 2])
+        #expect(ScreenRoute.order(frames, heading: -1) == [2, 1, 0])
+    }
+
     @Test func theSleighKeepsItsHeightWhereTheNextScreenCoversIt() {
         let next = CGRect(x: 1440, y: -300, width: 1920, height: 1080)   // copre da -300 a 780
         #expect(ScreenRoute.entry(700, into: next, margin: 24) == 1000, "quota locale: 700 + 300")

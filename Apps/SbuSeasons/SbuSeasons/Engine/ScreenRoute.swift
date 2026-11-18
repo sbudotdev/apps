@@ -4,17 +4,24 @@ import CoreGraphics
 ///
 /// Regole (SBU-114):
 /// - si attraversano tutti gli schermi, nell'ordine in cui stanno da sinistra a destra (o al contrario, se vola a sinistra);
-///   due schermi nella stessa colonna, uno sopra l'altro, si attraversano dall'alto in basso;
+///   gli schermi che si sovrappongono in orizzontale (uno sopra l'altro) sono una colonna, attraversata dall'alto in basso;
 /// - si entra nel vicino alla stessa quota globale da cui si è usciti; se il vicino non la copre (schermi sfalsati),
 ///   si vola alla quota solita di quello schermo.
 nonisolated enum ScreenRoute {
     /// Gli indici di `frames` nell'ordine in cui li attraversa chi vola verso `heading` (1 = destra, -1 = sinistra).
+    /// Gli schermi che si sovrappongono in orizzontale (un MacBook sotto un monitor più largo, anche non centrato)
+    /// sono una colonna: si attraversano dall'alto in basso.
     static func order(_ frames: [CGRect], heading: CGFloat) -> [Int] {
-        frames.indices.sorted { a, b in
-            let (fa, fb) = (frames[a], frames[b])
-            if fa.midX != fb.midX { return heading > 0 ? fa.midX < fb.midX : fa.midX > fb.midX }
-            return fa.maxY > fb.maxY
+        var columns: [(maxX: CGFloat, screens: [Int])] = []
+        for i in frames.indices.sorted(by: { frames[$0].minX < frames[$1].minX }) {
+            if let last = columns.last, frames[i].minX < last.maxX {
+                columns[columns.count - 1] = (max(last.maxX, frames[i].maxX), last.screens + [i])
+            } else {
+                columns.append((frames[i].maxX, [i]))
+            }
         }
+        if heading < 0 { columns.reverse() }
+        return columns.flatMap { $0.screens.sorted { frames[$0].maxY > frames[$1].maxY } }
     }
 
     /// La quota (locale allo schermo) a cui entra in `band` chi esce dal vicino alla quota globale `y`.

@@ -500,6 +500,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     /// Uno alla volta, attraverso tutti gli schermi; da qui in poi ripassa da solo (`Passages`).
     @objc private func sendSanta() {
+        guard isSnowing else { return }   // effetto spento: niente slitta ferma sulla finestra nascosta (QA SBU-115)
         passages.send(at: ProcessInfo.processInfo.systemUptime)
     }
 

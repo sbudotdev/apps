@@ -157,8 +157,8 @@ della sola neve (9,6% contro 9,0%).
   dall'avvio, poi ogni 6–12 minuti. Si chiama anche dal menu («Fai passare Babbo Natale»), in qualunque giorno d'inverno:
   da lì ripassa da solo ogni 1½–4 minuti (`Tuning.santaLoopInterval`) finché cambi stagione o metti in pausa i giochi.
 - **Più schermi** (`Passages`, `Engine/ScreenRoute.swift`): un solo passaggio alla volta, che attraversa tutti gli schermi
-  nell'ordine di Impostazioni → Schermi: da sinistra a destra (o al contrario), e due schermi nella stessa colonna dall'alto
-  in basso. Esce da uno schermo ed entra nel vicino alla stessa quota globale; se il vicino non la copre (schermi sfalsati),
+  nell'ordine di Impostazioni → Schermi: da sinistra a destra (o al contrario); gli schermi che si sovrappongono in
+  orizzontale (uno sopra l'altro, anche non centrati) sono una colonna, attraversata dall'alto in basso. Esce da uno schermo ed entra nel vicino alla stessa quota globale; se il vicino non la copre (schermi sfalsati),
   vola alla quota solita di quello schermo. Con uno schermo solo è come prima.
 - **Un regalo al giorno.** Babbo Natale lo lascia cadere su un bordo di finestra o sul Dock (senza, sul fondo): da solo
   un passaggio su due, dal menu sempre, finché oggi non l'ha lasciato. Il giorno si salva (`lastGiftDay` in UserDefaults),
