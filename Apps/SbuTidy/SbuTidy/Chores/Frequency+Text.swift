@@ -12,7 +12,6 @@ extension Frequency {
 }
 
 extension FrequencyUnit {
-    /// The unit in the frequency picker.
     nonisolated var name: LocalizedStringResource {
         switch self {
         case .day: "Giorni"

@@ -1,7 +1,6 @@
 import Foundation
 
 extension ChoreDraft {
-    /// The draft of an existing chore, for its edit form.
     init(chore: Chore) {
         self.init(lastDone: chore.lastDone)
         name = chore.name
