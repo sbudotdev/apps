@@ -395,7 +395,6 @@ final class HabitsModel {
         }
     }
 
-    /// Takes back today's last mark.
     func undoLast(_ habit: Habit) {
         update(habit) { $0.undoLast(on: today) }
     }
