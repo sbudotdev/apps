@@ -11,7 +11,6 @@ nonisolated struct PendingVideo: Identifiable, Sendable {
     /// Copies the file into the work folder and returns where it is.
     let load: @Sendable () async throws -> URL
 
-    /// A video picked in Photos.
     init(item: PhotosPickerItem) {
         assetID = item.itemIdentifier
         load = {
@@ -22,7 +21,6 @@ nonisolated struct PendingVideo: Identifiable, Sendable {
         }
     }
 
-    /// A video imported from Files.
     init(file: URL) {
         assetID = nil
         load = {
