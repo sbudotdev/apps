@@ -20,6 +20,7 @@ La neve si posa solo sulle finestre vere di macOS, non su pannelli e modali che 
 (la ricerca di IntelliJ, palette di comandi, popover). Con il permesso Accessibilità restano solo le finestre con
 subrole `AXStandardWindow` (via dialoghi, pannelli, sheet). Senza permesso, o se l'app non risponde, una finestra
 che sta tutta dentro una finestra più grande della stessa app conta come modale. Nessuna eccezione per singole app.
+Una modale non prende neve, ma copre ancora il tratto di bordo che ha davanti: la neve non le finisce sopra.
 A batteria va a 30 fotogrammi al secondo invece di 60, per consumare meno.
 Con **Riduci movimento** di macOS (Accessibilità → Schermo) va anche lei a 30 fotogrammi, cade metà dei fiocchi,
 senza vento, oscillazione né rotazione, e gli oggetti non si lanciano e non rimbalzano: cadono dritti.

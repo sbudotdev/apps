@@ -40,9 +40,8 @@ func currentWindowEdges() -> [WindowEdge] {
     }
     let alive = Set(all.map(\.id))
     axCache = axCache.filter { alive.contains($0.key) }   // dimentica le finestre chiuse
-    let windows = systemWindows(all)
     let settings = Settings.shared.values
-    return zip(visibleTopEdges(windows.map { ($0.id, $0.rect) }, clearance: CGFloat(settings.maxPile)), windows).map { edge, window in
+    return systemEdges(all, clearance: CGFloat(settings.maxPile)).map { edge, window in
         var edge = edge
         // Su macOS 26 le app native con barra degli strumenti (Finder, Safari…) hanno angoli più stondati
         // delle altre (IntelliJ, Chrome…). I due valori si regolano nelle Impostazioni.
@@ -76,6 +75,15 @@ nonisolated func systemWindows(_ windows: [AppWindow]) -> [AppWindow] {
                 && other.rect.width * other.rect.height > window.rect.width * window.rect.height
         }
     }
+}
+
+/// I bordi delle sole finestre vere. Le coperture si calcolano su tutte le finestre: una modale scartata
+/// non prende neve, ma il tratto di bordo che ha davanti resta coperto (se no la neve le finirebbe sopra).
+nonisolated func systemEdges(_ windows: [AppWindow], clearance: CGFloat) -> [(edge: WindowEdge, window: AppWindow)] {
+    let real = Set(systemWindows(windows).map(\.id))
+    return zip(visibleTopEdges(windows.map { ($0.id, $0.rect) }, clearance: clearance), windows)
+        .filter { real.contains($0.1.id) }
+        .map { (edge: $0.0, window: $0.1) }
 }
 
 /// Quello che l'Accessibilità dice di una finestra.

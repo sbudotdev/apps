@@ -81,3 +81,13 @@ private func window(_ id: CGWindowID, _ rect: CGRect, pid: pid_t = 1, standard: 
     #expect(edges[0].visible == [300...1300])
     #expect(edges[1].visible == [0...300, 1300...1920])
 }
+
+// QA di SBU-101 (SBU-102): una modale scartata non prende neve, ma copre ancora il bordo che ha davanti,
+// se no la neve della finestra sotto le verrebbe disegnata sopra.
+@Test func aDiscardedModalStillCoversTheEdgeBehindIt() {
+    let main = window(1, CGRect(x: 0, y: 0, width: 800, height: 600), standard: true)
+    let palette = window(2, CGRect(x: 200, y: 600, width: 400, height: 50), standard: false)  // appoggiata sul bordo
+    let edges = systemEdges([palette, main], clearance: 16)
+    #expect(edges.map(\.edge.id) == [1])
+    #expect(edges[0].edge.visible == [0...200, 600...800])
+}
