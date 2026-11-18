@@ -3,12 +3,12 @@ import Testing
 @testable import SbuLibretto
 
 struct TimetableTests {
-    @Test(arguments: [(0, "00:00"), (9 * 60 + 5, "09:05"), (13 * 60, "13:00"), (23 * 60 + 59, "23:59"), (12 * 60, "12:00")])
+    @Test(arguments: [(0, "00:00"), (9 * 60 + 5, "09:05"), (13 * 60, "13:00"), (23 * 60 + 59, "23:59"), (12 * 60, "12:00")] as [(Int, String)])
     func timesAreWrittenInTwentyFourHours(_ minutes: Int, _ expected: String) {
         #expect(ClockTime(minutes: minutes).text == expected)
     }
 
-    @Test(arguments: [(1_440, 0), (-30, 1_410), (1_500, 60), (-1_440, 0), (2_880 + 61, 61)])
+    @Test(arguments: [(1_440, 0), (-30, 1_410), (1_500, 60), (-1_440, 0), (2_880 + 61, 61)] as [(Int, Int)])
     func minutesFoldIntoOneDay(_ minutes: Int, _ expected: Int) {
         #expect(ClockTime(minutes: minutes).minutes == expected)
     }
