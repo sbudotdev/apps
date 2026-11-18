@@ -16,7 +16,6 @@ nonisolated struct StableSampler: Equatable, Sendable {
         case stable(Gravity)
     }
 
-    /// Steady samples needed.
     let sampleCount: Int
     /// Degrees a sample may stray from the first one.
     let tolerance: Double

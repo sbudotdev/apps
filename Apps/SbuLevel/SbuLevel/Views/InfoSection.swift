@@ -1,7 +1,6 @@
 import SbuKit
 import SwiftUI
 
-/// Settings section that opens the Info page.
 struct InfoSection: View {
     var body: some View {
         Section {
