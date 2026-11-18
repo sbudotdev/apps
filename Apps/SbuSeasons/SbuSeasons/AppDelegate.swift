@@ -68,9 +68,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     /// Il tour di benvenuto: creato la prima volta che serve, poi riusato.
     private lazy var tourWindow: NSWindow = {
-        let window = NSWindow(contentViewController: NSHostingController(rootView: TourView { [weak self] in
-            self?.tourWindow.performClose(nil)
-        }))
+        let window = NSWindow(contentViewController: makeTour())
         window.title = String(localized: "Tour di benvenuto")
         window.styleMask = [.titled, .closable]
         window.isReleasedWhenClosed = false
@@ -78,6 +76,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         window.center()
         return window
     }()
+
+    /// Un tour nuovo, che parte dalla prima pagina.
+    private func makeTour() -> NSHostingController<TourView> {
+        NSHostingController(rootView: TourView { [weak self] in
+            self?.tourWindow.performClose(nil)
+        })
+    }
 
     /// La finestra Sfondi: creata la prima volta che serve, poi riusata.
     private lazy var galleryWindow: NSWindow = {
@@ -566,6 +571,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     @objc private func openTour() {
         NSApp.setActivationPolicy(.regular)
         NSApp.activate()
+        // riaperto dopo Inizia o Salta: ricomincia dalla prima pagina, non da dove era rimasto
+        if !tourWindow.isVisible { tourWindow.contentViewController = makeTour() }
         tourWindow.makeKeyAndOrderFront(nil)
         tourWindow.orderFrontRegardless()
     }
