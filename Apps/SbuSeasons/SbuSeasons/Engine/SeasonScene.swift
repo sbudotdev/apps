@@ -429,6 +429,7 @@ final class SeasonScene: SKScene {
     /// Il cursore o una finestra scossi: tutta la neve posata si alza, i fiocchi salgono, le palle saltano;
     /// poi ricade. Con Riduci movimento no. Dopo una scossa riposa qualche secondo (`Tuning.globeRest`).
     func shakeGlobe() {
+        TourProgress.shared.complete(.shakeGlobe)   // una delle due cose da provare del tour, anche con Riduci movimento
         guard !reduceMotion, elapsed - lastGlobe >= Tuning.globeRest else { return }
         lastGlobe = elapsed
         for pile in everyPile { spawnPowder(pile.releaseAll(), spread: 90, pop: Tuning.globeLift) }
@@ -520,7 +521,7 @@ final class SeasonScene: SKScene {
         pile.node.removeFromParent()
     }
 
-    /// "Sciogli la neve": svuota tutti i mucchi.
+    /// "Togli quello che si è posato": svuota tutti i mucchi.
     /// Anche le palle di neve e i pupazzi.
     func meltAll() {
         everyPile.forEach { $0.clear() }

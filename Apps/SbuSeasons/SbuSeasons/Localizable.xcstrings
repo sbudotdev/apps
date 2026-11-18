@@ -122,16 +122,6 @@
         }
       }
     },
-    "Fai nevicare": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Let It Snow"
-          }
-        }
-      }
-    },
     "Finder, Safari e Note hanno angoli più tondi di Chrome. Se la neve resta sospesa sugli angoli, aumenta; se entra nella finestra, diminuisci.": {
       "localizations": {
         "en": {
@@ -252,26 +242,6 @@
         }
       }
     },
-    "Neve posata": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Settled Snow"
-          }
-        }
-      }
-    },
-    "Nevicata": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Snowfall"
-          }
-        }
-      }
-    },
     "Per vedere dov'è il Dock serve il permesso Accessibilità.": {
       "localizations": {
         "en": {
@@ -298,16 +268,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Spring"
-          }
-        }
-      }
-    },
-    "Quantità di fiocchi": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Number of Flakes"
           }
         }
       }
@@ -352,32 +312,12 @@
         }
       }
     },
-    "Sciogli la neve": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Melt the Snow"
-          }
-        }
-      }
-    },
     "Sereno": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Clear Skies"
-          }
-        }
-      }
-    },
-    "Stagione": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Season"
           }
         }
       }
@@ -408,16 +348,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "On Windows"
-          }
-        }
-      }
-    },
-    "Tutte le impostazioni della neve tornano come al primo avvio.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "All snow settings go back to how they were at first launch."
           }
         }
       }
@@ -1288,6 +1218,346 @@
           "stringUnit": {
             "state": "translated",
             "value": "Suggested effect: %@"
+          }
+        }
+      }
+    },
+    "%lld di %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld of %lld"
+          }
+        }
+      }
+    },
+    "Avanti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next"
+          }
+        }
+      }
+    },
+    "Caduta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falling"
+          }
+        }
+      }
+    },
+    "Con la neve, dal menu ❄︎ → Giochi: lo spazzaneve, la pista da slittino, la funivia, un albero da decorare e i personaggi. Tieni premuto ⌥ sulla neve posata per fare una palla di neve.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With snow, from the ❄︎ menu → Toys: the snowplough, the sled run, the cable car, a tree to decorate and the characters. Hold ⌥ over settled snow to make a snowball."
+          }
+        }
+      }
+    },
+    "Da fare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To Do"
+          }
+        }
+      }
+    },
+    "Da provare adesso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try These Now"
+          }
+        }
+      }
+    },
+    "Dal 1° dicembre al 6 gennaio Babbo Natale passa ogni tanto e lascia un regalo. Nel menu Natale ci sono anche l'omino di pan di zenzero e il conto alla rovescia.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From 1 December to 6 January, Santa passes by now and then and leaves a present. The Christmas menu also has the gingerbread man and the countdown."
+          }
+        }
+      }
+    },
+    "Di sera lo schermo si scurisce un po' e in basso a destra si accende una candela. Scegli quando dal menu ❄︎ → Notte.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the evening the screen dims a little and a candle lights up at the bottom right. Choose when from the ❄︎ menu → Night."
+          }
+        }
+      }
+    },
+    "Dieci sfondi disegnati per Sbu Seasons, ognuno con il suo effetto. Se vuoi gli effetti solo sulla scrivania, accendi Dietro le finestre.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ten wallpapers drawn for Sbu Seasons, each with its own effect. If you want the effects on the desktop only, turn on Behind Windows."
+          }
+        }
+      }
+    },
+    "Dietro le finestre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Behind Windows"
+          }
+        }
+      }
+    },
+    "Dietro le finestre: gli effetti restano sulla scrivania, sotto le finestre delle app.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Behind Windows: the effects stay on the desktop, under your app windows."
+          }
+        }
+      }
+    },
+    "Dove si posa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Where It Settles"
+          }
+        }
+      }
+    },
+    "Effetto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effect"
+          }
+        }
+      }
+    },
+    "Fatto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "Giochi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toys"
+          }
+        }
+      }
+    },
+    "Giochi d'inverno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Winter Toys"
+          }
+        }
+      }
+    },
+    "Gli effetti restano sulla scrivania, sotto le finestre delle app.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The effects stay on the desktop, under your app windows."
+          }
+        }
+      }
+    },
+    "Il volume è nelle Impostazioni.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The volume is in Settings."
+          }
+        }
+      }
+    },
+    "Indietro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        }
+      }
+    },
+    "Inizia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start"
+          }
+        }
+      }
+    },
+    "Mostra l'effetto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show the Effect"
+          }
+        }
+      }
+    },
+    "Natale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Christmas"
+          }
+        }
+      }
+    },
+    "Neve, petali, foglie, lucciole, stelle cadenti, pioggia sul vetro, temporale, nebbia e nuvole. Li scegli dal menu ❄︎ → Effetto, con l'intensità subito sotto.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snow, petals, leaves, fireflies, shooting stars, rain on the glass, thunderstorms, mist and clouds. Pick one from the ❄︎ menu → Effect, with the intensity just below."
+          }
+        }
+      }
+    },
+    "Quantità": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amount"
+          }
+        }
+      }
+    },
+    "Salta il tour": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip the Tour"
+          }
+        }
+      }
+    },
+    "Scegli un altro effetto dal menu ❄︎": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick another effect from the ❄︎ menu"
+          }
+        }
+      }
+    },
+    "Scuoti il cursore: la neve posata si alza come in una palla di vetro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shake the pointer: the settled snow lifts like in a snow globe"
+          }
+        }
+      }
+    },
+    "Sul Mac cade la neve, o l'effetto che scegli. Si posa sulle finestre e sul Dock, e col cursore la sposti. Tutto parte dal menu ❄︎ in alto a destra.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snow falls on your Mac, or whichever effect you choose. It settles on your windows and the Dock, and you push it around with the pointer. Everything starts from the ❄︎ menu at the top right."
+          }
+        }
+      }
+    },
+    "Ti diamo il benvenuto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome"
+          }
+        }
+      }
+    },
+    "Togli quello che si è posato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear What Has Settled"
+          }
+        }
+      }
+    },
+    "Tour di benvenuto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome Tour"
+          }
+        }
+      }
+    },
+    "Tour di benvenuto…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome Tour…"
+          }
+        }
+      }
+    },
+    "Tutte le impostazioni tornano come al primo avvio.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All settings go back to how they were at first launch."
+          }
+        }
+      }
+    },
+    "Undici effetti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eleven Effects"
           }
         }
       }
