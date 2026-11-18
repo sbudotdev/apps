@@ -34,14 +34,42 @@ import CoreGraphics
 }
 
 // Schermo alto 1080, barra dei menu di 30 pt: la zona libera finisce a 1050 (dati veri, MGS-615).
+// La neve non scende mai sotto il bordo: se il mucchio non ci sta sotto la barra, niente neve (SBU-101).
 @Test(arguments: [
     (edgeTop: CGFloat(1000), expected: CGFloat?(1000)),  // c'è posto: la neve sta sul bordo
-    (edgeTop: CGFloat(1050), expected: CGFloat?(1034)),  // attaccata alla barra (ingrandita): poco sotto
-    (edgeTop: CGFloat(1040), expected: CGFloat?(1034)),  // il mucchio arriverebbe nella barra: poco sotto
+    (edgeTop: CGFloat(1034), expected: CGFloat?(1034)),  // il mucchio tocca appena la barra: sta sul bordo
+    (edgeTop: CGFloat(1040), expected: nil),             // il mucchio entrerebbe nella barra: niente neve
+    (edgeTop: CGFloat(1050), expected: nil),             // attaccata alla barra (ingrandita): niente neve
     (edgeTop: CGFloat(1080), expected: nil),             // schermo intero: niente neve
 ])
-func snowSitsJustBelowTheMenuBar(edgeTop: CGFloat, expected: CGFloat?) {
+func snowNeverSitsBelowTheEdge(edgeTop: CGFloat, expected: CGFloat?) {
     #expect(pileBase(edgeTop: edgeTop, pileHeight: 16, ceiling: 1050) == expected)
+}
+
+// MARK: - Solo finestre vere (SBU-101)
+
+private func window(_ id: CGWindowID, _ rect: CGRect, pid: pid_t = 1, standard: Bool? = nil) -> AppWindow {
+    AppWindow(id: id, rect: rect, pid: pid, standard: standard)
+}
+
+@Test func accessibilityKeepsOnlyStandardWindows() {
+    let main = window(1, CGRect(x: 0, y: 0, width: 800, height: 600), standard: true)
+    let palette = window(2, CGRect(x: 200, y: 600, width: 400, height: 50), standard: false)  // anche fuori dalla principale
+    #expect(systemWindows([palette, main]).map(\.id) == [1])
+}
+
+@Test func withoutAccessibilityAWindowInsideABiggerOneOfTheSameAppIsAModal() {
+    let main = window(1, CGRect(x: 0, y: 0, width: 800, height: 600))
+    let search = window(2, CGRect(x: 200, y: 300, width: 400, height: 200))     // davanti, tutta dentro
+    let otherApp = window(3, CGRect(x: 250, y: 100, width: 100, height: 100), pid: 2)  // dentro, ma di un'altra app
+    let beside = window(4, CGRect(x: 700, y: 100, width: 300, height: 100))      // stessa app, esce dai bordi
+    #expect(systemWindows([search, otherApp, beside, main]).map(\.id) == [3, 4, 1])
+}
+
+@Test func theAnswerOfAccessibilityWinsOverTheFallbackRule() {
+    let main = window(1, CGRect(x: 0, y: 0, width: 800, height: 600), standard: true)
+    let small = window(2, CGRect(x: 100, y: 100, width: 200, height: 200), standard: true)  // vera finestra, solo piccola
+    #expect(systemWindows([small, main]).map(\.id) == [2, 1])
 }
 
 // QA di MGS-615 (MGS-628): ingrandita dietro, Finder piccola davanti ({300, 300, 1000, 800} in CoreGraphics).
@@ -52,4 +80,14 @@ func snowSitsJustBelowTheMenuBar(edgeTop: CGFloat, expected: CGFloat?) {
     let edges = visibleTopEdges([finder, maximized], clearance: 16)
     #expect(edges[0].visible == [300...1300])
     #expect(edges[1].visible == [0...300, 1300...1920])
+}
+
+// QA di SBU-101 (SBU-102): una modale scartata non prende neve, ma copre ancora il bordo che ha davanti,
+// se no la neve della finestra sotto le verrebbe disegnata sopra.
+@Test func aDiscardedModalStillCoversTheEdgeBehindIt() {
+    let main = window(1, CGRect(x: 0, y: 0, width: 800, height: 600), standard: true)
+    let palette = window(2, CGRect(x: 200, y: 600, width: 400, height: 50), standard: false)  // appoggiata sul bordo
+    let edges = systemEdges([palette, main], clearance: 16)
+    #expect(edges.map(\.edge.id) == [1])
+    #expect(edges[0].edge.visible == [0...200, 600...800])
 }
