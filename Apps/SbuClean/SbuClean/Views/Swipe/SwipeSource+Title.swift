@@ -1,7 +1,6 @@
 import SwiftUI
 
 extension SwipeSource {
-    /// The navigation title of the queue.
     var title: Text {
         switch self {
         case .recent: Text("Recenti")

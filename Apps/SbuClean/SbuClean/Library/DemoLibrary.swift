@@ -22,7 +22,6 @@ nonisolated final class DemoLibrary: PhotoLibrary {
 
     private let contents: OSAllocatedUnfairLock<Contents>
 
-    /// Creates the demo library.
     /// - Parameters:
     ///   - access: The access it pretends the user gave; requesting it gives full access.
     ///   - now: The day the library ends on.
@@ -178,7 +177,6 @@ nonisolated final class DemoLibrary: PhotoLibrary {
         photo("live-0", seed: 70, ago: day * 4, live: true)
         photo("live-1", seed: 71, ago: day * 12, live: true)
 
-        // Screenshots.
         for index in 0..<5 {
             let item = MediaItem(id: "screenshot-\(index)", creationDate: now.addingTimeInterval(-day * Double(index * 5 + 1)), kind: .photo,
                                  isScreenshot: true, pixelWidth: 1179, pixelHeight: 2556, size: ItemSize(bytes: Int64(900_000 + index * 150_000)))
