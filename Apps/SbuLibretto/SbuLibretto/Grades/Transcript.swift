@@ -28,7 +28,6 @@ nonisolated struct Transcript: Sendable {
         plannedCredits = planned.reduce(0) { $0 + $1.credits }
     }
 
-    /// The graded exams that count in the averages.
     var countedExams: [ExamRecord] {
         gradedExams.filter { !excludedIDs.contains($0.id) }
     }
