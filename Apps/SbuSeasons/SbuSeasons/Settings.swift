@@ -26,6 +26,8 @@ nonisolated struct SnowSettings: Codable, Equatable {
     // Notte: schermo più scuro e la candela, dalle `nightStart` al mattino o sempre
     var night = NightMode.off
     var nightStart = 22         // ora
+    // Dietro le finestre: gli effetti sulla scrivania, sotto le finestre delle app
+    var behindWindows = false
 }
 
 extension SnowSettings {
@@ -94,15 +96,19 @@ struct SettingsView: View {
             header
             Form {
                 Section {
-                    // Le stesse voci, nello stesso ordine, del sottomenu ❄︎ → Stagione.
-                    Picker("Stagione", selection: $settings.seasonID) {
+                    // Le stesse voci, nello stesso ordine, del sottomenu ❄︎ → Effetto.
+                    Picker("Effetto", selection: $settings.seasonID) {
                         ForEach(Seasons.all, id: \.id) { season in
                             Label(season.title, systemImage: season.symbol).tag(season.id)
                         }
                     }
+                    Toggle("Dietro le finestre", isOn: $settings.values.behindWindows)
+                } footer: {
+                    Text("Dietro le finestre: gli effetti restano sulla scrivania, sotto le finestre delle app.")
+                        .foregroundStyle(Quaderno.inkMuted.color)
                 }
-                Section("Nevicata") {
-                    slider("Quantità di fiocchi", $settings.values.flakeCount, Density.range, "%.0f")
+                Section("Caduta") {
+                    slider("Quantità", $settings.values.flakeCount, Density.range, "%.0f")
                     slider("Dimensione", $settings.values.flakeSize, 0.5...2.5, "%.1f×")
                     slider("Velocità di caduta", $settings.values.fallSpeed, 0.3...2.5, "%.1f×")
                     slider("Vento", $settings.values.wind, 0...80, "%.0f")
@@ -111,7 +117,7 @@ struct SettingsView: View {
                     slider("Raggio", $settings.values.cursorRadius, 20...250, "%.0f pt")
                     slider("Forza", $settings.values.cursorRepel, 0...6000, "%.0f")
                 }
-                Section("Neve posata") {
+                Section("Dove si posa") {
                     Toggle("Sulle finestre", isOn: $settings.values.accumulate)
                     Toggle("Sul Dock", isOn: $settings.values.groundSnow)
                     if settings.values.groundSnow && !AXIsProcessTrusted() {
@@ -190,7 +196,7 @@ struct SettingsView: View {
         .confirmationDialog("Ripristinare i valori predefiniti?", isPresented: $confirmsReset) {
             Button("Ripristina", role: .destructive) { settings.reset() }
         } message: {
-            Text("Tutte le impostazioni della neve tornano come al primo avvio.")
+            Text("Tutte le impostazioni tornano come al primo avvio.")
         }
         // A multipli della cella del reticolo (grid-cell). Il contenuto è più alto: si scorre.
         .frame(width: Quaderno.gridCell * 19, height: Quaderno.gridCell * 28)
