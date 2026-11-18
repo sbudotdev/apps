@@ -184,17 +184,39 @@ personaggi e la notte accesa 7,7%, sola neve 7,6% (+1%).
 
 ## Menu ❄︎
 
-Fai nevicare (⌘S) · Sciogli la neve (⌘R) · Togli le palle di neve · Scuoti la palla di vetro ·
-Manda lo spazzaneve · Prima il Dock · Prepara la pista da slittino · Monta/Togli la funivia · Pianta un albero di Natale ·
-Togli alberi, neve e slitte · Metti in pausa i giochi · Personaggi (Volpe, Cincia e mangiatoia, Baita, Lanterna, Renna) ·
-Fai passare Babbo Natale · Manda l'omino di pan di zenzero · Conto alla rovescia per Natale · Stagione ·
-Intensità (Leggera/Media/Forte con le scorciatoie, e sotto un cursore continuo) · Impostazioni… (⌘,) · Esci (⌘Q).
-Il cursore è lo stesso valore di "Quantità di fiocchi" nelle Impostazioni: muovendolo le particelle in più nascono in cima
+In ordine: effetto, intensità, giochi, Natale, notte, sfondi, suoni, impostazioni (SBU-57). I testi valgono per tutte le stagioni.
+
+- **Mostra l'effetto** (⌘S) · **Effetto** (le stagioni) · **Dietro le finestre** · **Togli quello che si è posato** (⌘R)
+- **Intensità**: Leggera/Media/Forte con le scorciatoie, e sotto un cursore continuo
+- **Giochi**: Togli le palle di neve · Scuoti la palla di vetro · Manda lo spazzaneve · Prima il Dock · Prepara la pista da slittino ·
+  Monta/Togli la funivia · Pianta un albero di Natale · Togli alberi, neve e slitte · Metti in pausa i giochi ·
+  Personaggi (Volpe, Cincia e mangiatoia, Baita, Lanterna, Renna)
+- **Natale**: Fai passare Babbo Natale · Manda l'omino di pan di zenzero · Conto alla rovescia per Natale
+- **Notte**: Mai · Di sera · Sempre (l'ora di inizio è nelle Impostazioni)
+- **Sfondi…** · **Suoni** (acceso o spento; il volume è nelle Impostazioni)
+- **Impostazioni…** (⌘,) · **Tour di benvenuto…** · Informazioni · Esci (⌘Q)
+
+Il cursore dell'intensità è lo stesso valore di "Quantità" nelle Impostazioni: muovendolo le particelle in più nascono in cima
 e quelle in meno spariscono, quelle che stanno cadendo non saltano.
 Le scorciatoie funzionano a menu aperto: non sono globali.
-La stagione scelta si salva (la neve è quella di partenza) e l'icona nella barra dei menu la segue.
+L'effetto scelto si salva (la neve è quello di partenza) e l'icona nella barra dei menu lo segue.
+I giochi d'inverno, Babbo Natale e l'omino sono spenti nelle altre stagioni.
 
-**Impostazioni**: quantità, dimensione e velocità dei fiocchi, vento, raggio e forza del cursore,
+**Tour di benvenuto.** Alla prima apertura (anche per chi aggiorna dalla 1.x) si apre il tour, sei pagine: benvenuto,
+effetti, giochi, Natale, notte, sfondi. In fondo a ogni pagina ci sono due cose da provare, che si spuntano da sole
+quando le fai: scegliere un altro effetto, scuotere il cursore (vale anche "Scuoti la palla di vetro", e anche con
+Riduci movimento, dove la palla non si agita). Il tour si riapre dal menu; le spunte restano (`Tour/TourProgress.swift`).
+Le volte dopo, aperta a mano, l'app mostra le Impostazioni come prima.
+
+**Dietro le finestre.** La finestra degli effetti scende appena sopra lo sfondo e le icone della scrivania
+(`OverlayWindow.level(behindWindows:)`): le app restano davanti, la neve si vede sulla scrivania e si posa lo stesso
+sui bordi scoperti delle finestre. Si accende dal menu o dalle Impostazioni; la finestra lo legge a ogni fotogramma.
+
+**CPU** (SBU-57, Release, neve Media, schermo 1920×1080, Mac a corrente carico di altri processi, tempo di CPU su 20 s,
+3 giri alternati con `app/seasons-2`): base 15,1%, con menu e tour 13,3%. Nessuna differenza misurabile: il tour è
+una finestra SwiftUI chiusa quasi sempre, e "Dietro le finestre" è un confronto di un Bool a fotogramma.
+
+**Impostazioni**: effetto e dietro le finestre, quantità, dimensione e velocità delle particelle, vento, raggio e forza del cursore,
 accumulo sulle finestre e sul fondo, velocità di accumulo, altezza massima, suoni e volume (spenti all'inizio), notte (mai, di sera dalle…, sempre),
 apri al login, ripristino.
 Le modifiche si vedono subito (nevica anche sulla finestra Impostazioni, utile per provare) e vengono salvate.
@@ -206,7 +228,8 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | File | Cosa fa |
 |---|---|
 | `App.swift` | Punto di ingresso, app senza icona nel Dock |
-| `AppDelegate.swift` | Una finestra per schermo, menu ❄︎ (con Stagione), legge le finestre 8 volte al secondo |
+| `AppDelegate.swift` | Una finestra per schermo, menu ❄︎ e i suoi sottomenu, apre tour, Impostazioni e Sfondi, legge le finestre 8 volte al secondo |
+| `Tour/` | Il tour di benvenuto: pagine (`TourPage`), cose da provare (`TourChallenge`), stato salvato (`TourProgress`), finestra (`TourView`) |
 | `Engine/Season.swift` | Il protocollo `Season` e `Particle`: ciò che una stagione deve dire al motore |
 | `Engine/OverlayWindow.swift` | Finestra trasparente, sempre sopra, attraversata dai click; il suo display link muove la scena |
 | `Engine/SeasonScene.swift` | Fiocchi, vento, cursore, collisione coi mucchi, neve che cade quando muovi una finestra |
@@ -286,7 +309,7 @@ in 1,5 s (le finestre si leggono solo 8 volte al secondo). Chi continua a scuote
    (copia `Snow.swift` come punto di partenza):
    - `id`: una parola in inglese minuscolo (`"leaves"`); si salva nelle impostazioni, quindi una volta uscita non cambia;
    - `title`: il nome nel menu, con `String(localized:)`, e la traduzione inglese in `Localizable.xcstrings`;
-   - `symbol`: il simbolo SF per la barra dei menu e per il menu Stagione;
+   - `symbol`: il simbolo SF per la barra dei menu e per il menu Effetto;
    - `pileColor`: il colore di ciò che si posa sulle finestre e sul Dock;
    - `makeTexture()`: la forma della particella, disegnata una volta;
    - `particle(depth:)`: raggio, opacità, velocità di caduta e oscillazione di una particella (0 = lontana, 1 = vicina);

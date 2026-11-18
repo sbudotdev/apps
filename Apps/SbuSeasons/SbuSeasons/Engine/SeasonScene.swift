@@ -428,8 +428,11 @@ final class SeasonScene: SKScene {
 
     /// Il cursore o una finestra scossi: tutta la neve posata si alza, i fiocchi salgono, le palle saltano;
     /// poi ricade. Con Riduci movimento no. Dopo una scossa riposa qualche secondo (`Tuning.globeRest`).
+    /// Chiamato a ogni scossa, anche quella che la palla di vetro ignora: il tour spunta "Scuoti il cursore".
+    var onGlobeShaken: (() -> Void)?
+
     func shakeGlobe() {
-        TourProgress.shared.complete(.shakeGlobe)   // una delle due cose da provare del tour, anche con Riduci movimento
+        onGlobeShaken?()   // anche con Riduci movimento: è il gesto che conta
         guard !reduceMotion, elapsed - lastGlobe >= Tuning.globeRest else { return }
         lastGlobe = elapsed
         for pile in everyPile { spawnPowder(pile.releaseAll(), spread: 90, pop: Tuning.globeLift) }

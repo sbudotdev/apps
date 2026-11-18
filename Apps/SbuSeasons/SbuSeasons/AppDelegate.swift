@@ -160,6 +160,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private func rebuildOverlays() {
         overlays.forEach { $0.close() }
         overlays = NSScreen.screens.map { OverlayWindow(screen: $0) }
+        for overlay in overlays { overlay.scene.onGlobeShaken = { TourProgress.shared.complete(.shakeGlobe) } }
         powerSourceDidChange()
         overlays.forEach { $0.setSnowing(isSnowing) }
         refreshWindows()
