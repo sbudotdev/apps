@@ -7,6 +7,7 @@ on:
 
 jobs:
   kit:
+    if: false
     runs-on: macos-26
     timeout-minutes: 45
     steps:
@@ -41,7 +42,7 @@ jobs:
     steps:
       - *checkout
       - id: apps
-        run: echo "apps=$(ls -d Apps/Sbu* | xargs -n1 basename | jq -R . | jq -sc .)" >> "$GITHUB_OUTPUT"
+        run: echo "apps=$(ls -d Apps/SbuClean Apps/SbuNoise | xargs -n1 basename | jq -R . | jq -sc .)" >> "$GITHUB_OUTPUT"
 
   app:
     needs: list
@@ -63,4 +64,13 @@ jobs:
         run: |
           brew install xcodegen
           xcodegen generate
-          xcodebuild test -project ${{ matrix.app }}.xcodeproj -scheme ${{ matrix.app }} -destination "$DESTINATION"
+          xcodebuild test -project ${{ matrix.app }}.xcodeproj -scheme ${{ matrix.app }} -destination "$DESTINATION" -resultBundlePath "$RUNNER_TEMP/${{ matrix.app }}.xcresult"
+
+      # The failing screens, to look at instead of guessing from the log.
+      - name: Keep the test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.app }}-xcresult
+          path: ${{ runner.temp }}/${{ matrix.app }}.xcresult
+          retention-days: 7

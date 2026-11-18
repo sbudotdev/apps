@@ -69,8 +69,12 @@ final class ManageFlowTests: XCTestCase {
     /// screenshots): it is the system's control, not ours.
     @MainActor
     private func audit(_ app: XCUIApplication) throws {
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             if issue.auditType == .textClipped && issue.element?.elementType == .searchField { return true }
+            let shot = XCTAttachment(screenshot: app.screenshot())
+            shot.name = issue.compactDescription
+            shot.lifetime = .keepAlways
+            self.add(shot)
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? "no element")")
             return true
         }
