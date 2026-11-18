@@ -60,13 +60,15 @@ con il download da sbu.dev (ADR-0022, `docs/adr/0022-app-mac.md`).
 ## Il .dmg da distribuire
 
 ```bash
-./make-dmg.sh 2.0    # → build/dist/SbuSeasons-2.0.dmg
+./make-dmg.sh 2.0.1  # → build/dist/SbuSeasons-2.0.1.dmg
 ```
 
 Build Release universale (arm64 + x86_64), firma Developer ID, `.dmg` con il collegamento ad Applicazioni,
 notarizzazione e `stapler staple`; alla fine `spctl` deve dire `Notarized Developer ID`.
 Usa `SBU_TEAM_ID` e la chiave API di App Store Connect di fastlane (`ASC_KEY_PATH`, `ASC_KEY_ID`, `ASC_ISSUER_ID`).
-Le versioni sono nelle [release della repo](https://github.com/sbudotdev/SbuSeasons/releases); l'ultima è la [2.0](https://github.com/sbudotdev/SbuSeasons/releases/tag/v2.0).
+Le versioni sono nelle [release della repo](https://github.com/sbudotdev/SbuSeasons/releases); l'ultima è la [2.0.1](https://github.com/sbudotdev/SbuSeasons/releases/tag/v2.0.1).
+
+**2.0.1.** Uguale alla 2.0, con il credito nuovo: "Nata da un'idea di Simone Antoniciello" (SBU-93).
 
 **1.3.1.** La 1.3 crashava all'avvio su un MacBook (la 1.2 partiva). La 1.3.1 toglie la novità della 1.3
 (un display link per schermo con `SKRenderer`, MGS-636) e torna alla `SKView` della 1.2 (MGS-686).
