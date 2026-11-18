@@ -279,7 +279,7 @@ final class Cabin: Figure {
         node.texture = isLit ? Self.lit : Self.dark
         glow.alpha = isLit ? 0.7 : 0
         smokeClock = Tuning.smokeInterval   // il primo sbuffo subito
-        SoundBoard.shared.play("baita")
+        SoundBoard.shared.play("camino")
     }
 
     override func step(dt: CGFloat) {

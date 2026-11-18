@@ -1071,6 +1071,226 @@
           }
         }
       }
+    },
+    "Sfondi…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wallpapers…"
+          }
+        }
+      }
+    },
+    "Sfondi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wallpapers"
+          }
+        }
+      }
+    },
+    "Dieci sfondi per la scrivania, ognuno con il suo effetto.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ten desktop wallpapers, each with its own effect."
+          }
+        }
+      }
+    },
+    "Prima neve": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First Snow"
+          }
+        }
+      }
+    },
+    "Baita nel bosco": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cabin in the Woods"
+          }
+        }
+      }
+    },
+    "Lago ghiacciato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frozen Lake"
+          }
+        }
+      }
+    },
+    "Funivia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cable Car"
+          }
+        }
+      }
+    },
+    "Vigilia in piazza": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Christmas Eve in the Square"
+          }
+        }
+      }
+    },
+    "Pioggia di marzo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "March Rain"
+          }
+        }
+      }
+    },
+    "Ciliegi in fiore": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cherry Blossom"
+          }
+        }
+      }
+    },
+    "Sera di luglio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "July Evening"
+          }
+        }
+      }
+    },
+    "Temporale sul lago": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storm over the Lake"
+          }
+        }
+      }
+    },
+    "Larici di ottobre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "October Larches"
+          }
+        }
+      }
+    },
+    "Schermo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Display"
+          }
+        }
+      }
+    },
+    "Anche l'effetto consigliato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Also Use the Suggested Effect"
+          }
+        }
+      }
+    },
+    "Con lo sfondo cambia la stagione: %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The season changes with the wallpaper: %@."
+          }
+        }
+      }
+    },
+    "Lascia il mio schermo com'è": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep My Desktop as It Was"
+          }
+        }
+      }
+    },
+    "Torna lo sfondo che avevi prima della galleria.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brings back the wallpaper you had before the gallery."
+          }
+        }
+      }
+    },
+    "Imposta sfondo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set Wallpaper"
+          }
+        }
+      }
+    },
+    "Lo sfondo non è cambiato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Wallpaper Didn't Change"
+          }
+        }
+      }
+    },
+    "OK": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "Effetto consigliato: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggested effect: %@"
+          }
+        }
+      }
     }
   }
 }

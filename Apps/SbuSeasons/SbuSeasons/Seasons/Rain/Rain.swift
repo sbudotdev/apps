@@ -6,6 +6,7 @@ import SpriteKit
 struct Rain: Season {
     static let id = "rain"
     var id: String { Self.id }
+    var ambience: String? { "pioggia" }
     var title: String { String(localized: "Pioggia sul vetro") }
     let symbol = "cloud.drizzle"
     var pileColor: NSColor { RainTuning.water }

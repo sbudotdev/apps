@@ -59,3 +59,51 @@ struct SoundBoardTests {
         board.stopAmbience()
     }
 }
+
+/// Più file per lo stesso effetto (`pallina-1`, `pallina-2`…) e il sottofondo che segue la stagione.
+@MainActor
+struct SoundVariantsTests {
+    private static func bundle(with names: [String]) throws -> Bundle {
+        let dir = FileManager.default.temporaryDirectory.appending(path: "sounds-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        let wav = try Data(contentsOf: #require(Bundle.main.url(forResource: "pallina-1", withExtension: "wav")))
+        for name in names { try wav.write(to: dir.appending(path: "\(name).wav")) }
+        return try #require(Bundle(url: dir))
+    }
+
+    private static var on: SnowSettings { var s = SnowSettings(); s.sounds = true; return s }
+
+    @Test func numberedFilesPlayUnderOneName() throws {
+        let board = SoundBoard(bundle: try Self.bundle(with: ["pallina-1", "pallina-2", "pallina-3"]), settings: { Self.on })
+        #expect(board.play("pallina"))
+        #expect(board.variants("pallina") == 3)
+    }
+
+    @Test func theAmbienceStartsWhenSoundsAreTurnedOn() throws {
+        var settings = SnowSettings()
+        let board = SoundBoard(bundle: try Self.bundle(with: ["vento"]), settings: { settings })
+        board.setAmbience("vento")
+        #expect(!board.isPlayingAmbience)
+        settings.sounds = true
+        board.settingsChanged()
+        #expect(board.isPlayingAmbience)
+        board.setAmbience(nil)
+        #expect(!board.isPlayingAmbience)
+    }
+
+    @Test func seasonsHaveTheirAmbience() {
+        #expect(Snow().ambience == "vento")
+        #expect(Rain().ambience == "pioggia")
+        #expect(Storm().ambience == "pioggia")
+        #expect(Fireflies().ambience == nil)
+    }
+
+    @Test func everySoundTheAppPlaysIsInTheBundle() {
+        let board = SoundBoard(bundle: .main, settings: { Self.on })
+        for name in ["palla-di-vetro", "pupazzo", "spazzaneve", "slittino", "funivia", "pallina", "babbo-natale",
+                     "regalo", "omino", "tuono", "camino", "lanterna", "passo-neve", "palla-di-neve-lancio",
+                     "palla-di-neve-colpo", "vento", "pioggia"] {
+            #expect(board.variants(name) > 0, "manca \(name)")
+        }
+    }
+}
