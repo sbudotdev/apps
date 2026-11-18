@@ -118,16 +118,6 @@ struct ChristmasTests {
         #expect(screens.map { toys($0, Gift.self).count }.reduce(0, +) == 1)
     }
 
-    @Test func santaComesByHimselfOnlyAtChristmasTime() {
-        let december = scene(on: Self.date(2026, 12, 10))
-        let november = scene(on: Self.date(2026, 11, 17))
-        let late = Tuning.santaFirstVisit.upperBound + 1
-        run(december, seconds: late)
-        run(november, seconds: late)
-        #expect(december.santaVisits == 1)
-        #expect(november.santaVisits == 0)
-    }
-
     @Test func santaOnlyFliesInWinterAndOneAtATime() {
         let scene = scene()
         #expect(scene.sendSanta() != nil)

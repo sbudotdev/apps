@@ -9,6 +9,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private var windowTimer: Timer?
     private var powerSource: CFRunLoopSource?
     private var windowShakes = WindowShakes()
+    /// Babbo Natale su tutti gli schermi e la pausa dei giochi: restano anche quando le finestre si ricreano.
+    private let passages = Passages()
 
     // Salvato in UserDefaults, così l'app se lo ricorda al prossimo avvio.
     // (Le altre impostazioni sono in Settings.swift.)
@@ -165,6 +167,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         overlays.forEach { $0.close() }
         overlays = NSScreen.screens.map { OverlayWindow(screen: $0) }
         for overlay in overlays { overlay.scene.onGlobeShaken = { TourProgress.shared.complete(.shakeGlobe) } }
+        passages.scenes = overlays.map(\.scene)
         powerSourceDidChange()
         overlays.forEach { $0.setSnowing(isSnowing) }
         refreshWindows()
@@ -176,6 +179,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         let edges = currentWindowEdges()
         let dock = currentDockFrame()
         overlays.forEach { $0.updateWindows(edges, dock: dock) }
+        passages.tick(at: ProcessInfo.processInfo.systemUptime)
         let shaken = windowShakes.update(edges, at: ProcessInfo.processInfo.systemUptime)
         if !shaken.isEmpty { overlays.forEach { $0.windowsShaken(shaken) } }
     }
@@ -349,7 +353,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private func christmasMenu() -> NSMenu {
         let menu = NSMenu()
         let santa = NSMenuItem(title: String(localized: "Fai passare Babbo Natale"), action: #selector(sendSanta), keyEquivalent: "")
-        santa.toolTip = String(localized: "Dal 1° dicembre al 6 gennaio passa da solo ogni tanto, quando nevica, e la vigilia più spesso. Lascia un regalo al giorno su una finestra o sul Dock: fai clic per aprirlo.")
+        santa.toolTip = String(localized: "Chiamato una volta, ripassa da solo ogni pochi minuti; dal 1° dicembre al 6 gennaio passa anche senza chiamarlo, la vigilia più spesso. Attraversa tutti gli schermi. Lascia un regalo al giorno su una finestra o sul Dock: fai clic per aprirlo.")
         let man = NSMenuItem(title: String(localized: "Manda l'omino di pan di zenzero"), action: #selector(sendGingerbreadMan), keyEquivalent: "")
         man.toolTip = String(localized: "Corre lungo il Dock: prova a prenderlo col cursore.")
         let countdown = NSMenuItem(title: String(localized: "Conto alla rovescia per Natale"), action: #selector(toggleCountdown), keyEquivalent: "")
@@ -384,9 +388,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private func updateMenuState() {
         toggleItem.state = isSnowing ? .on : .off
         let winter = Settings.shared.season is Snow
-        for mi in winterItems { mi.isEnabled = winter }
+        // In pausa non parte niente: resta accesa solo la voce che la toglie.
+        for mi in winterItems { mi.isEnabled = winter && (!passages.paused || mi === pauseItem) }
         dockFirstItem?.state = ploughDockFirst ? .on : .off
-        pauseItem?.state = overlays.first?.toysPaused == true ? .on : .off
+        pauseItem?.state = passages.paused ? .on : .off
         for (mi, kind) in figureItems { mi.state = overlays.contains { $0.scene.hasFigure(kind) } ? .on : .off }
         countdownItem?.state = showsCountdown ? .on : .off
         let values = Settings.shared.values
@@ -493,10 +498,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         updateMenuState()
     }
 
+    /// Uno alla volta, attraverso tutti gli schermi; da qui in poi ripassa da solo (`Passages`).
     @objc private func sendSanta() {
-        // Uno alla volta, anche con più schermi.
-        guard !overlays.contains(where: { $0.scene.santa != nil }) else { return }
-        currentOverlay?.scene.sendSanta()
+        passages.send(at: ProcessInfo.processInfo.systemUptime)
     }
 
     @objc private func sendGingerbreadMan() {
@@ -519,8 +523,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     }
 
     @objc private func togglePause() {
-        let paused = !(overlays.first?.toysPaused ?? false)
-        overlays.forEach { $0.scene.toysPaused = paused }
+        passages.paused.toggle()
         updateMenuState()
     }
 
@@ -533,6 +536,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         TourProgress.shared.complete(.changeEffect)
         let season = Settings.shared.season
         overlays.forEach { $0.setSeason(season) }
+        passages.seasonChanged()
         updateAmbience()
         updateMenuState()
     }

@@ -1,26 +1,27 @@
 import AppKit
 import SpriteKit
 
-/// Natale sulla scena: Babbo Natale passa da solo dal 1° dicembre al 6 gennaio (più spesso la vigilia) o dal menu,
+/// Natale sulla scena: Babbo Natale attraversa lo schermo quando lo manda `Passages` (da solo o dal menu),
 /// lascia un regalo al giorno; l'omino di pan di zenzero corre sul Dock. Solo d'inverno: cambiando stagione spariscono.
 extension SeasonScene {
 
     // MARK: - Babbo Natale
 
-    /// "Fai passare Babbo Natale", o una visita programmata (`manual` false). Dal menu porta il regalo se oggi
-    /// non l'ha ancora lasciato; da solo una volta su due, la vigilia sempre. nil = non è inverno o sta già volando.
+    /// Babbo Natale attraversa questo schermo, verso `heading` (1 = destra) alla quota `altitude` (nil = la solita).
+    /// `carriesGift` nil: lo decide qui, come una visita chiesta dal menu (`manual`) o programmata. Il resto (quando, su quali
+    /// schermi, il suono) lo decide `Passages`. nil = non è inverno, i giochi sono in pausa o sta già volando.
     @discardableResult
-    func sendSanta(manual: Bool = true) -> Santa? {
-        guard season is Snow, santa == nil else { return nil }
-        let now = christmas.now()
-        let canGive = christmas.diary.canGive(on: now)
-        let carries = manual ? canGive
-            : SantaVisits.carriesGift(eve: christmas.isEve, canGive: canGive, roll: .random(in: 0..<1))
-        let santa = Santa(heading: Bool.random() ? 1 : -1, carriesGift: carries)
-        santa.altitude = (ceiling ?? size.height) * Tuning.santaAltitude
+    func sendSanta(manual: Bool = true, heading: CGFloat = Bool.random() ? 1 : -1, altitude: CGFloat? = nil,
+                   carriesGift: Bool? = nil) -> Santa? {
+        guard season is Snow, santa == nil, !toysPaused else { return nil }
+        let carries = carriesGift ?? {
+            let canGive = christmas.diary.canGive(on: christmas.now())
+            return manual ? canGive : SantaVisits.carriesGift(eve: christmas.isEve, canGive: canGive, roll: .random(in: 0..<1))
+        }()
+        let santa = Santa(heading: heading, carriesGift: carries)
+        santa.altitude = altitude ?? (ceiling ?? size.height) * Tuning.santaAltitude
         santa.dropX = carries ? giftTarget() : nil
         santaVisits += 1
-        SoundBoard.shared.play("babbo-natale")
         // Con Riduci movimento la slitta non attraversa lo schermo: il regalo cade dritto dove sarebbe arrivato.
         if reduceMotion {
             if let x = santa.dropX { dropGift(at: CGPoint(x: x, y: santa.altitude)) }
@@ -106,7 +107,7 @@ extension SeasonScene {
 
     // MARK: - Passo
 
-    /// A ogni passo (se i giochi non sono in pausa): Babbo Natale vola, le visite programmate, i regali aperti
+    /// A ogni passo (se i giochi non sono in pausa): Babbo Natale vola, i regali aperti
     /// che spariscono, l'omino che corre e scappa dal cursore (`mouse`, coordinate della scena).
     func stepChristmas(dt: CGFloat, mouse: CGPoint) {
         guard season is Snow else { return }
@@ -122,13 +123,8 @@ extension SeasonScene {
             if p.x < -santa.node.size.width || p.x > size.width + santa.node.size.width {
                 santa.node.removeFromParent()
                 self.santa = nil
+                onSantaLeft?(santa.altitude)
             }
-        } else if let next = nextSantaVisit, elapsed >= next {
-            // La data si guarda solo all'ora della visita: niente calendario a ogni fotogramma.
-            if christmas.isChristmasTime { sendSanta(manual: false) }
-            nextSantaVisit = elapsed + SantaVisits.nextDelay(eve: christmas.isEve)
-        } else if nextSantaVisit == nil {
-            nextSantaVisit = elapsed + .random(in: Tuning.santaFirstVisit)
         }
 
         for gift in toys.compactMap({ $0 as? Gift }) where gift.openFor >= Tuning.giftLinger { remove(gift) }
