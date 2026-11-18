@@ -40,7 +40,7 @@ struct LocalizationTests {
         ("Togli la funivia", "Remove the Cable Car"),
         ("Metti in pausa i giochi", "Pause the Toys"),
         ("Informazioni su %@", "About %@"),
-        ("Nata da CozySnow di Simone Antoniciello", "Born from CozySnow by Simone Antoniciello"),
+        ("Nata da un'idea di Simone Antoniciello", "Based on an idea by Simone Antoniciello"),
     ])
     func theEnglishTranslationIsInTheBundle(_ italian: String, _ english: String) throws {
         let bundle = try #require(Self.english, "manca en.lproj nel bundle")

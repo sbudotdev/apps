@@ -253,18 +253,3 @@ struct SettingsView: View {
         openAtLogin = service.status == .enabled
     }
 }
-
-/// Con il bundle id cambiano anche i UserDefaults dell'app (README, "Dal vecchio nome").
-/// Al primo avvio con il nome nuovo, neve accesa o spenta e impostazioni si copiano dal nome vecchio.
-nonisolated enum PreviousDefaults {
-    /// Dal più recente: il bundle id provvisorio (MGS-416), poi quello della versione di Simone.
-    static let domains = ["dev.sbu.cozysnow", "local.cozysnow"]
-    static let keys = ["settings", "isSnowing"]
-
-    static func migrate(into defaults: UserDefaults = .standard, from domains: [String] = domains) {
-        for key in keys where defaults.object(forKey: key) == nil {
-            let value = domains.lazy.compactMap { UserDefaults(suiteName: $0)?.object(forKey: key) }.first
-            if let value { defaults.set(value, forKey: key) }
-        }
-    }
-}
