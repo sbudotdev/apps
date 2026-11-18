@@ -2,12 +2,12 @@ import AppKit
 import Testing
 @testable import SbuSeasons
 
-/// Sbu Seasons nasce da l'app di Simone Antoniciello: il suo nome e il link si vedono (MGS-614).
+/// Sbu Seasons nasce da un'idea di Simone Antoniciello: il suo nome e il link si vedono (MGS-614).
 struct CreditsTests {
     @Test func theAboutPanelCreditsNameSimoneAndLinkToHisGitHub() {
         let credits = Credits.aboutPanel
         #expect(credits.string.contains("Simone Antoniciello"))
-        #expect(credits.string.contains("idea"))
+        #expect(credits.string.contains("idea"))   // "un'idea" e "an idea": i test girano in tutte e due le lingue
         let at = (credits.string as NSString).range(of: "github.com/antonsimo")
         #expect(at.location != NSNotFound)
         let link = credits.attribute(.link, at: at.location, effectiveRange: nil)
