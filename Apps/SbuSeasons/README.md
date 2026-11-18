@@ -120,7 +120,9 @@ Il test `TwoScreensTests` lo prova con uno schermo virtuale a una frequenza dive
 - **Albero di Natale** («Pianta un albero di Natale»). Sul fondo, in un punto a caso; un clic su un ramo appende una
   pallina proprio lì (colori a turno, al massimo 40), e si trascina come gli altri oggetti. Al massimo 5 alberi.
 - «Togli alberi, neve e slitte»: alberi, montagnette, slittini e spazzaneve (palle e funivia hanno il loro comando).
-  «Metti in pausa i giochi»: gli oggetti stanno fermi dove sono e non si prendono col mouse; la neve continua.
+  «Metti in pausa i giochi»: gli oggetti stanno fermi dove sono e non si prendono col mouse; la neve continua. La slitta in
+  volo sparisce e non ripassa, le altre voci dei giochi si spengono finché non togli la pausa; la pausa resta anche quando
+  le finestre si ricreano (monitor collegato, risveglio). Cambiando stagione si toglie.
 - I giochi si fanno sullo schermo del cursore; lo spazzaneve con «Prima il Dock» su quello del Dock. Solo d'inverno:
   nelle altre stagioni le voci sono spente e cambiando stagione i giochi spariscono.
 - Suoni: vedi «Sfondi e suoni».
@@ -152,7 +154,12 @@ della sola neve (9,6% contro 9,0%).
 
 - **Babbo Natale** con la slitta e due renne attraversa il cielo, poco sotto la barra dei menu. Dal 1° dicembre
   al 6 gennaio (le stesse date del Natale delle app iPhone) passa da solo quando nevica: la prima volta tra 20 s e 1 minuto
-  dall'avvio, poi ogni 6–12 minuti. Si chiama anche dal menu («Fai passare Babbo Natale»), in qualunque giorno d'inverno.
+  dall'avvio, poi ogni 6–12 minuti. Si chiama anche dal menu («Fai passare Babbo Natale»), in qualunque giorno d'inverno:
+  da lì ripassa da solo ogni 1½–4 minuti (`Tuning.santaLoopInterval`) finché cambi stagione o metti in pausa i giochi.
+- **Più schermi** (`Passages`, `Engine/ScreenRoute.swift`): un solo passaggio alla volta, che attraversa tutti gli schermi
+  nell'ordine di Impostazioni → Schermi: da sinistra a destra (o al contrario); gli schermi che si sovrappongono in
+  orizzontale (uno sopra l'altro, anche non centrati) sono una colonna, attraversata dall'alto in basso. Esce da uno schermo ed entra nel vicino alla stessa quota globale; se il vicino non la copre (schermi sfalsati),
+  vola alla quota solita di quello schermo. Con uno schermo solo è come prima.
 - **Un regalo al giorno.** Babbo Natale lo lascia cadere su un bordo di finestra o sul Dock (senza, sul fondo): da solo
   un passaggio su due, dal menu sempre, finché oggi non l'ha lasciato. Il giorno si salva (`lastGiftDay` in UserDefaults),
   quindi uno al giorno anche riavviando l'app e con più schermi. Un clic lo apre: stelline, e salta fuori un omino di pan
@@ -167,12 +174,13 @@ della sola neve (9,6% contro 9,0%).
 - Con **Riduci movimento** la slitta non attraversa lo schermo (il regalo cade dritto dove sarebbe arrivato), l'omino
   cammina piano, non salta e non dondola, le stelline non si allargano.
 - Babbo Natale e l'omino sono solo d'inverno, come i giochi; cambiando stagione slitta, regali e omini spariscono.
-  «Metti in pausa i giochi» ferma anche loro.
+  «Metti in pausa i giochi» ferma l'omino e toglie la slitta in volo.
 - Suoni (se ci sono i file, SBU-56): `babbo-natale`, `regalo`, `omino`, `omino-preso`.
 
 Il codice è in `Toys/Christmas/`: `Christmas.swift` (date, conto alla rovescia, `GiftDiary`, quando passa e se porta il regalo),
 `ChristmasCast.swift` (Babbo Natale, regalo, omino e la sua corsa), `ChristmasVisits.swift` (l'estensione di `SeasonScene`
-con il passo di Natale e i comandi), `CountdownPanel.swift`. I numeri in `Tuning.swift`, sezione «Natale».
+con il passo di Natale e i comandi), `Passages.swift` (quando passa e su quali schermi, uno per tutti gli schermi),
+`CountdownPanel.swift`. I numeri in `Tuning.swift`, sezione «Natale».
 CPU misurata sul Mac (Release, 60 fps, 30 s per giro, sullo stesso Mac carico di altri processi): con Babbo Natale chiamato
 ogni 7,5 s, due omini che corrono e il conto alla rovescia acceso 17,3%, sola neve 17,4%: nessuna differenza misurabile.
 

@@ -80,16 +80,29 @@ final class SeasonScene: SKScene {
     let night = Night()
     private var nightClock: CGFloat = .infinity
 
-    /// Natale (`Toys/Christmas/`): che giorno è e il diario dei regali, la slitta in volo, la prossima visita.
+    /// Natale (`Toys/Christmas/`): che giorno è e il diario dei regali, la slitta in volo.
+    /// Quando passa e su quali schermi lo decide `Passages`, uno per tutti gli schermi.
     var christmas = ChristmasClock()
     var santa: Santa?
-    var nextSantaVisit: CGFloat?
     /// I passaggi di Babbo Natale su questo schermo (dal menu o da solo).
     var santaVisits = 0
+    /// La slitta è uscita di lato, alla quota (della scena) data: `Passages` la fa entrare nello schermo dopo.
+    var onSantaLeft: ((CGFloat) -> Void)?
 
-    /// "Metti in pausa i giochi": gli oggetti stanno fermi dove sono e non si prendono col mouse.
+    /// Lo schermo, in coordinate globali (come `NSScreen.frame`).
+    var screenFrame: CGRect { CGRect(origin: screenOrigin, size: size) }
+    /// Dove può volare la slitta, in coordinate globali: lo schermo sotto la barra dei menu.
+    var flightBand: CGRect { CGRect(x: screenOrigin.x, y: screenOrigin.y, width: size.width, height: ceiling ?? size.height) }
+
+    /// "Metti in pausa i giochi": gli oggetti stanno fermi dove sono e non si prendono col mouse;
+    /// la slitta in volo sparisce (non resta ferma in cielo) e non ne parte un'altra finché non si toglie.
     var toysPaused = false {
-        didSet { if toysPaused { dropHeld() } }
+        didSet {
+            guard toysPaused else { return }
+            dropHeld()
+            santa?.node.removeFromParent()
+            santa = nil
+        }
     }
 
     /// "Riduci movimento" di macOS: metà dei fiocchi, niente vento, oscillazione, rotazione, lanci o rimbalzi.

@@ -111,6 +111,9 @@ nonisolated enum Tuning {
     static let santaFirstVisit: ClosedRange<CGFloat> = 20...60
     static let santaInterval: ClosedRange<CGFloat> = 360...720
     static let santaEveInterval: ClosedRange<CGFloat> = 120...240
+    /// Mandato una volta dal menu, ripassa da solo ogni 1½–4 minuti, in qualunque giorno, finché cambi stagione
+    /// o metti in pausa i giochi (SBU-114).
+    static let santaLoopInterval: ClosedRange<CGFloat> = 90...240
     /// Un passaggio su due porta il regalo (finché oggi non l'ha lasciato).
     static let santaGiftChance = 0.5
     /// La velocità della slitta (pt/s): uno schermo da 1440 pt in circa 7 s.

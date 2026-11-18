@@ -46,11 +46,6 @@ nonisolated enum SantaVisits {
     static func carriesGift(eve: Bool, canGive: Bool, roll: Double) -> Bool {
         canGive && (eve || roll < Tuning.santaGiftChance)
     }
-
-    /// Secondi fino al prossimo passaggio: la vigilia passa più spesso.
-    static func nextDelay(eve: Bool) -> CGFloat {
-        .random(in: eve ? Tuning.santaEveInterval : Tuning.santaInterval)
-    }
 }
 
 /// Che giorno è e il diario dei regali: la scena li legge da qui, i test li sostituiscono.

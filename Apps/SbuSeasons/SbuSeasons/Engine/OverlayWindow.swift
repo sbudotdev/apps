@@ -106,7 +106,6 @@ final class OverlayWindow: NSPanel {
     func add(_ toy: Toy) { scene.add(toy) }
     var hasDock: Bool { scene.dockLedge != nil }
     var hasCableCar: Bool { scene.hasCableCar }
-    var toysPaused: Bool { scene.toysPaused }
     func windowsShaken(_ ids: Set<CGWindowID>) { scene.windowsShaken(ids) }
 
     /// Batteria e "Riduci movimento": in entrambi i casi meno fotogrammi; con Riduci movimento anche meno movimento.
