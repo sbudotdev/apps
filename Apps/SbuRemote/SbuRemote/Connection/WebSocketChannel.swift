@@ -27,7 +27,6 @@ final class WebSocketChannel {
         }
     }
 
-    /// The next message, as text.
     func receive() async throws -> String {
         let message: URLSessionWebSocketTask.Message
         do {
