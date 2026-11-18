@@ -8,7 +8,7 @@ nonisolated enum TourChallenge: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .changeEffect: String(localized: "Scegli un altro effetto dal menu ❄︎")
+        case .changeEffect: String(localized: "Scegli un altro effetto dal menu di Sbu Seasons")
         case .shakeGlobe: String(localized: "Scuoti il cursore: la neve posata si alza come in una palla di vetro")
         }
     }

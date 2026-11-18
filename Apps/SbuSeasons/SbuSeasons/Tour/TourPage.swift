@@ -20,15 +20,15 @@ nonisolated enum TourPage: Int, CaseIterable, Identifiable {
     var text: String {
         switch self {
         case .welcome:
-            String(localized: "Sul Mac cade la neve, o l'effetto che scegli. Si posa sulle finestre e sul Dock, e col cursore la sposti. Tutto parte dal menu ❄︎ in alto a destra.")
+            String(localized: "Sul Mac cade la neve, o l'effetto che scegli. Si posa sulle finestre e sul Dock, e col cursore la sposti. Tutto parte dal menu di Sbu Seasons in alto a destra.")
         case .effects:
-            String(localized: "Neve, petali, foglie, lucciole, stelle cadenti, pioggia sul vetro, temporale, nebbia e nuvole. Li scegli dal menu ❄︎ → Effetto, con l'intensità subito sotto.")
+            String(localized: "Neve, petali, foglie, lucciole, stelle cadenti, pioggia sul vetro, temporale, nebbia e nuvole. Li scegli dal menu di Sbu Seasons → Effetto, con l'intensità subito sotto.")
         case .toys:
-            String(localized: "Con la neve, dal menu ❄︎ → Giochi: lo spazzaneve, la pista da slittino, la funivia, un albero da decorare e i personaggi. Tieni premuto ⌥ sulla neve posata per fare una palla di neve.")
+            String(localized: "Con la neve, dal menu di Sbu Seasons → Giochi: lo spazzaneve, la pista da slittino, la funivia, un albero da decorare e i personaggi. Tieni premuto ⌥ sulla neve posata per fare una palla di neve.")
         case .christmas:
             String(localized: "Dal 1° dicembre al 6 gennaio Babbo Natale passa ogni tanto e lascia un regalo. Nel menu Natale ci sono anche l'omino di pan di zenzero e il conto alla rovescia.")
         case .night:
-            String(localized: "Di sera lo schermo si scurisce un po' e in basso a destra si accende una candela. Scegli quando dal menu ❄︎ → Notte.")
+            String(localized: "Di sera lo schermo si scurisce un po' e in basso a destra si accende una candela. Scegli quando dal menu di Sbu Seasons → Notte.")
         case .wallpapers:
             String(localized: "Dieci sfondi disegnati per Sbu Seasons, ognuno con il suo effetto. Se vuoi gli effetti solo sulla scrivania, accendi Dietro le finestre.")
         }
