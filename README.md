@@ -2,7 +2,7 @@
 
 Free iOS apps and games from [sbu.dev](https://sbu.dev). Each app remakes a single paid utility from the top of the App Store, each game one of the most played free games without its ads: no subscription, no in-app purchases, no account, no ads, no tracking, data only on the device. sbu.dev's third branch, [Software](https://sbu.dev/software), remakes enterprise software as open source; its first project, Sbu Commerce, lives in its own repo.
 
-**On the App Store:** [Sbu Subscriptions](https://apps.apple.com/app/id6780154928), a free alternative to Orbit, [Sbu Scanner](https://apps.apple.com/app/id6772572337), QR codes and barcodes without ads, and [Sbu Find](https://apps.apple.com/app/id6823934135), a free alternative to Find Air. **For the Mac:** [Sbu Seasons](https://sbu.dev/en/seasons), snow and the seasons falling over your windows. One new app a week; the rest are below.
+**On the App Store:** [Sbu Subscriptions](https://apps.apple.com/app/id6780154928), a free alternative to Orbit; [Sbu Scanner](https://apps.apple.com/app/id6772572337), QR codes and barcodes without ads; and [Sbu Find](https://apps.apple.com/app/id6823934135), a free alternative to Find Air. **For the Mac:** [Sbu Seasons](https://sbu.dev/en/seasons): snow falls over your Mac's windows and settles on their edges and on the Dock. One new app a week; the rest are below.
 
 <p>
   <a href="https://sbu.dev/en/apps/subscriptions"><img src="https://sbu.dev/og/subscriptions.png" width="49%" alt="Sbu Subscriptions: what your subscriptions cost, and no renewal surprises you"></a>
