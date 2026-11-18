@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// The fields of the kind being made.
 struct CreateFields: View {
     @Binding var draft: CodeDraft
 

@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// The screen for a route.
 struct RouteView: View {
     let route: Route
     let model: CleanModel

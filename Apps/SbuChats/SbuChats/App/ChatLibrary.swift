@@ -6,7 +6,6 @@ import Observation
 final class ChatLibrary {
     let store: ChatStore
     private(set) var chats: [ChatSummary] = []
-    /// The import sheet, if one is up.
     var sheet: ImportSheet?
     /// How much of the file the import has read, from 0 to 1.
     private(set) var progress = 0.0
@@ -29,7 +28,6 @@ final class ChatLibrary {
         chats.first { $0.id == id }
     }
 
-    /// Reads the chats from the store.
     func reload() async {
         chats = (try? await store.chats()) ?? []
     }

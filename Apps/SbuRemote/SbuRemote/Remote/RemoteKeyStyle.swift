@@ -21,7 +21,6 @@ struct RemoteKeyStyle: ButtonStyle {
 }
 
 extension ButtonStyle where Self == RemoteKeyStyle {
-    /// The remote's own key style.
     static var remoteKey: RemoteKeyStyle { RemoteKeyStyle() }
 }
 

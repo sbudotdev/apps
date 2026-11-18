@@ -35,7 +35,6 @@ nonisolated final class SQLiteDatabase {
         }
     }
 
-    /// Compiles one statement.
     func prepare(_ sql: String) throws(SQLiteError) -> SQLiteStatement {
         var statement: OpaquePointer?
         let status = sqlite3_prepare_v3(handle, sql, -1, UInt32(SQLITE_PREPARE_PERSISTENT), &statement, nil)
@@ -59,10 +58,8 @@ nonisolated final class SQLiteDatabase {
         }
     }
 
-    /// The rowid of the last row inserted.
     var lastInsertedRowID: Int64 { sqlite3_last_insert_rowid(handle) }
 
-    /// Rows changed by the last statement.
     var changes: Int { Int(sqlite3_changes(handle)) }
 
     var lastErrorMessage: String {

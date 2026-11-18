@@ -61,7 +61,6 @@ nonisolated final class SQLiteStatement {
         }
     }
 
-    /// Every result row, mapped.
     func map<Row>(_ transform: (SQLiteStatement) throws -> Row) throws -> [Row] {
         var rows: [Row] = []
         try forEachRow { rows.append(try transform($0)) }

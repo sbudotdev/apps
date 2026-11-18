@@ -63,7 +63,6 @@ struct ListsView: View {
     }
 }
 
-/// A list's name, editable in place.
 private struct ListNameField: View {
     @Bindable var list: SubscriptionList
     /// People it's shared with, `nil` when it isn't shared.

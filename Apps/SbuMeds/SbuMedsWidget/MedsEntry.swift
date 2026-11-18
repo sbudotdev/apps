@@ -1,7 +1,6 @@
 import Foundation
 import WidgetKit
 
-/// The widget at one moment.
 struct MedsEntry: TimelineEntry {
     let date: Date
     let content: WidgetContent

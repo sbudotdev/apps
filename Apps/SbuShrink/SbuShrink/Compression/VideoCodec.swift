@@ -1,6 +1,5 @@
 import AVFoundation
 
-/// The codec the compressed copy is written with.
 nonisolated enum VideoCodec: String, CaseIterable, Codable, Identifiable, Sendable {
     /// Plays everywhere: the default, like the original app's output.
     case h264

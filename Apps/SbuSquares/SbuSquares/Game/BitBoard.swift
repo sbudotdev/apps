@@ -15,7 +15,6 @@ nonisolated struct BitBoard: Hashable, Sendable {
         }
     }
 
-    /// Whether `mask` lies on empty cells.
     func fits(_ mask: UInt64) -> Bool {
         bits & mask == 0
     }

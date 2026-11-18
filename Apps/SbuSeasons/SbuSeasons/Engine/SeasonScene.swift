@@ -214,7 +214,6 @@ final class SeasonScene: SKScene {
     /// Quanti banchi rispetto a "Media": seguono l'intensità, e con Riduci movimento sono la metà.
     private var skyAmount: CGFloat { intensity * (reduceMotion ? Tuning.reducedMotionFlakes : 1) }
 
-    /// Crea un fiocco nel punto indicato.
     private func makeFlake(at position: CGPoint) -> Flake {
         let depth = CGFloat.random(in: 0...1)
         let particle = season.particle(depth: depth)
@@ -293,9 +292,7 @@ final class SeasonScene: SKScene {
     var grainCount: Int { grains.count }
     /// Il granello più in alto (0 se non ce ne sono).
     var highestGrain: CGFloat { grains.map(\.node.position.y).max() ?? 0 }
-    /// La neve posata su una finestra.
     func pile(for id: CGWindowID) -> Pile? { piles[id]?.pile }
-    /// La neve posata sul Dock.
     var dockPile: Pile? { dock?.pile }
     /// Il bordo del Dock su cui stanno gli oggetti.
     var dockLedge: Ledge? { dock.map { Ledge(y: $0.rect.maxY, span: $0.rect.minX...$0.rect.maxX) } }

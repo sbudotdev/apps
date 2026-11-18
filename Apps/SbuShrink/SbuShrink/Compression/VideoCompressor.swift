@@ -1,6 +1,5 @@
 import Foundation
 
-/// Writes the compressed copy of one video.
 nonisolated protocol VideoCompressor: Sendable {
     /// Compresses `input` to `output` following `plan`.
     /// - Parameter progress: Called with 0 to 1 as the copy is written, from any thread.

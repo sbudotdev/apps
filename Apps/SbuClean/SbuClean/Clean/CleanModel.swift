@@ -63,7 +63,6 @@ final class CleanModel {
     /// How often the scan's progress reaches the screen.
     private static let progressInterval: Duration = .milliseconds(250)
 
-    /// Creates the model.
     /// - Parameters:
     ///   - library: PhotoKit, or a fake in tests and previews.
     ///   - directory: Where state and caches live; Application Support when `nil`.
@@ -169,7 +168,6 @@ final class CleanModel {
         publish(WidgetSnapshot(freeableBytes: bytes, date: now()))
     }
 
-    /// Reads the user's albums.
     func loadAlbums() async {
         albums = await library.albums()
     }

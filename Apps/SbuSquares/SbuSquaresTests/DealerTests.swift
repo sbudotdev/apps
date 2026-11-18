@@ -4,7 +4,6 @@ import Testing
 struct DealerTests {
     private let pool = Array(Piece.catalog.indices)
 
-    /// A board with `cells` filled.
     private func board(_ cells: [Cell]) -> BitBoard {
         var board = Board()
         for cell in cells {

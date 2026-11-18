@@ -2,7 +2,6 @@ import SbuKit
 import SwiftUI
 import WidgetKit
 
-/// One day of the calendar widget.
 struct CalendarDotMark: View {
     @Environment(\.widgetRenderingMode) private var renderingMode
     let state: CalendarDotState

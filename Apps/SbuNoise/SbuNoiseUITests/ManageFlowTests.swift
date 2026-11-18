@@ -24,7 +24,7 @@ final class ManageFlowTests: XCTestCase {
         hidden.tap()
         XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Rumore rosa' AND NOT label CONTAINS 'Nascosto'")).firstMatch.waitForExistence(timeout: 2), "A tap puts a hidden sound back")
 
-        search.buttons.firstMatch.tap() // Clear text
+        search.buttons.firstMatch.tap()
         search.typeText("vento")
         let vento = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Vento'")).firstMatch
         // No audit while typing: the keyboard's own suggestion bar has no labels.

@@ -242,7 +242,7 @@ struct SettingsView: View {
 
     private func setOpenAtLogin(_ on: Bool) {
         let service = SMAppService.mainApp
-        guard on != (service.status == .enabled) else { return }   // già nello stato giusto
+        guard on != (service.status == .enabled) else { return }
         do {
             if on { try service.register() } else { try service.unregister() }
         } catch {
