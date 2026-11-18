@@ -42,8 +42,9 @@ nonisolated struct Game: Codable, Hashable, Sendable {
     private var recent: [[Int]] = []
     private var generator: SeededGenerator
 
-    init(seed: UInt64, recordToBeat: Int, avoiding: [Int] = [], assists: Int = 0) {
+    init(seed: UInt64, recordToBeat: Int, avoiding: [Int] = [], assists: Int = 0, board: Board = Board()) {
         self.seed = seed
+        self.board = board
         self.recordToBeat = recordToBeat
         self.avoiding = avoiding
         self.assists = min(assists, Self.maxAssists)

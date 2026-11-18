@@ -17,15 +17,18 @@ final class GameStore {
     var isShowingClosure = false
 
     private let defaults: UserDefaults
+    /// Today, for the Christmas game: the real date, a forced one in tests and DEBUG screenshots.
+    private let now: () -> Date
     /// When the last piece went down, to count play time; not saved, so time away does not count.
     private var lastMove: Date?
 
-    init(defaults: UserDefaults = .standard) {
+    init(defaults: UserDefaults = .standard, now: @escaping () -> Date = { .now }) {
         self.defaults = defaults
+        self.now = now
         let record = defaults.integer(forKey: Key.record)
         self.record = record
         game = defaults.data(forKey: Key.game).flatMap { try? JSONDecoder().decode(Game.self, from: $0) }
-            ?? Self.newGame(recordToBeat: record, defaults: defaults)
+            ?? Self.newGame(recordToBeat: record, defaults: defaults, now: now())
         previous = defaults.data(forKey: Key.previous).flatMap { try? JSONDecoder().decode(Game.self, from: $0) }
     }
 
@@ -65,11 +68,12 @@ final class GameStore {
         finish(game)
     }
 
-    /// Starts a new game, ending first one still waiting for the second chance.
+    /// Starts a new game, ending first one still waiting for the second chance. From 24 to 26
+    /// December it is the Christmas game.
     func startNewGame() {
         endGame()
         lastMove = nil
-        store(Self.newGame(recordToBeat: record, defaults: defaults), previous: nil)
+        store(Self.newGame(recordToBeat: record, defaults: defaults, now: now()), previous: nil)
     }
 
     /// Forgets the Record.
@@ -79,8 +83,11 @@ final class GameStore {
     }
 
     private func finish(_ game: Game) {
-        defaults.set(game.leftInHand, forKey: Key.leftInHand)
-        defaults.set(min(game.assists + 1, Game.maxAssists), forKey: Key.assists)
+        // The Christmas game deals the same for everyone, so it neither uses nor changes what the next game carries.
+        if !ChristmasGame.isChristmasSeed(game.seed) {
+            defaults.set(game.leftInHand, forKey: Key.leftInHand)
+            defaults.set(min(game.assists + 1, Game.maxAssists), forKey: Key.assists)
+        }
         guard game.score > record else { return }
         isShowingClosure = record > 0
         record = game.score
@@ -94,8 +101,10 @@ final class GameStore {
         defaults.set(previous.flatMap { try? JSONEncoder().encode($0) }, forKey: Key.previous)
     }
 
-    /// A game that leaves out the shapes the last one ended with, and carries the assists.
-    private static func newGame(recordToBeat: Int, defaults: UserDefaults) -> Game {
+    /// The Christmas game on its days, else a game that leaves out the shapes the last one ended
+    /// with, and carries the assists.
+    private static func newGame(recordToBeat: Int, defaults: UserDefaults, now: Date) -> Game {
+        if let christmas = ChristmasGame.game(on: now, recordToBeat: recordToBeat) { return christmas }
         let avoiding = defaults.array(forKey: Key.leftInHand) as? [Int] ?? []
         return Game(seed: .random(in: .min ... .max), recordToBeat: recordToBeat, avoiding: avoiding, assists: defaults.integer(forKey: Key.assists))
     }
