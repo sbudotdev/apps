@@ -43,6 +43,11 @@ final class CleanFlowTests: XCTestCase {
             if issue.auditType == .textClipped, let label = issue.element?.label, label == label.uppercased() {
                 return true
             }
+            // A guess about larger text, not text clipped now: the Dynamic Type check left out
+            // above. It fires on narrow phones (iPhone 16e, the system title too); see SBU-85.
+            if issue.auditType == .textClipped, issue.detailedDescription.contains("larger Dynamic Type") {
+                return true
+            }
             issues.append("\(issue.compactDescription): \(issue.element?.label ?? "no element") \(issue.element?.frame ?? .zero)")
             return true
         }
