@@ -103,7 +103,7 @@ sono legati al bundle id: con il nome nuovo vanno dati di nuovo.
   «Metti in pausa i giochi»: gli oggetti stanno fermi dove sono e non si prendono col mouse; la neve continua.
 - I giochi si fanno sullo schermo del cursore; lo spazzaneve con «Prima il Dock» su quello del Dock. Solo d'inverno:
   nelle altre stagioni le voci sono spente e cambiando stagione i giochi spariscono.
-- Suoni (se ci sono i file, SBU-56): `palla-di-neve`, `pupazzo`, `palla-di-vetro`, `spazzaneve`, `slittino`, `funivia`, `pallina`.
+- Suoni: vedi «Sfondi e suoni».
 
 ## Pioggia, temporale, nebbia, nuvole (2.0)
 
@@ -113,7 +113,7 @@ sono legati al bundle id: con il nome nuovo vanno dati di nuovo.
   cade giù libera; in fondo allo schermo sparisce. Quando il vetro è pieno, la pioggia cade sulle gocce che ci sono.
 - **Temporale.** Pioggia forte e obliqua (copre tutto lo schermo, anche il lato da cui viene), nuvole scure in cima,
   gocce sul vetro, e ogni 6–18 s un lampo lontano: due bagliori che illuminano le nuvole e il cielo dietro, poi,
-  1,5–4 s dopo, il tuono (suono `tuono`, se c'è il file, SBU-56).
+  1,5–4 s dopo, il tuono (suono `tuono`).
 - **Nebbia.** Tre strati bassi e sfumati, uno sopra l'altro, che scorrono verso destra a velocità diverse.
 - **Nuvole.** Banchi bianchi che attraversano piano la parte alta dello schermo; usciti a destra rientrano da sinistra.
 - L'intensità (menu e "Quantità") cambia quante gocce cadono sul vetro e quanti banchi ci sono.
@@ -319,3 +319,30 @@ si cambia `Season` e `SeasonScene` in un lavoro a parte, prima, perché tocca tu
 
 - Sfondo natalizio automatico (`NSWorkspace.shared.setDesktopImageURL`)
 - Icona dell'app
+
+## Sfondi e suoni (2.0)
+
+- **Sfondi** (menu ❄︎ → «Sfondi…»). Dieci scene (`Wallpapers/`, fatte per noi in SBU-67), ognuna in 16:10 e in 21:9:
+  gli schermi con rapporto da 2 in su (ultrawide) prendono la versione larga. Si sceglie lo schermo (con più monitor),
+  la scena e «Imposta sfondo». Con «Anche l'effetto consigliato» acceso cambia anche la stagione (baita → stelle cadenti,
+  pioggia di marzo → pioggia sul vetro…). Il file si copia in `~/Library/Application Support/Sbu Seasons/Wallpapers`:
+  macOS ricorda il percorso, e così lo sfondo resta anche se l'app si sposta o si aggiorna.
+- **«Lascia il mio schermo com'è»** rimette lo sfondo che c'era prima di usare la galleria, schermo per schermo
+  (`WallpaperMemory`, per nome dello schermo; si ricorda solo il primo, non i nostri).
+- **Suoni** (spenti di default, Impostazioni → Suoni). File in `Sounds/`; più file numerati (`pallina-1`, `-2`, `-3`)
+  sono lo stesso effetto e ne suona uno a caso.
+
+  | Momento | Suono |
+  |---|---|
+  | Nasce una palla di neve | `passo-neve` (scricchiolio) |
+  | Lanci una palla | `palla-di-neve-lancio` |
+  | Una palla arriva forte su un bordo | `palla-di-neve-colpo` |
+  | Pupazzo, palla di vetro, spazzaneve, slittino, funivia | `pupazzo`, `palla-di-vetro`, `spazzaneve`, `slittino`, `funivia` |
+  | Pallina sull'albero | `pallina` (tre note) |
+  | Babbo Natale, regalo, omino | `babbo-natale`, `regalo`, `omino` |
+  | Tuono dopo il lampo | `tuono` |
+  | Baita accesa, lanterna | `camino`, `lanterna` |
+  | Sottofondo: neve / pioggia e temporale | `vento` / `pioggia` (in loop, solo mentre cade qualcosa) |
+
+  Senza file restano muti l'omino preso, la volpe, la cincia e la renna.
+- Il codice: `Gallery/` (galleria) ed `Engine/SoundBoard.swift`; il sottofondo di una stagione è `Season.ambience`.
