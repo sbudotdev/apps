@@ -22,7 +22,7 @@ func currentWindowEdges() -> [WindowEdge] {
         as? [[String: Any]] ?? []
 
     // La lista arriva già ordinata dalla finestra più in primo piano alla più in fondo.
-    let windows: [(id: CGWindowID, rect: CGRect, pid: pid_t)] = list.compactMap { w in
+    let all: [AppWindow] = list.compactMap { w in
         // Solo finestre "normali" (livello 0): esclude Dock, barra dei menu e le nostre finestre di neve.
         // La finestra Impostazioni invece è normale, quindi ci nevica sopra: comodo per provare i valori.
         guard (w[kCGWindowLayer as String] as? NSNumber)?.intValue == 0,
@@ -34,45 +34,72 @@ func currentWindowEdges() -> [WindowEdge] {
               r.width >= 40, r.height >= 40
         else { return nil }
         // CoreGraphics: origine in ALTO a sinistra. Cocoa: in BASSO a sinistra.
-        return (id, CGRect(x: r.minX, y: primaryHeight - r.maxY, width: r.width, height: r.height), pid)
+        let rect = CGRect(x: r.minX, y: primaryHeight - r.maxY, width: r.width, height: r.height)
+        let info = accessibilityInfo(of: id, pid: pid, rect: rect, primaryHeight: primaryHeight)
+        return AppWindow(id: id, rect: rect, pid: pid, standard: info?.standard, toolbar: info?.toolbar ?? false)
     }
-    let alive = Set(windows.map(\.id))
-    radiusCache = radiusCache.filter { alive.contains($0.key) }   // dimentica le finestre chiuse
-    return zip(visibleTopEdges(windows.map { ($0.id, $0.rect) }, clearance: CGFloat(Settings.shared.values.maxPile)), windows).map { edge, window in
+    let alive = Set(all.map(\.id))
+    axCache = axCache.filter { alive.contains($0.key) }   // dimentica le finestre chiuse
+    let windows = systemWindows(all)
+    let settings = Settings.shared.values
+    return zip(visibleTopEdges(windows.map { ($0.id, $0.rect) }, clearance: CGFloat(settings.maxPile)), windows).map { edge, window in
         var edge = edge
-        edge.cornerRadius = cornerRadius(of: window.id, pid: window.pid, rect: window.rect, primaryHeight: primaryHeight)
+        // Su macOS 26 le app native con barra degli strumenti (Finder, Safari…) hanno angoli più stondati
+        // delle altre (IntelliJ, Chrome…). I due valori si regolano nelle Impostazioni.
+        edge.cornerRadius = CGFloat(window.toolbar ? settings.toolbarCornerRadius : settings.windowCornerRadius)
         return edge
     }
 }
 
-// MARK: - Angoli stondati
+// MARK: - Solo finestre vere
 
-/// Raggio degli angoli: su macOS 26 le app native con barra degli strumenti (Finder, Safari…)
-/// hanno angoli più stondati delle altre (IntelliJ, Chrome…). I due valori si regolano nelle Impostazioni.
-private func cornerRadius(of id: CGWindowID, pid: pid_t, rect: CGRect, primaryHeight: CGFloat) -> CGFloat {
-    let settings = Settings.shared.values
-    let toolbar = toolbarInfo(of: id, pid: pid, rect: rect, primaryHeight: primaryHeight)
-    return CGFloat(toolbar ? settings.toolbarCornerRadius : settings.windowCornerRadius)
+/// Una finestra di livello 0 di un'app. `standard`: la risposta dell'Accessibilità
+/// (subrole `AXStandardWindow`), nil se non c'è il permesso o l'app non la dà.
+nonisolated struct AppWindow {
+    let id: CGWindowID
+    let rect: CGRect
+    let pid: pid_t
+    let standard: Bool?
+    var toolbar = false
 }
+
+/// Parte pura (testabile): tiene solo le finestre vere di macOS, non i pannelli e le modali
+/// che le app disegnano come finestre a sé (la ricerca di IntelliJ, palette, popover…), SBU-101.
+/// - Con l'Accessibilità decide la subrole: resta solo `AXStandardWindow` (via dialoghi, pannelli, sheet).
+/// - Senza risposta: è una modale se sta tutta dentro un'altra finestra più grande della stessa app.
+/// Nessuna eccezione per singole app: non sappiamo come sono fatte dentro.
+nonisolated func systemWindows(_ windows: [AppWindow]) -> [AppWindow] {
+    windows.filter { window in
+        if let standard = window.standard { return standard }
+        return !windows.contains { other in
+            other.id != window.id && other.pid == window.pid && other.rect.contains(window.rect)
+                && other.rect.width * other.rect.height > window.rect.width * window.rect.height
+        }
+    }
+}
+
+/// Quello che l'Accessibilità dice di una finestra.
+private struct AccessibilityInfo { let standard: Bool; let toolbar: Bool }
 
 /// Risposte già trovate, per ID di finestra (chiedere all'Accessibilità a ogni giro costerebbe troppo).
 /// `tries` conta i tentativi falliti: una finestra appena aperta può non essere ancora visibile all'API.
-private var radiusCache: [CGWindowID: (toolbar: Bool?, tries: Int)] = [:]
+private var axCache: [CGWindowID: (info: AccessibilityInfo?, tries: Int)] = [:]
 
-private func toolbarInfo(of id: CGWindowID, pid: pid_t, rect: CGRect, primaryHeight: CGFloat) -> Bool {
-    if let known = radiusCache[id]?.toolbar { return known }
+/// nil = non lo sappiamo (niente permesso, o l'app non risponde): vale la regola senza permesso.
+private func accessibilityInfo(of id: CGWindowID, pid: pid_t, rect: CGRect, primaryHeight: CGFloat) -> AccessibilityInfo? {
+    if let cached = axCache[id], cached.info != nil || cached.tries >= 5 { return cached.info }
     // Senza permesso non è un tentativo: quando arriva, le finestre già aperte vanno ancora chieste.
-    guard AXIsProcessTrusted() else { return false }
-    let tries = (radiusCache[id]?.tries ?? 0) + 1
-    let found = hasToolbar(pid: pid, rect: rect, primaryHeight: primaryHeight)
+    guard AXIsProcessTrusted() else { return nil }
+    let tries = (axCache[id]?.tries ?? 0) + 1
+    let found = askAccessibility(pid: pid, rect: rect, primaryHeight: primaryHeight)
     // Trovata la risposta, o dopo 5 tentativi a vuoto: la teniamo per sempre (per questa finestra).
-    radiusCache[id] = (found ?? (tries >= 5 ? false : nil), tries)
-    return found ?? false
+    axCache[id] = (found, tries)
+    return found
 }
 
-/// Chiede all'app `pid` se la sua finestra in `rect` ha una barra degli strumenti.
+/// Chiede all'app `pid` com'è fatta la sua finestra in `rect`: subrole e barra degli strumenti.
 /// nil = finestra non trovata (o l'app non risponde).
-private func hasToolbar(pid: pid_t, rect: CGRect, primaryHeight: CGFloat) -> Bool? {
+private func askAccessibility(pid: pid_t, rect: CGRect, primaryHeight: CGFloat) -> AccessibilityInfo? {
     let app = AXUIElementCreateApplication(pid)
     AXUIElementSetMessagingTimeout(app, 0.05)   // un'app bloccata non deve congelare la neve
     guard let windows = attribute(app, kAXWindowsAttribute) as? [AXUIElement] else { return nil }
@@ -83,7 +110,9 @@ private func hasToolbar(pid: pid_t, rect: CGRect, primaryHeight: CGFloat) -> Boo
               abs(frame.minX - target.minX) < 2, abs(frame.minY - target.minY) < 2,
               abs(frame.width - target.width) < 2, abs(frame.height - target.height) < 2 else { continue }
         let children = attribute(window, kAXChildrenAttribute) as? [AXUIElement] ?? []
-        return children.contains { attribute($0, kAXRoleAttribute) as? String == kAXToolbarRole }
+        return AccessibilityInfo(
+            standard: attribute(window, kAXSubroleAttribute) as? String == kAXStandardWindowSubrole,
+            toolbar: children.contains { attribute($0, kAXRoleAttribute) as? String == kAXToolbarRole })
     }
     return nil
 }
@@ -106,12 +135,11 @@ nonisolated func visibleTopEdges(_ windows: [(id: CGWindowID, rect: CGRect)], cl
 }
 
 /// Dove poggia la neve di un bordo alto `edgeTop`, sotto `ceiling` (il limite della zona libera
-/// dello schermo, sotto la barra dei menu). Se il mucchio entrerebbe nella barra, la neve si posa
-/// poco sotto, sopra la barra del titolo, così non copre le voci di menu: molte finestre (e tutte
-/// quelle ingrandite) si aprono attaccate alla barra, e prima lì non si posava niente (MGS-615).
-/// nil se il bordo è sopra la zona libera: app a schermo intero, niente neve.
+/// dello schermo, sotto la barra dei menu). La neve sta sempre sul bordo, mai sotto (SBU-101).
+/// nil se il mucchio entrerebbe nella barra dei menu (finestre ingrandite o attaccate alla barra,
+/// app a schermo intero): quel bordo non prende neve e i fiocchi cadono più giù.
 nonisolated func pileBase(edgeTop: CGFloat, pileHeight: CGFloat, ceiling: CGFloat) -> CGFloat? {
-    edgeTop > ceiling + 1 ? nil : min(edgeTop, ceiling - pileHeight)   // +1: arrotondamenti dello schermo
+    edgeTop + pileHeight > ceiling + 1 ? nil : edgeTop   // +1: arrotondamenti dello schermo
 }
 
 /// `range` meno `cut`: zero, uno o due pezzi.

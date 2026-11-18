@@ -148,7 +148,7 @@ struct SnowPlayTests {
 
     @Test func aSnowmanDoesNotStandWhereItWouldCoverTheMenuBar() {
         let scene = scene()
-        // Finestra ingrandita: la neve si posa a 780 - 16 = 764, il pupazzo (46 pt) arriverebbe a 810.
+        // Finestra ingrandita: non prende neve (SBU-101), il pupazzo non ci si ferma.
         let maximized = WindowEdge(id: 2, rect: CGRect(x: 0, y: 0, width: 1000, height: 780), visible: [0...1000])
         scene.updateWindows([maximized], dock: nil, ceiling: 780)
         let snowman = Snowman(at: CGPoint(x: 500, y: 790))

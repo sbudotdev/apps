@@ -12,9 +12,14 @@ e sopra il Dock, e col cursore la sposti e la sparpagli.
 più stondati delle app con barra strumenti. Se il Dock si nasconde o sta di lato, sul fondo non si posa niente.
 L'app non è nella sandbox: senza, macOS non darebbe né le finestre delle altre app né l'Accessibilità.
 
-Sulle finestre attaccate alla barra dei menu (quelle ingrandite e le tante che si aprono in alto) la neve
-si posa poco sotto, sulla barra del titolo, con la cima che tocca la barra dei menu: così non copre le voci di menu.
-Sulle app a schermo intero non si posa niente.
+La neve si posa sempre sul bordo superiore di una finestra, mai più in basso. Se tra il bordo e la barra dei menu
+non c'è posto per il mucchio (finestre ingrandite, quelle attaccate alla barra, app a schermo intero), quella finestra
+non prende neve e i fiocchi cadono più giù, fino a un'altra finestra, al Dock o al fondo (SBU-101).
+
+La neve si posa solo sulle finestre vere di macOS, non su pannelli e modali che le app disegnano come finestre a sé
+(la ricerca di IntelliJ, palette di comandi, popover). Con il permesso Accessibilità restano solo le finestre con
+subrole `AXStandardWindow` (via dialoghi, pannelli, sheet). Senza permesso, o se l'app non risponde, una finestra
+che sta tutta dentro una finestra più grande della stessa app conta come modale. Nessuna eccezione per singole app.
 A batteria va a 30 fotogrammi al secondo invece di 60, per consumare meno.
 Con **Riduci movimento** di macOS (Accessibilità → Schermo) va anche lei a 30 fotogrammi, cade metà dei fiocchi,
 senza vento, oscillazione né rotazione, e gli oggetti non si lanciano e non rimbalzano: cadono dritti.
@@ -305,7 +310,7 @@ arriva alla finestra sotto; il trascinamento e il lancio funzionano.
 2. Sovrascrivi quello che serve: `clicked()` (clic), `clicked(at:)` (clic con il punto rispetto ai piedi, per l'albero), `shaken(_:)` (`.pointer` o `.window(id)` scossi), `bounce`.
 3. Aggiungilo con `SeasonScene.add(_:)` (dall'app: `OverlayWindow.add(_:)`). Il motore lo fa cadere e lo posa sui
    tratti scoperti dei bordi delle finestre, sul Dock o sul fondo dello schermo; se la finestra si sposta o si chiude, cade.
-   Dove coprirebbe la barra dei menu (un oggetto più alto della neve, su una finestra attaccata alla barra) non si ferma e cade più giù.
+   Dove coprirebbe la barra dei menu (un oggetto più alto della neve, su una finestra vicina alla barra) non si ferma e cade più giù.
 4. I suoni: `SoundBoard.shared.play("nome")` per un effetto, `startAmbience("nome")` per il sottofondo.
    Il file `nome.caf` (o `.m4a`, `.wav`, `.aiff`, `.mp3`) va in `SbuSeasons/`; se manca, non suona e non succede niente.
 
