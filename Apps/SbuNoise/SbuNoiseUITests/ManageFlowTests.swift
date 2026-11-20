@@ -65,14 +65,14 @@ final class ManageFlowTests: XCTestCase {
         return app
     }
 
-    /// The same exclusions as the player flow: contrast comes from the tokens. The system search
-    /// field's placeholder is reported as clipped although it is drawn in full (checked on the
-    /// screenshots): it is the system's control, not ours.
     /// The clock's date as the app shows it in Italian, lowercased.
     private static var today: String {
         Date.now.formatted(Date.FormatStyle(locale: Locale(identifier: "it_IT")).weekday(.wide).day().month(.wide)).localizedLowercase
     }
 
+    /// The same exclusions as the player flow: contrast comes from the tokens. The system search
+    /// field's placeholder is reported as clipped although it is drawn in full (checked on the
+    /// screenshots): it is the system's control, not ours.
     @MainActor
     private func audit(_ app: XCUIApplication) throws {
         try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
