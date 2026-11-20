@@ -4,17 +4,22 @@ import Testing
 @testable import SbuSeasons
 
 /// La stagione si sceglie dal menu ❄︎ e dalle Impostazioni (MGS-472): un solo valore, `Settings.seasonID`.
-/// I test usano i UserDefaults dell'app: rimettono la stagione di prima.
+/// I test usano i UserDefaults di prova di Settings (non quelli veri): rimettono la stagione di prima.
 @MainActor
 @Suite(.serialized)
 struct SeasonChoiceTests {
+    /// SBU-160: sotto test Settings non legge le preferenze vere del Mac (che cambiano da un Mac all'altro).
+    @Test func testsUseTheirOwnDefaults() {
+        #expect(Settings.defaults !== UserDefaults.standard)
+    }
+
     @Test func choosingInSettingsSavesTheSeason() {
         let settings = Settings.shared
         let before = settings.seasonID
         defer { settings.seasonID = before }
 
         Bindable(settings).seasonID.wrappedValue = Autumn.id   // la stessa Binding del Picker
-        #expect(UserDefaults.standard.string(forKey: "season") == Autumn.id)
+        #expect(Settings.defaults.string(forKey: "season") == Autumn.id)
         #expect(settings.season.id == Autumn.id)
     }
 

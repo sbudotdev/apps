@@ -55,13 +55,21 @@ final class Settings {
     static let shared = Settings()
     private static let key = "settings"
 
+    /// Dove si salvano. Sotto test una suite a parte, vuota a ogni avvio: i test non leggono né toccano le preferenze vere.
+    static let defaults: UserDefaults = {
+        guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil else { return .standard }
+        let suite = "dev.sbu.SbuSeasons.tests"
+        UserDefaults().removePersistentDomain(forName: suite)
+        return UserDefaults(suiteName: suite)!
+    }()
+
     var values: SnowSettings {
-        didSet { UserDefaults.standard.set(try? JSONEncoder().encode(values), forKey: Self.key) }
+        didSet { Self.defaults.set(try? JSONEncoder().encode(values), forKey: Self.key) }
     }
 
     /// La stagione scelta dal menu ❄︎ o dalle Impostazioni, salvata a parte: "Ripristina…" non la cambia.
     var seasonID: String {
-        didSet { UserDefaults.standard.set(seasonID, forKey: "season") }
+        didSet { Self.defaults.set(seasonID, forKey: "season") }
     }
     var season: any Season { Seasons.named(seasonID) }
 
@@ -77,8 +85,8 @@ final class Settings {
     }
 
     private init() {
-        values = SnowSettings(saved: UserDefaults.standard.data(forKey: Self.key))
-        seasonID = UserDefaults.standard.string(forKey: "season") ?? Seasons.all[0].id
+        values = SnowSettings(saved: Self.defaults.data(forKey: Self.key))
+        seasonID = Self.defaults.string(forKey: "season") ?? Seasons.all[0].id
     }
 
     func reset() { values = SnowSettings() }
