@@ -82,11 +82,17 @@ final class SeasonScene: SKScene {
     let sky = Sky()
     /// Le gocce sul vetro della stagione.
     let glass = Glass()
+    /// Finestre e Dock in coordinate della scena: con "Dietro le finestre" coprono il vetro.
+    private var covers: [CGRect] = []
     /// La notte: schermo più scuro e la candela (Impostazioni → Notte). Si ricontrolla una volta al secondo.
     let night = Night()
     /// Le scintille delle stelle cadenti che si rompono sui bordi e l'arcobaleno dopo la pioggia (SBU-177).
     let sparks = Sparks()
     let rainbow = Rainbow()
+    /// La frase della stagione quando non ha niente da far cadere (`Season.invitation`).
+    let invitation = Invitation()
+    /// La `Season.revision` con cui sono state fatte le particelle: se cambia, si rifanno.
+    private var builtRevision = 0
     /// Da quanto il cursore sta fermo, e se le lucciole si stavano radunando (per disperderle quando riparte).
     private var stillness = Stillness()
     private var gathering = false
@@ -170,6 +176,7 @@ final class SeasonScene: SKScene {
         addChild(night)
         addChild(sparks)
         addChild(rainbow)
+        addChild(invitation)
         glass.set(season.glass)
     }
 
@@ -186,6 +193,7 @@ final class SeasonScene: SKScene {
         if !flakes.isEmpty && oldSize != size {
             rebuildFlakes()
         }
+        invitation.show(season.invitation, in: size)
     }
 
     // MARK: - Stagione
@@ -227,6 +235,8 @@ final class SeasonScene: SKScene {
         }
         let settings = Settings.shared.values
         builtWith = (settings.flakeCount, settings.flakeSize)
+        builtRevision = season.revision
+        invitation.show(season.invitation, in: size)
         sky.set(season, size: size, amount: skyAmount)
         guard size.width > 0, size.height > 0 else {
             flakes.forEach { $0.node.removeFromParent() }
@@ -260,8 +270,13 @@ final class SeasonScene: SKScene {
         let particle = season.particle(depth: depth)
         let radius = particle.radius * Settings.shared.values.flakeSize
 
-        let node = SKSpriteNode(texture: flakeTexture)
+        let node = SKSpriteNode(texture: particle.texture ?? flakeTexture)
         node.size = CGSize(width: radius * 2, height: radius * 2)
+        if let own = particle.texture?.size(), own.width > 0, own.height > 0 {
+            // Un'immagine importata tiene le sue proporzioni: il lato lungo è il diametro.
+            let scale = radius * 2 / max(own.width, own.height)
+            node.size = CGSize(width: own.width * scale, height: own.height * scale)
+        }
         node.alpha = particle.alpha
         node.zPosition = depth
         node.position = position
@@ -644,10 +659,17 @@ final class SeasonScene: SKScene {
 
     // MARK: - Finestre
 
+    /// Il cursore asciuga il vetro in quel punto? Con "Dietro le finestre" no sopra una finestra o il Dock:
+    /// lì il vetro bagnato non si vede.
+    static func wipesGlass(at point: CGPoint, behindWindows: Bool, covers: [CGRect]) -> Bool {
+        !behindWindows || !covers.contains { $0.contains(point) }
+    }
+
     /// Riceve finestre e Dock attuali (coordinate globali) e aggiorna i mucchi di neve.
     /// `ceiling`: dove finisce la zona libera dello schermo, sotto la barra dei menu (coordinate della scena).
     func updateWindows(_ edges: [WindowEdge], dock dockFrame: CGRect?, ceiling: CGFloat) {
         self.ceiling = ceiling
+        covers = (edges.map(\.rect) + [dockFrame].compactMap { $0 }).map { $0.offsetBy(dx: -screenOrigin.x, dy: -screenOrigin.y) }
         updateDock(dockFrame)
         let maxPile = CGFloat(Settings.shared.values.pileHeight)
         var seen = Set<CGWindowID>()
@@ -743,6 +765,7 @@ final class SeasonScene: SKScene {
         if let built = builtWith, built != (settings.flakeCount, settings.flakeSize) {
             rebuildFlakes(keeping: built.size == settings.flakeSize)
         }
+        if season.revision != builtRevision { rebuildFlakes() }
         let cursorRadius = CGFloat(settings.cursorRadius)
         let cursorRepel = CGFloat(settings.cursorRepel)
         let fallSpeed = CGFloat(settings.fallSpeed)
@@ -897,7 +920,11 @@ final class SeasonScene: SKScene {
 
         // --- Nebbia, nuvole, lampi e gocce sul vetro ---
         sky.step(dt: dt, width: size.width, calm: reduceMotion)
-        glass.step(dt: dt, size: size, ledges: ledges, amount: intensity * energyShare, calm: reduceMotion)
+        // Il cursore che passa asciuga il vetro (SBU-228); "Dietro le finestre" solo dove si vede la scrivania.
+        let wipe = glass.model != nil && onScreen && mouseVelocity != .zero
+            && Self.wipesGlass(at: mouse, behindWindows: settings.behindWindows, covers: covers)
+        glass.step(dt: dt, size: size, ledges: ledges, amount: intensity * energyShare, calm: reduceMotion,
+                   wipe: wipe ? (mouse, cursorRadius) : nil)
         for point in glass.splashes { sparks.splash(at: point, color: season.pileColor, calm: reduceMotion) }
         if !bolts.isEmpty {
             bolts.removeAll { bolt in

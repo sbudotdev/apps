@@ -365,6 +365,48 @@ nonisolated enum Tuning {
     /// Fiamme e lampadine si ridisegnano tante volte al secondo: bastano, e costano poco.
     static let deskFlickerFPS: Double = 8
 
+    // MARK: Luci in alto (SBU-229)
+
+    /// Il filo sotto la barra dei menu: un gancio ogni `topLightsSpan` pt circa, e in mezzo pende di `topLightsSag` pt.
+    static let topLightsSpan: CGFloat = 180
+    static let topLightsSag: CGFloat = 12
+    /// Una lampadina ogni `topLightsBulbGap` pt almeno, grande `topLightsBulbRadius`; la finestra è alta `topLightsHeight`.
+    static let topLightsBulbGap: CGFloat = 32
+    static let topLightsBulbRadius: CGFloat = 5
+    static let topLightsHeight: CGFloat = 44
+    /// Spenta a metà animazione una lampadina resta a questa luce, non nera.
+    static let topLightsDim: CGFloat = 0.3
+    /// A turno: una ogni `topLightsChaseGroup` accesa, il turno passa alla vicina ogni `topLightsChaseStep` s.
+    static let topLightsChaseGroup = 3
+    static let topLightsChaseStep = 0.5
+    /// Lampeggio lento: un respiro ogni `topLightsBlinkPeriod` s. Onda: un giro ogni `topLightsWavePeriod` s, lunga
+    /// `topLightsWaveLength` lampadine.
+    static let topLightsBlinkPeriod = 3.0
+    static let topLightsWavePeriod = 2.5
+    static let topLightsWaveLength = 10.0
+    /// Si ridisegnano tante volte al secondo, solo se l'animazione si muove.
+    static let topLightsFPS: Double = 15
+
+    // MARK: Le tue immagini (SBU-230)
+
+    /// Al massimo tante immagini importate, ognuna al massimo di tanti byte: oltre, l'importazione si rifiuta.
+    static let imagesMax = 10
+    static let imageMaxBytes = 20 * 1024 * 1024
+    /// La texture che cade ha il lato lungo di tanti pt (il doppio in pixel, per il Retina): una foto grande non pesa.
+    static let imageSide: CGFloat = 128
+    /// Quante immagini rispetto ai fiocchi di neve: sono più grandi, la metà basta.
+    static let imagesAbundance = 0.5
+    /// Raggio di un'immagine che cade, in pt: lontana `imageRadius`, vicina `imageRadius + imageRadiusDepth`.
+    static let imageRadius: CGFloat = 8
+    static let imageRadiusDepth: CGFloat = 10
+    static let imageOpacity: ClosedRange<CGFloat> = 0.75...1
+    /// Come la pioggia: dritte e veloci, in pt/s.
+    static let imageRainSpeed: ClosedRange<CGFloat> = 500...800
+    /// L'invito a importarle: a questa frazione dell'altezza dello schermo, angoli come `radiusCard`, inchiostro velato.
+    static let invitationHeight: CGFloat = 0.62
+    static let invitationRadius: CGFloat = 6
+    static let invitationOpacity: CGFloat = 0.85
+
     // MARK: Mandare un oggetto (SBU-200)
 
     /// Un file `.sbuseasons` più grande non si legge: un albero pieno di decorazioni ne occupa meno di 10 KB.

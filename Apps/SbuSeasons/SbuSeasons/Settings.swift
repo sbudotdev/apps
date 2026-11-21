@@ -42,6 +42,16 @@ nonisolated struct SnowSettings: Codable, Equatable {
     var followSeason = false        // l'effetto segue il calendario (`SeasonCalendar`)
     // Due pupazzi vicini ogni tanto si tirano una palla di neve (SBU-187)
     var snowballFights = true
+    // Luci in alto (SBU-229): il filo sotto la barra dei menu, con ogni effetto e anche a effetto spento
+    var topLights = false
+    var topLightsPalette = TopLights.Palette.multicolor
+    var topLightsColor = TopLights.SingleColor.red   // con «Un colore solo»
+    var topLightsShape = TopLights.Shape.round
+    var topLightsAnimation = TopLights.Animation.chase
+    // Le tue immagini (SBU-230): come cadono e quali non cadono (nome del file). Le immagini stanno in `ImageLibrary`:
+    // «Ripristina» non le tocca.
+    var imagesMotion = ImageMotion.snow
+    var imagesOff: [String] = []
 }
 
 extension SnowSettings {
@@ -52,8 +62,14 @@ extension SnowSettings {
     func showsEffect(onScreen key: String) -> Bool { !screensOff.contains(key) }
 
     /// Con un solo schermo la sezione Schermi è nascosta: l'effetto si vede, la scelta resta salvata.
-    func showsEffect(onScreen key: String, screenCount: Int) -> Bool {
-        screenCount < 2 || showsEffect(onScreen: key)
+    /// Se tutti gli schermi collegati sono spenti (l'unico acceso si è scollegato) l'effetto si vede su tutti (SBU-227).
+    func showsEffect(onScreen key: String, connected: [String]) -> Bool {
+        connected.count < 2 || showsEffect(onScreen: key) || !connected.contains { showsEffect(onScreen: $0) }
+    }
+
+    /// L'ultimo schermo acceso non si spegne: per togliere l'effetto da tutti c'è «Mostra l'effetto» (SBU-227).
+    func canTurnOffEffect(onScreen key: String, connected: [String]) -> Bool {
+        connected.contains { $0 != key && showsEffect(onScreen: $0) }
     }
 
     mutating func setEffect(_ on: Bool, onScreen key: String) {
@@ -182,16 +198,10 @@ struct SettingsView: View {
                         .foregroundStyle(Quaderno.inkMuted.color)
                 }
                 if NSScreen.screens.count > 1 {
-                    Section("Schermi") {
-                        ForEach(NSScreen.screens, id: \.wallpaperKey) { screen in
-                            Toggle(screen.localizedName, isOn: Binding {
-                                settings.values.showsEffect(onScreen: screen.wallpaperKey)
-                            } set: { on in
-                                settings.values.setEffect(on, onScreen: screen.wallpaperKey)
-                            })
-                        }
-                    }
+                    ScreensSection()
                 }
+                TopLightsSection()
+                ImagesSection()
                 Section("Caduta") {
                     slider("Quantità", $settings.values.flakeCount, Density.range, "%.0f")
                     slider("Dimensione", $settings.values.flakeSize, 0.5...2.5, "%.1f×")

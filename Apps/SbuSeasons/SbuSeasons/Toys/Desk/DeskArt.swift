@@ -29,7 +29,8 @@ enum DeskArt {
         context.restoreGState()
     }
 
-    private static let bulbColors: [NSColor] = [.systemRed, .systemYellow, .systemTeal, .systemOrange, .systemPink, .systemGreen]
+    /// Anche i colori «Multicolore» delle Luci in alto (SBU-229).
+    static let bulbColors: [NSColor] = [.systemRed, .systemYellow, .systemTeal, .systemOrange, .systemPink, .systemGreen]
 
     // MARK: - Luci
 

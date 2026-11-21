@@ -75,3 +75,48 @@ private final class VirtualDisplay {
         self.display = display
     }
 }
+
+/// La scelta degli schermi (SBU-227): di base tutti accesi, l'ultimo acceso non si spegne, la scelta resta tra un avvio e l'altro.
+struct ScreenChoiceTests {
+    private let screens = ["UUID-A", "UUID-B", "UUID-C"]
+
+    @Test func theChoiceIsSavedAndReadBack() throws {
+        var settings = SnowSettings()
+        settings.setEffect(false, onScreen: "UUID-B")
+        let again = SnowSettings(saved: try JSONEncoder().encode(settings))
+        #expect(!again.showsEffect(onScreen: "UUID-B", connected: screens))
+        #expect(again.showsEffect(onScreen: "UUID-A", connected: screens))
+    }
+
+    @Test func aNewScreenStartsOn() {
+        var settings = SnowSettings()
+        settings.setEffect(false, onScreen: "UUID-B")
+        #expect(settings.showsEffect(onScreen: "UUID-NEW", connected: screens + ["UUID-NEW"]))
+    }
+
+    @Test func aReconnectedScreenFindsItsChoice() {
+        var settings = SnowSettings()
+        settings.setEffect(false, onScreen: "UUID-B")
+        #expect(settings.showsEffect(onScreen: "UUID-A", connected: ["UUID-A"]))     // B scollegato
+        #expect(!settings.showsEffect(onScreen: "UUID-B", connected: screens))       // B ricollegato: torna spento
+    }
+
+    @Test func theLastScreenOnCannotBeTurnedOff() {
+        var settings = SnowSettings()
+        #expect(settings.canTurnOffEffect(onScreen: "UUID-A", connected: screens))
+        settings.setEffect(false, onScreen: "UUID-A")
+        settings.setEffect(false, onScreen: "UUID-B")
+        #expect(!settings.canTurnOffEffect(onScreen: "UUID-C", connected: screens), "l'ultimo acceso")
+        #expect(settings.canTurnOffEffect(onScreen: "UUID-A", connected: screens), "già spento: si può solo riaccendere")
+    }
+
+    @Test func ifEveryConnectedScreenIsOffTheEffectShowsOnAll() {
+        // A e B spenti, C acceso; C si scollega: restano due schermi spenti, l'effetto si vede su tutti e due.
+        var settings = SnowSettings()
+        settings.setEffect(false, onScreen: "UUID-A")
+        settings.setEffect(false, onScreen: "UUID-B")
+        #expect(settings.showsEffect(onScreen: "UUID-A", connected: ["UUID-A", "UUID-B"]))
+        #expect(settings.showsEffect(onScreen: "UUID-B", connected: ["UUID-A", "UUID-B"]))
+        #expect(!settings.showsEffect(onScreen: "UUID-A", connected: screens), "con C ricollegato tornano spenti")
+    }
+}
