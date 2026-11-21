@@ -28,8 +28,7 @@ final class ToyCard: NSPanel {
             content = AnyView(SnowmanCard(look: snowman.look) { [weak snowman] in snowman?.look = $0 })
         case let tree as ChristmasTree:
             title = String(localized: "Albero di Natale")
-            content = AnyView(TreeCard(look: tree.look, focus: tree.cardFocus,
-                                       apply: { [weak tree] in tree?.look = $0 },
+            content = AnyView(TreeCard(tree: tree,
                                        cut: { [weak self, weak tree] in
                                            tree?.cut()
                                            self?.close()

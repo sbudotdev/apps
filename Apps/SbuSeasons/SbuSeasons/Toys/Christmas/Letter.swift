@@ -19,7 +19,7 @@ extension SeasonScene {
         if reduceMotion {
             envelope.position = CGPoint(x: x, y: altitude)
             envelope.alpha = 0
-            envelope.run(.sequence([.fadeIn(withDuration: 0.4), .wait(forDuration: 1.2), .fadeOut(withDuration: 0.6), .removeFromParent()]))
+            envelope.run(.sequence([.fadeIn(withDuration: Tuning.letterFadeIn), .wait(forDuration: Tuning.letterStay), .fadeOut(withDuration: Tuning.letterFadeOut), .removeFromParent()]))
             letter = nil
             return true
         }

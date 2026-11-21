@@ -200,10 +200,11 @@ struct ShotsTests {
     // MARK: - Schede
 
     @Test func cards() throws {
-        var tree = TreeLook()
-        tree.hang(at: CGPoint(x: 0, y: 30))
+        let tree = ChristmasTree(at: .zero)
+        tree.clicked(at: CGPoint(x: 0, y: 30))
+        tree.cardFocus = 0
         try card(SnowmanCard(look: SnowmanLook()) { _ in }, as: "7-scheda-pupazzo")
-        try card(TreeCard(look: tree, focus: 0, apply: { _ in }, cut: {}), as: "8-scheda-albero")
+        try card(TreeCard(tree: tree, cut: {}), as: "8-scheda-albero")
         try card(LetterView(send: {}, cancel: {}), as: "9-letterina-finestra")
         try card(Form { VisitorsSection() }.formStyle(.grouped).frame(width: Quaderno.gridCell * 19).fixedSize(horizontal: false, vertical: true),
                  as: "10-impostazioni-visitatori")

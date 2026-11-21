@@ -11,9 +11,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private var windowShakes = WindowShakes()
     /// Babbo Natale su tutti gli schermi e la pausa dei giochi: restano anche quando le finestre si ricreano.
     private let passages = Passages()
-    /// Alberi, decorazioni e pupazzi salvati (SBU-178). nil nei test: l'app ospite non tocca quelli veri.
     /// Yeti e trenino con l'elfo su tutti gli schermi (SBU-178).
     private let visitors = Visitors()
+    /// Alberi, decorazioni e pupazzi salvati (SBU-178). nil nei test: l'app ospite non tocca quelli veri.
     private let keeper = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil ? ToyKeeper() : nil
     private var lastKeep: TimeInterval = 0
 

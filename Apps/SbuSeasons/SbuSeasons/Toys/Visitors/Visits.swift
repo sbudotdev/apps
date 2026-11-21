@@ -74,21 +74,21 @@ extension SeasonScene {
         }
         let gap = target.body.position.x - feet.x
         let rise = target.body.position.y - feet.y
-        if abs(gap) < 8, rise <= 1 {
+        if abs(gap) < Tuning.yetiReach, rise <= 1 {
             // Lo prende (anche un po' più in basso: si china) e prosegue per la sua strada.
             yeti.carried = target
             target.body.hold(at: yeti.shoulders)
             SoundBoard.shared.play("yeti")
             return
         }
-        if rise > 1, abs(gap) < 40 {
+        if rise > 1, abs(gap) < Tuning.yetiJumpReach {
             // Più in alto: ci salta sopra (con Riduci movimento ci si trova e basta).
             if reduceMotion {
                 yeti.body.position = target.body.position
                 yeti.node.position = yeti.body.position
             } else {
-                let up = (2 * Tuning.toyGravity * (rise + 24)).squareRoot()
-                let down = (2 * Tuning.toyGravity * 24).squareRoot()
+                let up = (2 * Tuning.toyGravity * (rise + Tuning.yetiJumpClearance)).squareRoot()
+                let down = (2 * Tuning.toyGravity * Tuning.yetiJumpClearance).squareRoot()
                 yeti.body.velocity = CGVector(dx: gap / ((up + down) / Tuning.toyGravity), dy: up)
             }
             return
@@ -106,7 +106,7 @@ extension SeasonScene {
     func sendTrain(heading: CGFloat, carriesGift: Bool) -> Train? {
         guard season is Snow, !toysPaused, train == nil else { return nil }
         let train = Train(heading: heading)
-        train.dropX = carriesGift ? .random(in: size.width * 0.15...size.width * 0.85) : nil
+        train.dropX = carriesGift ? .random(in: size.width * Tuning.elfDropSpan.lowerBound...size.width * Tuning.elfDropSpan.upperBound) : nil
         if reduceMotion {
             if let x = train.dropX { add(Gift(at: CGPoint(x: x, y: 0), fromElf: true)) }
             return train
@@ -124,8 +124,8 @@ extension SeasonScene {
         train.node.position = p
         if let x = train.dropX, train.heading > 0 ? p.x >= x : p.x <= x {
             train.dropX = nil
-            let gift = Gift(at: CGPoint(x: x, y: 26), fromElf: true)
-            gift.body.velocity = CGVector(dx: -train.heading * 60, dy: 240)   // l'elfo lo lancia giù dal vagone
+            let gift = Gift(at: CGPoint(x: x, y: Tuning.elfGiftHeight), fromElf: true)
+            gift.body.velocity = CGVector(dx: -train.heading * Tuning.elfGiftThrow.dx, dy: Tuning.elfGiftThrow.dy)   // l'elfo lo lancia giù dal vagone
             add(gift)
             SoundBoard.shared.play("regalo")
         }
@@ -154,7 +154,7 @@ extension SeasonScene {
             var look = tree.look
             let hanging = look.hanging
             look.hanging = kind
-            let y = CGFloat.random(in: 16...60)
+            let y = CGFloat.random(in: Tuning.elfDecorationHeight)
             let reach = TreeLook.halfWidth * (1 - (y - TreeLook.foliage.lowerBound) / (TreeLook.foliage.upperBound - TreeLook.foliage.lowerBound))
             look.hang(at: CGPoint(x: .random(in: -reach * 0.7...reach * 0.7), y: y))
             look.hanging = hanging

@@ -187,4 +187,21 @@ nonisolated enum Tuning {
     static let trainSpeed: CGFloat = 130
     /// La lettera sale fino alla slitta a `letterRise` pt/s.
     static let letterRise: CGFloat = 160
+    /// Con Riduci movimento la busta compare lassù in `letterFadeIn` s, resta `letterStay` s e svanisce in `letterFadeOut` s.
+    static let letterFadeIn: TimeInterval = 0.4
+    static let letterStay: TimeInterval = 1.2
+    static let letterFadeOut: TimeInterval = 0.6
+
+    /// Lo Yeti prende il pupazzo a meno di `yetiReach` pt; più in alto, a meno di `yetiJumpReach` pt, ci salta sopra
+    /// arrivando `yetiJumpClearance` pt più su del pupazzo.
+    static let yetiReach: CGFloat = 8
+    static let yetiJumpReach: CGFloat = 40
+    static let yetiJumpClearance: CGFloat = 24
+    /// Dove l'elfo lancia il regalo, in frazioni della larghezza dello schermo (lontano dai bordi).
+    static let elfDropSpan: ClosedRange<CGFloat> = 0.15...0.85
+    /// Il regalo parte dal vagone a `elfGiftHeight` pt, lanciato indietro a `elfGiftThrow.dx` e in su a `elfGiftThrow.dy` pt/s.
+    static let elfGiftHeight: CGFloat = 26
+    static let elfGiftThrow = CGVector(dx: 60, dy: 240)
+    /// L'altezza (pt dai piedi, albero a grandezza 1) dove l'elfo appende la sua decorazione.
+    static let elfDecorationHeight: ClosedRange<CGFloat> = 16...60
 }

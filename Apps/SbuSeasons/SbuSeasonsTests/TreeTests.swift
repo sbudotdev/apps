@@ -175,4 +175,46 @@ struct TreeTests {
         scene.secondaryClick(at: CGPoint(x: tree.body.position.x, y: 20))
         #expect(asked === tree)
     }
+
+    // MARK: - La scheda (SBU-184)
+
+    /// La scheda aperta non tiene una copia dell'albero: cambiare l'altezza non toglie le palline appese dopo.
+    @Test func theCardChangesOnlyItsFieldOnTheLiveTree() {
+        let tree = ChristmasTree(at: .zero)
+        let card = TreeCard(tree: tree, cut: {})
+        tree.clicked(at: CGPoint(x: -5, y: 30))
+        tree.clicked(at: CGPoint(x: 5, y: 40))
+        card.$tree.look.growth.wrappedValue = 1.5
+        #expect(tree.look.growth == 1.5)
+        #expect(tree.look.decorations.count == 2)
+    }
+
+    /// Una decorazione tolta trascinandola fuori: la scheda resta su quella giusta, o su nessuna se era lei.
+    @Test func theCardFocusFollowsItsDecorationWhenAnotherIsTakenAway() {
+        let tree = ChristmasTree(at: .zero)
+        for x in [-10, 0, 10] { tree.clicked(at: CGPoint(x: CGFloat(x), y: 20)) }
+        let focused = tree.look.decorations[2]
+        tree.cardFocus = 2
+        tree.look.drop(0, at: CGPoint(x: 120, y: 20))
+        #expect(tree.cardFocus == 1)
+        #expect(tree.look.decorations[1] == focused)
+        tree.look.remove(1)
+        #expect(tree.cardFocus == nil)
+    }
+
+    /// ⇧ e la rotella di un mouse classico: macOS la manda come scorrimento orizzontale, la decorazione gira lo stesso.
+    @Test func shiftAndAMouseWheelTurnADecoration() throws {
+        let scene = scene()
+        let tree = try #require(scene.plantTree())
+        run(scene, seconds: 0.2)
+        let feet = tree.body.position
+        tree.clicked(at: CGPoint(x: 0, y: 30))
+        let cg = try #require(CGEvent(scrollWheelEvent2Source: nil, units: .line, wheelCount: 2, wheel1: 0, wheel2: 3, wheel3: 0))
+        cg.flags = .maskShift
+        cg.location = .zero
+        let event = try #require(NSEvent(cgEvent: cg))
+        #expect(event.scrollingDeltaY == 0)
+        scene.scrollWheel(at: CGPoint(x: feet.x, y: feet.y + 30), with: event)
+        #expect(tree.look.decorations[0].rotation != 0)
+    }
 }

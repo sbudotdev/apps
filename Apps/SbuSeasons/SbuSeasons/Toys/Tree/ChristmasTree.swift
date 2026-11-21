@@ -1,25 +1,34 @@
 import AppKit
+import Observation
 import SpriteKit
 
 /// L'albero di Natale da decorare (SBU-178). Lo pianti dal menu (fino a 3); un clic sui rami appende la decorazione
 /// scelta nella sua scheda (palline, luci, bastoncini di zucchero, la stella in cima). Le decorazioni si trascinano
 /// (fuori dall'albero si tolgono), si ingrandiscono col pizzico o la rotella e si girano con due dita o ⇧ e la rotella.
 /// Pizzico o rotella sull'albero lo fanno crescere. Si trascina come gli altri oggetti; dalla scheda si taglia.
-/// Com'è fatto sta tutto in `look`, che si salva (`KeptToys`).
+/// Com'è fatto sta tutto in `look`, che si salva (`KeptToys`). Osservabile: la scheda (`TreeCard`) lo modifica dal vivo.
+@Observable
 final class ChristmasTree: Toy {
     static let size = CGSize(width: 60, height: 84)
     /// I colori delle palline, a turno (`Decoration.color`).
     static let colors: [NSColor] = [.systemRed, .systemYellow, .systemBlue, .white, .systemPink]
 
     /// L'albero a grandezza 1, con le decorazioni dentro: crescendo si scala tutto insieme.
-    private let crown = SKSpriteNode(texture: ChristmasTree.texture)
-    private var dragged: Int?
+    @ObservationIgnored private let crown = SKSpriteNode(texture: ChristmasTree.texture)
+    @ObservationIgnored private var dragged: Int?
     /// La decorazione su cui si è aperta la scheda (clic destro), se c'era: la scheda mostra anche lei.
     var cardFocus: Int?
-    private var twinkle: CGFloat = 0
+    @ObservationIgnored private var twinkle: CGFloat = 0
 
     var look: TreeLook {
-        didSet { if look != oldValue { redraw(growing: look.growth != oldValue.growth) } }
+        didSet {
+            guard look != oldValue else { return }
+            // Tolta una decorazione: la scheda resta su quella che mostrava (che può aver cambiato indice), o su nessuna.
+            if let focus = cardFocus, look.decorations.count != oldValue.decorations.count {
+                cardFocus = oldValue.decorations.indices.contains(focus) ? look.decorations.firstIndex(of: oldValue.decorations[focus]) : nil
+            }
+            redraw(growing: look.growth != oldValue.growth)
+        }
     }
 
     init(at position: CGPoint, look: TreeLook = TreeLook()) {

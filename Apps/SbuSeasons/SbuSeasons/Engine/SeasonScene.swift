@@ -532,13 +532,16 @@ final class SeasonScene: SKScene {
     override func rightMouseDown(with event: NSEvent) { secondaryClick(at: event.location(in: self)) }
     override func magnify(with event: NSEvent) { resize(at: event.location(in: self), by: 1 + event.magnification) }
     override func rotate(with event: NSEvent) { turn(at: event.location(in: self), by: CGFloat(event.rotation) * .pi / 180) }
-    override func scrollWheel(with event: NSEvent) {
-        let point = event.location(in: self)
-        let delta = event.scrollingDeltaY * (event.hasPreciseScrollingDeltas ? 1 : 10)
+    override func scrollWheel(with event: NSEvent) { scrollWheel(at: event.location(in: self), with: event) }
+    /// La rotella nel punto `point` della scena: ingrandisce; con ⇧ o ⌥ gira.
+    func scrollWheel(at point: CGPoint, with event: NSEvent) {
+        let step: CGFloat = event.hasPreciseScrollingDeltas ? 1 : 10
         if event.modifierFlags.contains(.shift) || event.modifierFlags.contains(.option) {
-            turn(at: point, by: delta * .pi / 180)
+            // Con ⇧ macOS manda la rotella del mouse come scorrimento orizzontale.
+            let raw = event.scrollingDeltaY != 0 ? event.scrollingDeltaY : event.scrollingDeltaX
+            turn(at: point, by: raw * step * .pi / 180)
         } else {
-            resize(at: point, by: exp(delta * Tuning.scrollResize))
+            resize(at: point, by: exp(event.scrollingDeltaY * step * Tuning.scrollResize))
         }
     }
     override func mouseDragged(with event: NSEvent) { drag(to: event.location(in: self), time: event.timestamp) }
