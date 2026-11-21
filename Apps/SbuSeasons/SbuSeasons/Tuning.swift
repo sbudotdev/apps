@@ -229,4 +229,20 @@ nonisolated enum Tuning {
     static let elfRollInterval: CGFloat = 1
     static let elfBallGap: CGFloat = 14
     static let elfWalk: CGFloat = 60
+
+    // MARK: Decora (SBU-187)
+
+    /// Le decorazioni sulla scrivania, per schermo: oltre sparisce la più vecchia.
+    static let maxDeskItems = 12
+    /// Quanto si ingrandisce o rimpicciolisce una decorazione.
+    static let deskScale: ClosedRange<CGFloat> = 0.5...3
+    /// Le luci pendono in mezzo di questa parte della loro lunghezza, almeno `lightsMinSag` pt.
+    static let lightsSag: CGFloat = 0.18
+    static let lightsMinSag: CGFloat = 12
+    /// Un'estremità delle luci si prende entro tanti pt; le lampadine sono a `bulbGap` pt l'una dall'altra.
+    static let lightsGrab: CGFloat = 14
+    static let bulbRadius: CGFloat = 4
+    static let bulbGap: CGFloat = 18
+    /// Fiamme e lampadine si ridisegnano tante volte al secondo: bastano, e costano poco.
+    static let deskFlickerFPS: Double = 8
 }
