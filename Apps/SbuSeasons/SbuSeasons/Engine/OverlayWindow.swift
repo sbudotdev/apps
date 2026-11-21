@@ -50,6 +50,7 @@ final class OverlayWindow: NSPanel {
         contentView = skView
         skView.presentScene(scene)
 
+        scene.onCard = { toy, point in ToyCard.shared.show(for: toy, at: point) }
         setFrame(frame, display: true)
         let link = skView.displayLink(target: self, selector: #selector(step))
         link.add(to: .main, forMode: .common)

@@ -414,6 +414,11 @@ final class SeasonScene: SKScene {
     /// Clic destro (o ⌃ clic) su un oggetto: la sua scheda, se ne ha una.
     func secondaryClick(at point: CGPoint) {
         guard !toysPaused, let toy = toy(at: point) else { return }
+        if let tree = toy as? ChristmasTree {
+            let feet = tree.body.position
+            tree.cardFocus = tree.look.decoration(at: CGPoint(x: (point.x - feet.x) / tree.look.growth,
+                                                              y: (point.y - feet.y) / tree.look.growth))
+        }
         openCard(for: toy, at: point)
     }
 

@@ -4,6 +4,15 @@ import CoreGraphics
 nonisolated enum DecorationKind: String, Codable, CaseIterable, Sendable {
     case bauble, lights, candyCane, star
 
+    var title: String {
+        switch self {
+        case .bauble: String(localized: "Palline")
+        case .lights: String(localized: "Luci")
+        case .candyCane: String(localized: "Bastoncini")
+        case .star: String(localized: "Stella")
+        }
+    }
+
     /// Il lato del disegno a grandezza 1 (pt): serve anche per capire se il cursore ci è sopra.
     var side: CGFloat {
         switch self {

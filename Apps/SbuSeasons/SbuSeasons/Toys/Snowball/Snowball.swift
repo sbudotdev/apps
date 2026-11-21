@@ -36,42 +36,6 @@ final class Snowball: Toy {
     }
 }
 
-/// Il pupazzo di neve: nasce da tre palle vicine. Non fa niente, si sposta e si lancia come gli altri oggetti.
-final class Snowman: Toy {
-    init(at position: CGPoint) {
-        let node = SKSpriteNode(texture: Self.texture)
-        node.size = Self.texture.size()
-        super.init(node: node, at: position)
-    }
-
-    private static let texture = drawnTexture(size: CGSize(width: 30, height: 46)) { _ in
-        let snow = Quaderno.paper.lightColor
-        let shade = snow.shadow(withLevel: 0.12) ?? snow
-        // Tre palle, dal basso: 26, 20, 14 pt.
-        for ball in [CGRect(x: 2, y: 0, width: 26, height: 22), CGRect(x: 5, y: 17, width: 20, height: 17),
-                     CGRect(x: 8, y: 31, width: 14, height: 14)] {
-            snow.setFill()
-            NSBezierPath(ovalIn: ball).fill()
-            shade.setFill()
-            NSBezierPath(ovalIn: CGRect(x: ball.midX - ball.width * 0.3, y: ball.minY + 0.5,
-                                        width: ball.width * 0.6, height: 3)).fill()
-        }
-        let coal = NSColor(white: 0.15, alpha: 1)
-        coal.setFill()
-        for eye in [CGPoint(x: 12.5, y: 39), CGPoint(x: 17.5, y: 39), CGPoint(x: 15, y: 28), CGPoint(x: 15, y: 23)] {
-            NSBezierPath(ovalIn: CGRect(x: eye.x - 1, y: eye.y - 1, width: 2, height: 2)).fill()
-        }
-        // Il naso, una carota che guarda a destra.
-        let nose = NSBezierPath()
-        nose.move(to: CGPoint(x: 15, y: 37.5))
-        nose.line(to: CGPoint(x: 22, y: 36.5))
-        nose.line(to: CGPoint(x: 15, y: 35.5))
-        nose.close()
-        NSColor.systemOrange.setFill()
-        nose.fill()
-    }
-}
-
 /// Le posizioni di tre palle tutte vicine tra loro (entro `distance`), o nil. Le prime che trova.
 nonisolated func snowmanTrio(_ balls: [CGPoint], within distance: CGFloat) -> [Int]? {
     func near(_ a: Int, _ b: Int) -> Bool { hypot(balls[a].x - balls[b].x, balls[a].y - balls[b].y) <= distance }

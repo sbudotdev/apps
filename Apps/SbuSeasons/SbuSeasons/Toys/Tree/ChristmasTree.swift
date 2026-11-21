@@ -14,6 +14,8 @@ final class ChristmasTree: Toy {
     /// L'albero a grandezza 1, con le decorazioni dentro: crescendo si scala tutto insieme.
     private let crown = SKSpriteNode(texture: ChristmasTree.texture)
     private var dragged: Int?
+    /// La decorazione su cui si è aperta la scheda (clic destro), se c'era: la scheda mostra anche lei.
+    var cardFocus: Int?
     private var twinkle: CGFloat = 0
 
     var look: TreeLook {
