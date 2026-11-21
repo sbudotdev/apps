@@ -114,6 +114,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         setupStatusItem()
         setupMainMenu()
         rebuildOverlays()
+        // Dopo il primo `rebuildOverlays`: prima la scrivania salvata non è ancora tornata.
+        desk.onChange = { [weak self] in
+            guard let self else { return }
+            self.keeper?.save(self.keptToys)
+        }
         if showsCountdown { setCountdownVisible(true) }
         updateAmbience()
         // La stagione cambia dal menu ❄︎ o dalle Impostazioni: neve e icona seguono subito.
@@ -201,18 +206,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     }
 
     private func refreshWindows() {
+        let now = ProcessInfo.processInfo.systemUptime
+        // Prima della guardia: Decora vale anche a effetto spento (pizzichi e rotazioni si salvano qui, QA SBU-188).
+        if now - lastKeep >= Tuning.keepInterval {
+            lastKeep = now
+            keeper?.save(keptToys)
+        }
         guard isSnowing else { return }
         // Una sola lettura, condivisa da tutti gli schermi.
         let edges = currentWindowEdges()
         let dock = currentDockFrame()
         overlays.forEach { $0.updateWindows(edges, dock: dock) }
-        passages.tick(at: ProcessInfo.processInfo.systemUptime)
-        let now = ProcessInfo.processInfo.systemUptime
+        passages.tick(at: now)
         visitors.tick(at: now)
-        if now - lastKeep >= Tuning.keepInterval {
-            lastKeep = now
-            keeper?.save(keptToys)
-        }
         let shaken = windowShakes.update(edges, at: ProcessInfo.processInfo.systemUptime)
         if !shaken.isEmpty { overlays.forEach { $0.windowsShaken(shaken) } }
     }

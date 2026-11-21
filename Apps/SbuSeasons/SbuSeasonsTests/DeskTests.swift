@@ -91,6 +91,62 @@ struct DeskTests {
         #expect(items.filter { $0.screen == "B" }.count == 1, "l'altro schermo ha il suo limite")
     }
 
+    // MARK: - Da uno schermo all'altro (QA SBU-188)
+
+    private let twoScreens: [(key: String, frame: CGRect)] = [
+        ("A", CGRect(x: 0, y: 0, width: 1440, height: 900)),
+        ("B", CGRect(x: 1440, y: 0, width: 1920, height: 1080)),
+    ]
+
+    @Test func draggedOntoTheOtherScreenItBelongsToIt() throws {
+        // Il pinguino trascinato da A fino a x = 1600 di A, cioè a x = 160 di B.
+        var penguin = DeskItem(kind: .penguin, screen: "A", center: CGPoint(x: 400, y: 300))
+        penguin.move(by: CGVector(dx: 1200, dy: 0))
+        let moved = try #require(DeskItem.settling(penguin.id, in: [penguin], screens: twoScreens).first)
+        #expect(moved.screen == "B")
+        #expect(abs(moved.center.x - 160) < 0.001 && abs(moved.center.y - 300) < 0.001)
+        #expect(moved.placed(on: "B", size: CGSize(width: 1920, height: 1080)) == moved, "al riavvio resta dov'è")
+    }
+
+    @Test func draggedOntoTheOtherScreenTheLightsKeepTheirShape() throws {
+        var lights = lights(from: CGPoint(x: 1300, y: 500), to: CGPoint(x: 1700, y: 500))
+        lights.move(by: CGVector(dx: 100, dy: 0))
+        let moved = try #require(DeskItem.settling(lights.id, in: [lights], screens: twoScreens).first)
+        #expect(moved.screen == "B")
+        #expect(moved.end.x - moved.start.x == 400 && moved.start.y == 500 && moved.end.y == 500, "stesso filo")
+        #expect(moved.frame.minX >= 0 && moved.frame.maxX < 1920, "spinto dentro B, non a cavallo")
+    }
+
+    @Test func draggedWithinItsScreenNothingChanges() {
+        let penguin = DeskItem(kind: .penguin, screen: "A", center: CGPoint(x: 1400, y: 300))
+        #expect(DeskItem.settling(penguin.id, in: [penguin], screens: twoScreens) == [penguin])
+    }
+
+    @Test func draggedOntoAFullScreenTheOldestThereGoes() {
+        var items: [DeskItem] = (0..<Tuning.maxDeskItems).map {
+            DeskItem(kind: .candle, screen: "B", center: CGPoint(x: CGFloat(100 + $0 * 10), y: 100))
+        }
+        var penguin = DeskItem(kind: .penguin, screen: "A", center: CGPoint(x: 400, y: 300))
+        penguin.move(by: CGVector(dx: 1200, dy: 0))
+        items.append(penguin)
+        let settled = DeskItem.settling(penguin.id, in: items, screens: twoScreens)
+        #expect(settled.filter { $0.screen == "B" }.count == Tuning.maxDeskItems, "il limite vale anche trascinando")
+        #expect(settled.contains { $0.id == penguin.id && $0.screen == "B" })
+        #expect(!settled.contains { $0.id == items[0].id }, "via la più vecchia di B")
+    }
+
+    // MARK: - Accessibilità (QA SBU-188)
+
+    @Test func voiceOverCanRemoveAnItem() throws {
+        let view = DeskItemView(item: DeskItem(kind: .penguin, screen: "A", center: .zero))
+        var removed = false
+        view.onRemove = { removed = true }
+        let action = try #require(view.accessibilityCustomActions()?.first)
+        #expect(action.name == String(localized: "Togli"))
+        #expect(action.handler?() == true)
+        #expect(removed)
+    }
+
     // MARK: - Salvataggio
 
     @Test func theDeskIsSavedWithTheTreesAndSnowmen() throws {

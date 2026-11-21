@@ -10,6 +10,8 @@ final class Desk {
     private var screens: [(key: String, frame: CGRect)] = []
     private var timer: Timer?
     private var phase: CGFloat = 0
+    /// Aggiunta, rimozione, fine di un trascinamento: da salvare subito, anche a effetto spento (QA SBU-188).
+    var onChange: (() -> Void)?
 
     /// false con Riduci movimento, a batteria e con i giochi in pausa: fiamme e lampadine stanno ferme.
     var animates = true {
@@ -45,17 +47,27 @@ final class Desk {
             : DeskItem(kind: kind, screen: screen.key, center: local)
         items = DeskItem.adding(item.placed(on: screen.key, size: screen.frame.size), to: items)
         rebuildPanels()
+        onChange?()
     }
 
     func remove(_ id: UUID) {
         items.removeAll { $0.id == id }
         rebuildPanels()
+        onChange?()
     }
 
     /// "Togli le decorazioni".
     func removeAll() {
         items = []
         rebuildPanels()
+        onChange?()
+    }
+
+    /// Fine di un trascinamento: se è finita su un altro schermo passa a quello (il pannello si rifà con la sua origine).
+    private func dropped(_ id: UUID) {
+        items = DeskItem.settling(id, in: items, screens: screens)
+        rebuildPanels()
+        onChange?()
     }
 
     // MARK: - Pannelli
@@ -81,6 +93,7 @@ final class Desk {
                 panel.place()
             }
             panel.view.onRemove = { [weak self] in self?.remove(item.id) }
+            panel.view.onDrop = { [weak self] in self?.dropped(item.id) }
             panel.orderFrontRegardless()
             panels[item.id] = panel
         }

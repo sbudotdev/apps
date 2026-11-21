@@ -144,6 +144,18 @@ nonisolated struct DeskItem: Codable, Equatable, Sendable, Identifiable {
         return item
     }
 
+    /// Dopo un trascinamento: se il centro di `id` è finito su un altro schermo, la decorazione passa a quello,
+    /// con le coordinate del nuovo schermo e il suo limite (QA SBU-188). `screens` in coordinate globali.
+    static func settling(_ id: UUID, in items: [DeskItem], screens: [(key: String, frame: CGRect)]) -> [DeskItem] {
+        guard let item = items.first(where: { $0.id == id }),
+              let from = screens.first(where: { $0.key == item.screen }) else { return items }
+        let center = CGPoint(x: item.center.x + from.frame.minX, y: item.center.y + from.frame.minY)
+        guard let to = screens.first(where: { $0.frame.contains(center) }), to.key != from.key else { return items }
+        var moved = item
+        moved.move(by: CGVector(dx: from.frame.minX - to.frame.minX, dy: from.frame.minY - to.frame.minY))
+        return adding(moved.placed(on: to.key, size: to.frame.size), to: items.filter { $0.id != id })
+    }
+
     /// `items` con `item` in più; oltre `Tuning.maxDeskItems` sul suo schermo sparisce la più vecchia di quello schermo.
     static func adding(_ item: DeskItem, to items: [DeskItem]) -> [DeskItem] {
         var items = items + [item]

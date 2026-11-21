@@ -11,6 +11,8 @@ final class DeskItemView: NSView {
     var screenOrigin: CGPoint = .zero
     var onChange: ((DeskItem) -> Void)?
     var onRemove: (() -> Void)?
+    /// Fine di un trascinamento: la decorazione può essere passata su un altro schermo.
+    var onDrop: (() -> Void)?
 
     private var last: CGPoint?
     private var grabbedEnd: Int?
@@ -21,6 +23,11 @@ final class DeskItemView: NSView {
         setAccessibilityElement(true)
         setAccessibilityRole(.image)
         setAccessibilityLabel(item.kind.title)
+        // Con VoiceOver si toglie senza clic destro (QA SBU-188).
+        setAccessibilityCustomActions([NSAccessibilityCustomAction(name: String(localized: "Togli")) { [weak self] in
+            self?.onRemove?()
+            return true
+        }])
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) non supportato") }
@@ -57,8 +64,10 @@ final class DeskItemView: NSView {
     }
 
     override func mouseUp(with event: NSEvent) {
+        guard last != nil else { return }
         last = nil
         grabbedEnd = nil
+        onDrop?()
     }
 
     override func magnify(with event: NSEvent) { change { $0.resize(by: 1 + event.magnification) } }

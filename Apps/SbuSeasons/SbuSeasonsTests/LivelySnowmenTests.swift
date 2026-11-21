@@ -178,6 +178,35 @@ struct LivelySnowmenTests {
         #expect(!scene.snowballFight())
     }
 
+    /// Due pupazzi vicini e la prossima palla già dovuta: dopo un passo, c'è una palla in volo?
+    private func fightDue(_ scene: SeasonScene) -> Bool {
+        scene.add(Snowman(at: CGPoint(x: 600, y: 0)))
+        scene.add(Snowman(at: CGPoint(x: 720, y: 0)))
+        run(scene, seconds: 0.3)
+        scene.nextFight = 0
+        scene.step(at: 0.4)
+        return scene.toys.contains { $0 is Snowball }
+    }
+
+    @Test func withTheFightsSwitchedOffNoBallIsThrown() {
+        let saved = Settings.shared.values
+        defer { Settings.shared.values = saved }
+        Settings.shared.values.snowballFights = true
+        #expect(fightDue(scene()), "acceso: la palla parte")
+        Settings.shared.values.snowballFights = false
+        #expect(!fightDue(scene()), "spento: nessuna palla")
+    }
+
+    @Test func withTheGamesPausedNoBallIsThrown() {
+        let scene = scene()
+        scene.add(Snowman(at: CGPoint(x: 600, y: 0)))
+        scene.add(Snowman(at: CGPoint(x: 720, y: 0)))
+        run(scene, seconds: 0.3)
+        scene.toysPaused = true
+        #expect(!scene.snowballFight())
+        #expect(!scene.toys.contains { $0 is Snowball })
+    }
+
     // MARK: - Yeti colpito
 
     @Test func aSnowballKnocksTheYetiDown() throws {
