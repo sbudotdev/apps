@@ -184,6 +184,19 @@ struct ShotsTests {
         }
     }
 
+    /// Un pupazzo mandato (SBU-200): scritto in un file `.sbuseasons`, riletto, e il trenino lo porta in mezzo allo schermo.
+    @Test func received() throws {
+        var look = SnowmanLook()
+        look.hat = .pirate
+        look.scarf = .striped
+        look.mittens = true
+        let url = try ToyFile.snowman(look).write(in: folder.appending(path: "file"))
+        guard case .snowman(let arrived) = try ToyFile(contentsOf: url) else { Issue.record(); return }
+        let (scene, view) = scene()
+        #expect(scene.receive(Snowman(at: .zero, look: arrived)))
+        try film(scene, view, as: "15-ricevuto", seconds: 6)
+    }
+
     @Test func letter() throws {
         let (scene, view) = scene()
         scene.mailLetter(from: CGPoint(x: 300, y: 60))
