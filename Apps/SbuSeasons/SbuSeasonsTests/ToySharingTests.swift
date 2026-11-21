@@ -34,4 +34,19 @@ struct ToySharingTests {
         #expect(throws: (any Error).self) { try ToySharing.place(missing, at: target) }
         #expect(try String(contentsOf: target, encoding: .utf8) == "vecchio")
     }
+
+    @Test func aFailedReplaceLeavesNoTemporaryCopy() throws {
+        let shared = try file("nuovo.sbuseasons", "nuovo")
+        let locked = folder.appending(path: "bloccata")
+        try FileManager.default.createDirectory(at: locked, withIntermediateDirectories: true)
+        let target = locked.appending(path: "vecchio.sbuseasons")
+        try Data("vecchio".utf8).write(to: target)
+        try FileManager.default.setAttributes([.posixPermissions: 0o555], ofItemAtPath: locked.path)
+        defer { try? FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: locked.path) }
+
+        #expect(throws: (any Error).self) { try ToySharing.place(shared, at: target) }
+        #expect(try String(contentsOf: target, encoding: .utf8) == "vecchio")
+        let left = try FileManager.default.contentsOfDirectory(atPath: folder.path).sorted()
+        #expect(left == ["bloccata", "nuovo.sbuseasons"], "nessuna copia temporanea rimasta")
+    }
 }

@@ -47,12 +47,16 @@ final class ToySharing: NSObject, NSSharingServicePickerDelegate {
     /// Mette una copia di `url` in `target`. Se `target` c'è già (la sostituzione l'ha confermata il pannello)
     /// lo scambia in un colpo solo: se qualcosa va storto, il file di prima resta.
     static func place(_ url: URL, at target: URL) throws {
-        let copy = url.deletingLastPathComponent().appending(path: UUID().uuidString)
-        try FileManager.default.copyItem(at: url, to: copy)
-        guard FileManager.default.fileExists(atPath: target.path) else {
-            try FileManager.default.moveItem(at: copy, to: target)
+        let files = FileManager.default
+        guard files.fileExists(atPath: target.path) else {
+            try files.copyItem(at: url, to: target)
             return
         }
-        _ = try FileManager.default.replaceItemAt(target, withItemAt: copy)
+        // La copia sta sullo stesso disco di `target` (chiavetta, disco esterno): replaceItemAt non scambia tra due dischi.
+        let folder = try files.url(for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: target, create: true)
+        defer { try? files.removeItem(at: folder) }
+        let copy = folder.appending(path: target.lastPathComponent)
+        try files.copyItem(at: url, to: copy)
+        _ = try files.replaceItemAt(target, withItemAt: copy)
     }
 }
