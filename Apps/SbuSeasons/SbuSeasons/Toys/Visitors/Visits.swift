@@ -9,6 +9,7 @@ extension SeasonScene {
         switch kind {
         case .yeti: yeti != nil
         case .train: train != nil
+        case .elves: elf != nil
         }
     }
 
@@ -193,6 +194,7 @@ extension SeasonScene {
         guard season is Snow else { return }
         stepYeti()
         stepTrain(dt: dt)
+        stepElf(dt: dt)
     }
 
     /// In pausa e cambiando stagione: via Yeti e trenino. Il pupazzo che lo Yeti aveva in spalla resta e cade.
@@ -204,5 +206,6 @@ extension SeasonScene {
         }
         train?.node.removeFromParent()
         train = nil
+        if let elf { remove(elf) }
     }
 }

@@ -222,4 +222,11 @@ nonisolated enum Tuning {
     static let fightFlight: CGFloat = 0.8
     /// Lo Yeti colpito da una palla cade e sparisce in tanti secondi.
     static let yetiFall: CGFloat = 1.2
+    /// Gli elfi passano da soli ogni 1½–3 ore (Impostazioni → Visitatori). Escono dalla neve in `elfRise` s,
+    /// rotolano una palla ogni `elfRollInterval` s a `elfBallGap` pt l'una dall'altra, poi se ne vanno a `elfWalk` pt/s.
+    static let elvesInterval: ClosedRange<CGFloat> = 5400...10_800
+    static let elfRise: CGFloat = 0.5
+    static let elfRollInterval: CGFloat = 1
+    static let elfBallGap: CGFloat = 14
+    static let elfWalk: CGFloat = 60
 }

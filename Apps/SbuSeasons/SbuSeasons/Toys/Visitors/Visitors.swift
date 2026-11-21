@@ -26,6 +26,8 @@ final class Visitors {
     private let random: () -> Double
     /// "Passa da solo" (Impostazioni → Visitatori), acceso all'inizio. I test lo fissano.
     var passesAlone: (VisitorKind) -> Bool = { UserDefaults.standard.object(forKey: $0.autoKey) as? Bool ?? true }
+    /// Quanto spesso (Impostazioni → Visitatori). I test la fissano.
+    var frequency: () -> VisitFrequency = { VisitFrequency.saved }
 
     /// `random` in 0..<1: i test lo fissano.
     init(random: @escaping () -> Double = { .random(in: 0..<1) }) {
@@ -49,7 +51,9 @@ final class Visitors {
             trips[kind] = nil
         }
         let heading: CGFloat = random() < 0.5 ? -1 : 1
-        let route = ScreenRoute.order(scenes.map(\.screenFrame), heading: heading)
+        let order = ScreenRoute.order(scenes.map(\.screenFrame), heading: heading)
+        // L'elfo fa il suo pupazzo su uno schermo solo.
+        let route = kind == .elves ? Array(order.prefix(1)) : order
         trips[kind] = (route, 0, heading, nil, min(Int(random() * Double(route.count)), route.count - 1))
         go(kind)
         return true
@@ -58,13 +62,14 @@ final class Visitors {
     /// Ogni tanto (`AppDelegate`, mentre l'effetto è acceso): è ora che qualcuno ripassi?
     func tick(at now: TimeInterval) {
         guard canVisit else { return }
+        let frequency = frequency()
         for kind in VisitorKind.allCases where passesAlone(kind) {
             guard let due = next[kind] else {
-                next[kind] = now + Passages.delay(in: kind.interval, roll: random())
+                next[kind] = now + Passages.delay(in: frequency.scaled(kind.interval), roll: random())
                 continue
             }
             guard now >= due else { continue }
-            next[kind] = now + Passages.delay(in: kind.interval, roll: random())
+            next[kind] = now + Passages.delay(in: frequency.scaled(kind.interval), roll: random())
             let hasSnowman = scenes.contains { $0.toys.contains { $0 is Snowman } }
             if kind != .yeti || hasSnowman { send(kind) }
         }
@@ -84,6 +89,7 @@ final class Visitors {
             switch kind {
             case .yeti: scene.sendYeti(heading: trip.heading, carrying: trip.carrying)
             case .train: scene.sendTrain(heading: trip.heading, carriesGift: trip.leg == trip.giftLeg)
+            case .elves: scene.sendElf(heading: trip.heading)
             }
             if scene.isVisiting(kind) { return }   // in giro: all'uscita la scena chiama `left`
             trip.leg += 1

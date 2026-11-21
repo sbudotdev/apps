@@ -2,13 +2,14 @@ import CoreGraphics
 
 /// I visitatori che passano da soli (SBU-178).
 nonisolated enum VisitorKind: CaseIterable, Sendable {
-    case yeti, train
+    case yeti, train, elves
 
     /// La chiave in UserDefaults di "passa da solo" (Impostazioni → Visitatori), acceso all'inizio.
     var autoKey: String {
         switch self {
         case .yeti: "yetiVisits"
         case .train: "trainVisits"
+        case .elves: "elfVisits"
         }
     }
 
@@ -16,6 +17,7 @@ nonisolated enum VisitorKind: CaseIterable, Sendable {
         switch self {
         case .yeti: Tuning.yetiInterval
         case .train: Tuning.trainInterval
+        case .elves: Tuning.elvesInterval
         }
     }
 }

@@ -392,11 +392,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         yeti.toolTip = String(localized: "Prova a portarsi via un pupazzo: fai clic sullo Yeti per scacciarlo.")
         let train = NSMenuItem(title: String(localized: "Fai passare il trenino"), action: #selector(sendTrain), keyEquivalent: "")
         train.toolTip = String(localized: "L'elfo lascia un regalo: dentro c'è qualcosa per l'albero o il pupazzo.")
-        for mi in [santa, letter, man, yeti, train, countdown] {
+        let elves = NSMenuItem(title: String(localized: "Fai passare gli elfi"), action: #selector(sendElves), keyEquivalent: "")
+        elves.toolTip = String(localized: "Un elfo esce dalla neve, rotola tre palle e fa un pupazzo.")
+        for mi in [santa, letter, man, yeti, train, elves, countdown] {
             mi.target = self
             menu.addItem(mi)
         }
-        winterItems += [santa, letter, man, yeti, train]
+        winterItems += [santa, letter, man, yeti, train, elves]
         countdownItem = countdown
         return menu
     }
@@ -541,6 +543,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     @objc private func sendYeti() {
         guard isSnowing else { return }
         visitors.send(.yeti)
+    }
+
+    @objc private func sendElves() {
+        guard isSnowing else { return }
+        visitors.send(.elves)
     }
 
     @objc private func sendTrain() {
