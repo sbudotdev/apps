@@ -41,7 +41,7 @@ func currentWindowEdges() -> [WindowEdge] {
     let alive = Set(all.map(\.id))
     axCache = axCache.filter { alive.contains($0.key) }   // dimentica le finestre chiuse
     let settings = Settings.shared.values
-    return systemEdges(all, clearance: CGFloat(settings.maxPile)).map { edge, window in
+    return systemEdges(all, clearance: CGFloat(settings.pileHeight)).map { edge, window in
         var edge = edge
         // Su macOS 26 le app native con barra degli strumenti (Finder, Safari…) hanno angoli più stondati
         // delle altre (IntelliJ, Chrome…). I due valori si regolano nelle Impostazioni.

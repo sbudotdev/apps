@@ -1561,6 +1561,66 @@
           }
         }
       }
+    },
+    "Meteo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weather"
+          }
+        }
+      }
+    },
+    "Meteo a caso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Random Weather"
+          }
+        }
+      }
+    },
+    "Arcobaleno dopo la pioggia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rainbow After the Rain"
+          }
+        }
+      }
+    },
+    "Mucchi più alti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taller Piles"
+          }
+        }
+      }
+    },
+    "120 fps sugli schermi ProMotion": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "120 fps on ProMotion Displays"
+          }
+        }
+      }
+    },
+    "Meteo a caso cambia effetto da solo ogni 10–25 minuti, tra quelli della stagione dell'anno. I 120 fps valgono solo a corrente e senza Riduci movimento.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Random Weather changes the effect by itself every 10–25 minutes, picking from those of the time of year. 120 fps only applies on power and without Reduce Motion."
+          }
+        }
+      }
     }
   }
 }

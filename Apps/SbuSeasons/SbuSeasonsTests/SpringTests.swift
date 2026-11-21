@@ -20,10 +20,11 @@ struct SpringTests {
 }
 
 extension SpringTests {
-    /// Uno strato sottile: un petalo posato aggiunge al mucchio meno della metà di un fiocco.
-    @Test func petalsSettleInAThinLayer() {
-        #expect(Spring().pileGrowth.upperBound < 0.5)
-        #expect(Spring().pileGrowth.lowerBound > 0)
+    /// I petali non fanno mucchio: ognuno resta intero sulla finestra per un po' e poi sfuma (SBU-177).
+    @Test func petalsRestOnTheWindowsForAWhile() throws {
+        let linger = try #require(Spring().linger)
+        #expect(linger.lowerBound >= 10)
+        #expect(linger.upperBound <= 60)
     }
 
     /// I petali girano e si ribaltano piano mentre cadono, non tutti uguali.

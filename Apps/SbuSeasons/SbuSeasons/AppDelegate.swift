@@ -11,6 +11,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private var windowShakes = WindowShakes()
     /// Babbo Natale su tutti gli schermi e la pausa dei giochi: restano anche quando le finestre si ricreano.
     private let passages = Passages()
+    /// Pausa automatica (SBU-177): i display dormono, o un'app a schermo intero copre uno schermo.
+    private var displaysAsleep = false
+    private var coveredScreens: Set<CGDirectDisplayID> = []
+    /// «Meteo a caso»: quando cambia l'effetto. E l'effetto di prima, per l'arcobaleno dopo la pioggia.
+    private var weatherClock = WeatherClock()
+    private var lastSeasonID = Settings.shared.seasonID
 
     // Salvato in UserDefaults, così l'app se lo ricorda al prossimo avvio.
     // (Le altre impostazioni sono in Settings.swift.)
@@ -127,6 +133,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
             object: nil
         )
 
+        // I display dormono: niente da disegnare, l'effetto si ferma finché non si svegliano.
+        for (name, asleep) in [(NSWorkspace.screensDidSleepNotification, true), (NSWorkspace.screensDidWakeNotification, false)] {
+            NSWorkspace.shared.notificationCenter.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated {
+                    self?.displaysAsleep = asleep
+                    self?.applyRunning()
+                }
+            }
+        }
+
         // Se colleghi/scolleghi un monitor o cambi risoluzione, ricreiamo le finestre.
         NotificationCenter.default.addObserver(
             self,
@@ -169,15 +185,30 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         for overlay in overlays { overlay.scene.onGlobeShaken = { TourProgress.shared.complete(.shakeGlobe) } }
         passages.scenes = overlays.map(\.scene)
         powerSourceDidChange()
-        overlays.forEach { $0.setSnowing(isSnowing) }
+        applyRunning()
         refreshWindows()
     }
 
+    /// L'effetto gira su uno schermo se è acceso dal menu, i display sono svegli e nessuna app a schermo intero lo copre.
+    private func applyRunning() {
+        for overlay in overlays {
+            let covered = overlay.screenID.map(coveredScreens.contains) ?? false
+            overlay.setSnowing(isSnowing && !displaysAsleep && !covered)
+        }
+    }
+
     private func refreshWindows() {
-        guard isSnowing else { return }
+        guard isSnowing, !displaysAsleep else { return }
         // Una sola lettura, condivisa da tutti gli schermi.
         let edges = currentWindowEdges()
         let dock = currentDockFrame()
+        // Un'app a schermo intero copre lo schermo (un video, una presentazione): lì l'effetto si ferma e sparisce.
+        let rects = edges.map(\.rect)
+        coveredScreens = Set(overlays.filter { coversScreen(rects, screen: $0.frame) }.compactMap(\.screenID))
+        applyRunning()
+        if weatherClock.tick(now: ProcessInfo.processInfo.systemUptime, enabled: Settings.shared.values.randomWeather) {
+            shuffleWeather()
+        }
         overlays.forEach { $0.updateWindows(edges, dock: dock) }
         passages.tick(at: ProcessInfo.processInfo.systemUptime)
         let shaken = windowShakes.update(edges, at: ProcessInfo.processInfo.systemUptime)
@@ -418,7 +449,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     @objc private func toggleSnow() {
         isSnowing.toggle()
-        overlays.forEach { $0.setSnowing(isSnowing) }
+        applyRunning()
         updateAmbience()
         updateMenuState()
     }
@@ -537,9 +568,36 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         TourProgress.shared.complete(.changeEffect)
         let season = Settings.shared.season
         overlays.forEach { $0.setSeason(season) }
+        if Settings.shared.values.rainbow, Rainbow.follows(from: lastSeasonID, to: season.id) {
+            overlays.forEach { $0.scene.showRainbow() }
+        }
+        lastSeasonID = season.id
         passages.seasonChanged()
         updateAmbience()
         updateMenuState()
+    }
+
+    /// «Meteo a caso»: un effetto della stagione dell'anno (`WeatherShuffle`), con una dissolvenza; con Riduci movimento
+    /// cambia e basta.
+    private func shuffleWeather() {
+        let next = WeatherShuffle.next(after: Settings.shared.seasonID, month: Calendar.current.component(.month, from: .now))
+        guard !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion else {
+            Settings.shared.seasonID = next
+            return
+        }
+        let windows = overlays
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = Tuning.weatherFade
+            windows.forEach { $0.animator().alphaValue = 0 }
+        } completionHandler: {
+            MainActor.assumeIsolated {
+                Settings.shared.seasonID = next   // il resto lo fa seasonDidChange
+                NSAnimationContext.runAnimationGroup { context in
+                    context.duration = Tuning.weatherFade
+                    windows.forEach { $0.animator().alphaValue = 1 }
+                }
+            }
+        }
     }
 
     @objc private func selectDensity(_ sender: NSMenuItem) {

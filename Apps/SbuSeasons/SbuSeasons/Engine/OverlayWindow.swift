@@ -19,9 +19,18 @@ final class OverlayWindow: NSPanel {
     private var displayLink: CADisplayLink?
     private var takesMouse = false
     private var behindWindows = false
+    /// Batteria e Riduci movimento dell'ultima volta, e «120 fps» come era allora: se cambia, si ricalcola.
+    private var energy = (onBattery: false, reduceMotion: false)
+    private var highRate = false
+    /// Quanti fotogrammi al secondo fa questo schermo (120 sui ProMotion).
+    private let maxFPS: Int
+    /// L'effetto gira (false = spento dal menu, schermo coperto da un'app a schermo intero o display che dorme).
+    private var running: Bool?
 
     init(screen: NSScreen) {
         let frame = screen.frame
+        maxFPS = screen.maximumFramesPerSecond
+        screenID = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID
 
         skView = OverlaySKView(frame: NSRect(origin: .zero, size: frame.size))
         scene = SeasonScene(size: frame.size, screenOrigin: frame.origin, season: Settings.shared.season)
@@ -68,6 +77,7 @@ final class OverlayWindow: NSPanel {
             behindWindows.toggle()
             level = Self.level(behindWindows: behindWindows)
         }
+        if Settings.shared.values.highFrameRate != highRate { setEnergy(onBattery: energy.onBattery, reduceMotion: energy.reduceMotion) }
         scene.step(at: link.targetTimestamp)
         // Il mouse si prende solo sopra un oggetto: la scena lo ricontrolla a ogni fotogramma.
         // Lo stato si tiene qui: leggere `ignoresMouseEvents` a ogni fotogramma costava CPU.
@@ -100,6 +110,8 @@ final class OverlayWindow: NSPanel {
     func meltAll() { scene.meltAll() }
     func clearSnowballs() { scene.clearSnowballs() }
     func shakeGlobe() { scene.shakeGlobe() }
+    /// Lo schermo di questa finestra, per la pausa automatica.
+    let screenID: CGDirectDisplayID?
     /// Il tempo simulato della neve su questo schermo.
     var elapsed: CGFloat { scene.elapsed }
     func setSeason(_ season: any Season) { scene.setSeason(season) }
@@ -109,14 +121,21 @@ final class OverlayWindow: NSPanel {
     func windowsShaken(_ ids: Set<CGWindowID>) { scene.windowsShaken(ids) }
 
     /// Batteria e "Riduci movimento": in entrambi i casi meno fotogrammi; con Riduci movimento anche meno movimento.
+    /// Con «120 fps sugli schermi ProMotion» acceso (Impostazioni → Meteo), a corrente e senza Riduci movimento, 120.
     func setEnergy(onBattery: Bool, reduceMotion: Bool) {
+        energy = (onBattery, reduceMotion)
+        highRate = Settings.shared.values.highFrameRate
         scene.reduceMotion = reduceMotion
-        let fps = Tuning.framesPerSecond(onBattery: onBattery, reduceMotion: reduceMotion)
+        let fps = Tuning.framesPerSecond(onBattery: onBattery, reduceMotion: reduceMotion, highRate: highRate, maxFPS: maxFPS)
         skView.preferredFramesPerSecond = fps
         displayLink?.preferredFrameRateRange = CAFrameRateRange(minimum: Float(fps), maximum: Float(fps), preferred: Float(fps))
     }
 
+    /// Accende o spegne l'effetto su questo schermo. Lo stesso stato di nuovo non fa niente: `AppDelegate` lo richiama
+    /// a ogni lettura delle finestre (pausa automatica, SBU-177).
     func setSnowing(_ snowing: Bool) {
+        guard snowing != running else { return }
+        running = snowing
         skView.isPaused = !snowing
         displayLink?.isPaused = !snowing
         if !snowing {

@@ -2,14 +2,15 @@ import AppKit
 import SpriteKit
 
 /// La primavera: petali di ciliegio, leggeri, che scendono lenti e svolazzano larghi;
-/// lenti come sono, il vento e il cursore li portano lontano. Si posano rosa chiaro.
+/// lenti come sono, il vento e il cursore li portano lontano. Si posano sulle finestre, restano un po' e sfumano.
 struct Spring: Season {
     static let id = "spring"
     var id: String { Self.id }
     var title: String { String(localized: "Primavera") }
     let symbol = "camera.macro"
     var pileColor: NSColor { SpringTuning.settled }
-    var pileGrowth: ClosedRange<CGFloat> { SpringTuning.pileGrowth }
+    var pieceSize: ClosedRange<CGFloat> { SpringTuning.piece }
+    var linger: ClosedRange<CGFloat>? { SpringTuning.linger }
 
     func particle(depth: CGFloat) -> Particle {
         Particle(
@@ -63,8 +64,10 @@ nonisolated enum SpringTuning {
     /// Giri al secondo nel piano e del ribaltamento: piano, un petalo plana.
     static let spin: ClosedRange<CGFloat> = 0.05...0.25
     static let flip: ClosedRange<CGFloat> = 0.1...0.35
-    /// Quanto aggiunge al mucchio un petalo posato (la neve 1): uno strato sottile.
-    static let pileGrowth: ClosedRange<CGFloat> = 0.15...0.35
-    /// I petali posati sulle finestre e sul Dock.
+    /// Un petalo posato su una finestra resta lì, intero, per 20–45 s e poi sfuma (SBU-177).
+    static let linger: ClosedRange<CGFloat> = 20...45
+    /// I petali che il cursore stacca da una finestra (pt).
+    static let piece: ClosedRange<CGFloat> = 6...10
+    /// I petali staccati dal cursore (i petali posati restano interi: `linger`).
     static let settled = NSColor(srgbRed: 0.98, green: 0.84, blue: 0.87, alpha: 1)
 }

@@ -14,7 +14,7 @@ struct SeasonChoiceTests {
         defer { settings.seasonID = before }
 
         Bindable(settings).seasonID.wrappedValue = Autumn.id   // la stessa Binding del Picker
-        #expect(UserDefaults.standard.string(forKey: "season") == Autumn.id)
+        #expect(Settings.defaults.string(forKey: "season") == Autumn.id)
         #expect(settings.season.id == Autumn.id)
     }
 

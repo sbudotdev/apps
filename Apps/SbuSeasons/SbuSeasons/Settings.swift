@@ -28,6 +28,16 @@ nonisolated struct SnowSettings: Codable, Equatable {
     var nightStart = 22         // ora
     // Dietro le finestre: gli effetti sulla scrivania, sotto le finestre delle app
     var behindWindows = false
+    // Meteo (SBU-177)
+    var randomWeather = false   // l'effetto cambia da solo (`WeatherShuffle`)
+    var rainbow = true          // arcobaleno quando la pioggia lascia il posto a un altro effetto
+    var tallSnow = false        // mucchi più alti sui bordi (× `Tuning.tallSnowFactor`)
+    var highFrameRate = false   // 120 fps sugli schermi ProMotion, solo a corrente
+}
+
+extension SnowSettings {
+    /// L'altezza massima vera dei mucchi: quella scelta, più alta con «Mucchi più alti».
+    var pileHeight: Double { maxPile * (tallSnow ? Tuning.tallSnowFactor : 1) }
 }
 
 extension SnowSettings {
@@ -54,14 +64,22 @@ extension SnowSettings {
 final class Settings {
     static let shared = Settings()
     private static let key = "settings"
+    /// Nei test un dominio a parte, vuoto a ogni giro: i test non leggono né cambiano le impostazioni di chi usa l'app
+    /// (prima tre test fallivano con «Sulle finestre» spento, e i test sovrascrivevano i valori veri).
+    static let defaults: UserDefaults = {
+        guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil, let suite = UserDefaults(suiteName: "dev.sbu.SbuSeasons.tests")
+        else { return .standard }
+        suite.removePersistentDomain(forName: "dev.sbu.SbuSeasons.tests")
+        return suite
+    }()
 
     var values: SnowSettings {
-        didSet { UserDefaults.standard.set(try? JSONEncoder().encode(values), forKey: Self.key) }
+        didSet { Self.defaults.set(try? JSONEncoder().encode(values), forKey: Self.key) }
     }
 
     /// La stagione scelta dal menu ❄︎ o dalle Impostazioni, salvata a parte: "Ripristina…" non la cambia.
     var seasonID: String {
-        didSet { UserDefaults.standard.set(seasonID, forKey: "season") }
+        didSet { Self.defaults.set(seasonID, forKey: "season") }
     }
     var season: any Season { Seasons.named(seasonID) }
 
@@ -77,8 +95,8 @@ final class Settings {
     }
 
     private init() {
-        values = SnowSettings(saved: UserDefaults.standard.data(forKey: Self.key))
-        seasonID = UserDefaults.standard.string(forKey: "season") ?? Seasons.all[0].id
+        values = SnowSettings(saved: Self.defaults.data(forKey: Self.key))
+        seasonID = Self.defaults.string(forKey: "season") ?? Seasons.all[0].id
     }
 
     func reset() { values = SnowSettings() }
@@ -105,6 +123,18 @@ struct SettingsView: View {
                     Toggle("Dietro le finestre", isOn: $settings.values.behindWindows)
                 } footer: {
                     Text("Dietro le finestre: gli effetti restano sulla scrivania, sotto le finestre delle app.")
+                        .foregroundStyle(Quaderno.inkMuted.color)
+                }
+                // Meteo (SBU-177): una sezione a sé, per non toccare le righe degli altri filoni di SBU-175.
+                Section {
+                    Toggle("Meteo a caso", isOn: $settings.values.randomWeather)
+                    Toggle("Arcobaleno dopo la pioggia", isOn: $settings.values.rainbow)
+                    Toggle("Mucchi più alti", isOn: $settings.values.tallSnow)
+                    Toggle("120 fps sugli schermi ProMotion", isOn: $settings.values.highFrameRate)
+                } header: {
+                    Text("Meteo")
+                } footer: {
+                    Text("Meteo a caso cambia effetto da solo ogni 10–25 minuti, tra quelli della stagione dell'anno. I 120 fps valgono solo a corrente e senza Riduci movimento.")
                         .foregroundStyle(Quaderno.inkMuted.color)
                 }
                 Section("Caduta") {

@@ -11,6 +11,7 @@ struct Meteors: Season {
     var pileColor: NSColor { MeteorsTuning.head }
     var settles: Bool { false }
     var abundance: Double { MeteorsTuning.abundance }
+    var shatters: Bool { true }
 
     func particle(depth: CGFloat) -> Particle {
         let fall = CGFloat.random(in: MeteorsTuning.fallSpeed)
