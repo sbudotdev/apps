@@ -92,6 +92,8 @@ final class RemoteModel {
     }
 
     func connected(to mac: String) {
+        // A new link: the Mac says again if it still refuses codes.
+        isPairingPaused = false
         if let token = tokens[mac] {
             phase = .connecting(mac)
             send(.resume(token: token))

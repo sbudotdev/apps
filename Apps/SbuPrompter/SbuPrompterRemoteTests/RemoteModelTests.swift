@@ -239,6 +239,18 @@ struct RemoteModelTests {
         #expect(!model.isPairingPaused)
     }
 
+    @Test func thePauseEndsWithTheConnection() {
+        model.found(["Studio"])
+        model.connected(to: "Studio")
+        model.enter(code: "1234")
+        model.receive(.pairingPaused)
+        model.disconnected(from: "Studio")
+        model.found(["Studio"])
+        model.connected(to: "Studio")
+        #expect(model.phase == .needsCode(mac: "Studio", wrong: false))
+        #expect(!model.isPairingPaused)
+    }
+
     @Test func twoMacsWithTheSameNameGetDifferentLabels() {
         #expect(MacLink.label(for: "Studio", taken: []) == "Studio")
         #expect(MacLink.label(for: "Studio", taken: ["Studio"]) == "Studio (2)")

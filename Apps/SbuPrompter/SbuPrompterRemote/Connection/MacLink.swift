@@ -9,6 +9,9 @@ final class MacLink: NSObject {
     private let session: MCSession
     private let browser: MCNearbyServiceBrowser
     /// The Macs nearby by the name shown; two Macs with the same name get "Studio (2)".
+    // shortcut: tokens are keyed by this label, and the label depends on which Mac is found
+    // first. Two Macs with the same name can swap tokens after a relaunch, and a refused
+    // `resume` then forgets the other Mac's token. Key tokens by a Mac id if that ever matters.
     private var found: [String: MCPeerID] = [:]
 
     init(model: RemoteModel) {
@@ -54,12 +57,13 @@ final class MacLink: NSObject {
         }
     }
 
-    /// One label per peer, so the session's callbacks use the name shown in the list.
+    /// One label per peer, so the session's callbacks use the name shown in the list. A lost
+    /// peer keeps its label: a late `.notConnected` still names the Mac the model knows.
     private var names: [MCPeerID: String] = [:]
 
     private func name(for mac: MCPeerID) -> String {
         if let name = names[mac] { return name }
-        let name = Self.label(for: mac.displayName, taken: Set(names.values))
+        let name = Self.label(for: mac.displayName, taken: Set(found.keys))
         names[mac] = name
         return name
     }
@@ -85,9 +89,9 @@ extension MacLink: MCNearbyServiceBrowserDelegate {
 
     nonisolated func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
         Task { @MainActor in
-            self.found[self.name(for: peerID)] = nil
-            // A relaunched Mac comes back as a new peer: let it take its plain name again.
-            self.names[peerID] = nil
+            // A relaunched Mac comes back as a new peer and takes its plain name again,
+            // since labels only clash with the Macs found now.
+            if let name = self.names[peerID], self.found[name] == peerID { self.found[name] = nil }
             self.foundChanged()
         }
     }
