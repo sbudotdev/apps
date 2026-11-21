@@ -13,6 +13,8 @@ struct Rain: Season {
     var settles: Bool { false }
     var abundance: Double { 0 }
     var glass: GlassRain? { RainTuning.glass }
+    var lightning: Lightning? { RainTuning.lightning }
+    var splashes: Bool { true }
 
     func makeTexture() -> SKTexture { SKTexture() }
     func particle(depth: CGFloat) -> Particle {
@@ -26,4 +28,6 @@ nonisolated enum RainTuning {
     static let water = NSColor(srgbRed: 0.72, green: 0.8, blue: 0.88, alpha: 1)
     /// Con "Media" 30 gocce al secondo su uno schermo da 1440×900, al massimo 400 sul vetro.
     static let glass = GlassRain(beads: 30, size: 2...5, slide: 7, most: 400, color: water)
+    /// Ogni tanto un lampo lontano anche nella pioggia: più di rado e più debole del temporale (SBU-177).
+    static let lightning = Lightning(every: 40...120, strength: 0.7)
 }

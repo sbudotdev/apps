@@ -13,7 +13,11 @@ nonisolated enum Tuning {
 
     /// 60 fotogrammi al secondo, 30 a batteria per consumare meno (decisione di Matteo, MGS-416)
     /// e con "Riduci movimento" di macOS, che chiede meno movimento.
-    static func framesPerSecond(onBattery: Bool, reduceMotion: Bool) -> Int { onBattery || reduceMotion ? 30 : 60 }
+    /// `highRate`: «120 fps sugli schermi ProMotion» (spento di base, SBU-177), solo se lo schermo li fa (`maxFPS`).
+    static func framesPerSecond(onBattery: Bool, reduceMotion: Bool, highRate: Bool = false, maxFPS: Int = 60) -> Int {
+        if onBattery || reduceMotion { return 30 }
+        return highRate && maxFPS >= 120 ? 120 : 60
+    }
 
     // MARK: Riduci movimento
 
@@ -101,9 +105,8 @@ nonisolated enum Tuning {
     static let cablePylonHeight: CGFloat = 60
     /// La velocità della cabina sul cavo (pt/s).
     static let cableSpeed: CGFloat = 70
-    static let maxTrees = 5
-    /// Le palline su un albero, al massimo.
-    static let maxBaubles = 40
+    /// Fino a 3 alberi, come in KoiArt (SBU-178): oltre sparisce il più vecchio.
+    static let maxTrees = 3
 
     // MARK: Natale
 
@@ -163,4 +166,202 @@ nonisolated enum Tuning {
     static let globeLift: ClosedRange<CGFloat> = 250...650
     /// Dopo una scossa la palla di vetro riposa per qualche secondo: chi continua a scuotere non la rifà subito.
     static let globeRest: CGFloat = 3
+
+    // MARK: Meteo (SBU-177)
+
+    /// Foglie e petali presi dal cursore: quanto in su e di lato volano via dal mucchio (pt/s).
+    static let leafScatterPop: ClosedRange<CGFloat> = 60...220
+    static let leafScatterSpread: CGFloat = 120
+    /// Di un mucchio di foglie si stacca un pezzo ogni tanti granelli di neve.
+    static let leafPieceShare = 3
+    /// Foglie e petali in volo: pesano meno della polvere e l'aria li frena di più (`grainGravity`, `grainAirDrag`).
+    static let leafGravity: CGFloat = 160
+    static let leafAirDrag: CGFloat = 2.5
+    /// Petali posati sulle finestre, al massimo per finestra: oltre se ne va il più vecchio.
+    static let maxRestingPerPile = 60
+    /// L'ultimo tratto della vita di un petalo posato, in cui sfuma (s).
+    static let restingFade: CGFloat = 3
+
+    /// Le lucciole cominciano a radunarsi quando il cursore è fermo da `gatherDelay` s; in `gatherRamp` s arrivano
+    /// alla forza piena `gatherRate` (frazione della distanza al secondo). Stanno in un anello di `gatherRing` pt.
+    /// Un movimento di più di `stillSlop` pt le disperde.
+    static let gatherDelay: CGFloat = 1.5
+    static let gatherRamp: CGFloat = 4
+    static let gatherRate: CGFloat = 0.6
+    static let gatherRing: ClosedRange<CGFloat> = 18...70
+    static let stillSlop: CGFloat = 4
+
+    /// Quanto tira il cursore fermo le lucciole (0 = niente): Riduci movimento a metà.
+    static func gatherPull(still: CGFloat, calm: Bool) -> CGFloat {
+        guard still >= gatherDelay else { return 0 }
+        return gatherRate * min(1, (still - gatherDelay) / gatherRamp) * (calm ? 0.5 : 1)
+    }
+
+    /// Una stella cadente che tocca un bordo si rompe in tante scintille, che vivono `sparkLife` s.
+    /// Con Riduci movimento ne nascono un terzo e non volano: si spengono dove sono.
+    static let sparksPerBurst = 14
+    static let sparkLife: ClosedRange<CGFloat> = 0.5...1.1
+    static let sparkSpeed: ClosedRange<CGFloat> = 60...220
+    static let sparkGravity: CGFloat = 260
+
+    /// L'arcobaleno dopo la pioggia: entra in `rainbowFadeIn` s, resta, sfuma negli ultimi `rainbowFadeOut`.
+    static let rainbowLife: CGFloat = 40
+    static let rainbowFadeIn: CGFloat = 4
+    static let rainbowFadeOut: CGFloat = 8
+    /// Quanto è coprente nel pieno: un velo, non una bandiera.
+    static let rainbowOpacity: CGFloat = 0.35
+
+    /// «Meteo a caso»: l'effetto cambia da solo ogni 10–25 minuti, con una dissolvenza di `weatherFade` s per lato.
+    static let weatherShuffle: ClosedRange<TimeInterval> = 600...1500
+    static let weatherFade: TimeInterval = 1.2
+
+    /// «Mucchi più alti»: l'altezza massima dei mucchi (Impostazioni → Dove si posa) moltiplicata per tanto.
+    static let tallSnowFactor: Double = 2.5
+
+    // MARK: Secondo giro meteo (SBU-185)
+
+    /// Vento fisso: le raffiche scendono al massimo a questa parte della forza scelta, senza cambiare lato.
+    static let windGustDip: CGFloat = 0.6
+    /// «Vento variabile»: gira ogni mezzo periodo (3 minuti), con almeno questa forza anche col cursore a zero (pt/s).
+    static let variableWindPeriod: CGFloat = 360
+    static let variableWindFloor: CGFloat = 30
+
+    /// Con Risparmio energetico, o con il Mac caldo (`thermalState` da `.serious` in su), metà effetto.
+    static func energyShare(lowPower: Bool, thermal: ProcessInfo.ThermalState) -> CGFloat {
+        lowPower || thermal == .serious || thermal == .critical ? 0.5 : 1
+    }
+
+    /// «Finestre pulite»: la neve su finestre e Dock si scioglie di `cleanMeltRate` pt al secondo
+    /// fino a uno strato di `cleanLayer` pt.
+    static let cleanLayer: CGFloat = 3
+    static let cleanMeltRate: CGFloat = 2
+
+    /// Gli schizzi della pioggia sul bordo di una finestra: poche goccioline basse che durano un attimo.
+    /// Solo una goccia del temporale su `1/splashShare` si rompe sul bordo: le altre cadono davanti.
+    static let splashDrops = 5
+    static let splashShare = 0.35
+    static let splashSpeed: ClosedRange<CGFloat> = 40...110
+    static let splashLife: ClosedRange<CGFloat> = 0.2...0.45
+
+    /// Il fulmine sull'icona del Dock di un'app che chiudi mentre piove: quanti tratti e quanto resta (s).
+    static let boltSegments = 10
+    static let boltLife: CGFloat = 0.45
+    // MARK: Ora del giorno (sfondi)
+
+    /// L'ora del Mac (decimale) a cui comincia ogni momento: la notte va dalle 21 all'alba delle 5.
+    static let momentStarts: [DayMoment: Double] = [
+        .dawn: 5, .sunrise: 6.5, .morning: 8, .noon: 11,
+        .goldenHour: 16, .sunset: 18, .dusk: 19.5, .night: 21,
+    ]
+    /// Come cambia lo sfondo in ogni momento (`DayTint`). Mezzogiorno è il disegno com'è.
+    static let momentLooks: [DayMoment: MomentLook] = [
+        .dawn: MomentLook(exposure: -0.55, temperature: 7600, saturation: 0.7, contrast: 0.95,
+                          veil: (0.95, 0.62, 0.66), veilOpacity: 0.28, veilReach: 0.75),
+        .sunrise: MomentLook(exposure: -0.2, temperature: 5600, saturation: 0.9,
+                             veil: (1, 0.78, 0.55), veilOpacity: 0.22, veilReach: 0.7),
+        .morning: MomentLook(exposure: 0.05, temperature: 6900, saturation: 0.95),
+        .noon: MomentLook(),
+        .goldenHour: MomentLook(exposure: -0.05, temperature: 4700, saturation: 1.1,
+                                veil: (1, 0.8, 0.4), veilOpacity: 0.16, veilReach: 0.8),
+        .sunset: MomentLook(exposure: -0.35, temperature: 4200, saturation: 1.15, contrast: 1.05,
+                            veil: (0.98, 0.45, 0.3), veilOpacity: 0.3, veilReach: 0.75),
+        .dusk: MomentLook(exposure: -1.2, temperature: 8400, saturation: 0.8, contrast: 1.05,
+                          veil: (0.4, 0.28, 0.6), veilOpacity: 0.4, veilReach: 0.9),
+        .night: MomentLook(exposure: -2.4, temperature: 10000, saturation: 0.6, contrast: 1.1,
+                           veil: (0.03, 0.06, 0.2), veilOpacity: 0.45, veilReach: 1),
+    ]
+    /// Uno sfondo con questa luminosità media (0…1) si scurisce quanto dice `momentLooks`; uno più scuro in proporzione,
+    /// col quadrato del rapporto, ma almeno per `momentDarkFloor`.
+    static let momentReferenceBrightness: CGFloat = 0.78
+    static let momentDarkFloor: CGFloat = 0.2
+    /// Ogni quanto (s) si guarda se è cominciato un altro momento. Solo di ripiego: di solito il cambio
+    /// lo fa macOS con lo sfondo dinamico (`DynamicWallpaper`), e questo timer non parte.
+    static let momentCheckInterval: TimeInterval = 60
+    /// La qualità dei JPEG dei momenti, scritti una volta in Application Support.
+    static let momentJPEGQuality = 0.9
+    /// La qualità dei fotogrammi dell'HEIC dinamico, scritto una volta per sfondo in Application Support.
+    static let dynamicWallpaperQuality = 0.8
+
+    // MARK: Albero da decorare, pupazzo, visitatori (SBU-178)
+
+    /// Le decorazioni su un albero, al massimo (la stella non conta: ce n'è una sola e sostituisce la vecchia).
+    static let maxDecorations = 40
+    /// Quanto può crescere un albero (1 = come lo pianti) e quanto si ingrandisce o rimpicciolisce una decorazione.
+    static let treeGrowth: ClosedRange<CGFloat> = 1...2.2
+    static let decorationScale: ClosedRange<CGFloat> = 0.5...2.5
+    /// La rotella: un punto di scorrimento ingrandisce dell'1% (con ⇧ o ⌥ gira di un grado).
+    static let scrollResize: CGFloat = 0.01
+
+    /// Ogni quanto si salvano alberi e pupazzi (s), se sono cambiati; poi all'uscita e quando si ricreano gli schermi.
+    static let keepInterval: TimeInterval = 5
+
+    /// Lo Yeti passa da solo ogni 4–9 minuti, solo se c'è almeno un pupazzo da portare via.
+    static let yetiInterval: ClosedRange<CGFloat> = 240...540
+    /// Cammina a `yetiWalk` pt/s, scappa a `yetiDash` quando lo scacci; con il pupazzo in spalla va a `yetiCarry`.
+    static let yetiWalk: CGFloat = 70
+    static let yetiCarry: CGFloat = 55
+    static let yetiDash: CGFloat = 320
+    /// Il trenino con l'elfo passa da solo ogni 5–10 minuti, a `trainSpeed` pt/s, e lascia un regalo.
+    static let trainInterval: ClosedRange<CGFloat> = 300...600
+    static let trainSpeed: CGFloat = 130
+    /// La lettera sale fino alla slitta a `letterRise` pt/s.
+    static let letterRise: CGFloat = 160
+    /// Con Riduci movimento la busta compare lassù in `letterFadeIn` s, resta `letterStay` s e svanisce in `letterFadeOut` s.
+    static let letterFadeIn: TimeInterval = 0.4
+    static let letterStay: TimeInterval = 1.2
+    static let letterFadeOut: TimeInterval = 0.6
+
+    /// Lo Yeti prende il pupazzo a meno di `yetiReach` pt; più in alto, a meno di `yetiJumpReach` pt, ci salta sopra
+    /// arrivando `yetiJumpClearance` pt più su del pupazzo.
+    static let yetiReach: CGFloat = 8
+    static let yetiJumpReach: CGFloat = 40
+    static let yetiJumpClearance: CGFloat = 24
+    /// Dove l'elfo lancia il regalo, in frazioni della larghezza dello schermo (lontano dai bordi).
+    static let elfDropSpan: ClosedRange<CGFloat> = 0.15...0.85
+    /// Il regalo parte dal vagone a `elfGiftHeight` pt, lanciato indietro a `elfGiftThrow.dx` e in su a `elfGiftThrow.dy` pt/s.
+    static let elfGiftHeight: CGFloat = 26
+    static let elfGiftThrow = CGVector(dx: 60, dy: 240)
+    /// L'altezza (pt dai piedi, albero a grandezza 1) dove l'elfo appende la sua decorazione.
+    static let elfDecorationHeight: ClosedRange<CGFloat> = 16...60
+
+    // MARK: Pupazzi vivi (SBU-187)
+
+    /// Una palla o un pupazzo lanciati più forte di così (pt/s) si rompono in neve al primo urto.
+    /// Cadere da soli non li rompe: solo il lancio.
+    static let shatterThrow: CGFloat = 1000
+    /// Quanti granelli di neve lascia una palla rotta (un pupazzo ne lascia tre volte tanti).
+    static let shatterGrains = 40
+    /// Una finestra scossa fa saltare i pupazzi e le palle che ci stanno sopra (pt/s in su, e un po' di lato).
+    static let shakeHop: CGFloat = 380
+    static let shakeHopSide: CGFloat = 30
+    /// Due pupazzi sullo stesso bordo, a questa distanza (pt), ogni tanto si tirano una palla (Impostazioni → Visitatori).
+    static let fightReach: ClosedRange<CGFloat> = 40...260
+    static let fightInterval: ClosedRange<CGFloat> = 25...70
+    /// Quanto vola la palla tra i due (s).
+    static let fightFlight: CGFloat = 0.8
+    /// Lo Yeti colpito da una palla cade e sparisce in tanti secondi.
+    static let yetiFall: CGFloat = 1.2
+    /// Gli elfi passano da soli ogni 1½–3 ore (Impostazioni → Visitatori). Escono dalla neve in `elfRise` s,
+    /// rotolano una palla ogni `elfRollInterval` s a `elfBallGap` pt l'una dall'altra, poi se ne vanno a `elfWalk` pt/s.
+    static let elvesInterval: ClosedRange<CGFloat> = 5400...10_800
+    static let elfRise: CGFloat = 0.5
+    static let elfRollInterval: CGFloat = 1
+    static let elfBallGap: CGFloat = 14
+    static let elfWalk: CGFloat = 60
+
+    // MARK: Decora (SBU-187)
+
+    /// Le decorazioni sulla scrivania, per schermo: oltre sparisce la più vecchia.
+    static let maxDeskItems = 12
+    /// Quanto si ingrandisce o rimpicciolisce una decorazione.
+    static let deskScale: ClosedRange<CGFloat> = 0.5...3
+    /// Le luci pendono in mezzo di questa parte della loro lunghezza, almeno `lightsMinSag` pt.
+    static let lightsSag: CGFloat = 0.18
+    static let lightsMinSag: CGFloat = 12
+    /// Un'estremità delle luci si prende entro tanti pt; le lampadine sono a `bulbGap` pt l'una dall'altra.
+    static let lightsGrab: CGFloat = 14
+    static let bulbRadius: CGFloat = 4
+    static let bulbGap: CGFloat = 18
+    /// Fiamme e lampadine si ridisegnano tante volte al secondo: bastano, e costano poco.
+    static let deskFlickerFPS: Double = 8
 }

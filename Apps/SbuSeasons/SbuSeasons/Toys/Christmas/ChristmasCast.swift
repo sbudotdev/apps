@@ -12,6 +12,8 @@ final class Santa {
     var dropX: CGFloat?
     /// L'altezza a cui vola (ci ondeggia intorno).
     var altitude: CGFloat = 0
+    /// La letterina da prendere al volo (SBU-178).
+    weak var pickup: SKNode?
 
     init(heading: CGFloat, carriesGift: Bool) {
         self.heading = heading
@@ -96,10 +98,14 @@ final class Gift: Toy {
     private(set) var isOpen = false
     /// Da quanto è aperto (s).
     private(set) var openFor: CGFloat = 0
+    /// Il regalo del trenino (SBU-178): verde, e dentro c'è un oggetto per l'albero o il pupazzo (`ElfPresent`).
+    let fromElf: Bool
 
-    init(at position: CGPoint) {
-        let node = SKSpriteNode(texture: Self.closed)
-        node.size = Self.closed.size()
+    init(at position: CGPoint, fromElf: Bool = false) {
+        self.fromElf = fromElf
+        let closed = fromElf ? Self.elfClosed : Self.closed
+        let node = SKSpriteNode(texture: closed)
+        node.size = closed.size()
         super.init(node: node, at: position)
         bounce = 0.25
     }
@@ -113,15 +119,22 @@ final class Gift: Toy {
     override func clicked() {
         guard !isOpen else { return }
         isOpen = true
-        node.texture = Self.open
+        node.texture = fromElf ? Self.elfOpen : Self.open
         SoundBoard.shared.play("regalo")
-        (node.scene as? SeasonScene)?.unwrap(self)
+        guard let scene = node.scene as? SeasonScene else { return }
+        if fromElf { scene.unwrapElfGift(self) } else { scene.unwrap(self) }
     }
 
     private static let red = NSColor(calibratedRed: 0.78, green: 0.12, blue: 0.16, alpha: 1)
     private static let gold = NSColor(calibratedRed: 0.98, green: 0.78, blue: 0.2, alpha: 1)
 
-    private static let closed = drawnTexture(size: CGSize(width: 22, height: 22)) { _ in
+    private static let green = NSColor(calibratedRed: 0.13, green: 0.45, blue: 0.26, alpha: 1)
+    private static let closed = drawnTexture(size: CGSize(width: 22, height: 22)) { _ in drawClosed(box: red, ribbon: gold) }
+    private static let open = drawnTexture(size: CGSize(width: 22, height: 22)) { _ in drawOpen(box: red, ribbon: gold) }
+    private static let elfClosed = drawnTexture(size: CGSize(width: 22, height: 22)) { _ in drawClosed(box: green, ribbon: red) }
+    private static let elfOpen = drawnTexture(size: CGSize(width: 22, height: 22)) { _ in drawOpen(box: green, ribbon: red) }
+
+    private static func drawClosed(box red: NSColor, ribbon gold: NSColor) {
         red.setFill()
         NSBezierPath(rect: CGRect(x: 2, y: 0, width: 18, height: 14)).fill()
         NSBezierPath(rect: CGRect(x: 1, y: 13, width: 20, height: 4)).fill()   // il coperchio
@@ -136,7 +149,7 @@ final class Gift: Toy {
         }
     }
 
-    private static let open = drawnTexture(size: CGSize(width: 22, height: 22)) { _ in
+    private static func drawOpen(box red: NSColor, ribbon gold: NSColor) {
         red.setFill()
         NSBezierPath(rect: CGRect(x: 2, y: 0, width: 18, height: 14)).fill()
         gold.setFill()

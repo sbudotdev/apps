@@ -127,6 +127,7 @@ extension SeasonScene {
             }
         }
 
+        stepLetter()
         for gift in toys.compactMap({ $0 as? Gift }) where gift.openFor >= Tuning.giftLinger { remove(gift) }
 
         let floor = Ledge(y: 0, span: 0...size.width)
@@ -145,6 +146,8 @@ extension SeasonScene {
     func removeChristmas() {
         santa?.node.removeFromParent()
         santa = nil
+        letter?.removeFromParent()
+        letter = nil
         toys.filter { $0 is Gift || $0 is GingerbreadMan }.forEach(remove)
     }
 }

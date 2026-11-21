@@ -37,6 +37,11 @@ final class Passages {
     /// Quando ripassa (secondi dell'orologio di `tick`).
     private var next: TimeInterval?
     private let random: () -> Double
+    /// "Babbo Natale passa da solo" (Impostazioni → Visitatori, SBU-187), acceso all'inizio. Dal menu passa sempre.
+    static let autoKey = "santaVisits"
+    var passesAlone: () -> Bool = { UserDefaults.standard.object(forKey: Passages.autoKey) as? Bool ?? true }
+    /// Quanto spesso passa da solo; il giro chiamato dal menu tiene il suo ritmo.
+    var frequency: () -> VisitFrequency = { VisitFrequency.saved }
 
     /// `random` in 0..<1: i test lo fissano.
     init(random: @escaping () -> Double = { .random(in: 0..<1) }) {
@@ -55,13 +60,15 @@ final class Passages {
     /// Fa partire un passaggio (`manual`: dal menu, e accende il loop). false = in pausa, già in volo o non è inverno.
     @discardableResult
     func send(at now: TimeInterval, manual: Bool = true) -> Bool {
+        endStuckFlight()
         guard !paused, flight == nil, let lead = scenes.first, lead.season is Snow else { return false }
+        let heading: CGFloat = random() < 0.5 ? -1 : 1
+        let route = ScreenRoute.order(scenes.map(\.screenFrame), heading: heading, live: scenes.map(\.effectRuns))
+        guard !route.isEmpty else { return false }
         if manual {
             looping = true
             next = now + delay(Tuning.santaLoopInterval)
         }
-        let heading: CGFloat = random() < 0.5 ? -1 : 1
-        let route = ScreenRoute.order(scenes.map(\.screenFrame), heading: heading)
         let clock = lead.christmas
         let canGive = clock.diary.canGive(on: clock.now())
         let carries = manual ? canGive : SantaVisits.carriesGift(eve: clock.isEve, canGive: canGive, roll: random())
@@ -73,16 +80,20 @@ final class Passages {
 
     /// Ogni tanto (`AppDelegate`, mentre l'effetto è acceso): è ora di ripassare?
     func tick(at now: TimeInterval) {
+        endStuckFlight()
         guard !paused, flight == nil, let lead = scenes.first, lead.season is Snow else { return }
+        guard looping || passesAlone() else { return }
+        let frequency = frequency()
         guard let next else {
-            self.next = now + delay(looping ? Tuning.santaLoopInterval : Tuning.santaFirstVisit)
+            self.next = now + delay(looping ? Tuning.santaLoopInterval : frequency.scaled(Tuning.santaFirstVisit))
             return
         }
         guard now >= next else { return }
         // La data si guarda solo all'ora del passaggio: niente calendario a ogni controllo.
         let clock = lead.christmas
         if looping || clock.isChristmasTime { send(at: now, manual: false) }
-        self.next = now + delay(looping ? Tuning.santaLoopInterval : clock.isEve ? Tuning.santaEveInterval : Tuning.santaInterval)
+        self.next = now + delay(looping ? Tuning.santaLoopInterval
+                                        : frequency.scaled(clock.isEve ? Tuning.santaEveInterval : Tuning.santaInterval))
     }
 
     /// Cambiando stagione finiscono il loop e la pausa (fuori dall'inverno la voce della pausa è spenta, QA SBU-63).
@@ -106,6 +117,14 @@ final class Passages {
             current.leg += 1
             flight = current
         }
+        flight = nil
+    }
+
+    /// La slitta è su uno schermo che si è fermato (pausa automatica, scelta degli schermi): lì non arriverebbe
+    /// mai in fondo, e Babbo Natale non ripasserebbe più (SBU-193).
+    private func endStuckFlight() {
+        guard let current = flight, scenes.indices.contains(current.route[current.leg]),
+              !scenes[current.route[current.leg]].effectRuns else { return }
         flight = nil
     }
 

@@ -157,7 +157,7 @@ struct WinterGamesTests {
         let tree = try #require(scene.plantTree())
         tree.clicked(at: CGPoint(x: 0, y: 40))
         tree.clicked(at: CGPoint(x: -10, y: 25))
-        #expect(tree.baubles == 2)
+        #expect(tree.look.decorations.count == 2)
     }
 
     @Test func clickingTheTrunkOrBesideTheTreeHangsNothing() throws {
@@ -165,7 +165,7 @@ struct WinterGamesTests {
         let tree = try #require(scene.plantTree())
         tree.clicked(at: CGPoint(x: 0, y: 3))      // il tronco
         tree.clicked(at: CGPoint(x: 27, y: 70))    // accanto alla punta, fuori dai rami
-        #expect(tree.baubles == 0)
+        #expect(tree.look.decorations.count == 0)
     }
 
     @Test func aBaubleIsHungThroughTheEngineClick() throws {
@@ -176,7 +176,7 @@ struct WinterGamesTests {
         let point = CGPoint(x: feet.x, y: feet.y + 40)
         #expect(scene.grab(at: point, time: 1))
         scene.letGo(at: point, time: 1.05)
-        #expect(tree.baubles == 1)
+        #expect(tree.look.decorations.count == 1)
     }
 
     // MARK: - Menu

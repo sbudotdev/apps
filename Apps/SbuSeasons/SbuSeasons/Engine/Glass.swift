@@ -20,6 +20,8 @@ nonisolated struct GlassDrops {
     private(set) var drops: [Drop] = []
     /// Le gocce sparite nell'ultimo passo (unite a un'altra o uscite): chi le disegna toglie le loro sprite.
     private(set) var removed: [Int] = []
+    /// Dove una goccia è arrivata su un bordo nell'ultimo passo: lì schizza (SBU-185).
+    private(set) var splashes: [CGPoint] = []
     private var nextID = 0
     private var due: CGFloat = 0
 
@@ -47,6 +49,7 @@ nonisolated struct GlassDrops {
     /// Un passo. `amount`: intensità rispetto a "Media"; `ledges`: i bordi da cui una goccia cade; `calm`: Riduci movimento.
     mutating func step(dt: CGFloat, size: CGSize, ledges: [Ledge], amount: CGFloat, calm: Bool) {
         removed = []
+        splashes = []
         guard size.width > 0, size.height > 0 else { return }
         let area = size.width * size.height / Tuning.referenceScreenArea
         // Nuove gocce.
@@ -86,8 +89,9 @@ nonisolated struct GlassDrops {
             drop.position.y -= drop.speed * dt
             // Scorrendo arriva su un bordo scoperto: lì non c'è più vetro libero, cade giù.
             if !drop.falling, drop.speed > 0,
-               ledges.contains(where: { previousY >= $0.y && drop.position.y < $0.y && $0.span.contains(drop.position.x) }) {
+               let ledge = ledges.first(where: { previousY >= $0.y && drop.position.y < $0.y && $0.span.contains(drop.position.x) }) {
                 drop.falling = true
+                splashes.append(CGPoint(x: drop.position.x, y: ledge.y))
             }
             drops[i] = drop
         }
@@ -139,6 +143,9 @@ final class Glass: SKNode {
         model = rain.map(GlassDrops.init)
         texture = rain.map { Self.makeTexture($0.color) }
     }
+
+    /// Dove le gocce sono arrivate su un bordo nell'ultimo passo.
+    var splashes: [CGPoint] { model?.splashes ?? [] }
 
     func step(dt: CGFloat, size: CGSize, ledges: [Ledge], amount: CGFloat, calm: Bool) {
         guard var model, let texture else { return }

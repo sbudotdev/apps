@@ -10,6 +10,7 @@ struct Autumn: Season {
     let symbol = "leaf"
     var pileColor: NSColor { AutumnTuning.settled }
     var pileGrowth: ClosedRange<CGFloat> { AutumnTuning.pileGrowth }
+    var pieceSize: ClosedRange<CGFloat> { AutumnTuning.piece }
 
     func particle(depth: CGFloat) -> Particle {
         Particle(
@@ -87,4 +88,6 @@ nonisolated enum AutumnTuning {
     static let settled = NSColor(srgbRed: 0.62, green: 0.36, blue: 0.19, alpha: 1)
     /// Quanto aggiunge al mucchio una foglia posata: in media meno della neve, e molto variabile.
     static let pileGrowth: ClosedRange<CGFloat> = 0.1...1.1
+    /// Le foglie che il cursore stacca dal mucchio: intere, un po' più piccole di quelle che cadono (pt).
+    static let piece: ClosedRange<CGFloat> = 8...14
 }

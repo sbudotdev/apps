@@ -40,6 +40,8 @@ final class SeasonScene: SKScene {
         var velocity: CGVector
         /// Il mucchio da cui è partito: non ci ricade sopra, scende davanti alla finestra.
         let source: Pile?
+        /// Rotazione in radianti al secondo: le foglie e i petali staccati girano, la polvere no.
+        var spin: CGFloat = 0
     }
     private var grains: [Grain] = []
 
@@ -65,12 +67,16 @@ final class SeasonScene: SKScene {
     /// Dove comincia la barra dei menu (coordinate della scena): un oggetto non sta in piedi dove la coprirebbe.
     private(set) var ceiling: CGFloat?
     /// L'oggetto in mano al cursore: dove l'ha preso, dov'è partito, l'ultima posizione e la velocità del lancio.
-    private var held: (toy: Toy, grip: CGVector, start: CGPoint, last: CGPoint, time: TimeInterval, velocity: CGVector)?
+    /// `part`: si trascina una parte dell'oggetto (una decorazione), non l'oggetto.
+    private var held: (toy: Toy, grip: CGVector, start: CGPoint, last: CGPoint, time: TimeInterval, velocity: CGVector,
+                       part: Bool)?
     private var pointerShake = ShakeDetector()
     /// Granelli di neve raccolti con ⌥ per la prossima palla.
     private var gathered = 0
     /// Quando è stata scossa l'ultima volta la palla di vetro (tempo della scena).
     private var lastGlobe = -CGFloat.infinity
+    /// Quando due pupazzi vicini si tirano la prossima palla (tempo della scena, `LivelySnowmen`).
+    var nextFight: CGFloat?
 
     /// Nebbia, nuvole e lampi della stagione.
     let sky = Sky()
@@ -78,6 +84,14 @@ final class SeasonScene: SKScene {
     let glass = Glass()
     /// La notte: schermo più scuro e la candela (Impostazioni → Notte). Si ricontrolla una volta al secondo.
     let night = Night()
+    /// Le scintille delle stelle cadenti che si rompono sui bordi e l'arcobaleno dopo la pioggia (SBU-177).
+    let sparks = Sparks()
+    let rainbow = Rainbow()
+    /// Da quanto il cursore sta fermo, e se le lucciole si stavano radunando (per disperderle quando riparte).
+    private var stillness = Stillness()
+    private var gathering = false
+    /// Dove è il cursore, in coordinate globali. Si sostituisce nei test e per registrare le prove fuori schermo.
+    var pointerLocation: () -> CGPoint = { NSEvent.mouseLocation }
     private var nightClock: CGFloat = .infinity
 
     /// Natale (`Toys/Christmas/`): che giorno è e il diario dei regali, la slitta in volo.
@@ -88,9 +102,18 @@ final class SeasonScene: SKScene {
     var santaVisits = 0
     /// La slitta è uscita di lato, alla quota (della scena) data: `Passages` la fa entrare nello schermo dopo.
     var onSantaLeft: ((CGFloat) -> Void)?
+    /// Il trenino con l'elfo in corsa (`Toys/Visitors/`); lo Yeti invece è un oggetto, sta in `toys`.
+    var train: Train?
+    /// La busta della letterina a Babbo Natale, finché la slitta non la prende (`Toys/Christmas/Letter.swift`).
+    var letter: SKSpriteNode?
+    /// Yeti o trenino usciti di lato: `Visitors` li fa entrare nello schermo dopo.
+    var onVisitorLeft: ((VisitorKind, VisitorExit) -> Void)?
 
     /// Lo schermo, in coordinate globali (come `NSScreen.frame`).
     var screenFrame: CGRect { CGRect(origin: screenOrigin, size: size) }
+    /// L'effetto gira su questo schermo (`OverlayWindow.setSnowing`). Spento dalla scelta degli schermi o fermo per la
+    /// pausa automatica, la scena non va avanti: visitatori e Babbo Natale lo saltano (SBU-193).
+    var effectRuns = true
     /// Dove può volare la slitta, in coordinate globali: lo schermo sotto la barra dei menu.
     var flightBand: CGRect { CGRect(x: screenOrigin.x, y: screenOrigin.y, width: size.width, height: ceiling ?? size.height) }
 
@@ -102,6 +125,9 @@ final class SeasonScene: SKScene {
             dropHeld()
             santa?.node.removeFromParent()
             santa = nil
+            letter?.removeFromParent()
+            letter = nil
+            removeVisitors()
         }
     }
 
@@ -113,6 +139,17 @@ final class SeasonScene: SKScene {
             if flakes.isEmpty { sky.set(season, size: size, amount: skyAmount) } else { rebuildFlakes() }
         }
     }
+
+    /// Risparmio energetico o Mac caldo (SBU-185): la parte di particelle, banchi e gocce che resta (1 = tutto).
+    var energyShare: CGFloat = 1 {
+        didSet {
+            guard energyShare != oldValue else { return }
+            if flakes.isEmpty { sky.set(season, size: size, amount: skyAmount) } else { rebuildFlakes(keeping: true) }
+        }
+    }
+
+    /// I fulmini sul Dock ancora accesi.
+    private var bolts: [Bolt] = []
 
     /// Quantità e dimensione con cui sono stati creati i fiocchi attuali:
     /// se nelle impostazioni cambiano, li ricreiamo.
@@ -131,6 +168,8 @@ final class SeasonScene: SKScene {
         addChild(sky)
         addChild(glass)
         addChild(night)
+        addChild(sparks)
+        addChild(rainbow)
         glass.set(season.glass)
     }
 
@@ -167,6 +206,7 @@ final class SeasonScene: SKScene {
             removeWinterPlay(includingCableCar: true)
             removeChristmas()
             removeFigures()
+            removeVisitors()
         }
         if !season.settles { everyPile.forEach { $0.clear() } }
         // La pausa è una voce dei giochi d'inverno: fuori dall'inverno non si potrebbe togliere (QA SBU-63).
@@ -193,7 +233,7 @@ final class SeasonScene: SKScene {
             flakes = []
             return
         }
-        let calm = reduceMotion ? Tuning.reducedMotionFlakes : 1
+        let calm = (reduceMotion ? Tuning.reducedMotionFlakes : 1) * energyShare
         let exact = settings.flakeCount * season.abundance * Double(size.width * size.height / Tuning.referenceScreenArea * calm)
         let count = season.abundance > 0 ? max(Int(exact), 1) : 0
         if flakes.count > count {
@@ -212,7 +252,7 @@ final class SeasonScene: SKScene {
     private var intensity: CGFloat { CGFloat(Settings.shared.values.flakeCount / SnowSettings().flakeCount) }
 
     /// Quanti banchi rispetto a "Media": seguono l'intensità, e con Riduci movimento sono la metà.
-    private var skyAmount: CGFloat { intensity * (reduceMotion ? Tuning.reducedMotionFlakes : 1) }
+    private var skyAmount: CGFloat { intensity * (reduceMotion ? Tuning.reducedMotionFlakes : 1) * energyShare }
 
     /// Crea un fiocco nel punto indicato.
     private func makeFlake(at position: CGPoint) -> Flake {
@@ -273,20 +313,58 @@ final class SeasonScene: SKScene {
     /// orizzontale (`drift` ± `spread`) e un saltello verticale (`pop`). Poi ci pensa la gravità.
     private func spawnPowder(_ points: [CGPoint], from source: Pile? = nil, drift: CGFloat = 0,
                              spread: CGFloat = 8, pop: ClosedRange<CGFloat> = -5...5) {
+        // Un mucchio di foglie si stacca in meno pezzi della neve: interi, troppi farebbero un grumo.
+        // I petali posati no: ogni punto è un petalo vero.
+        let thin = piecesAreWhole && season.linger == nil
         for point in points where grains.count < Tuning.maxGrains {
+            if thin, Int.random(in: 0..<Tuning.leafPieceShare) != 0 { continue }
             let node = SKSpriteNode(texture: flakeTexture)
-            let diameter = CGFloat.random(in: 2...4)   // più piccoli dei fiocchi: è polvere
+            let diameter = CGFloat.random(in: season.pieceSize)   // la neve è polvere, foglie e petali restano interi
             node.size = CGSize(width: diameter, height: diameter)
+            let whole = piecesAreWhole && !reduceMotion
+            if whole { node.zRotation = .random(in: 0...(2 * .pi)) }
             node.alpha = .random(in: 0.8...1)
-            // È un pezzo del mucchio: ha il suo colore (una foglia senza tinta sarebbe bianca).
-            node.color = season.pileColor
-            node.colorBlendFactor = 1
+            // È un pezzo del mucchio: ha il suo colore (una foglia senza tinta sarebbe bianca). Una foglia intera
+            // ha la tinta di una foglia vera, un petalo il suo disegno.
+            let tint = piecesAreWhole ? season.particle(depth: 0.5).tint : nil
+            node.color = tint ?? season.pileColor
+            node.colorBlendFactor = tint == nil && piecesAreWhole ? 0 : 1
             node.zPosition = 1.5
             node.position = point
             addChild(node)
             grains.append(Grain(node: node, velocity: CGVector(dx: drift + .random(in: -spread...spread),
-                                                               dy: .random(in: pop)), source: source))
+                                                               dy: .random(in: pop)), source: source,
+                                spin: whole ? .random(in: -4...4) : 0))
         }
+    }
+
+    /// L'arcobaleno dopo la pioggia (lo chiede `AppDelegate` quando l'effetto cambia, se è acceso).
+    func showRainbow() { rainbow.show(size: size) }
+
+    /// Il fulmine sull'icona del Dock in `point` (coordinate globali): dalla cima dello schermo all'icona, con un lampo
+    /// e il tuono (SBU-185). Chi chiama controlla `Bolt.strikes`.
+    func strike(at point: CGPoint) {
+        let target = CGPoint(x: point.x - screenOrigin.x, y: point.y - screenOrigin.y)
+        let bolt = Bolt(from: size.height, to: target)
+        addChild(bolt)
+        bolts.append(bolt)
+        sky.strikeNow()
+    }
+    var boltCount: Int { bolts.count }
+
+    /// I pezzi staccati da un mucchio sono foglie o petali interi (non polvere): volano e cadono piano.
+    private var piecesAreWhole: Bool { season.pieceSize.upperBound > 4 }
+
+    /// Una particella posata che resta intera sul bordo (i petali): una copia ferma, adagiata di lato.
+    private func restingCopy(of flake: Flake) -> SKSpriteNode {
+        let node = SKSpriteNode(texture: flakeTexture)
+        node.size = CGSize(width: flake.radius * 2, height: flake.radius * 2)
+        node.color = flake.node.color
+        node.colorBlendFactor = flake.node.colorBlendFactor
+        node.alpha = flake.alpha
+        node.zRotation = .pi / 2 + .random(in: -0.5...0.5)
+        node.yScale = 0.6
+        return node
     }
 
     var flakeCount: Int { flakes.count }
@@ -325,6 +403,8 @@ final class SeasonScene: SKScene {
     func wantsMouse(at point: CGPoint) -> Bool {
         !toysPaused && (held != nil || toy(at: point) != nil)
     }
+    /// L'oggetto in mano al cursore, se c'è.
+    var heldToy: Toy? { held?.toy }
     /// `wantsMouse` nel punto del cursore, ricalcolato a ogni passo.
     private(set) var wantsMouse = false
 
@@ -333,8 +413,13 @@ final class SeasonScene: SKScene {
     func grab(at point: CGPoint, time: TimeInterval) -> Bool {
         guard !toysPaused, let toy = toy(at: point) else { return false }
         let feet = toy.body.position
-        held = (toy, CGVector(dx: point.x - feet.x, dy: point.y - feet.y), point, point, time, .zero)
-        toy.body.hold(at: feet)
+        let grip = CGVector(dx: point.x - feet.x, dy: point.y - feet.y)
+        let part = toy.pressPart(at: CGPoint(x: grip.dx, y: grip.dy))
+        held = (toy, grip, point, point, time, .zero, part)
+        if !part && toy.isDraggable {
+            toy.body.hold(at: feet)
+            toy.thrownHard = false
+        }
         // Davanti agli altri oggetti.
         toys.removeAll { $0 === toy }
         toys.append(toy)
@@ -352,9 +437,14 @@ final class SeasonScene: SKScene {
         }
         held.last = point
         held.time = time
-        held.toy.body.hold(at: CGPoint(x: point.x - held.grip.dx, y: point.y - held.grip.dy))
-        held.toy.node.position = held.toy.body.position
         self.held = held
+        let feet = held.toy.body.position
+        if held.part {
+            held.toy.dragPart(to: CGPoint(x: point.x - feet.x, y: point.y - feet.y))
+        } else if held.toy.isDraggable {
+            held.toy.body.hold(at: CGPoint(x: point.x - held.grip.dx, y: point.y - held.grip.dy))
+            held.toy.node.position = held.toy.body.position
+        }
     }
 
     /// Rilascio: un clic se il mouse non si è quasi mosso, se no un lancio (con Riduci movimento cade dritto).
@@ -365,7 +455,18 @@ final class SeasonScene: SKScene {
         guard let held else { return }
         self.held = nil
         let isClick = hypot(point.x - held.start.x, point.y - held.start.y) < Tuning.clickSlop
+        if held.part {
+            let feet = held.toy.body.position
+            held.toy.releasePart(at: CGPoint(x: point.x - feet.x, y: point.y - feet.y))
+            return
+        }
+        guard held.toy.isDraggable else {
+            if isClick { held.toy.clicked(at: CGPoint(x: point.x - held.toy.body.position.x, y: point.y - held.toy.body.position.y)) }
+            return
+        }
         held.toy.body.release(velocity: isClick || stale || reduceMotion ? .zero : held.velocity)
+        let thrown = held.toy.body.velocity
+        held.toy.thrownHard = held.toy.breaks && hypot(thrown.dx, thrown.dy) >= Tuning.shatterThrow
         if held.toy is Snowball, held.toy.body.velocity != .zero { SoundBoard.shared.play("palla-di-neve-lancio") }
         if isClick {
             let feet = held.toy.body.position
@@ -376,8 +477,44 @@ final class SeasonScene: SKScene {
     /// Il cursore si è mosso su questo schermo: se è stato scosso, lo sanno tutti gli oggetti.
     /// La neve si ferma mentre trascini: l'oggetto cade lì, e la finestra non resta col mouse preso.
     func dropHeld() {
-        held?.toy.body.release(velocity: .zero)
+        if let held, !held.part, held.toy.isDraggable { held.toy.body.release(velocity: .zero) }
+        if let held, held.part { held.toy.releasePart(at: CGPoint(x: held.grip.dx, y: held.grip.dy)) }
         held = nil
+    }
+
+    // MARK: - Schede, pizzico, rotella (SBU-178)
+
+    /// La scheda di un oggetto (pupazzo, albero) da aprire nel punto dato, in coordinate globali.
+    /// La apre `OverlayWindow` (`ToyCard`); i test la intercettano.
+    var onCard: ((Toy, CGPoint) -> Void)?
+
+    /// Chiede la scheda di `toy`, aperta sopra il punto `point` della scena (di norma il cursore).
+    func openCard(for toy: Toy, at point: CGPoint) {
+        guard !toysPaused else { return }
+        onCard?(toy, CGPoint(x: point.x + screenOrigin.x, y: point.y + screenOrigin.y))
+    }
+
+    /// Clic destro (o ⌃ clic) su un oggetto: la sua scheda, se ne ha una.
+    func secondaryClick(at point: CGPoint) {
+        guard !toysPaused, let toy = toy(at: point) else { return }
+        if let tree = toy as? ChristmasTree {
+            let feet = tree.body.position
+            tree.cardFocus = tree.look.decoration(at: CGPoint(x: (point.x - feet.x) / tree.look.growth,
+                                                              y: (point.y - feet.y) / tree.look.growth))
+        }
+        openCard(for: toy, at: point)
+    }
+
+    /// Pizzico o rotella sopra un oggetto: lo ingrandisce o rimpicciolisce (o una sua parte).
+    func resize(at point: CGPoint, by factor: CGFloat) {
+        guard !toysPaused, factor > 0, let toy = toy(at: point) else { return }
+        toy.resized(at: CGPoint(x: point.x - toy.body.position.x, y: point.y - toy.body.position.y), by: factor)
+    }
+
+    /// Rotazione a due dita (o ⇧ e la rotella) sopra un oggetto.
+    func turn(at point: CGPoint, by radians: CGFloat) {
+        guard !toysPaused, let toy = toy(at: point) else { return }
+        toy.turned(at: CGPoint(x: point.x - toy.body.position.x, y: point.y - toy.body.position.y), by: radians)
     }
 
     /// `rolling`: ⌥ premuto d'inverno, si sta facendo una palla. Passare avanti e indietro sulla neve
@@ -391,7 +528,31 @@ final class SeasonScene: SKScene {
     /// Finestre scosse (le riconosce `AppDelegate`, una volta per tutti gli schermi).
     func windowsShaken(_ ids: Set<CGWindowID>) {
         if !ids.isEmpty { shakeGlobe() }
-        for id in ids { toys.forEach { $0.shaken(.window(id)) } }
+        for id in ids {
+            toys.forEach { $0.shaken(.window(id)) }
+            // Palle e pupazzi sopra la finestra scossa saltano (SBU-187); con Riduci movimento no.
+            guard !reduceMotion, !toysPaused, let entry = piles[id] else { continue }
+            for toy in riders(of: entry.pile.baseY, span: entry.rect.minX...entry.rect.maxX) where toy.breaks {
+                toy.body.velocity = CGVector(dx: .random(in: -Tuning.shakeHopSide...Tuning.shakeHopSide), dy: Tuning.shakeHop)
+            }
+        }
+    }
+
+    /// Gli oggetti fermi in piedi sul bordo all'altezza `y`, dentro `span` (quelli in mano no).
+    private func riders(of y: CGFloat, span: ClosedRange<CGFloat>) -> [Toy] {
+        toys.filter { $0.body.isResting && !$0.body.isHeld && abs($0.body.position.y - y) < 0.5 && span.contains($0.body.position.x) }
+    }
+
+    /// Una palla o un pupazzo lanciati forte si rompono: spariscono in neve che cade e si posa (SBU-187).
+    func shatter(_ toy: Toy) {
+        let frame = toy.frame
+        let count = Tuning.shatterGrains * (toy is Snowman ? 3 : 1)
+        let points = (0..<count).map { _ in
+            CGPoint(x: .random(in: frame.minX...frame.maxX), y: .random(in: frame.minY...frame.maxY))
+        }
+        remove(toy)
+        spawnPowder(points, spread: 70, pop: 40...220)
+        SoundBoard.shared.play("palla-di-neve-colpo")
     }
 
     // MARK: - Palle di neve e pupazzo
@@ -459,7 +620,25 @@ final class SeasonScene: SKScene {
         SoundBoard.shared.play("palla-di-vetro")
     }
 
-    override func mouseDown(with event: NSEvent) { grab(at: event.location(in: self), time: event.timestamp) }
+    override func mouseDown(with event: NSEvent) {
+        if event.modifierFlags.contains(.control) { return secondaryClick(at: event.location(in: self)) }
+        grab(at: event.location(in: self), time: event.timestamp)
+    }
+    override func rightMouseDown(with event: NSEvent) { secondaryClick(at: event.location(in: self)) }
+    override func magnify(with event: NSEvent) { resize(at: event.location(in: self), by: 1 + event.magnification) }
+    override func rotate(with event: NSEvent) { turn(at: event.location(in: self), by: CGFloat(event.rotation) * .pi / 180) }
+    override func scrollWheel(with event: NSEvent) { scrollWheel(at: event.location(in: self), with: event) }
+    /// La rotella nel punto `point` della scena: ingrandisce; con ⇧ o ⌥ gira.
+    func scrollWheel(at point: CGPoint, with event: NSEvent) {
+        let step: CGFloat = event.hasPreciseScrollingDeltas ? 1 : 10
+        if event.modifierFlags.contains(.shift) || event.modifierFlags.contains(.option) {
+            // Con ⇧ macOS manda la rotella del mouse come scorrimento orizzontale.
+            let raw = event.scrollingDeltaY != 0 ? event.scrollingDeltaY : event.scrollingDeltaX
+            turn(at: point, by: raw * step * .pi / 180)
+        } else {
+            resize(at: point, by: exp(event.scrollingDeltaY * step * Tuning.scrollResize))
+        }
+    }
     override func mouseDragged(with event: NSEvent) { drag(to: event.location(in: self), time: event.timestamp) }
     override func mouseUp(with event: NSEvent) { letGo(at: event.location(in: self), time: event.timestamp) }
 
@@ -470,7 +649,7 @@ final class SeasonScene: SKScene {
     func updateWindows(_ edges: [WindowEdge], dock dockFrame: CGRect?, ceiling: CGFloat) {
         self.ceiling = ceiling
         updateDock(dockFrame)
-        let maxPile = CGFloat(Settings.shared.values.maxPile)
+        let maxPile = CGFloat(Settings.shared.values.pileHeight)
         var seen = Set<CGWindowID>()
         ledges = dockLedge.map { [$0] } ?? []
         for edge in edges {
@@ -494,7 +673,12 @@ final class SeasonScene: SKScene {
                     let shift = CGVector(dx: r.minX - old.rect.minX, dy: r.minY - old.rect.minY)
                     if old.rect.size == r.size, old.pile.cornerRadius == edge.cornerRadius,
                        hypot(shift.dx, shift.dy) <= Tuning.slideOffDistance {
-                        // Spostata piano: la neve resta sopra e la segue.
+                        // Spostata piano: la neve resta sopra e la segue, e con lei chi ci sta in piedi (SBU-187).
+                        for toy in riders(of: old.pile.baseY, span: old.rect.minX...old.rect.maxX) {
+                            toy.body.position.x += shift.dx
+                            toy.body.position.y = base
+                            toy.node.position = toy.body.position
+                        }
                         pile.carry(old.pile)
                         old.pile.node.removeFromParent()
                     } else {
@@ -527,7 +711,7 @@ final class SeasonScene: SKScene {
         dock = nil
         guard let r, onThisScreen else { return }
         let pile = Pile(minX: r.minX, width: r.width, baseY: r.maxY, cornerRadius: Tuning.dockCornerRadius,
-                        maxHeight: CGFloat(Settings.shared.values.maxPile) * Tuning.dockPileFactor, color: season.pileColor)
+                        maxHeight: CGFloat(Settings.shared.values.pileHeight) * Tuning.dockPileFactor, color: season.pileColor)
         addChild(pile.node)
         dock = (pile, r)
     }
@@ -563,12 +747,11 @@ final class SeasonScene: SKScene {
         let cursorRepel = CGFloat(settings.cursorRepel)
         let fallSpeed = CGFloat(settings.fallSpeed)
 
-        // Vento globale che cambia lentamente.
-        let maxWind = reduceMotion ? 0 : CGFloat(settings.wind)
-        let wind = sin(elapsed * 0.11) * maxWind + sin(elapsed * 0.37) * maxWind * 0.3
+        // Il vento: a sinistra o a destra con le raffiche, o variabile (SBU-185). Con Riduci movimento niente.
+        let wind = reduceMotion ? 0 : Wind.speed(at: elapsed, base: CGFloat(settings.wind), variable: settings.variableWind)
 
         // Posizione e velocità del cursore in coordinate della scena.
-        let global = NSEvent.mouseLocation
+        let global = pointerLocation()
         let mouse = CGPoint(x: global.x - screenOrigin.x, y: global.y - screenOrigin.y)
         var mouseVelocity = CGVector.zero
         if let last = lastMouse {
@@ -579,6 +762,16 @@ final class SeasonScene: SKScene {
         // ⌥ d'inverno: il cursore raccoglie la neve per una palla, invece di spazzarla o scuotere la palla di vetro.
         let rolling = onScreen && season is Snow && NSEvent.modifierFlags.contains(.option)
         if onScreen { pointerMoved(to: mouse, time: currentTime, rolling: rolling) }
+        // Le lucciole si radunano dove il cursore si ferma; quando riparte, si disperdono.
+        stillness.update(mouse, dt: dt)
+        let gather = season.gathers && onScreen ? Tuning.gatherPull(still: stillness.seconds, calm: reduceMotion) : 0
+        let scatter = gathering && gather == 0
+        gathering = gather > 0
+        // Letti una volta per fotogramma, non per particella: `season` è un protocollo e ogni lettura costa.
+        let shatters = season.shatters
+        let splashes = season.splashes
+        let linger = season.linger
+        let settles = season.settles
 
         let decay = CGFloat(exp(-Double(Tuning.cursorDamping * dt)))
         let dragBlend = min(1, dt * 10)
@@ -596,7 +789,13 @@ final class SeasonScene: SKScene {
             let dx = p.x - mouse.x
             let dy = p.y - mouse.y
             let distance = hypot(dx, dy)
-            if distance < cursorRadius, distance > 0.001 {
+            if scatter, distance > 0.001, distance < Tuning.gatherRing.upperBound * 2 {
+                // Il cursore riparte: chi era radunato vola via, un po' a caso.
+                let kick = CGFloat.random(in: 40...90) * (reduceMotion ? 0.5 : 1)
+                flake.push.dx += dx / distance * kick
+                flake.push.dy += dy / distance * kick
+            }
+            if gather == 0, distance < cursorRadius, distance > 0.001 {
                 let falloff = 1 - distance / cursorRadius
                 let strength = falloff * falloff
 
@@ -625,6 +824,31 @@ final class SeasonScene: SKScene {
             let waiting = flake.drift != 0 && p.y > size.height + flake.extent
             if !waiting { p.x += (wind * (0.4 + flake.depth) + sway + flake.drift * fallSpeed + flake.push.dx) * dt }
             p.y += (-flake.fallSpeed * fallSpeed + bob + flake.push.dy) * dt
+            if gather > 0 {
+                // Ognuna in un anello attorno al cursore, alla sua distanza, e ci gira piano intorno.
+                let ring = Tuning.gatherRing.lowerBound + (Tuning.gatherRing.upperBound - Tuning.gatherRing.lowerBound) * flake.depth
+                let angle = flake.phase + elapsed * (reduceMotion ? 0 : 0.25)
+                let pull = min(1, gather * dt)
+                p.x += (mouse.x + cos(angle) * ring - p.x) * pull
+                p.y += (mouse.y + sin(angle) * ring - p.y) * pull
+            }
+            if shatters || splashes, !waiting, flake.drift != 0 {
+                // La testa della stella (davanti al centro della scia) tocca un bordo scoperto: si rompe in scintille.
+                let length = hypot(flake.drift, flake.fallSpeed)
+                let lead = CGVector(dx: flake.drift / length * flake.extent, dy: -flake.fallSpeed / length * flake.extent)
+                let from = CGPoint(x: flake.node.position.x + lead.dx, y: previousY + lead.dy)
+                let to = CGPoint(x: p.x + lead.dx, y: p.y + lead.dy)
+                if let edge = ledgeHit(from: from, to: to, ledges: ledges) {
+                    if shatters {
+                        sparks.burst(at: CGPoint(x: to.x, y: edge.y), color: season.pileColor, calm: reduceMotion)
+                        p.y = -flake.extent - 1   // finita: rinasce in cima (il chiamante la vede sotto lo schermo)
+                    } else if Double.random(in: 0..<1) < Tuning.splashShare {
+                        // Una goccia del temporale su tre schizza sul bordo; le altre cadono davanti alla finestra.
+                        sparks.splash(at: CGPoint(x: to.x, y: edge.y), color: season.pileColor, calm: reduceMotion)
+                        p.y = -flake.extent - 1
+                    }
+                }
+            }
 
             if flake.drift != 0 {
                 // Va di traverso: uscito di lato (in vista, non mentre aspetta sopra) è finito,
@@ -648,10 +872,14 @@ final class SeasonScene: SKScene {
             }
 
             // --- Si posa? Ha attraversato la superficie di un mucchio in questo passo ---
-            guard season.settles else { return false }
+            guard settles else { return false }
             for pile in allPiles {
                 if let top = pile.surface(at: p.x), previousY >= top, p.y < top {
-                    pile.add(atX: p.x, radius: flake.radius, growth: CGFloat(settings.growth) * .random(in: season.pileGrowth))
+                    if let linger {
+                        pile.rest(restingCopy(of: flake), atX: p.x, life: .random(in: linger))   // i petali restano interi
+                    } else {
+                        pile.add(atX: p.x, radius: flake.radius, growth: CGFloat(settings.growth) * .random(in: season.pileGrowth))
+                    }
                     return true
                 }
             }
@@ -669,7 +897,15 @@ final class SeasonScene: SKScene {
 
         // --- Nebbia, nuvole, lampi e gocce sul vetro ---
         sky.step(dt: dt, width: size.width, calm: reduceMotion)
-        glass.step(dt: dt, size: size, ledges: ledges, amount: intensity, calm: reduceMotion)
+        glass.step(dt: dt, size: size, ledges: ledges, amount: intensity * energyShare, calm: reduceMotion)
+        for point in glass.splashes { sparks.splash(at: point, color: season.pileColor, calm: reduceMotion) }
+        if !bolts.isEmpty {
+            bolts.removeAll { bolt in
+                guard !bolt.step(dt: dt) else { return false }
+                bolt.removeFromParent()
+                return true
+            }
+        }
         nightClock += dt
         if nightClock >= 1 {
             nightClock = 0
@@ -678,17 +914,33 @@ final class SeasonScene: SKScene {
                       size: size, calm: reduceMotion)
         }
         night.step(dt: dt, calm: reduceMotion)
+        sparks.step(dt: dt)
+        rainbow.step(dt: dt, calm: reduceMotion)
 
         // --- Oggetti: gravità, appoggio sui bordi scoperti, sul Dock o sul fondo dello schermo ---
         if !toys.isEmpty, !toysPaused {
             let toyLedges = ledges + [Ledge(y: 0, span: 0...size.width)]
+            // I visitatori entrano e escono di lato: per loro il fondo continua fuori dallo schermo.
+            let wideLedges = ledges + [Ledge(y: 0, span: -size.width...size.width * 2)]
+            var broken: [Toy] = []
             for toy in toys {
                 // Sulle finestre attaccate alla barra dei menu un oggetto alto la coprirebbe: lì non si ferma.
                 let room = (ceiling ?? size.height) - toy.node.size.height
-                let fit = toyLedges.contains { $0.y > room } ? toyLedges.filter { $0.y <= room } : toyLedges
+                let all = toy.staysOnScreen ? toyLedges : wideLedges
+                let fit = all.contains { $0.y > room } ? all.filter { $0.y <= room } : all
                 let falling = toy.body.velocity.dy
-                toy.body.step(dt: dt, ledges: fit, width: size.width, bounce: reduceMotion ? 0 : toy.bounce,
-                              friction: toy.friction)
+                let before = toy.body.velocity
+                toy.body.step(dt: dt, ledges: fit, width: toy.staysOnScreen ? size.width : nil,
+                              bounce: reduceMotion ? 0 : toy.bounce, friction: toy.friction)
+                if toy.thrownHard {
+                    // Lanciata forte: al primo urto (un bordo sotto, o il lato dello schermo) si rompe.
+                    let landed = before.dy < 0 && toy.body.velocity.dy >= 0
+                    let wall = before.dx != 0 && toy.body.velocity.dx * before.dx <= 0
+                    if landed || wall {
+                        broken.append(toy)
+                        continue
+                    }
+                }
                 // Una palla che arriva forte su un bordo fa "puf"; quelle che rotolano o rimbalzano piano no.
                 if toy is Snowball, falling < -Tuning.toyMinBounce * 2, toy.body.velocity.dy >= 0 {
                     SoundBoard.shared.play("palla-di-neve-colpo")
@@ -696,19 +948,29 @@ final class SeasonScene: SKScene {
                 toy.node.position = toy.body.position
                 toy.step(dt: dt)
             }
+            broken.forEach(shatter)
+            stepLivelySnowmen()
             buildSnowman()
             stepWinterPlay()
             stepFigures(mouse: mouse)
+            stepVisitors(dt: dt)
+        } else if !toysPaused {
+            stepVisitors(dt: dt)   // il trenino corre anche senza oggetti sulla scena
         }
         if !toysPaused { stepChristmas(dt: dt, mouse: mouse) }
         wantsMouse = wantsMouse(at: mouse)
 
         // --- Granelli di polvere: gravità + attrito dell'aria, niente oscillazione ---
-        let drag = CGFloat(exp(-Double(Tuning.grainAirDrag * dt)))
+        // Foglie e petali interi planano: più attrito e meno peso della polvere.
+        let whole = piecesAreWhole
+        let drag = CGFloat(exp(-Double((whole ? Tuning.leafAirDrag : Tuning.grainAirDrag) * dt)))
+        let gravity = whole ? Tuning.leafGravity : Tuning.grainGravity
+        let lands = season.linger == nil   // un petalo staccato non fa mucchio sotto: cade via
         grains = grains.compactMap { grain in
             var grain = grain
             grain.velocity.dx *= drag
-            grain.velocity.dy = grain.velocity.dy * drag - Tuning.grainGravity * dt
+            grain.velocity.dy = grain.velocity.dy * drag - gravity * dt
+            if grain.spin != 0 { grain.node.zRotation += grain.spin * dt }
             var p = grain.node.position
             let previousY = p.y
             p.x += grain.velocity.dx * dt
@@ -717,7 +979,7 @@ final class SeasonScene: SKScene {
 
             // Si posa su un mucchio più in basso (aggiunge poca neve: è un granello)…
             let landed = allPiles.first { pile in
-                guard pile !== grain.source,
+                guard lands, pile !== grain.source,
                       let top = pile.surface(at: p.x), previousY >= top, p.y < top else { return false }
                 pile.add(atX: p.x, radius: 1, growth: CGFloat(settings.growth) * 0.3)
                 return true
@@ -737,9 +999,12 @@ final class SeasonScene: SKScene {
             if rolling {
                 roll(at: mouse)
             } else {
-                let drift = max(-150, min(150, mouseVelocity.dx * 0.15))
+                // Foglie e petali volano via dal mucchio, in alto e di lato; la neve si sbriciola (con Riduci movimento tutto cade).
+                let fly = piecesAreWhole && !reduceMotion
+                let drift = max(-150, min(150, mouseVelocity.dx * (fly ? 0.4 : 0.15)))
                 for pile in allPiles {
-                    spawnPowder(pile.scoop(at: mouse, radius: Tuning.scoopRadius), from: pile, drift: drift, spread: 25, pop: -10...40)
+                    spawnPowder(pile.scoop(at: mouse, radius: Tuning.scoopRadius), from: pile, drift: drift,
+                                spread: fly ? Tuning.leafScatterSpread : 25, pop: fly ? Tuning.leafScatterPop : -10...40)
                 }
             }
         }
@@ -749,11 +1014,14 @@ final class SeasonScene: SKScene {
         pileClock += dt
         if pileClock >= Tuning.pileSettleInterval {
             pileClock = 0
-            let maxPile = CGFloat(settings.maxPile)
+            let maxPile = CGFloat(settings.pileHeight)
             for pile in piles.values.map(\.pile) + (dock.map { [$0.pile] } ?? []) {
                 pile.maxHeight = pile === dock?.pile ? maxPile * Tuning.dockPileFactor : maxPile
                 // Accumulo disattivato dalle impostazioni: la neve sparisce.
                 if !allPiles.contains(where: { $0 === pile }) { pile.clear() }
+                // «Finestre pulite»: si scioglie piano e resta uno strato sottile.
+                if settings.cleanWindows { pile.melt(downTo: Tuning.cleanLayer, by: Tuning.cleanMeltRate * Tuning.pileSettleInterval) }
+                pile.age(by: Tuning.pileSettleInterval)
                 pile.settle()
                 pile.redrawIfNeeded()
             }

@@ -26,7 +26,33 @@ Con **Riduci movimento** di macOS (Accessibilità → Schermo) va anche lei a 30
 senza vento, oscillazione né rotazione, e gli oggetti non si lanciano e non rimbalzano: cadono dritti.
 L'impostazione si segue anche mentre l'app è aperta.
 
+**Pausa automatica.** Quando un'app a schermo intero copre uno schermo (un video, una presentazione) l'effetto su
+quello schermo si ferma e sparisce, e riparte quando l'app esce dallo schermo intero; quando i display dormono si ferma
+su tutti (SBU-177). Prima la neve restava visibile anche sopra le app a schermo intero.
+
 Requisiti: macOS 14+, Xcode 26+, XcodeGen (`brew install xcodegen`).
+
+## Novità della 2.1
+
+Le funzioni di KoiArt che mancavano, rifatte a modo nostro (SBU-175): tre filoni, riuniti nel ramo SBU-193.
+
+- **Meteo:** foglie che si staccano intere, petali che restano posati, lucciole che si radunano attorno al cursore fermo,
+  stelle cadenti che si rompono in scintille, arcobaleno dopo la pioggia, «Meteo a caso» e «Segui la stagione»,
+  vento con verso e «Vento variabile», schizzi della pioggia e fulmine sul Dock, «Mucchi più alti», 120 fps.
+- **Pause ed energia:** l'effetto si ferma sotto le app a schermo intero, con i display spenti e con un videogioco
+  davanti; «Ferma a batteria», metà effetto con Risparmio energetico o col Mac caldo; scelta degli schermi; «Finestre pulite».
+- **Giochi:** albero da decorare, pupazzo da vestire (più vestiti e un angelo), alberi e pupazzi salvati sul loro schermo,
+  pupazzi vivi che si tirano palle di neve, visitatori scelti da te (Babbo Natale, Yeti, trenino, elfi), lettera a Babbo
+  Natale e **Decora**, le decorazioni libere sulla scrivania.
+- **Sfondi per ora del giorno:** ogni sfondo del borgo in otto momenti (alba, aurora, mattina, mezzogiorno, ora d'oro,
+  tramonto, crepuscolo, notte), segue l'ora del Mac o resta fisso su un momento. Il cambio lo fa macOS, anche ad app chiusa.
+- **Lo sfondo segue l'effetto:** cambiando effetto arriva lo sfondo consigliato, su tutti gli schermi. Vale anche quando
+  l'effetto lo cambiano «Meteo a caso» o «Segui la stagione».
+- **Salvaschermo** con gli sfondi del borgo e l'effetto sopra, da installare dalle Impostazioni.
+- **Novità:** dopo un aggiornamento, la prima volta che apri il menu ❄︎, una schedina con le cose nuove.
+
+I dettagli sono nelle sezioni «Meteo (2.1)», «Meteo, secondo giro (2.1)», «Albero, pupazzo e visitatori (2.1)»,
+«Decora, più vestiti, pupazzi vivi, scelta dei visitatori (2.1)» e «Sfondi per ora del giorno e salvaschermo (2.1)».
 
 ## Novità della 2.0
 
@@ -103,6 +129,7 @@ Il test `TwoScreensTests` lo prova con uno schermo virtuale a una frequenza dive
   e si lancia col mouse, rimbalza un po' e rotola lungo i bordi finché cade. Al massimo 12 sullo schermo: oltre
   sparisce la più vecchia. Solo d'inverno: cambiando stagione palle e pupazzi si sciolgono.
 - **Pupazzo.** Tre palle ferme a meno di 40 pt l'una dall'altra diventano un pupazzo di neve. Una palla in mano non conta.
+  Un clic sul pupazzo apre la sua scheda: taglia delle tre palle e vestiti (vedi «Albero, pupazzo e visitatori»).
 - **Neve che scivola via.** Se sposti piano una finestra la neve resta sopra e la segue; se la trascini veloce
   (più di 40 pt in un ottavo di secondo, circa 320 pt/s) o la ridimensioni, la neve scivola giù come polvere.
   La neve segue la finestra a scatti, 8 volte al secondo: tante sono le letture delle finestre.
@@ -120,8 +147,8 @@ Il test `TwoScreensTests` lo prova con uno schermo virtuale a una frequenza dive
 - **Funivia** («Monta la funivia»). Un palo sul fondo a sinistra e un gancio d'ottone col cavo: trascina il gancio sul
   bordo di una finestra (o sul Dock) e la cabina corre avanti e indietro sul cavo. Se la finestra si sposta il gancio cade
   e la cabina torna al palo. «Togli la funivia» la smonta. Una per schermo.
-- **Albero di Natale** («Pianta un albero di Natale»). Sul fondo, in un punto a caso; un clic su un ramo appende una
-  pallina proprio lì (colori a turno, al massimo 40), e si trascina come gli altri oggetti. Al massimo 5 alberi.
+- **Albero di Natale** («Pianta un albero di Natale»). Sul fondo, in un punto a caso, e da decorare: vedi
+  «Albero, pupazzo e visitatori». Al massimo 3 alberi.
 - «Togli alberi, neve e slitte»: alberi, montagnette, slittini e spazzaneve (palle e funivia hanno il loro comando).
   «Metti in pausa i giochi»: gli oggetti stanno fermi dove sono e non si prendono col mouse; la neve continua. La slitta in
   volo sparisce e non ripassa, le altre voci dei giochi si spengono finché non togli la pausa; la pausa resta anche quando
@@ -129,6 +156,199 @@ Il test `TwoScreensTests` lo prova con uno schermo virtuale a una frequenza dive
 - I giochi si fanno sullo schermo del cursore; lo spazzaneve con «Prima il Dock» su quello del Dock. Solo d'inverno:
   nelle altre stagioni le voci sono spente e cambiando stagione i giochi spariscono.
 - Suoni: vedi «Sfondi e suoni».
+
+## Meteo (2.1)
+
+Le funzioni meteo di KoiArt che mancavano, rifatte (comportamento, non codice né disegni: tutto è disegnato a codice).
+Niente rete, niente permessi in più, nessun dato che esce dal Mac.
+
+- **Foglie** (autunno). Si ammucchiano sui bordi come prima; passando col cursore sul mucchio le foglie si staccano
+  intere (una ogni tre granelli di neve, `Tuning.leafPieceShare`), ognuna col colore di una foglia vera, girano
+  e volano via in alto e di lato, poi planano giù. La neve invece si sbriciola in polvere come prima.
+- **Petali** (primavera). Non fanno più mucchio: ogni petalo che si posa su una finestra (o sul Dock) resta lì intero,
+  adagiato, per 20–45 s (`SpringTuning.linger`), poi sfuma in 3 s. Al massimo 60 per finestra. Il cursore li porta via,
+  e se la finestra si sposta piano restano sopra; se si sposta veloce o si chiude volano via.
+- **Lucciole**. Quando il cursore sta fermo da 1,5 s (`Tuning.gatherDelay`) si radunano piano attorno a lui, ognuna
+  alla sua distanza (18–70 pt), girandoci intorno; appena il cursore si muove di più di 4 pt si disperdono.
+- **Stelle cadenti**. Quando la testa di una stella tocca il bordo scoperto di una finestra (o il Dock) si rompe in
+  14 scintille che volano a ventaglio, ricadono e si spengono in meno di un secondo.
+- **Pioggia**. Anche nella pioggia sul vetro ogni 40–120 s un lampo lontano, più tenue del temporale (`RainTuning.lightning`),
+  poi il tuono se i suoni sono accesi.
+- **Arcobaleno dopo la pioggia** (Impostazioni → Meteo, acceso di base). Quando si passa da pioggia o temporale a un altro
+  effetto (dal menu, dalle Impostazioni o col meteo a caso), su ogni schermo sale un arcobaleno tenue dietro a tutto:
+  entra in 4 s, resta e sfuma negli ultimi 8 s, in tutto 40 s.
+- **Meteo a caso** (Impostazioni → Meteo, spento di base). L'effetto cambia da solo ogni 10–25 minuti
+  (`Tuning.weatherShuffle`), con una dissolvenza di 1,2 s per lato. La regola (`WeatherShuffle`, emisfero nord):
+  dicembre–febbraio neve, nebbia, nuvole, stelle cadenti; marzo–maggio primavera, pioggia, temporale, nuvole, nebbia;
+  giugno–agosto estate, lucciole, stelle cadenti, temporale, nuvole; settembre–novembre autunno, pioggia, nebbia, nuvole,
+  temporale. Mai il sereno (non cade niente) e mai lo stesso effetto due volte di fila. Lasciando la neve i giochi
+  d'inverno spariscono, come cambiando effetto a mano.
+- **Mucchi più alti** (Impostazioni → Meteo). L'altezza massima dei mucchi × 2,5 (`Tuning.tallSnowFactor`), sulle finestre
+  e sul Dock; una finestra troppo vicina alla barra dei menu per il mucchio più alto non prende neve, come prima.
+- **120 fps sugli schermi ProMotion** (Impostazioni → Meteo, spento di base). Solo sugli schermi che li fanno, a corrente
+  e senza Riduci movimento: a batteria e con Riduci movimento restano 30.
+- **Pausa automatica**: vedi in cima.
+- Con **Riduci movimento**: le lucciole si radunano a metà velocità e senza girare, foglie e petali staccati cadono
+  invece di volare via e non girano, le stelle fanno un terzo delle scintille, ferme, che si spengono dove sono, niente lampi,
+  l'arcobaleno compare e sparisce senza dissolvenza, il meteo a caso cambia senza dissolvenza.
+
+Il codice: `Engine/Weather.swift` (meteo a caso, cursore fermo, bordo toccato, schermo coperto), `Engine/Sparks.swift`,
+`Engine/Rainbow.swift`, i petali posati in `Pile` (`rest`, `age`), il resto in `SeasonScene.step`. Le stagioni dicono
+cosa fanno con `Season.pieceSize`, `linger`, `gathers`, `shatters`. I numeri in `Tuning.swift`, sezione «Meteo».
+
+**CPU** (SBU-177, Release, schermo 1920×1080, tre finestre e il Dock, intensità Media, `main` e il branch alternati, 18 giri
+ciascuno, mediana del tempo di CPU di un passo della simulazione). Non si è lanciata l'app sul Mac condiviso: la simulazione
+gira in un test, uguale nelle due versioni. Neve 0,0398 → 0,0396 ms (−0,8%), autunno 0,0660 → 0,0649 (−1,7%),
+primavera 0,0656 → 0,0651 (−0,7%), pioggia 0,0721 → 0,0725 (+0,6%), lucciole 0,0082 → 0,0056, stelle 0,0030 → 0,0033 ms
+(+0,0003 ms a passo, meno dello 0,002% di un core a 60 fps). Con il disegno fuori schermo (texture della scena a ogni passo)
+lucciole, stelle e pioggia stanno entro ±6%, la primavera scende del 31% (i petali posati sono sprite fermi, il mucchio era
+una forma da ridisegnare); neve e autunno saltano fra 0,55 e 2,5 ms a fotogramma in tutte e due le versioni, quindi lì
+la misura col disegno non dice niente. Va rifatta con l'app vera, come nelle sezioni sopra.
+
+## Meteo, secondo giro (2.1)
+
+Altre funzioni di KoiArt, rifatte a modo nostro. Niente rete, nessun permesso in più: il fulmine sul Dock usa l'Accessibilità
+che serve già per la neve sul Dock.
+
+- **Vento** (Impostazioni → Caduta). Il cursore va da ← 80 a 80 →: a sinistra o a destra, da brezza a forte. Il vento
+  soffia sempre dallo stesso lato, con raffiche che scendono fino al 60% (`Tuning.windGustDip`). I valori salvati
+  prima (0…80) restano validi: soffiano verso destra.
+- **Vento variabile** (Impostazioni → Meteo, spento di base). Si alza, si calma e gira ogni 3 minuti
+  (`Tuning.variableWindPeriod`, un giro intero in 6), con la forza del cursore e almeno 30 pt/s.
+  Con Riduci movimento niente vento, come prima.
+- **Pausa quando giochi a un videogioco** (Impostazioni → Energia, accesa di base). Quando un'app viene davanti,
+  `VideoGame` guarda la sua categoria (`LSApplicationCategoryType` che inizia con `public.app-category.` e finisce con
+  `games`) e il percorso (`/steamapps/`, i giochi di Steam). Se è un gioco, l'effetto si ferma e sparisce su tutti gli schermi,
+  Babbo Natale e gli altri visitatori non passano, e l'app smette anche di leggere le finestre. Riparte quando torni a
+  un'altra app. È un'altra cosa da «Metti in pausa i giochi», che ferma solo gli oggetti di Sbu Seasons.
+- **Energia** (Impostazioni → Energia). «Ferma a batteria» (spento di base) ferma tutto quando stacchi la corrente.
+  Con Risparmio energetico, o quando il Mac si scalda (`thermalState` `.serious` o `.critical`), particelle, banchi e
+  gocce sul vetro si dimezzano da soli (`Tuning.energyShare`), e tornano pieni quando passa.
+- **Schermi** (Impostazioni → Schermi, solo con più di uno schermo). Un interruttore per schermo; la scelta si salva
+  per schermo (lo stesso UUID con cui la galleria ricorda gli sfondi), quindi resta anche staccando e riattaccando il monitor.
+- **Finestre pulite** (Impostazioni → Meteo, spento di base). La neve su finestre e Dock si scioglie piano, 2 pt al secondo
+  (`Tuning.cleanMeltRate`), e resta uno strato sottile di 3 pt (`Tuning.cleanLayer`). «Sulle finestre» spento la toglie
+  tutta, come prima.
+- **Segui la stagione** (Impostazioni → Meteo, spento di base). Sceglie l'effetto dal calendario (`SeasonCalendar`):
+  dicembre–febbraio neve, marzo–maggio primavera, giugno–agosto estate, settembre–novembre autunno. Non si somma a
+  «Meteo a caso»: accenderne uno spegne l'altro. Se scegli a mano un effetto fuori stagione, «Segui la stagione» si spegne.
+- **Schizzi**. Nel temporale una goccia su tre che arriva sul bordo scoperto di una finestra o sul Dock schizza in 5
+  goccioline basse che durano meno di mezzo secondo (`Tuning.splashShare`, `splashDrops`); le altre cadono davanti.
+  Anche le gocce che scorrono sul vetro schizzano quando arrivano su un bordo. Con Riduci movimento due goccioline ferme.
+- **Fulmine sul Dock**. Con pioggia o temporale, quando chiudi un'app un fulmine azzurro scende dalla cima dello schermo
+  sulla sua icona del Dock, con un lampo e il tuono (se i suoni sono accesi). La posizione dell'icona si legge con
+  l'Accessibilità; per le app che non tieni nel Dock (l'icona sparisce appena chiudi) si usa quella letta l'ultima volta
+  che l'app è venuta davanti. Senza permesso o con Riduci movimento niente fulmine. Nessun dato esce dal Mac.
+
+Non fatto: **neve sui widget della scrivania**. Sul Mac di prova non ci sono widget sulla scrivania, Stage Manager è
+spento e lo schermo non ha la notch: non si può vedere come macOS elenca i widget (`CGWindowList`) né provare il resto.
+Aggiungerli o accendere Stage Manager avrebbe cambiato il Mac condiviso. Per la notch il mucchio sta già sotto la barra
+dei menu (`visibleFrame`), quindi sotto la notch non si posa niente.
+
+Il codice: `Engine/Weather.swift` (`Wind`, `VideoGame`, `EffectGate`, `SeasonCalendar`), `Engine/Bolt.swift`,
+`Sparks.splash`, `GlassDrops.splashes`, `Pile.melt`, `Sky.strikeNow`; gli avvisi del sistema in `AppDelegate`
+(app davanti, app chiusa, Risparmio energetico, temperatura). I numeri in `Tuning.swift`, sezione «Secondo giro meteo».
+## Albero, pupazzo e visitatori (2.1)
+
+Le funzioni di KoiArt che mancavano, rifatte: tutto subito (niente oggetti a pagamento o sbloccati uno al giorno),
+niente server, disegni nostri fatti a codice.
+
+- **Albero da decorare.** Fino a 3 alberi (il quarto toglie il più vecchio). Un clic sui rami appende la decorazione scelta:
+  palline (colori a turno), filo di luci (si accendono piano a turno), bastoncini di zucchero, la stella (sempre in cima,
+  una sola). Al massimo 40 decorazioni per albero.
+  - Una decorazione si **trascina** sui rami; lasciata fuori dall'albero si **toglie**. Col **pizzico** del trackpad o la
+    **rotella** sopra di lei si ingrandisce o rimpicciolisce (0,5–2,5×); con la **rotazione a due dita** o ⇧ (o ⌥) e la
+    rotella **gira**.
+  - Pizzico o rotella sull'albero (fuori dalle decorazioni) lo fanno **crescere** fino a 2,2 volte, decorazioni comprese.
+  - L'albero si **sposta** trascinandolo come gli altri oggetti. **Clic destro** (o ⌃ clic) apre la sua scheda: che cosa
+    appendere, l'altezza, «Taglia l'albero»; aperta su una decorazione, anche la sua dimensione, la rotazione e «Togli la decorazione».
+- **Pupazzo da vestire.** Un clic (o il clic destro) sul pupazzo apre la sua scheda: la taglia di pancia, petto e testa
+  (piccola, media, grande), il cappello (cilindro, berretto), la sciarpa (rossa, verde), il naso (carota, carbone) e i bottoni.
+  Ogni cambio si vede subito. La scheda è un pannellino "non attivante" sopra l'oggetto (`ToyCard`): prende i clic senza
+  portare l'app davanti e si chiude con la ✕, con Esc o facendo clic altrove.
+- **Tutto resta dov'è.** Alberi (con altezza e decorazioni) e pupazzi (con taglie e vestiti) si salvano in UserDefaults
+  (`keptToys`, `ToyKeeper`): ogni 5 s se qualcosa è cambiato, quando si ricreano le finestre degli schermi e all'uscita.
+  Al riavvio tornano uguali, sullo stesso schermo (riconosciuto dall'UUID del display, come gli sfondi); se quello schermo
+  non c'è più, su quello principale; su uno schermo più piccolo restano dentro. Le palle sciolte, gli slittini e il resto no.
+  Collegando o scollegando un monitor alberi e pupazzi ora restano (prima sparivano).
+  **Il salvataggio vale solo d'inverno**: la regola resta quella di prima, cambiando stagione alberi e pupazzi si sciolgono,
+  e il salvataggio si svuota con loro; aprendo l'app in un'altra stagione non torna niente.
+- **Yeti** («Fai passare lo Yeti», e da solo ogni 4–9 minuti se c'è almeno un pupazzo). Entra da un lato sul fondo, va dal
+  pupazzo più vicino (se sta su una finestra ci salta sopra), se lo mette in spalla e se ne va, anche nello schermo dopo.
+  **Un clic lo scaccia**: lascia cadere il pupazzo e scappa. Se gli togli il pupazzo trascinandolo, se ne va a mani vuote.
+  Non si trascina.
+- **Trenino con l'elfo** («Fai passare il trenino», e da solo ogni 5–10 minuti). Corre sul fondo e attraversa gli schermi;
+  su uno l'elfo lascia un regalo verde. Aperto con un clic, dentro c'è una sorpresa (`ElfPresent`): una decorazione che vola
+  sull'albero più vicino, o un vestito che il pupazzo non ha ancora; se sullo schermo non c'è né l'uno né l'altro, un albero.
+  Al posto del treno verso gli amici di KoiArt, che chiede la rete: qui niente esce dal Mac.
+- I visitatori passano uno alla volta per tipo, attraversando gli schermi come Babbo Natale (`ScreenRoute`), con gli intervalli
+  casuali di `Passages.delay` (SBU-114). Impostazioni → Visitatori: chi passa da solo e quanto spesso (vedi SBU-187);
+  dal menu passano sempre.
+- **Letterina a Babbo Natale** («Scrivi a Babbo Natale…»). Una finestra con un campo per il desiderio; «Spedisci» la chiude,
+  la busta sale in cielo e la slitta passa a prenderla. Il testo non si salva da nessuna parte e non arriva nemmeno alla scena:
+  sparisce con la finestra.
+- Con **Riduci movimento**: lo Yeti cammina a metà velocità e non salta (si trova sul bordo del pupazzo), il trenino non
+  attraversa lo schermo (il regalo arriva dritto), la busta compare in cielo e svanisce (la slitta non vola), le luci restano accese.
+- **«Metti in pausa i giochi»** toglie Yeti (il pupazzo che aveva in spalla resta), trenino e busta, ferma le decorazioni e non
+  fa partire nessun visitatore; le voci del menu si spengono. Solo d'inverno, come gli altri giochi. A batteria va a 30 fotogrammi
+  come il resto; i clic passano sotto tranne che sugli oggetti (il trenino e la busta non si prendono).
+- Suoni: lo Yeti usa `yeti` (il file non c'è ancora: per ora è muto); il regalo dell'elfo `regalo`, la slitta `babbo-natale`.
+
+Il codice: `Toys/Tree/` (albero, `TreeLook`, `Decoration`), `Toys/Snowball/Snowman.swift` e `SnowmanLook.swift`, `Toys/Cards/`
+(la scheda e i suoi contenuti), `Toys/Keeping/` (salvataggio), `Toys/Visitors/` (Yeti, trenino, `Visitors`, `ElfPresent`,
+la sezione delle Impostazioni), `Toys/Christmas/Letter.swift` e `LetterView.swift`. I numeri in `Tuning.swift`, sezione
+«Albero da decorare, pupazzo, visitatori». Le immagini per l'approvazione si rifanno fuori schermo con `ShotsTests`
+(istruzioni nel file).
+
+## Decora, più vestiti, pupazzi vivi, scelta dei visitatori (2.1)
+
+Il secondo giro di funzioni di KoiArt trovate dall'analisi (righe ★ del documento gap di SBU-176). Disegni nostri, fatti a codice.
+
+- **Decora** (menu ❄︎ → Decora). Decorazioni libere sulla scrivania: luci da appendere, ghirlanda, calza, candela, falò,
+  pinguino, palla di vetro. Ognuna nasce dove c'è il cursore ed è un pannellino sul desktop (`DeskPanel`, come il conto alla
+  rovescia): sopra le icone, **dietro le finestre** delle app; altrove i clic arrivano alla scrivania.
+  - Si **trascina**; col **pizzico** o la **rotella** si ingrandisce o rimpicciolisce (0,5–3×); con la **rotazione a due dita**
+    o ⇧ (o ⌥) e la rotella **gira**. **Clic destro** (o ⌃ clic) → Togli. «Togli le decorazioni» le toglie tutte.
+  - Le **luci** hanno due estremità libere (il tappo scuro): trascinandone una si sposta solo quella, il centro pende da solo
+    (di più se il filo è lungo); trascinate dal filo si spostano intere. Non si girano: le girano le loro estremità.
+  - Al massimo 12 per schermo: la tredicesima toglie la più vecchia di quello schermo.
+  - **Restano al riavvio**, nello stesso salvataggio di alberi e pupazzi (`keptToys`, campo `desk`; un salvataggio vecchio si
+    apre lo stesso), sul loro schermo o dentro il principale se non c'è più.
+  - **La regola dell'anno**: le decorazioni restano tutto l'anno e con ogni effetto, finché non le togli. Le hai messe tu sulla
+    scrivania, non sono neve: alberi e pupazzi invece fuori dall'inverno si sciolgono, come prima.
+  - Fiamme di candela e falò e lampadine si muovono 8 volte al secondo (`Tuning.deskFlickerFPS`); stanno **ferme** con Riduci
+    movimento, a batteria e con «Metti in pausa i giochi». Se non ci sono decorazioni con una fiamma o lampadine, il timer non c'è.
+- **Più vestiti.** Nella scheda del pupazzo: cappello da cowboy, da festa, da elfo, da pirata, corona, corna di renna; occhi a
+  stella; sciarpa a righe; muffole, papillon, maglione, mantello. Sull'albero, al posto della stella, l'**angelo** (in cima c'è
+  sempre uno solo dei due). Anche l'elfo del trenino può portare l'angelo. I pupazzi salvati prima si aprono uguali.
+- **Pupazzi vivi.**
+  - Un pupazzo (o una palla, o un altro oggetto) in piedi su una finestra **viaggia con lei** quando la sposti piano, come la neve;
+    spostata veloce, cade come la neve.
+  - **Scuoti la finestra** e palle e pupazzi sopra **saltano**.
+  - Una palla o un pupazzo **lanciati forte** (oltre 1000 pt/s) **si rompono in neve** al primo urto, su un bordo o sul lato
+    dello schermo. Cadere da soli, anche da in alto, non li rompe.
+  - Ogni tanto (25–70 s) due pupazzi sullo stesso bordo, a 40–260 pt, **si tirano una palla**: vola in arco e si rompe all'arrivo,
+    così non restano palle sparse. Si spegne in Impostazioni → Visitatori, «I pupazzi si tirano palle di neve».
+  - Lo **Yeti colpito da una palla di neve** in volo cade all'indietro e sparisce (1,2 s), e lascia il pupazzo. Il clic che lo
+    scaccia resta.
+- **Scelta dei visitatori** (Impostazioni → Visitatori): chi passa da solo, Babbo Natale (dal 1° dicembre al 6 gennaio), Yeti,
+  trenino, **elfi** (accesi all'inizio), e **quanto spesso**: spesso (attese a metà), ogni tanto (come prima), di rado (il doppio).
+  Il giro di Babbo Natale chiamato dal menu tiene il suo ritmo. Dal menu passano sempre.
+- **Elfi** (nuovi; «Fai passare gli elfi», e da soli ogni 1½–3 ore). Un elfo esce dalla neve su uno schermo, rotola tre palle
+  una accanto all'altra (diventano un pupazzo, che resta) e se ne va di lato.
+- **Verifica: una palla lanciata oltre il bordo alto torna giù.** Sì: esce dallo schermo e ricade (test
+  `aBallThrownPastTheTopComesBackDown`). Lanciata forte col mouse, all'arrivo si rompe in neve.
+- Con **Riduci movimento**: niente salti, niente lanci (quindi niente rotture) né palle tra pupazzi; lo Yeti colpito svanisce senza
+  cadere; l'elfo compare piano e cammina a metà velocità; fiamme e lampadine ferme. **«Metti in pausa i giochi»** toglie anche
+  l'elfo e ferma fiamme e lampadine.
+
+Scartato, e perché: gli elfi che cacciano lo Yeti e la carota rubata (non erano in questo giro); il suono del falò che scoppietta
+(non c'è un file, e i suoni sono spenti all'inizio); smoking (il papillon basta). La CPU di «Decora» non è misurata sul Mac
+condiviso: sono pannellini fermi, ridisegnati 8 volte al secondo solo se c'è una fiamma o un filo di luci.
+
+Il codice: `Toys/Desk/` (`DeskItem` il modello, `DeskArt` i disegni, `DeskItemView` i gesti, `DeskPanel`, `Desk`),
+`Toys/Snowball/LivelySnowmen.swift` (palle tra pupazzi, Yeti colpito; il resto in `SeasonScene`: `riders`, `shatter`),
+`Toys/Visitors/Elf.swift`, `Elves.swift`, `VisitFrequency.swift`. I numeri in `Tuning.swift`, sezioni «Pupazzi vivi» e «Decora».
 
 ## Pioggia, temporale, nebbia, nuvole (2.0)
 
@@ -215,14 +435,16 @@ personaggi e la notte accesa 7,7%, sola neve 7,6% (+1%).
 
 ## Menu ❄︎
 
-In ordine: effetto, intensità, giochi, Natale, notte, sfondi, suoni, impostazioni (SBU-57). I testi valgono per tutte le stagioni.
+In ordine: effetto, intensità, giochi, Natale, Decora, notte, sfondi, suoni, impostazioni (SBU-57). I testi valgono per tutte le stagioni.
 
 - **Mostra l'effetto** (⌘S) · **Effetto** (le stagioni) · **Dietro le finestre** · **Togli quello che si è posato** (⌘R)
 - **Intensità**: Leggera/Media/Forte con le scorciatoie, e sotto un cursore continuo
 - **Giochi**: Togli le palle di neve · Scuoti la palla di vetro · Manda lo spazzaneve · Prima il Dock · Prepara la pista da slittino ·
   Monta/Togli la funivia · Pianta un albero di Natale · Togli alberi, neve e slitte · Metti in pausa i giochi ·
   Personaggi (Volpe, Cincia e mangiatoia, Baita, Lanterna, Renna)
-- **Natale**: Fai passare Babbo Natale · Manda l'omino di pan di zenzero · Conto alla rovescia per Natale
+- **Natale**: Fai passare Babbo Natale · Scrivi a Babbo Natale… · Manda l'omino di pan di zenzero · Fai passare lo Yeti ·
+  Fai passare il trenino · Fai passare gli elfi · Conto alla rovescia per Natale
+- **Decora**: Luci da appendere · Ghirlanda · Calza · Candela · Falò · Pinguino · Palla di vetro · Togli le decorazioni (sempre accese)
 - **Notte**: Mai · Di sera · Sempre (l'ora di inizio è nelle Impostazioni)
 - **Sfondi…** · **Suoni** (acceso o spento; il volume è nelle Impostazioni)
 - **Impostazioni…** (⌘,) · **Tour di benvenuto…** · Informazioni · Esci (⌘Q)
@@ -247,9 +469,9 @@ sui bordi scoperti delle finestre. Si accende dal menu o dalle Impostazioni; la 
 3 giri alternati con `app/seasons-2`): base 15,1%, con menu e tour 13,3%. Nessuna differenza misurabile: il tour è
 una finestra SwiftUI chiusa quasi sempre, e "Dietro le finestre" è un confronto di un Bool a fotogramma.
 
-**Impostazioni**: effetto e dietro le finestre, quantità, dimensione e velocità delle particelle, vento, raggio e forza del cursore,
+**Impostazioni**: effetto e dietro le finestre, meteo (meteo a caso, arcobaleno, mucchi più alti, 120 fps), quantità, dimensione e velocità delle particelle, vento, raggio e forza del cursore,
 accumulo sulle finestre e sul fondo, velocità di accumulo, altezza massima, suoni e volume (spenti all'inizio), notte (mai, di sera dalle…, sempre),
-apri al login, ripristino.
+visitatori (Babbo Natale, Yeti, trenino ed elfi che passano da soli, quanto spesso, palle tra pupazzi), apri al login, ripristino.
 Le modifiche si vedono subito (nevica anche sulla finestra Impostazioni, utile per provare) e vengono salvate.
 
 ## Struttura
@@ -269,11 +491,17 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Engine/ShakeDetector.swift`, `Engine/WindowShakes.swift`, `Engine/Shake.swift` | Cursore e finestre scossi |
 | `Toys/Snowball/Snowball.swift` | Palla di neve (rotola), pupazzo, `snowmanTrio` |
 | `Engine/Sky.swift` | Banchi a tutto schermo (nebbia, nuvole: pochi sprite grandi e sfumati) e lampi |
+| `Engine/Weather.swift`, `Engine/Sparks.swift`, `Engine/Rainbow.swift` | Meteo a caso, cursore fermo, schermo coperto; scintille delle stelle; arcobaleno (SBU-177); vento, videogiochi, quando gira l'effetto, segui la stagione; schizzi (SBU-185) |
+| `Engine/Bolt.swift` | Il fulmine sull'icona del Dock di un'app chiusa mentre piove (SBU-185) |
 | `Engine/Glass.swift` | Gocce sul vetro: `GlassDrops` (logica, testata) e `Glass` (una sprite per goccia) |
 | `Toys/Christmas/` | Babbo Natale, il regalo, l'omino di pan di zenzero, il conto alla rovescia e le date di Natale |
 | `Toys/Figures/` | I personaggi: volpe, cincia con la mangiatoia, baita, lanterna, renna e i loro comandi (`FigureVisits.swift`) |
 | `Engine/Night.swift` | La notte: quando è notte (`NightClock`), lo schermo più scuro e la candela |
-| `Toys/WinterPlay/` | Spazzaneve, montagnetta, slittino, funivia, albero di Natale e i loro comandi (`WinterPlay.swift`) |
+| `Toys/WinterPlay/` | Spazzaneve, montagnetta, slittino, funivia e i loro comandi (`WinterPlay.swift`, anche quello dell'albero) |
+| `Toys/Tree/` | L'albero da decorare: `ChristmasTree` (disegno e gesti), `TreeLook` e `Decoration` (i dati, testati e salvati) |
+| `Toys/Cards/` | La scheda di un oggetto (`ToyCard`), con i contenuti del pupazzo (`SnowmanCard`) e dell'albero (`TreeCard`) |
+| `Toys/Keeping/` | Alberi e pupazzi salvati: `KeptToys` (i dati e a quale schermo vanno), `ToyKeeper` (UserDefaults) |
+| `Toys/Visitors/` | Yeti, trenino con l'elfo, `ElfPresent`, `Visitors` (quando passano e su quali schermi), Impostazioni → Visitatori |
 | `Engine/SoundBoard.swift` | Effetti brevi e sottofondo in loop (`AVAudioPlayer`) |
 | `Engine/Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
 | `Seasons/Seasons.swift` | L'elenco delle stagioni, una riga ciascuna |
@@ -289,8 +517,13 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Settings.swift` | Le impostazioni e la stagione (salvate in UserDefaults) e la finestra SwiftUI per regolarle |
 | `Localizable.xcstrings`, `InfoPlist.xcstrings` | Le stringhe in italiano e inglese; il nome "Sbu Seasons" nel menu dell'app in alto |
 | `Density.swift` | Le scorciatoie Leggera / Media / Forte del menu |
-| `Tuning.swift` | I parametri fissi del motore (fisica, cursore, mucchi, lettura delle finestre) |
-| `project.yml` | Progetto XcodeGen: target app (LSUIElement) e test |
+| `Tuning.swift` | I parametri fissi del motore (fisica, cursore, mucchi, lettura delle finestre) e i momenti del giorno |
+| `Gallery/` | La finestra Sfondi, i dieci sfondi (`Wallpaper`), lo sfondo di prima (`WallpaperMemory`), le anteprime |
+| `DayCycle/` | Momenti del giorno (`DayMoment`, `MomentLook`, `DayTint`), la scelta (`MomentChoice`, `WallpaperPrefs`), chi cambia gli sfondi (`WallpaperDirector`) |
+| `Saver/` | Il salvaschermo, parte comune ad app e `.saver`: opzioni, scena, installazione |
+| `../SaverBundle/` | Solo nel `.saver`: la `ScreenSaverView`, le opzioni in Impostazioni di Sistema |
+| `WhatsNew/` | «Novità»: le righe di ogni versione (`WhatsNew`) e la schedina nel menu (`WhatsNewCard`) |
+| `project.yml` | Progetto XcodeGen: target app (LSUIElement), salvaschermo (`SbuSeasonsSaver`) e test |
 
 I valori predefiniti sono in `SnowSettings` (`Settings.swift`); i parametri fissi in `Tuning.swift`.
 
@@ -325,6 +558,9 @@ arriva alla finestra sotto; il trascinamento e il lancio funzionano.
 1. Una sottoclasse di `Toy` nella cartella della sua funzione (per esempio `Toys/Snowball/`), con il suo `SKSpriteNode`
    (l'àncora è il centro in basso: `position` è dove poggiano i piedi).
 2. Sovrascrivi quello che serve: `clicked()` (clic), `clicked(at:)` (clic con il punto rispetto ai piedi, per l'albero), `shaken(_:)` (`.pointer` o `.window(id)` scossi), `bounce`.
+   Per una parte che si trascina da sola `pressPart`/`dragPart`/`releasePart`; per pizzico, rotella e rotazione `resized(at:by:)`
+   e `turned(at:by:)`; `isDraggable = false` per un oggetto che si clicca ma non si sposta, `staysOnScreen = false` per uno
+   che esce di lato (i visitatori). Una scheda col clic destro: un caso in `ToyCard.show(for:at:)`.
 3. Aggiungilo con `SeasonScene.add(_:)` (dall'app: `OverlayWindow.add(_:)`). Il motore lo fa cadere e lo posa sui
    tratti scoperti dei bordi delle finestre, sul Dock o sul fondo dello schermo; se la finestra si sposta o si chiude, cade.
    Dove coprirebbe la barra dei menu (un oggetto più alto della neve, su una finestra vicina alla barra) non si ferma e cade più giù.
@@ -371,8 +607,7 @@ si cambia `Season` e `SeasonScene` in un lavoro a parte, prima, perché tocca tu
 
 ## Prossimi passi possibili
 
-- Sfondo natalizio automatico (`NSWorkspace.shared.setDesktopImageURL`)
-- Icona dell'app
+- Alba e tramonto veri dalla stagione (oggi le ore dei momenti sono fisse, `Tuning.momentStarts`)
 
 ## Sfondi e suoni (2.0)
 
@@ -400,3 +635,41 @@ si cambia `Season` e `SeasonScene` in un lavoro a parte, prima, perché tocca tu
 
   Senza file restano muti l'omino preso, la volpe, la cincia e la renna.
 - Il codice: `Gallery/` (galleria) ed `Engine/SoundBoard.swift`; il sottofondo di una stagione è `Season.ambience`.
+
+## Sfondi per ora del giorno e salvaschermo (2.1)
+
+Come Koi Art, ma tutto sul Mac: nessuno sfondo scaricato, nessun controllo aggiornamenti, nessun dato che esce (SBU-179).
+
+- **Ora del giorno** (Impostazioni → Sfondi, o nella finestra Sfondi). Otto momenti fatti a codice con Core Image dal disegno
+  che c'è, senza immagini nuove (`DayTint`: luce, temperatura, colore e un velo di cielo che sfuma dall'alto; i valori sono
+  in `Tuning.momentLooks`). Uno sfondo già scuro (la sera di luglio) si scurisce meno, se no di notte diventa nero.
+  Mezzogiorno è il disegno com'è. I momenti cominciano a ore fisse dell'ora del Mac (`Tuning.momentStarts`: alba alle 5,
+  aurora 6:30, mattina 8, mezzogiorno 11, ora d'oro 16, tramonto 18, crepuscolo 19:30, notte 21): niente posizione, niente rete.
+  «Segue l'ora del Mac» mette uno **sfondo dinamico di macOS** (SBU-189): un solo HEIC con gli otto momenti e, nei metadati
+  XMP del primo fotogramma, l'ora a cui comincia ognuno (`apple_desktop:h24`, lo stesso formato degli sfondi dinamici di
+  Apple; `DynamicWallpaper`). Il cambio lo fa macOS, anche ad app chiusa: nessun timer e nessuna CPU dell'app. Il file si fa
+  una volta per sfondo e formato, in circa 0,7 s, e pesa 5–9 MB (`01-prima-neve-16x10-giorno-e-notte.heic`). Le ore sono
+  ore locali: viaggiando con un altro fuso, il cambio segue l'ora del Mac. macOS non cambia al minuto esatto: può arrivare
+  qualche minuto dopo l'ora del momento. Il vecchio controllo al minuto resta solo di ripiego, se l'HEIC non si riesce a
+  scrivere (allora si mette il JPEG del momento). Un momento fisso è un JPEG (`01-prima-neve-16x10-night.jpg`), e lì un
+  timer non serve. Tutto resta in `Application Support/Sbu Seasons/Wallpapers`; il lavoro pesante è fuori dal main thread.
+- **Lo sfondo torna se macOS lo perde** (SBU-189): al risveglio dallo stop o cambiando schermi, se su uno schermo c'era uno
+  dei nostri e adesso c'è uno sfondo di sistema (`/System/Library/Wallpapers`, `Desktop Pictures`) o nessuno, si rimette
+  (`Wallpaper.wasLost`). Una tua foto non si tocca mai. Limite noto: se scegli proprio uno sfondo di sistema al posto del
+  nostro, al cambio di schermo seguente torna il nostro. Serve l'app aperta.
+- Lo sfondo cambia solo sugli schermi dove c'è ancora uno dei nostri: se metti una tua foto, resta la tua.
+  «Lascia il mio schermo com'è» rimette la tua e smette di cambiarlo.
+- **Tutti gli schermi** con un clic: nella finestra Sfondi, con più monitor, «Schermo» → «Tutti gli schermi».
+- **Lo sfondo segue l'effetto** (Impostazioni → Sfondi): cambiando effetto, dal menu, dalle Impostazioni o dal meteo a caso,
+  su tutti gli schermi arriva lo sfondo consigliato (`Wallpaper.suggested`). Se lo sfondo di adesso va già bene con l'effetto
+  (le due scene con la neve) resta quello; se nessuno sfondo consiglia l'effetto (estate, sereno) non cambia niente.
+- **Salvaschermo** (`SbuSeasonsSaver`, `Sbu Seasons.saver` dentro l'app in `Contents/Resources`). Uno sfondo del borgo nel
+  momento del giorno e sopra il suo effetto (la stessa `SeasonScene` della scrivania, che cade fino in fondo). Opzioni in
+  Impostazioni di Sistema: lo sfondo scelto oppure uno diverso ogni volta, l'effetto sopra sì o no. A batteria va a 30
+  fotogrammi; con Riduci movimento anche con metà particelle e senza vento. Impostazioni → Sfondi → «Installa…» lo copia in
+  `~/Library/Screen Savers` e apre Impostazioni di Sistema (da macOS 15 in Sfondo → «Salvaschermo…»): lo scegli tu, l'app
+  non lo attiva e non lo avvia mai. Il salvaschermo gira dentro un processo di macOS e non legge le impostazioni dell'app:
+  le sue opzioni sono a parte (`ScreenSaverDefaults`). Pesa 28 MB perché porta con sé i suoi sfondi.
+- **Novità** (`WhatsNew/`): dopo un aggiornamento, la prima volta che apri il menu ❄︎, una schedina in cima con le righe
+  della versione (`WhatsNew.notes`). Si chiude con la ✕ o chiudendo il menu e non torna. Alla prima installazione no:
+  c'è il tour. Le correzioni (2.1.1) non hanno una schedina loro. Per una versione nuova si aggiunge una voce a `notes`.
