@@ -1,0 +1,72 @@
+name: SbuPrompter
+options:
+  bundleIdPrefix: dev.sbu
+  deploymentTarget:
+    macOS: "15.0"
+  developmentLanguage: it
+  createIntermediateGroups: true
+packages:
+  SbuKit:
+    path: ../../Packages/SbuKit
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: $(SBU_TEAM_ID)
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+    SWIFT_APPROACHABLE_CONCURRENCY: YES
+    SWIFT_STRICT_CONCURRENCY: complete
+# The iPhone remote (target SbuPrompterRemote, iOS 17) joins this project in its own ticket,
+# with the same bundle id for universal purchase (spec SBU-166). It will compile SbuPrompter/Core
+# as shared sources, so Core stays pure Swift with no AppKit.
+targets:
+  SbuPrompter:
+    type: application
+    platform: macOS
+    sources: [SbuPrompter]
+    dependencies:
+      - package: SbuKit
+    entitlements:
+      path: SbuPrompter/SbuPrompter.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        # Microphone for the voice scrolling; nothing else leaves the sandbox.
+        com.apple.security.device.audio-input: true
+        # Import of .txt, .md and .rtf the user picks.
+        com.apple.security.files.user-selected.read-only: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.prompter
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Sbu Prompter
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.productivity
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        # English in InfoPlist.xcstrings.
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: "Sbu Prompter ascolta la tua voce per far scorrere il copione mentre leggi. L'audio resta sul Mac."
+        INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: "Sbu Prompter riconosce le parole sul Mac, senza rete, per seguire il punto del copione che stai leggendo."
+        # Menu bar app: no Dock icon until the library window opens.
+        INFOPLIST_KEY_LSUIElement: YES
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "-"
+        ENABLE_HARDENED_RUNTIME: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+  SbuPrompterTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [SbuPrompterTests]
+    dependencies:
+      - target: SbuPrompter
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        BUNDLE_LOADER: $(TEST_HOST)
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/SbuPrompter.app/Contents/MacOS/SbuPrompter
+schemes:
+  SbuPrompter:
+    build:
+      targets:
+        SbuPrompter: all
+    test:
+      targets: [SbuPrompterTests]
