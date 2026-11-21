@@ -27,9 +27,9 @@ nonisolated struct TreeLook: Codable, Equatable, Sendable {
     @discardableResult
     mutating func hang(at point: CGPoint) -> Bool {
         guard Self.isOnBranch(point) else { return false }
-        if hanging == .star {
-            decorations.removeAll { $0.kind == .star }
-            decorations.append(Decoration(kind: .star, position: Self.tip))
+        if hanging.isTopper {
+            decorations.removeAll { $0.kind.isTopper }
+            decorations.append(Decoration(kind: hanging, position: Self.tip))
             return true
         }
         guard decorations.count < Tuning.maxDecorations else { return false }
@@ -51,7 +51,7 @@ nonisolated struct TreeLook: Codable, Equatable, Sendable {
     /// Lasciata dopo il trascinamento: sui rami resta lì, fuori dall'albero si toglie.
     mutating func drop(_ index: Int, at point: CGPoint) {
         guard decorations.indices.contains(index) else { return }
-        if Self.isOnBranch(point) || decorations[index].kind == .star && hypot(point.x - Self.tip.x, point.y - Self.tip.y) < 10 {
+        if Self.isOnBranch(point) || decorations[index].kind.isTopper && hypot(point.x - Self.tip.x, point.y - Self.tip.y) < 10 {
             decorations[index].position = point
         } else {
             decorations.remove(at: index)

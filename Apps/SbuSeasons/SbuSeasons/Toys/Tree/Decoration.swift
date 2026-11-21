@@ -1,8 +1,11 @@
 import CoreGraphics
 
-/// Che cosa si appende all'albero. La stella va sempre in cima, una per albero.
+/// Che cosa si appende all'albero. La stella e l'angelo vanno sempre in cima: uno solo per albero.
 nonisolated enum DecorationKind: String, Codable, CaseIterable, Sendable {
-    case bauble, lights, candyCane, star
+    case bauble, lights, candyCane, star, angel
+
+    /// Va in cima, al posto di quello che c'era.
+    var isTopper: Bool { self == .star || self == .angel }
 
     var title: String {
         switch self {
@@ -10,6 +13,7 @@ nonisolated enum DecorationKind: String, Codable, CaseIterable, Sendable {
         case .lights: String(localized: "Luci")
         case .candyCane: String(localized: "Bastoncini")
         case .star: String(localized: "Stella")
+        case .angel: String(localized: "Angelo")
         }
     }
 
@@ -20,6 +24,7 @@ nonisolated enum DecorationKind: String, Codable, CaseIterable, Sendable {
         case .lights: String(localized: "Filo di luci")
         case .candyCane: String(localized: "Bastoncino")
         case .star: String(localized: "Stella")
+        case .angel: String(localized: "Angelo")
         }
     }
 
@@ -30,6 +35,7 @@ nonisolated enum DecorationKind: String, Codable, CaseIterable, Sendable {
         case .lights: 22
         case .candyCane: 10
         case .star: 13
+        case .angel: 14
         }
     }
 }

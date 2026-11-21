@@ -125,6 +125,7 @@ final class ChristmasTree: Toy {
         case .lights: lightsTexture
         case .candyCane: candyCaneTexture
         case .star: starTexture
+        case .angel: angelTexture
         }
     }
 
@@ -177,6 +178,28 @@ final class ChristmasTree: Toy {
         star.close()
         NSColor.systemYellow.setFill()
         star.fill()
+    }
+
+    /// L'angelo: una veste bianca a campana, la testa, due ali e l'aureola d'oro.
+    private static let angelTexture = drawnTexture(size: CGSize(width: 14, height: 14)) { rect in
+        NSColor(white: 0.85, alpha: 1).setFill()
+        for side in [-1.0, 1.0] {
+            NSBezierPath(ovalIn: CGRect(x: rect.midX + side * 3.5 - 2.5, y: 4, width: 5, height: 6)).fill()
+        }
+        let robe = NSBezierPath()
+        robe.move(to: CGPoint(x: rect.midX - 4, y: 0.5))
+        robe.line(to: CGPoint(x: rect.midX + 4, y: 0.5))
+        robe.line(to: CGPoint(x: rect.midX + 1.5, y: 8))
+        robe.line(to: CGPoint(x: rect.midX - 1.5, y: 8))
+        robe.close()
+        NSColor.white.setFill()
+        robe.fill()
+        NSColor(calibratedRed: 0.98, green: 0.85, blue: 0.72, alpha: 1).setFill()
+        NSBezierPath(ovalIn: CGRect(x: rect.midX - 2, y: 7.5, width: 4, height: 4)).fill()
+        let halo = NSBezierPath(ovalIn: CGRect(x: rect.midX - 2.5, y: 11.5, width: 5, height: 2))
+        halo.lineWidth = 0.9
+        NSColor.systemYellow.setStroke()
+        halo.stroke()
     }
 
     private static let texture = drawnTexture(size: size) { rect in

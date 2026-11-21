@@ -22,11 +22,22 @@ struct SnowmanCard: View {
                     Text("Nessuno").tag(SnowmanLook.Hat.none)
                     Text("Cilindro").tag(SnowmanLook.Hat.topHat)
                     Text("Berretto").tag(SnowmanLook.Hat.beanie)
+                    Text("Da cowboy").tag(SnowmanLook.Hat.cowboy)
+                    Text("Da festa").tag(SnowmanLook.Hat.party)
+                    Text("Da elfo").tag(SnowmanLook.Hat.elf)
+                    Text("Da pirata").tag(SnowmanLook.Hat.pirate)
+                    Text("Corona").tag(SnowmanLook.Hat.crown)
+                    Text("Corna di renna").tag(SnowmanLook.Hat.antlers)
                 }
                 Picker("Sciarpa", selection: $look.scarf) {
                     Text("Nessuna").tag(SnowmanLook.Scarf.none)
                     Text("Rossa").tag(SnowmanLook.Scarf.red)
                     Text("Verde").tag(SnowmanLook.Scarf.green)
+                    Text("A righe").tag(SnowmanLook.Scarf.striped)
+                }
+                Picker("Occhi", selection: $look.eyes) {
+                    Text("Carbone").tag(SnowmanLook.Eyes.coal)
+                    Text("Stelle").tag(SnowmanLook.Eyes.stars)
                 }
                 Picker("Naso", selection: $look.nose) {
                     Text("Carota").tag(SnowmanLook.Nose.carrot)
@@ -34,6 +45,10 @@ struct SnowmanCard: View {
                     Text("Nessuno").tag(SnowmanLook.Nose.none)
                 }
                 Toggle("Bottoni", isOn: $look.buttons)
+                Toggle("Muffole", isOn: $look.mittens)
+                Toggle("Papillon", isOn: $look.bowTie)
+                Toggle("Maglione", isOn: $look.sweater)
+                Toggle("Mantello", isOn: $look.cape)
             }
         }
         .formStyle(.grouped)

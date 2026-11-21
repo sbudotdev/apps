@@ -139,7 +139,7 @@ struct VisitorsTests {
 
     // MARK: - Il regalo dell'elfo
 
-    @Test(arguments: [(0.0, ElfPresent.decoration(.bauble)), (0.99, .decoration(.star))])
+    @Test(arguments: [(0.0, ElfPresent.decoration(.bauble)), (0.99, .decoration(.angel))])
     func withATreeTheGiftIsADecoration(_ roll: Double, _ present: ElfPresent) {
         #expect(ElfPresent.pick(hasTree: true, snowman: nil, roll: roll) == present)
     }
