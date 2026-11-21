@@ -364,4 +364,11 @@ nonisolated enum Tuning {
     static let bulbGap: CGFloat = 18
     /// Fiamme e lampadine si ridisegnano tante volte al secondo: bastano, e costano poco.
     static let deskFlickerFPS: Double = 8
+
+    // MARK: Mandare un oggetto (SBU-200)
+
+    /// Un file `.sbuseasons` più grande non si legge: un albero pieno di decorazioni ne occupa meno di 10 KB.
+    static let toyFileMaxBytes = 64 * 1024
+    /// Le luci ricevute sono lunghe al massimo tanti pt, in larghezza e in altezza (il file non è fidato).
+    static let toyFileMaxLightsSpan: CGFloat = 1600
 }
