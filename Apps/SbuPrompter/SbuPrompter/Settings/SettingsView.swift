@@ -143,15 +143,13 @@ private struct ShortcutSettings: View {
                     ShortcutRecorder(action: action)
                 }
             }
-            HStack {
-                Text("Funzionano in ogni app. Clicca una scorciatoia e premi i tasti nuovi.")
-                    .font(SbuTheme.caption)
-                    .foregroundStyle(SbuTheme.inkMuted)
-                Spacer()
-                Button("Ripristina") {
-                    model.settings.shortcuts = Dictionary(uniqueKeysWithValues: ShortcutAction.allCases.map { ($0, $0.defaultCombo) })
-                    model.suspendShortcuts(false)
-                }
+            Text("Funzionano in ogni app. Clicca una scorciatoia e premi i tasti nuovi.")
+                .font(SbuTheme.caption)
+                .foregroundStyle(SbuTheme.inkMuted)
+                .fixedSize(horizontal: false, vertical: true)
+            Button("Ripristina") {
+                model.settings.shortcuts = Dictionary(uniqueKeysWithValues: ShortcutAction.allCases.map { ($0, $0.defaultCombo) })
+                model.suspendShortcuts(false)
             }
         }
     }

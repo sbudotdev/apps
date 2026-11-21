@@ -24,6 +24,7 @@ struct SbuPrompterApp: App {
         Window("Libreria", id: LibraryView.windowID) {
             LibraryView()
                 .environment(model)
+                .environment(\.sbuAccent, .prompter)
                 .modelContainer(model.container)
         }
         .defaultSize(width: 820, height: 560)
@@ -32,6 +33,7 @@ struct SbuPrompterApp: App {
         Settings {
             SettingsView()
                 .environment(model)
+                .environment(\.sbuAccent, .prompter)
         }
     }
 }
