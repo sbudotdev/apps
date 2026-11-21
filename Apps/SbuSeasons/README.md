@@ -99,8 +99,11 @@ Le quattro funzioni scelte da Matteo dopo l'analisi della SBU-223 (risposta nell
     dice perché, per ogni file rifiutato (`ImageImportError`). Ogni immagine è ridotta una volta a una texture con il
     lato lungo di 128 pt (`Tuning.imageSide`, 256 pixel): PNG, JPEG e HEIC con la miniatura di ImageIO, senza
     decodificare la foto intera; SVG con `NSImage`.
-  - **Senza immagini** (o con tutte le caselle spente) l'effetto non fa cadere niente e al centro dello schermo dice
-    «Importa le tue immagini in Impostazioni → Le tue immagini.» (`Engine/Invitation.swift`, `Season.invitation`).
+  - **Senza immagini** l'effetto non fa cadere niente e al centro dello schermo dice «Importa le tue immagini in
+    Impostazioni → Le tue immagini.»; con le immagini importate ma tutte le caselle spente dice «Spunta almeno
+    un'immagine in Impostazioni → Le tue immagini.» (`Engine/Invitation.swift`, `Season.invitation`).
+  - **Senza blocchi:** l'importazione (lettura, riduzione e copia) e le miniature delle Impostazioni si fanno fuori dal
+    thread principale: una foto grande non ferma la finestra.
   - **Motore:** una particella può avere la sua texture (`Particle.texture`); quando cambiano le immagini, le caselle o
     il moto cambia `Season.revision` e la scena rifà le particelle al fotogramma dopo. Le altre stagioni non cambiano.
   - Il codice in `Seasons/Images/` (`ImageLibrary`, `MyImages`, `ImageMotion`, `ImagesSection`), i test in

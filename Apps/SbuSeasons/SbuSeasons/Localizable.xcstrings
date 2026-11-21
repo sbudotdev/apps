@@ -14780,6 +14780,52 @@
         }
       }
     },
+    "Spunta almeno un'immagine in Impostazioni → Le tue immagini.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tick at least one image in Settings → Your Images."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hake mindestens ein Bild an in Einstellungen → Deine Bilder."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coche au moins une image dans Réglages → Tes images."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marca al menos una imagen en Ajustes → Tus imágenes."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定 → あなたの画像 で画像を1つ以上選んでください。"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marque pelo menos uma imagem em Ajustes → Suas imagens."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vink minstens één afbeelding aan in Instellingen → Je eigen afbeeldingen."
+          }
+        }
+      }
+    },
     "Importa immagini…": {
       "localizations": {
         "en": {

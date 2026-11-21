@@ -15,11 +15,15 @@ final class ImageLibrary {
     private(set) var names: [String] = []
     /// Cambia a ogni importazione o rimozione: la scena rifà le particelle.
     private(set) var revision = 0
-    @ObservationIgnored private var small: [String: CGImage] = [:]
+    /// Le miniature già fatte: osservate, così le Impostazioni le mostrano appena arrivano dal disco.
+    private var small: [String: CGImage] = [:]
     @ObservationIgnored private var textureCache: [String: SKTexture] = [:]
+    /// Come si legge un file; nei test si guarda su che thread.
+    private let read: @Sendable (URL) -> Data?
 
-    init(folder: URL) {
+    init(folder: URL, read: @escaping @Sendable (URL) -> Data? = { try? Data(contentsOf: $0) }) {
         self.folder = folder
+        self.read = read
         names = ((try? FileManager.default.contentsOfDirectory(atPath: folder.path())) ?? [])
             .filter { !$0.hasPrefix(".") }
             .sorted()
@@ -28,18 +32,18 @@ final class ImageLibrary {
     func url(for name: String) -> URL { folder.appending(path: name) }
 
     /// Controlla il file e ne mette una copia nella cartella. Un file troppo grande o rovinato non entra.
-    func importFile(at source: URL) throws(ImageImportError) {
+    /// Lettura, riduzione e copia fuori dal thread principale (QA SBU-231): le Impostazioni non si bloccano.
+    func importFile(at source: URL) async throws(ImageImportError) {
         guard names.count < Tuning.imagesMax else { throw .full }
         let bytes = (try? source.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0
         guard bytes <= Tuning.imageMaxBytes else { throw .tooLarge }
-        guard let data = try? Data(contentsOf: source), let shrunk = Self.shrink(data) else { throw .unreadable }
         let ext = source.pathExtension.lowercased()
         let name = String(format: "%013.0f-", Date.now.timeIntervalSince1970 * 1000) + UUID().uuidString + (ext.isEmpty ? "" : ".\(ext)")
-        do {
-            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
-            try data.write(to: url(for: name))
-        } catch {
-            throw .unreadable
+        let shrunk = try await Self.copy(source, to: url(for: name), read: read)
+        // Durante l'attesa un'altra importazione può aver riempito la cartella.
+        guard names.count < Tuning.imagesMax else {
+            try? FileManager.default.removeItem(at: url(for: name))
+            throw .full
         }
         small[name] = shrunk
         names.append(name)
@@ -57,8 +61,38 @@ final class ImageLibrary {
     /// L'immagine ridotta (lato lungo `imageSide` pt, al doppio in pixel), fatta una volta per file.
     func smallImage(_ name: String) -> CGImage? {
         if let cached = small[name] { return cached }
-        guard let data = try? Data(contentsOf: url(for: name)), let shrunk = Self.shrink(data) else { return nil }
+        guard let shrunk = read(url(for: name)).flatMap(Self.shrink) else { return nil }
         small[name] = shrunk
+        return shrunk
+    }
+
+    /// La miniatura se è già fatta, senza toccare il disco: per le Impostazioni.
+    func cachedSmallImage(_ name: String) -> CGImage? { small[name] }
+
+    /// Come `smallImage`, ma il disco si legge fuori dal thread principale (QA SBU-231).
+    @discardableResult
+    func loadSmallImage(_ name: String) async -> CGImage? {
+        if let cached = small[name] { return cached }
+        guard let shrunk = await Self.load(url(for: name), read: read) else { return nil }
+        small[name] = shrunk
+        return shrunk
+    }
+
+    @concurrent
+    private nonisolated static func load(_ url: URL, read: @Sendable (URL) -> Data?) async -> CGImage? {
+        read(url).flatMap(shrink)
+    }
+
+    @concurrent
+    private nonisolated static func copy(_ source: URL, to destination: URL,
+                                         read: @Sendable (URL) -> Data?) async throws(ImageImportError) -> CGImage {
+        guard let data = read(source), let shrunk = shrink(data) else { throw .unreadable }
+        do {
+            try FileManager.default.createDirectory(at: destination.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try data.write(to: destination)
+        } catch {
+            throw .unreadable
+        }
         return shrunk
     }
 
@@ -75,7 +109,7 @@ final class ImageLibrary {
 
     /// L'immagine con il lato lungo di `imageSide` × 2 pixel, in proporzione; nil se il file non è un'immagine.
     /// PNG, JPEG e HEIC con la miniatura di ImageIO (una foto enorme non si decodifica intera); SVG con `NSImage`.
-    static func shrink(_ data: Data) -> CGImage? {
+    nonisolated static func shrink(_ data: Data) -> CGImage? {
         let side = Int(Tuning.imageSide * 2)
         if let source = CGImageSourceCreateWithData(data as CFData, nil), CGImageSourceGetCount(source) > 0 {
             let options = [kCGImageSourceCreateThumbnailFromImageAlways: true, kCGImageSourceCreateThumbnailWithTransform: true,

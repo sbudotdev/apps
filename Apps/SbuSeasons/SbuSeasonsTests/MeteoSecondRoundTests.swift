@@ -60,6 +60,20 @@ struct MeteoSecondRoundTests {
 
     // MARK: - Quando gira l'effetto
 
+    /// Fiamme, lampadine e Luci in alto si fermano con gli schermi a riposo (QA SBU-231), come col resto.
+    @Test func decorationsMoveOnlyWhenNothingStopsThem() {
+        let free = DecorGate(onBattery: false, reduceMotion: false, paused: false, gameInFront: false, displaysAsleep: false)
+        #expect(free.animates)
+        var gate = free
+        gate.displaysAsleep = true
+        #expect(!gate.animates)
+        for stop in [\DecorGate.onBattery, \.reduceMotion, \.paused, \.gameInFront] {
+            gate = free
+            gate[keyPath: stop] = true
+            #expect(!gate.animates)
+        }
+    }
+
     @Test func theEffectRunsOnlyWhenNothingStopsIt() {
         let free = EffectGate(snowing: true, displaysAsleep: false, screenCovered: false, gameInFront: false,
                               screenOff: false, stopOnBattery: false, onBattery: true)

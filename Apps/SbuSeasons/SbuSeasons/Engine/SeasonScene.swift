@@ -665,6 +665,13 @@ final class SeasonScene: SKScene {
         !behindWindows || !covers.contains { $0.contains(point) }
     }
 
+    /// Da dove parte il tratto asciugato in questo passo: da dov'era il cursore, se era sullo schermo;
+    /// appena entrato, da dov'è (fuori dallo schermo il vetro non c'è).
+    static func wipeStart(from previous: CGPoint?, to point: CGPoint, size: CGSize) -> CGPoint {
+        guard let previous, CGRect(origin: .zero, size: size).contains(previous) else { return point }
+        return previous
+    }
+
     /// Riceve finestre e Dock attuali (coordinate globali) e aggiorna i mucchi di neve.
     /// `ceiling`: dove finisce la zona libera dello schermo, sotto la barra dei menu (coordinate della scena).
     func updateWindows(_ edges: [WindowEdge], dock dockFrame: CGRect?, ceiling: CGFloat) {
@@ -777,6 +784,7 @@ final class SeasonScene: SKScene {
         let global = pointerLocation()
         let mouse = CGPoint(x: global.x - screenOrigin.x, y: global.y - screenOrigin.y)
         var mouseVelocity = CGVector.zero
+        let previousMouse = lastMouse
         if let last = lastMouse {
             mouseVelocity = CGVector(dx: (mouse.x - last.x) / dt, dy: (mouse.y - last.y) / dt)
         }
@@ -924,7 +932,7 @@ final class SeasonScene: SKScene {
         let wipe = glass.model != nil && onScreen && mouseVelocity != .zero
             && Self.wipesGlass(at: mouse, behindWindows: settings.behindWindows, covers: covers)
         glass.step(dt: dt, size: size, ledges: ledges, amount: intensity * energyShare, calm: reduceMotion,
-                   wipe: wipe ? (mouse, cursorRadius) : nil)
+                   wipe: wipe ? (Self.wipeStart(from: previousMouse, to: mouse, size: size), mouse, cursorRadius) : nil)
         for point in glass.splashes { sparks.splash(at: point, color: season.pileColor, calm: reduceMotion) }
         if !bolts.isEmpty {
             bolts.removeAll { bolt in

@@ -2,7 +2,7 @@ import AppKit
 import SpriteKit
 
 /// Le tue immagini (SBU-230): fino a 10 immagini importate nelle Impostazioni cadono al posto dei fiocchi,
-/// come la neve, come le foglie o come la pioggia. Non si posano. Senza immagini, l'invito a importarle.
+/// come la neve, come le foglie o come la pioggia. Non si posano. Senza immagini, un invito.
 struct MyImages: Season {
     static let id = "images"
     var id: String { Self.id }
@@ -16,8 +16,13 @@ struct MyImages: Season {
     private var motion: ImageMotion { Settings.shared.values.imagesMotion }
 
     var abundance: Double { textures.isEmpty ? 0 : Tuning.imagesAbundance }
+    /// Senza immagini l'invito a importarle; importate ma tutte senza spunta, a spuntarne una (QA SBU-231).
     var invitation: String? {
-        textures.isEmpty ? String(localized: "Importa le tue immagini in Impostazioni → Le tue immagini.") : nil
+        guard textures.isEmpty else { return nil }
+        let off = Settings.shared.values.imagesOff
+        return !library.names.isEmpty && library.names.allSatisfy(off.contains)
+            ? String(localized: "Spunta almeno un'immagine in Impostazioni → Le tue immagini.")
+            : String(localized: "Importa le tue immagini in Impostazioni → Le tue immagini.")
     }
     var revision: Int {
         var hasher = Hasher()

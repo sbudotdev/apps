@@ -346,9 +346,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
                                   stopOnBattery: values.stopOnBattery, onBattery: onBattery)
             overlay.setSnowing(gate.runs)
         }
-        // Fiamme e lampadine di Decora: ferme anche con un videogioco davanti (SBU-193).
-        desk.animates = !onBattery && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
-            && !passages.paused && !gameInFront
+        desk.animates = DecorGate(onBattery: onBattery, reduceMotion: NSWorkspace.shared.accessibilityDisplayShouldReduceMotion,
+                                  paused: passages.paused, gameInFront: gameInFront, displaysAsleep: displaysAsleep).animates
         updateTopLights()
     }
 

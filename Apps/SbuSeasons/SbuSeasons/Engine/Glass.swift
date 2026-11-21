@@ -63,15 +63,15 @@ nonisolated struct GlassDrops {
     }
 
     /// Un passo. `amount`: intensità rispetto a "Media"; `ledges`: i bordi da cui una goccia cade; `calm`: Riduci movimento;
-    /// `wipe`: dove passa il cursore, col suo raggio.
+    /// `wipe`: il tratto fatto dal cursore in questo passo (da dov'era a dov'è), col suo raggio.
     mutating func step(dt: CGFloat, size: CGSize, ledges: [Ledge], amount: CGFloat, calm: Bool,
-                       wipe: (point: CGPoint, radius: CGFloat)? = nil) {
+                       wipe: (from: CGPoint, to: CGPoint, radius: CGFloat)? = nil) {
         removed = []
         splashes = []
         wiped = []
         clock += dt
         guard size.width > 0, size.height > 0 else { return }
-        if let wipe { self.wipe(at: wipe.point, radius: wipe.radius) }
+        if let wipe { self.wipe(from: wipe.from, to: wipe.to, radius: wipe.radius) }
         let area = size.width * size.height / Tuning.referenceScreenArea
         // Nuove gocce.
         due += rain.beads * amount * area * (calm ? 0.5 : 1) * dt
@@ -147,6 +147,17 @@ nonisolated struct GlassDrops {
         }
     }
 
+    /// Asciuga tutto il tratto, un timbro ogni `Tuning.wipeStep` raggi: col cursore veloce la scia non resta a buchi
+    /// (QA SBU-231).
+    private mutating func wipe(from: CGPoint, to: CGPoint, radius: CGFloat) {
+        guard radius > 0 else { return }
+        let stamps = max(Int((hypot(to.x - from.x, to.y - from.y) / (radius * Tuning.wipeStep)).rounded(.up)), 1)
+        for k in 1...stamps {
+            let t = CGFloat(k) / CGFloat(stamps)
+            wipe(at: CGPoint(x: from.x + (to.x - from.x) * t, y: from.y + (to.y - from.y) * t), radius: radius)
+        }
+    }
+
     /// Il cursore passa: le gocce ferme o che scorrono nel raggio spariscono (quelle che cadono vanno per la loro strada).
     private mutating func wipe(at point: CGPoint, radius: CGFloat) {
         drops.removeAll { drop in
@@ -154,12 +165,12 @@ nonisolated struct GlassDrops {
             wiped.append(drop.id)
             return true
         }
-        // Ripassando su un tratto ancora fresco, si riasciuga; uno nuovo ogni mezzo raggio di strada.
+        // Ripassando su un tratto ancora fresco, si riasciuga; uno nuovo ogni `Tuning.wipeStep` raggi di strada.
         var near = false
         for i in trail.indices where hypot(trail[i].center.x - point.x, trail[i].center.y - point.y) < radius {
             trail[i].born = clock
             trail[i].filled = 0
-            if hypot(trail[i].center.x - point.x, trail[i].center.y - point.y) < radius / 2 { near = true }
+            if hypot(trail[i].center.x - point.x, trail[i].center.y - point.y) < radius * Tuning.wipeStep { near = true }
         }
         if !near {
             trail.append(Wiped(center: point, radius: radius, born: clock, life: .random(in: RainTuning.wipeClose)))
@@ -219,7 +230,7 @@ final class Glass: SKNode {
     var splashes: [CGPoint] { model?.splashes ?? [] }
 
     func step(dt: CGFloat, size: CGSize, ledges: [Ledge], amount: CGFloat, calm: Bool,
-              wipe: (point: CGPoint, radius: CGFloat)? = nil) {
+              wipe: (from: CGPoint, to: CGPoint, radius: CGFloat)? = nil) {
         guard var model, let texture else { return }
         model.step(dt: dt, size: size, ledges: ledges, amount: amount, calm: calm, wipe: wipe)
         self.model = model
