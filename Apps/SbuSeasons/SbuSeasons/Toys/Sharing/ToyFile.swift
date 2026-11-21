@@ -15,6 +15,15 @@ nonisolated enum ToyFile: Equatable, Sendable {
 
     enum ReadError: Error, Equatable {
         case tooLarge, unreadable, newerVersion
+
+        /// Perché non si apre, per chi ha fatto doppio clic.
+        var explanation: String {
+            switch self {
+            case .tooLarge: String(localized: "È troppo grande per essere un oggetto di Sbu Seasons.")
+            case .unreadable: String(localized: "Non è un oggetto di Sbu Seasons, oppure è rovinato.")
+            case .newerVersion: String(localized: "L'ha fatto una versione più nuova di Sbu Seasons. Aggiorna l'app e riprova.")
+            }
+        }
     }
 
     static let format = "sbuseasons"

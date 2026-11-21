@@ -371,4 +371,6 @@ nonisolated enum Tuning {
     static let toyFileMaxBytes = 64 * 1024
     /// Le luci ricevute sono lunghe al massimo tanti pt, in larghezza e in altezza (il file non è fidato).
     static let toyFileMaxLightsSpan: CGFloat = 1600
+    /// Una decorazione ricevuta compare piano, in tanti secondi (solo opacità: va bene anche con Riduci movimento).
+    static let receivedFadeIn: TimeInterval = 0.8
 }

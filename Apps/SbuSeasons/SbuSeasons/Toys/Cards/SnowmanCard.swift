@@ -4,9 +4,12 @@ import SwiftUI
 struct SnowmanCard: View {
     @State private var look: SnowmanLook
     let apply: (SnowmanLook) -> Void
+    /// «Manda…»: il pupazzo diventa un file da mandare (SBU-200).
+    let send: () -> Void
 
-    init(look: SnowmanLook, apply: @escaping (SnowmanLook) -> Void) {
+    init(look: SnowmanLook, send: @escaping () -> Void = {}, apply: @escaping (SnowmanLook) -> Void) {
         _look = State(initialValue: look)
+        self.send = send
         self.apply = apply
     }
 
@@ -49,6 +52,12 @@ struct SnowmanCard: View {
                 Toggle("Papillon", isOn: $look.bowTie)
                 Toggle("Maglione", isOn: $look.sweater)
                 Toggle("Mantello", isOn: $look.cape)
+            }
+            Section {
+                Button("Manda…", action: send)
+            } footer: {
+                Text("Diventa un file da mandare con AirDrop, Messaggi o Mail. Chi lo apre con Sbu Seasons se lo trova sullo schermo.")
+                    .foregroundStyle(Quaderno.inkMuted.color)
             }
         }
         .formStyle(.grouped)

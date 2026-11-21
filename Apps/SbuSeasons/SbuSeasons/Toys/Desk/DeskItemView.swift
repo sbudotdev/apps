@@ -2,7 +2,7 @@ import AppKit
 
 /// Una decorazione della scrivania (SBU-187): la disegna e la muove. Trascinandola si sposta (le luci: da un'estremità
 /// si sposta solo quella); pizzico o rotella la ingrandiscono, due dita o ⇧ e la rotella la girano;
-/// il clic destro (o ⌃ clic) la toglie.
+/// il clic destro (o ⌃ clic) la manda a qualcuno o la toglie.
 final class DeskItemView: NSView {
     var item: DeskItem { didSet { needsDisplay = true } }
     /// Il tempo delle fiamme e delle lampadine (0 = ferme).
@@ -26,6 +26,9 @@ final class DeskItemView: NSView {
         // Con VoiceOver si toglie senza clic destro (QA SBU-188).
         setAccessibilityCustomActions([NSAccessibilityCustomAction(name: String(localized: "Togli")) { [weak self] in
             self?.onRemove?()
+            return true
+        }, NSAccessibilityCustomAction(name: String(localized: "Manda…")) { [weak self] in
+            self?.sendItem()
             return true
         }])
     }
@@ -95,6 +98,9 @@ final class DeskItemView: NSView {
 
     override func rightMouseDown(with event: NSEvent) {
         let menu = NSMenu()
+        let send = NSMenuItem(title: String(localized: "Manda…"), action: #selector(sendItem), keyEquivalent: "")
+        send.target = self
+        menu.addItem(send)
         let remove = NSMenuItem(title: String(localized: "Togli"), action: #selector(removeItem), keyEquivalent: "")
         remove.target = self
         menu.addItem(remove)
@@ -102,4 +108,7 @@ final class DeskItemView: NSView {
     }
 
     @objc private func removeItem() { onRemove?() }
+
+    /// La decorazione diventa un file da mandare (SBU-200).
+    @objc private func sendItem() { ToySharing.shared.share(.decoration(item), from: self) }
 }
