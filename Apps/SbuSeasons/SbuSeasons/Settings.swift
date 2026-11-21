@@ -42,6 +42,12 @@ nonisolated struct SnowSettings: Codable, Equatable {
     var followSeason = false        // l'effetto segue il calendario (`SeasonCalendar`)
     // Due pupazzi vicini ogni tanto si tirano una palla di neve (SBU-187)
     var snowballFights = true
+    // Luci in alto (SBU-229): il filo sotto la barra dei menu, con ogni effetto e anche a effetto spento
+    var topLights = false
+    var topLightsPalette = TopLights.Palette.multicolor
+    var topLightsColor = TopLights.SingleColor.red   // con «Un colore solo»
+    var topLightsShape = TopLights.Shape.round
+    var topLightsAnimation = TopLights.Animation.chase
 }
 
 extension SnowSettings {
