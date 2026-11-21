@@ -5,8 +5,54 @@
       "comment": "The bold app menu on macOS: without this it shows the product name, SbuSeasons.",
       "extractionState": "manual",
       "localizations": {
-        "en": { "stringUnit": { "state": "translated", "value": "Sbu Seasons" } },
-        "it": { "stringUnit": { "state": "translated", "value": "Sbu Seasons" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Seasons"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Seasons"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Seasons"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Seasons"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Seasons"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Seasons"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Seasons"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Seasons"
+          }
+        }
       }
     }
   },
