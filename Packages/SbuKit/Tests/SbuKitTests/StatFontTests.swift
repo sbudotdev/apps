@@ -1,6 +1,5 @@
 import SwiftUI
 import Testing
-import UIKit
 @testable import SbuKit
 
 /// `stat` and `statHero` use the Bricolage Grotesque bundled with SbuKit, with tabular figures.
@@ -8,7 +7,7 @@ struct StatFontTests {
     @Test func bundledFontRegistersAndResolves() throws {
         #expect(SbuFont.isRegistered)
 
-        let font = try #require(UIFont(name: SbuFont.statPostScriptName, size: SbuTheme.statSize))
+        let font = try #require(PlatformFont(name: SbuFont.statPostScriptName, size: SbuTheme.statSize))
         #expect(font.familyName == "Bricolage Grotesque")
     }
 
@@ -39,7 +38,7 @@ struct StatFontTests {
 
     @Test func faceIsProportionalWithoutTheFeature() throws {
         try #require(SbuFont.isRegistered)
-        let font = try #require(UIFont(name: SbuFont.statPostScriptName, size: 64))
+        let font = try #require(PlatformFont(name: SbuFont.statPostScriptName, size: 64))
         let one = ("1111" as NSString).size(withAttributes: [.font: font]).width
         let zero = ("0000" as NSString).size(withAttributes: [.font: font]).width
 
@@ -48,7 +47,6 @@ struct StatFontTests {
 
     private func renderedWidth(of digits: String) throws -> CGFloat {
         let renderer = ImageRenderer(content: Text(verbatim: digits).font(SbuTheme.numberFont(size: 64)).fixedSize())
-        let image = try #require(renderer.uiImage)
-        return image.size.width
+        return try #require(renderer.pointSize).width
     }
 }

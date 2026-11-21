@@ -1,7 +1,6 @@
 import Foundation
 import SwiftUI
 import Testing
-import UIKit
 @testable import SbuKit
 
 /// Checks that SbuKit ships every token of `Design/tokens.json` with the right values.
@@ -59,11 +58,24 @@ struct TokenTests {
 
     @Test(arguments: ["light", "dark"])
     func colorAssetsMatchTokenValues(theme: String) throws {
-        let traits = UITraitCollection(userInterfaceStyle: theme == "dark" ? .dark : .light)
         for token in tokens.color.tokens {
-            let color = try #require(UIColor(named: token.name, in: SbuTheme.bundle, compatibleWith: traits), "Missing asset \(token.name)")
-            #expect(hex(color.resolvedColor(with: traits)) == token.value[theme]?.lowercased(), "\(token.name) \(theme)")
+            let color = try #require(resolved(token.name, dark: theme == "dark"), "Missing asset \(token.name)")
+            #expect(hex(color) == token.value[theme]?.lowercased(), "\(token.name) \(theme)")
         }
+    }
+
+    /// The color asset as the system draws it in light or dark, in sRGB.
+    private func resolved(_ name: String, dark: Bool) -> PlatformColor? {
+        #if canImport(UIKit)
+        let traits = UITraitCollection(userInterfaceStyle: dark ? .dark : .light)
+        return UIColor(named: name, in: SbuTheme.bundle, compatibleWith: traits)?.resolvedColor(with: traits)
+        #else
+        guard let color = NSColor(named: name, bundle: SbuTheme.bundle),
+              let appearance = NSAppearance(named: dark ? .darkAqua : .aqua) else { return nil }
+        var srgb: NSColor?
+        appearance.performAsCurrentDrawingAppearance { srgb = color.usingColorSpace(.sRGB) }
+        return srgb
+        #endif
     }
 
     @Test func metricsMatchTokenValues() {
@@ -88,7 +100,7 @@ struct TokenTests {
         #expect(Double(style.letterSpacing?.replacing("px", with: "") ?? "0") == Double(tracking))
     }
 
-    private func hex(_ color: UIColor) -> String {
+    private func hex(_ color: PlatformColor) -> String {
         var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         // Opaque colors stay #rrggbb, translucent ones add the alpha byte as in tokens.json.
