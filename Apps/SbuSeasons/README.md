@@ -31,7 +31,7 @@ Requisiti: macOS 14+, Xcode 26+, XcodeGen (`brew install xcodegen`).
 ## Novità della 2.1
 
 - **Sfondi per ora del giorno:** ogni sfondo del borgo in otto momenti (alba, aurora, mattina, mezzogiorno, ora d'oro,
-  tramonto, crepuscolo, notte), segue l'ora del Mac o resta fisso su un momento.
+  tramonto, crepuscolo, notte), segue l'ora del Mac o resta fisso su un momento. Il cambio lo fa macOS, anche ad app chiusa.
 - **Lo sfondo segue l'effetto:** cambiando effetto arriva lo sfondo consigliato, su tutti gli schermi.
 - **Salvaschermo** con gli sfondi del borgo e l'effetto sopra, da installare dalle Impostazioni.
 - **Novità:** dopo un aggiornamento, la prima volta che apri il menu ❄︎, una schedina con le cose nuove.
@@ -424,9 +424,18 @@ Come Koi Art, ma tutto sul Mac: nessuno sfondo scaricato, nessun controllo aggio
   in `Tuning.momentLooks`). Uno sfondo già scuro (la sera di luglio) si scurisce meno, se no di notte diventa nero.
   Mezzogiorno è il disegno com'è. I momenti cominciano a ore fisse dell'ora del Mac (`Tuning.momentStarts`: alba alle 5,
   aurora 6:30, mattina 8, mezzogiorno 11, ora d'oro 16, tramonto 18, crepuscolo 19:30, notte 21): niente posizione, niente rete.
-  «Segue l'ora del Mac» cambia lo sfondo da solo (si controlla una volta al minuto e al risveglio dallo stop), oppure si
-  sceglie un momento fisso. Ogni momento si fa una volta sola e resta in `Application Support/Sbu Seasons/Wallpapers`
-  (`01-prima-neve-16x10-night.jpg`); il lavoro pesante è fuori dal main thread.
+  «Segue l'ora del Mac» mette uno **sfondo dinamico di macOS** (SBU-189): un solo HEIC con gli otto momenti e, nei metadati
+  XMP del primo fotogramma, l'ora a cui comincia ognuno (`apple_desktop:h24`, lo stesso formato degli sfondi dinamici di
+  Apple; `DynamicWallpaper`). Il cambio lo fa macOS, anche ad app chiusa: nessun timer e nessuna CPU dell'app. Il file si fa
+  una volta per sfondo e formato, in circa 0,7 s, e pesa 5–9 MB (`01-prima-neve-16x10-giorno-e-notte.heic`). Le ore sono
+  ore locali: viaggiando con un altro fuso, il cambio segue l'ora del Mac. macOS non cambia al minuto esatto: può arrivare
+  qualche minuto dopo l'ora del momento. Il vecchio controllo al minuto resta solo di ripiego, se l'HEIC non si riesce a
+  scrivere (allora si mette il JPEG del momento). Un momento fisso è un JPEG (`01-prima-neve-16x10-night.jpg`), e lì un
+  timer non serve. Tutto resta in `Application Support/Sbu Seasons/Wallpapers`; il lavoro pesante è fuori dal main thread.
+- **Lo sfondo torna se macOS lo perde** (SBU-189): al risveglio dallo stop o cambiando schermi, se su uno schermo c'era uno
+  dei nostri e adesso c'è uno sfondo di sistema (`/System/Library/Wallpapers`, `Desktop Pictures`) o nessuno, si rimette
+  (`Wallpaper.wasLost`). Una tua foto non si tocca mai. Limite noto: se scegli proprio uno sfondo di sistema al posto del
+  nostro, al cambio di schermo seguente torna il nostro. Serve l'app aperta.
 - Lo sfondo cambia solo sugli schermi dove c'è ancora uno dei nostri: se metti una tua foto, resta la tua.
   «Lascia il mio schermo com'è» rimette la tua e smette di cambiarlo.
 - **Tutti gli schermi** con un clic: nella finestra Sfondi, con più monitor, «Schermo» → «Tutti gli schermi».

@@ -191,8 +191,11 @@ nonisolated enum Tuning {
     /// col quadrato del rapporto, ma almeno per `momentDarkFloor`.
     static let momentReferenceBrightness: CGFloat = 0.78
     static let momentDarkFloor: CGFloat = 0.2
-    /// Ogni quanto (s) si guarda se è cominciato un altro momento.
+    /// Ogni quanto (s) si guarda se è cominciato un altro momento. Solo di ripiego: di solito il cambio
+    /// lo fa macOS con lo sfondo dinamico (`DynamicWallpaper`), e questo timer non parte.
     static let momentCheckInterval: TimeInterval = 60
     /// La qualità dei JPEG dei momenti, scritti una volta in Application Support.
     static let momentJPEGQuality = 0.9
+    /// La qualità dei fotogrammi dell'HEIC dinamico, scritto una volta per sfondo in Application Support.
+    static let dynamicWallpaperQuality = 0.8
 }
