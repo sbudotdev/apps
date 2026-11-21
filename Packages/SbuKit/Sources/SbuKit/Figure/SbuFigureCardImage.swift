@@ -36,7 +36,12 @@ public struct SbuFigureCardImage: Transferable, Sendable {
     @MainActor func pngData() throws -> Data {
         let renderer = ImageRenderer(content: SbuFigureCard(value: value, unit: unit, word: word, appName: appName, accent: accent))
         renderer.scale = SbuFigureCard.scale
-        guard let data = renderer.uiImage?.pngData() else { throw CocoaError(.fileWriteUnknown) }
+        #if canImport(UIKit)
+        let data = renderer.uiImage?.pngData()
+        #else
+        let data = renderer.cgImage.flatMap { NSBitmapImageRep(cgImage: $0).representation(using: .png, properties: [:]) }
+        #endif
+        guard let data else { throw CocoaError(.fileWriteUnknown) }
         return data
     }
 }

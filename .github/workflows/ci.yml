@@ -33,6 +33,10 @@ jobs:
         working-directory: Packages/SbuKit
         run: xcodebuild test -scheme SbuKit -destination "$DESTINATION"
 
+      - name: SbuKit (macOS)
+        working-directory: Packages/SbuKit
+        run: xcodebuild test -scheme SbuKit -destination platform=macOS
+
   # Every Apps/Sbu* folder, so a new app is tested without touching this file.
   list:
     runs-on: ubuntu-latest

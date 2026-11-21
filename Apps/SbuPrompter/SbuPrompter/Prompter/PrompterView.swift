@@ -1,0 +1,99 @@
+import SbuKit
+import SwiftUI
+
+/// The text that scrolls, plus the countdown, the pause button and the voice level bar.
+struct PrompterView: View {
+    let controller: PrompterController
+    let settings: PrompterSettings
+    let speech: SpeechFollower
+    let chrome: PrompterChrome
+    let isEmpty: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        ZStack(alignment: .top) {
+            background
+            GeometryReader { proxy in
+                PrompterTextColumn(controller: controller, settings: settings, width: proxy.size.width,
+                                   viewportHeight: proxy.size.height)
+                    .offset(y: -controller.engine.offset)
+                    .scaleEffect(x: settings.isMirrored ? -1 : 1, y: 1)
+            }
+            .clipped()
+            // The text fades out at the bottom edge instead of being cut.
+            .mask {
+                LinearGradient(stops: [.init(color: SbuTheme.ink, location: 0.75), .init(color: .clear, location: 1)],
+                               startPoint: .top, endPoint: .bottom)
+            }
+            .padding(.horizontal, SbuTheme.space5)
+            .padding(.top, chrome.topInset + SbuTheme.space2)
+            .padding(.bottom, SbuTheme.space2)
+            .opacity(controller.countdownLeft == nil ? 1 : 0.15)
+
+            if isEmpty {
+                Text("Scegli un copione dalla libreria.")
+                    .font(SbuTheme.body)
+                    .foregroundStyle(SbuTheme.inkMuted)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.top, chrome.topInset)
+            }
+
+            if let left = controller.countdownLeft {
+                Text(left, format: .number)
+                    .font(.sbuFigure(size: 72))
+                    .monospacedDigit()
+                    .foregroundStyle(SbuTheme.ink)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.top, chrome.topInset)
+                    .accessibilityLabel(Text("Si parte tra \(left) secondi"))
+            }
+
+            overlayControls
+        }
+        // Floating, the whole prompter is a handle to move it.
+        .gesture(WindowDragGesture(), including: chrome == .floating ? .all : .subviews)
+        .environment(\.colorScheme, .dark)
+    }
+
+    private var shape: some Shape {
+        switch chrome {
+        case .notch: AnyShape(UnevenRoundedRectangle(bottomLeadingRadius: SbuTheme.radiusXl, bottomTrailingRadius: SbuTheme.radiusXl))
+        case .pill: AnyShape(RoundedRectangle(cornerRadius: SbuTheme.radiusXl))
+        case .floating: AnyShape(RoundedRectangle(cornerRadius: SbuTheme.radiusLg))
+        }
+    }
+
+    private var background: some View {
+        shape.fill(SbuTheme.paper.opacity(settings.backgroundOpacity))
+    }
+
+    private var overlayControls: some View {
+        VStack {
+            HStack {
+                Spacer()
+                Button {
+                    controller.perform(.togglePlay)
+                } label: {
+                    Image(systemName: controller.isPlaying ? "pause.fill" : "play.fill")
+                        .fontWeight(.medium)
+                        .foregroundStyle(SbuTheme.inkMuted)
+                        .frame(width: SbuTheme.space6, height: SbuTheme.space6)
+                        .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(controller.isPlaying ? Text("Pausa") : Text("Avvia"))
+            }
+            Spacer()
+            if speech.isListening {
+                Capsule()
+                    .fill(SbuAccent.prompter.base)
+                    .frame(width: max(SbuTheme.space1, speech.level * 120), height: 3)
+                    .animation(SbuMotion.animation(SbuMotion.short, reduceMotion: reduceMotion), value: speech.level)
+                    .accessibilityHidden(true)
+            }
+        }
+        .padding(.top, chrome.topInset + SbuTheme.space1)
+        .padding(.horizontal, SbuTheme.space2)
+        .padding(.bottom, SbuTheme.space1)
+    }
+}

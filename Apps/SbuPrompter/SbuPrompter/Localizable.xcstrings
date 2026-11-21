@@ -1,0 +1,837 @@
+{
+  "sourceLanguage": "it",
+  "strings": {
+    "%lld parole · %lld sezioni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld words · %lld sections"
+          }
+        }
+      }
+    },
+    "%lld s": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld s"
+          }
+        }
+      }
+    },
+    "A velocità fissa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At a fixed speed"
+          }
+        }
+      }
+    },
+    "A voce": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By voice"
+          }
+        }
+      }
+    },
+    "Altezza": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Height"
+          }
+        }
+      }
+    },
+    "Annulla": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "Aspetto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appearance"
+          }
+        }
+      }
+    },
+    "Avvia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start"
+          }
+        }
+      }
+    },
+    "Avvia o metti in pausa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start or pause"
+          }
+        }
+      }
+    },
+    "Benvenuto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome"
+          }
+        }
+      }
+    },
+    "Chiaro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light"
+          }
+        }
+      }
+    },
+    "Ciano": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cyan"
+          }
+        }
+      }
+    },
+    "Colore del testo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text color"
+          }
+        }
+      }
+    },
+    "Consenti microfono e riconoscimento vocale in Impostazioni di Sistema > Privacy e sicurezza.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow the microphone and speech recognition in System Settings > Privacy & Security."
+          }
+        }
+      }
+    },
+    "Conto alla rovescia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Countdown"
+          }
+        }
+      }
+    },
+    "Copione incollato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pasted script"
+          }
+        }
+      }
+    },
+    "Dimensione del testo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text size"
+          }
+        }
+      }
+    },
+    "Elimina": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        }
+      }
+    },
+    "Eliminare il copione?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete the script?"
+          }
+        }
+      }
+    },
+    "Elimina…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete…"
+          }
+        }
+      }
+    },
+    "Esci da Sbu Prompter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quit Sbu Prompter"
+          }
+        }
+      }
+    },
+    "Finestra mobile": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Floating window"
+          }
+        }
+      }
+    },
+    "Funzionano in ogni app. Clicca una scorciatoia e premi i tasti nuovi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "They work in every app. Click a shortcut and press the new keys."
+          }
+        }
+      }
+    },
+    "Grigio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grey"
+          }
+        }
+      }
+    },
+    "Il riconoscimento vocale non è disponibile per questa lingua.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech recognition isn’t available for this language."
+          }
+        }
+      }
+    },
+    "Il testo segue le parole che leggi e si ferma quando taci. La voce resta sul Mac.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The text follows the words you read and stops when you stop. Your voice stays on the Mac."
+          }
+        }
+      }
+    },
+    "Importa…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import…"
+          }
+        }
+      }
+    },
+    "Impostazioni…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings…"
+          }
+        }
+      }
+    },
+    "Incolla come copione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paste as script"
+          }
+        }
+      }
+    },
+    "Larghezza": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Width"
+          }
+        }
+      }
+    },
+    "Leggi nel prompter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read in the prompter"
+          }
+        }
+      }
+    },
+    "Libreria": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Library"
+          }
+        }
+      }
+    },
+    "Libreria…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Library…"
+          }
+        }
+      }
+    },
+    "Lingua": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language"
+          }
+        }
+      }
+    },
+    "Mostra o nascondi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show or hide"
+          }
+        }
+      }
+    },
+    "Mostra prompter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show prompter"
+          }
+        }
+      }
+    },
+    "Nascondi prompter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide prompter"
+          }
+        }
+      }
+    },
+    "Nel prompter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the prompter"
+          }
+        }
+      }
+    },
+    "Nessuno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None"
+          }
+        }
+      }
+    },
+    "Non riesco a leggere il file.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Can’t read the file."
+          }
+        }
+      }
+    },
+    "Non riesco ad aprire il microfono.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Can’t open the microphone."
+          }
+        }
+      }
+    },
+    "Nuovo copione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New script"
+          }
+        }
+      }
+    },
+    "OK": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "Opacità dello sfondo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Background opacity"
+          }
+        }
+      }
+    },
+    "Pausa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause"
+          }
+        }
+      }
+    },
+    "Per leggere attraverso il vetro di un teleprompter.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To read through the glass of a teleprompter."
+          }
+        }
+      }
+    },
+    "Più lento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slower"
+          }
+        }
+      }
+    },
+    "Più veloce": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faster"
+          }
+        }
+      }
+    },
+    "Posizione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Position"
+          }
+        }
+      }
+    },
+    "Premi i tasti…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press the keys…"
+          }
+        }
+      }
+    },
+    "Premi per registrare una nuova scorciatoia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press to record a new shortcut"
+          }
+        }
+      }
+    },
+    "Prompter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prompter"
+          }
+        }
+      }
+    },
+    "Riavvolgi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rewind"
+          }
+        }
+      }
+    },
+    "Righe che iniziano con # o una riga di --- dividono il copione in sezioni.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lines that start with # or a line of --- split the script into sections."
+          }
+        }
+      }
+    },
+    "Ripristina": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore"
+          }
+        }
+      }
+    },
+    "Sbu Prompter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Prompter"
+          }
+        }
+      }
+    },
+    "Sbu Prompter importa file .txt, .md e .rtf.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Prompter imports .txt, .md and .rtf files."
+          }
+        }
+      }
+    },
+    "Scarica la lingua della dettatura in Impostazioni di Sistema > Tastiera > Dettatura: Sbu Prompter riconosce la voce solo sul Mac.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download the dictation language in System Settings > Keyboard > Dictation: Sbu Prompter recognizes your voice on the Mac only."
+          }
+        }
+      }
+    },
+    "Scegli un copione dalla libreria.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a script from the library."
+          }
+        }
+      }
+    },
+    "Scorciatoie": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shortcuts"
+          }
+        }
+      }
+    },
+    "Scorrimento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scrolling"
+          }
+        }
+      }
+    },
+    "Scrivi o importa un copione da leggere.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write or import a script to read."
+          }
+        }
+      }
+    },
+    "Senza titolo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Untitled"
+          }
+        }
+      }
+    },
+    "Sezione %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Section %lld"
+          }
+        }
+      }
+    },
+    "Sezione precedente": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous section"
+          }
+        }
+      }
+    },
+    "Sezione successiva": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next section"
+          }
+        }
+      }
+    },
+    "Sezioni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sections"
+          }
+        }
+      }
+    },
+    "Si parte tra %lld secondi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starting in %lld seconds"
+          }
+        }
+      }
+    },
+    "Sotto la fotocamera": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Under the camera"
+          }
+        }
+      }
+    },
+    "Specchia il testo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mirror the text"
+          }
+        }
+      }
+    },
+    "Sui Mac senza notch il prompter è una pillola in alto al centro.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On Macs without a notch the prompter is a pill at the top center."
+          }
+        }
+      }
+    },
+    "Testo del copione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Script text"
+          }
+        }
+      }
+    },
+    "Titolo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Title"
+          }
+        }
+      }
+    },
+    "Torna dove eri": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back to where you were"
+          }
+        }
+      }
+    },
+    "Trascina il prompter dove vuoi e ridimensionalo dai bordi: la posizione resta.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag the prompter anywhere and resize it from the edges: it stays where you put it."
+          }
+        }
+      }
+    },
+    "Velocità": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speed"
+          }
+        }
+      }
+    },
+    "welcome.script": {
+      "comment": "The practice script added on first launch.",
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "# Prima di iniziare\nQuesto è un copione di prova. Premi Avvia nel menu, oppure Controllo Opzione Spazio, e il testo scorre sotto la fotocamera.\nPorta il mouse sopra il prompter per fermarlo. Toglilo e riparte. Con il trackpad vai avanti e indietro.\n\n# Le sezioni\nUna riga che inizia con il cancelletto apre una sezione. Saltaci dal menu, oppure con Controllo Opzione e le frecce.\n---\nAnche tre trattini di fila dividono il copione.\n\n# A voce\nScegli lo scorrimento a voce: il testo segue le parole che leggi e si ferma quando taci. La voce resta sul Mac.\n\n# Nessuno lo vede\nIl prompter non compare quando condividi lo schermo, nelle registrazioni e negli screenshot. Lo vedi solo tu."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "# Before you start\nThis is a practice script. Choose Start in the menu, or press Control Option Space, and the text scrolls under the camera.\nMove the pointer over the prompter to stop it. Move it away and it starts again. Scroll with the trackpad to go back and forth.\n\n# Sections\nA line that starts with a hash opens a section. Jump to it from the menu, or with Control Option and the arrow keys.\n---\nThree dashes in a row also split the script.\n\n# By voice\nChoose voice scrolling: the text follows the words you read and stops when you stop. Your voice stays on the Mac.\n\n# Nobody sees it\nThe prompter doesn't show up when you share your screen, in recordings or in screenshots. Only you can see it."
+          }
+        }
+      }
+    },
+    "«%@» sparisce dalla libreria di questo Mac.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” disappears from this Mac’s library."
+          }
+        }
+      }
+    },
+    "Codice per l'iPhone: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code for iPhone: %@"
+          }
+        }
+      }
+    },
+    "Telecomando: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remote: %@"
+          }
+        }
+      }
+    },
+    "Impostazioni": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "Dimentica gli iPhone abbinati": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forget Paired iPhones"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
