@@ -51,6 +51,8 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.prompter
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Sbu Prompter
+        # Icon from Tools/make_icons.py prompter --mac-appiconset (SBU-218).
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.productivity
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         # English in InfoPlist.xcstrings.
@@ -94,6 +96,10 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.prompter
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Sbu Prompter
+        # Icons from Tools/make_icons.py prompter, with the Inversa alternate for SbuIconPicker (SBU-218).
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: AppIcon-Inversa
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.productivity
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         # ADR-0007. English in InfoPlist.xcstrings.
