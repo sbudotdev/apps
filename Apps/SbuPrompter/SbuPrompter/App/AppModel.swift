@@ -58,8 +58,7 @@ final class AppModel {
         }
         controller.perform(command)
         if settings.speed != controller.speed { settings.speed = controller.speed }
-        window?.updateTicking()
-        syncSpeech()
+        // Ticking and the microphone follow `onPlayingChange`: calling them here too started the microphone twice.
     }
 
     /// Loads `script` into the prompter, from the top, and shows it.
