@@ -23,6 +23,7 @@ struct ControlView: View {
                     Button("Riavvolgi", systemImage: "backward.end") { model.perform(.rewind) }
                     Spacer()
                     Button("Sezioni", systemImage: "list.bullet") { isShowingCues = true }
+                        .accessibilityIdentifier("cues")
                         .disabled(status?.cueTitles.isEmpty ?? true)
                 }
                 .buttonStyle(.bordered)
@@ -59,6 +60,7 @@ struct ControlView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .frame(maxWidth: .infinity)
+                .accessibilityIdentifier("playPause")
                 Button("Sezione successiva", systemImage: "chevron.right") { model.perform(.nextCue) }
                     .labelStyle(.iconOnly)
             }
@@ -66,6 +68,7 @@ struct ControlView: View {
                 Button("Più lento", systemImage: "tortoise") { model.perform(.slower) }
                     .labelStyle(.iconOnly)
                 Text(speedText)
+                    .accessibilityIdentifier("speed")
                     .font(SbuTheme.body.monospacedDigit())
                     .foregroundStyle(SbuTheme.inkMuted)
                     .frame(maxWidth: .infinity)

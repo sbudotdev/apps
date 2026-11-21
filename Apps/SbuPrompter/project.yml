@@ -116,6 +116,19 @@ targets:
         TARGETED_DEVICE_FAMILY: "1"
         BUNDLE_LOADER: $(TEST_HOST)
         TEST_HOST: $(BUILT_PRODUCTS_DIR)/SbuPrompterRemote.app/SbuPrompterRemote
+  SbuPrompterRemoteUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [SbuPrompterRemoteUITests]
+    dependencies:
+      - target: SbuPrompterRemote
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1"
+        TEST_TARGET_NAME: SbuPrompterRemote
+        # XCTestCase's initializers are nonisolated; the test methods are @MainActor themselves.
+        SWIFT_DEFAULT_ACTOR_ISOLATION: nonisolated
 schemes:
   SbuPrompter:
     build:
@@ -128,4 +141,4 @@ schemes:
       targets:
         SbuPrompterRemote: all
     test:
-      targets: [SbuPrompterRemoteTests]
+      targets: [SbuPrompterRemoteTests, SbuPrompterRemoteUITests]

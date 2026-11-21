@@ -131,6 +131,17 @@ struct RemoteModelTests {
         #expect(model.status == nil)
     }
 
+    @Test func aFailedInvitationIsRetriedThenGivesUp() {
+        model.found(["Studio"])
+        for _ in 1..<RemoteModel.maxAttempts {
+            model.disconnected(from: "Studio")
+            #expect(model.phase == .connecting("Studio"))
+        }
+        #expect(sent.macs.count == RemoteModel.maxAttempts)
+        model.disconnected(from: "Studio")
+        #expect(model.phase == .searching)
+    }
+
     @Test func anotherMacDroppingIsIgnored() {
         pair()
         model.disconnected(from: "Portatile")

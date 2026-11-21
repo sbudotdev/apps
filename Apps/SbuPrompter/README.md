@@ -2,9 +2,19 @@
 
 Teleprompter gratuito per Mac: il copione scorre nel notch, sotto la fotocamera, e non compare quando condividi lo schermo, nelle registrazioni o negli screenshot. Spec: SBU-166, ADR-0024 per SbuKit sul Mac.
 
+Il telecomando iPhone (`SbuPrompterRemote`, iOS 17) è la stessa app: stesso bundle id, universal purchase. Parla col Mac solo in rete locale, con MultipeerConnectivity cifrato (ADR-0007).
+
 ```sh
 xcodegen generate
 xcodebuild test -project SbuPrompter.xcodeproj -scheme SbuPrompter -destination platform=macOS
+xcodebuild test -project SbuPrompter.xcodeproj -scheme SbuPrompterRemote -destination 'platform=iOS Simulator,name=<iPhone>'
+```
+
+Prova vera col Mac: avvia la build Debug del Mac, leggi il codice dal menu (o con `kill -USR1 <pid>`, campo `remoteCode`) e lancia il test UI con quel codice. Senza codice il test viene saltato.
+
+```sh
+TEST_RUNNER_SBU_PROMPTER_CODE=1234 xcodebuild test -project SbuPrompter.xcodeproj -scheme SbuPrompterRemote \
+  -destination 'platform=iOS Simulator,name=<iPhone>' -only-testing:SbuPrompterRemoteUITests
 ```
 
 ## Dove sta cosa
@@ -14,6 +24,9 @@ xcodebuild test -project SbuPrompter.xcodeproj -scheme SbuPrompter -destination 
 - `Speech`: microfono e `SFSpeechRecognizer` solo sul dispositivo.
 - `Shortcuts`: scorciatoie globali con `RegisterEventHotKey` (niente permesso Accessibilità).
 - `Library`: copioni in SwiftData, importazione `.txt`, `.md`, `.rtf`.
+- `Remote`: il lato Mac del telecomando. `RemoteGate` decide chi può comandare (codice di 4 cifre nel menu, poi un token; pausa che raddoppia dopo 5 codici sbagliati), `RemoteServer` fa Multipeer e manda lo stato.
+- `Core/RemoteMessage` e `Core/RemoteCodec`: il protocollo, con la versione in ogni messaggio. Un peer con un'altra versione viene rifiutato.
+- `../SbuPrompterRemote`: l'app iPhone. `RemoteModel` (stato e abbinamento, testato), `MacLink` (Multipeer), le schermate.
 
 ## Argomenti di avvio per il QA (solo build Debug)
 
@@ -23,6 +36,6 @@ xcodebuild test -project SbuPrompter.xcodeproj -scheme SbuPrompter -destination 
 | `-SbuPrompterForcePill YES` | mostra la pillola anche su un Mac con il notch |
 | `-SbuPrompterAllowCapture YES` | rende il prompter visibile agli screenshot (per le immagini dello Store) |
 | `-SbuPrompterSnapshots YES` | salva prompter, libreria e impostazioni in PNG nella cartella temporanea dell'app ed esce |
-| `kill -USR1 <pid>` | salva il prompter dal vivo (`live-N.png`) e scrive lo stato su stderr |
+| `kill -USR1 <pid>` | salva il prompter dal vivo (`live-N.png`) e scrive lo stato su stderr, con il codice del telecomando e l'iPhone collegato |
 
 Le impostazioni si possono forzare all'avvio con le loro chiavi, per esempio `-layout floating`, `-countdown 0`, `-mode voice`, `-isMirrored YES`.

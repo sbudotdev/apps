@@ -28,6 +28,7 @@ struct PairingView: View {
                     .background(SbuTheme.surfaceRaised, in: .rect(cornerRadius: SbuTheme.radiusCard))
                     .overlay(RoundedRectangle(cornerRadius: SbuTheme.radiusCard).strokeBorder(SbuTheme.line))
                     .focused($isFocused)
+                    .accessibilityIdentifier("pairingCode")
                     .onChange(of: code) { _, new in
                         let digits = String(new.filter(\.isNumber).prefix(4))
                         if digits != new { code = digits }

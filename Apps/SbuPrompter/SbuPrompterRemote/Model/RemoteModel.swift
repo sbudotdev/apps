@@ -30,6 +30,9 @@ final class RemoteModel {
 
     @ObservationIgnored private let defaults: UserDefaults
     @ObservationIgnored private var sentCode = false
+    /// Failed invitations to the current Mac; Multipeer often drops the first after a relaunch.
+    @ObservationIgnored private var failedAttempts = 0
+    static let maxAttempts = 3
     private static let tokensKey = "macTokens"
 
     init(defaults: UserDefaults = .standard) {
@@ -68,6 +71,12 @@ final class RemoteModel {
 
     func disconnected(from mac: String) {
         guard mac == currentMac else { return }
+        if phase == .connecting(mac), status == nil, failedAttempts + 1 < Self.maxAttempts, macs.contains(mac) {
+            failedAttempts += 1
+            connect(mac)
+            return
+        }
+        failedAttempts = 0
         phase = .searching
         status = nil
         sentCode = false
@@ -77,6 +86,7 @@ final class RemoteModel {
         guard let mac = currentMac else { return }
         switch message {
         case .paired(let token):
+            failedAttempts = 0
             tokens[mac] = token
             phase = .connected(mac)
         case .pairingRequired:

@@ -31,6 +31,7 @@ struct GesturePad: View {
         })
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("Area dei gesti"))
+        .accessibilityIdentifier("gesturePad")
         .accessibilityAddTraits(.isButton)
         .accessibilityAction { perform(.togglePlay) }
         .accessibilityAction(named: Text("Più veloce")) { perform(.faster) }
