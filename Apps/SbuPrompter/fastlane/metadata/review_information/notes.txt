@@ -1,0 +1,19 @@
+DRAFT (SBU-172), to be reviewed by Matteo before any submission.
+
+No account. Sbu Prompter has no server: no analytics, ads or tracking. Mac and iPhone are one app (universal purchase, same bundle id dev.sbu.prompter).
+
+The Mac app is the teleprompter: the script scrolls in the notch, under the camera, at a fixed speed or following the voice (recognized on the Mac only), and it stays hidden from screen sharing and recordings.
+
+The iPhone app is its remote. It is for people who read the script on the Mac while they record or present standing away from the keyboard: the iPhone starts and pauses the text, changes the speed, jumps between sections and shows the line being read and the reading time. Tap starts or pauses; swiping up and down changes the speed; swiping left and right moves between sections. Every command plays a light haptic.
+
+The only network traffic is between the user's iPhone and Mac on the same Wi-Fi, over MultipeerConnectivity with encryption required (Local Network permission, Bonjour services _sbu-prompter._tcp and _sbu-prompter._udp). Nothing goes to the internet.
+
+To review the remote:
+1. Open Sbu Prompter on a Mac (macOS 15 or later) on the same Wi-Fi as the iPhone. It lives in the menu bar.
+2. Open Sbu Prompter on the iPhone and allow Local Network. The Mac appears and joins on its own.
+3. The first time, the iPhone asks for a 4-digit code: it is in the Sbu Prompter menu on the Mac ("Codice per l'iPhone"). Type it once; next times the iPhone joins without the code.
+4. Tap the large area or the play button: the text starts scrolling on the Mac. Try the swipes and "Sezioni" (Sections) to jump to a part of the script.
+
+Without a Mac nearby, the iPhone shows a single screen that explains how to connect it: the iPhone app is a companion to the Mac app, which is the same purchase, and does nothing on its own by design.
+
+Settings on the iPhone shows the Mac in use and "Dimentica questo Mac" (Forget this Mac). On the Mac, "Dimentica gli iPhone abbinati" in the menu removes every paired iPhone.

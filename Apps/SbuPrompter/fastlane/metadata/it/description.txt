@@ -1,0 +1,22 @@
+Sbu Prompter mostra il copione nel notch del Mac, proprio sotto la fotocamera: leggi e intanto guardi in camera. Chi vede il tuo schermo condiviso non vede il testo.
+
+- Il copione nel notch, sotto la fotocamera; sui Mac senza notch una pillola in alto al centro
+- Oppure una finestra mobile da mettere e ridimensionare dove vuoi
+- Nascosto quando condividi lo schermo, nelle registrazioni dello schermo e negli screenshot
+- Scorrimento a velocità fissa, da cambiare mentre leggi, oppure a voce: il testo segue le parole che leggi e si ferma quando taci
+- La voce viene riconosciuta sul Mac e non esce dal computer
+- Si ferma quando passi col mouse sopra il testo; col trackpad torni indietro o vai avanti
+- Sezioni: una riga che inizia con # divide il copione, e salti da una parte all'altra
+- Conto alla rovescia prima di partire: 3, 5 o 10 secondi
+- Colore e dimensione del testo, opacità dello sfondo, testo specchiato per il vetro di un teleprompter
+- Libreria dei copioni sul Mac, con importazione di file .txt, .md e .rtf
+- Scorciatoie da tastiera che funzionano in ogni app, e le puoi cambiare
+- L'iPhone come telecomando: avvia e ferma, cambia la velocità, salta tra le sezioni, vedi la riga che stai leggendo e il tempo di lettura
+
+L'app per iPhone è il telecomando ed è inclusa: serve Sbu Prompter aperto su un Mac con macOS 15 o successivo, sulla stessa Wi-Fi. Mac e iPhone si parlano solo in rete locale, con un codice di 4 cifre la prima volta. Nessun dato va su internet.
+
+Sbu Prompter non registra lo schermo né la videocamera: registri o fai la call con l'app che usi già.
+
+Sbu fa una cosa sola: ti fa leggere il copione guardando in camera.
+
+Nessun abbonamento. Nessun acquisto in-app. Nessun account. Nessuna pubblicità. Nessun tracking. Dati solo sul dispositivo.

@@ -37,6 +37,8 @@ La regola per il codice nuovo: in SbuKit SwiftUI puro quando basta; `#if canImpo
 
 `Tools/sync_tokens.py` genera SwiftUI puro (`Color("…", bundle: .module)`) e colorset `universal`: lo stesso output compila su iOS, watchOS e macOS. Nessun generatore separato per il Mac. Ogni app Mac ha il suo `accent-<app>` e `accent-on-ink-<app>` come le altre; `accent-prompter` è il ciano scelto da Matteo in SBU-174 (`#02787d` chiaro, `#46c6cd` scuro, `#2bb3b9` nella Chiusura).
 
+Il pannello di Sbu Prompter è sempre scuro (`.colorScheme(.dark)`), anche col Mac in chiaro: sta sotto o accanto al notch nero e deve fondersi con lui. È l'unica eccezione al tema del sistema sul Mac.
+
 ## Test
 
 `xcodebuild test` di SbuKit gira su un simulatore iPhone **e** su `platform=macOS`; la CI li esegue entrambi. I test che leggono font, colori o immagini usano i tipi della piattaforma (`PlatformFont`, `PlatformColor`, `ImageRenderer.pointSize`), così la stessa suite vale per i due sistemi.
