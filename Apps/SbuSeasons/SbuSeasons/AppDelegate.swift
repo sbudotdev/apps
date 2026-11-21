@@ -11,6 +11,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private var windowShakes = WindowShakes()
     /// Babbo Natale su tutti gli schermi e la pausa dei giochi: restano anche quando le finestre si ricreano.
     private let passages = Passages()
+    /// Alberi, decorazioni e pupazzi salvati (SBU-178). nil nei test: l'app ospite non tocca quelli veri.
+    private let keeper = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil ? ToyKeeper() : nil
+    private var lastKeep: TimeInterval = 0
 
     // Salvato in UserDefaults, così l'app se lo ricorda al prossimo avvio.
     // (Le altre impostazioni sono in Settings.swift.)
@@ -164,13 +167,26 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     }
 
     private func rebuildOverlays() {
+        // Alberi e pupazzi passano dalle finestre vecchie alle nuove (prima, collegando un monitor, sparivano).
+        let kept = overlays.isEmpty ? keeper?.load() : keptToys
         overlays.forEach { $0.close() }
         overlays = NSScreen.screens.map { OverlayWindow(screen: $0) }
         for overlay in overlays { overlay.scene.onGlobeShaken = { TourProgress.shared.complete(.shakeGlobe) } }
         passages.scenes = overlays.map(\.scene)
         powerSourceDidChange()
         overlays.forEach { $0.setSnowing(isSnowing) }
+        // Prima di leggere le finestre: se no il primo salvataggio scriverebbe una scrivania vuota.
+        kept?.restore(into: overlays.map { ($0.screenKey, $0.scene) })
         refreshWindows()
+    }
+
+    /// Alberi e pupazzi di tutti gli schermi, da salvare.
+    private var keptToys: KeptToys {
+        overlays.map { $0.scene.keptToys(screen: $0.screenKey) }.reduce(KeptToys(), +)
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        keeper?.save(keptToys)
     }
 
     private func refreshWindows() {
@@ -180,6 +196,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         let dock = currentDockFrame()
         overlays.forEach { $0.updateWindows(edges, dock: dock) }
         passages.tick(at: ProcessInfo.processInfo.systemUptime)
+        let now = ProcessInfo.processInfo.systemUptime
+        if now - lastKeep >= Tuning.keepInterval {
+            lastKeep = now
+            keeper?.save(keptToys)
+        }
         let shaken = windowShakes.update(edges, at: ProcessInfo.processInfo.systemUptime)
         if !shaken.isEmpty { overlays.forEach { $0.windowsShaken(shaken) } }
     }

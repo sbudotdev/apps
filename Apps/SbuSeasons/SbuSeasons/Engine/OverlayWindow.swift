@@ -16,12 +16,15 @@ final class OverlayWindow: NSPanel {
     private let skView: SKView
     /// La scena: i giochi d'inverno del menu la chiamano direttamente (`SeasonScene`, `Toys/WinterPlay/WinterPlay.swift`).
     let scene: SeasonScene
+    /// Lo schermo, con un nome che resta uguale tra un avvio e l'altro: alberi e pupazzi salvati tornano qui (`KeptToys`).
+    let screenKey: String
     private var displayLink: CADisplayLink?
     private var takesMouse = false
     private var behindWindows = false
 
     init(screen: NSScreen) {
         let frame = screen.frame
+        screenKey = screen.wallpaperKey
 
         skView = OverlaySKView(frame: NSRect(origin: .zero, size: frame.size))
         scene = SeasonScene(size: frame.size, screenOrigin: frame.origin, season: Settings.shared.season)
