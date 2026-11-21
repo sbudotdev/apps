@@ -306,6 +306,13 @@ struct ShotsTests {
         try card(LetterView(send: {}, cancel: {}), as: "9-letterina-finestra")
         try card(Form { VisitorsSection() }.formStyle(.grouped).frame(width: Quaderno.gridCell * 19).fixedSize(horizontal: false, vertical: true),
                  as: "10-impostazioni-visitatori")
+        // Tre schermi, due spenti: l'ultimo acceso ha l'interruttore grigio (SBU-227).
+        let before = Settings.shared.values
+        defer { Settings.shared.values = before }
+        Settings.shared.values.screensOff = ["B", "C"]
+        try card(Form { ScreensSection(screens: [("Display Retina integrato", "A"), ("Studio Display", "B"), ("DELL U2723QE", "C")]) }
+                    .formStyle(.grouped).frame(width: Quaderno.gridCell * 19).fixedSize(horizontal: false, vertical: true),
+                 as: "11-impostazioni-schermi")
     }
 
     /// La scheda in italiano, chiara e scura.

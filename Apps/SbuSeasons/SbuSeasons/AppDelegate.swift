@@ -334,11 +334,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private func applyRunning() {
         let values = Settings.shared.values
         let gameInFront = frontIsGame && values.pauseForVideoGames
+        let connected = overlays.map(\.screenKey)
         for overlay in overlays {
             let gate = EffectGate(snowing: isSnowing, displaysAsleep: displaysAsleep,
                                   screenCovered: overlay.screenID.map(coveredScreens.contains) ?? false,
                                   gameInFront: gameInFront,
-                                  screenOff: !values.showsEffect(onScreen: overlay.screenKey, screenCount: NSScreen.screens.count),
+                                  screenOff: !values.showsEffect(onScreen: overlay.screenKey, connected: connected),
                                   stopOnBattery: values.stopOnBattery, onBattery: onBattery)
             overlay.setSnowing(gate.runs)
         }

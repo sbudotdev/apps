@@ -52,8 +52,14 @@ extension SnowSettings {
     func showsEffect(onScreen key: String) -> Bool { !screensOff.contains(key) }
 
     /// Con un solo schermo la sezione Schermi è nascosta: l'effetto si vede, la scelta resta salvata.
-    func showsEffect(onScreen key: String, screenCount: Int) -> Bool {
-        screenCount < 2 || showsEffect(onScreen: key)
+    /// Se tutti gli schermi collegati sono spenti (l'unico acceso si è scollegato) l'effetto si vede su tutti (SBU-227).
+    func showsEffect(onScreen key: String, connected: [String]) -> Bool {
+        connected.count < 2 || showsEffect(onScreen: key) || !connected.contains { showsEffect(onScreen: $0) }
+    }
+
+    /// L'ultimo schermo acceso non si spegne: per togliere l'effetto da tutti c'è «Mostra l'effetto» (SBU-227).
+    func canTurnOffEffect(onScreen key: String, connected: [String]) -> Bool {
+        connected.contains { $0 != key && showsEffect(onScreen: $0) }
     }
 
     mutating func setEffect(_ on: Bool, onScreen key: String) {
@@ -182,15 +188,7 @@ struct SettingsView: View {
                         .foregroundStyle(Quaderno.inkMuted.color)
                 }
                 if NSScreen.screens.count > 1 {
-                    Section("Schermi") {
-                        ForEach(NSScreen.screens, id: \.wallpaperKey) { screen in
-                            Toggle(screen.localizedName, isOn: Binding {
-                                settings.values.showsEffect(onScreen: screen.wallpaperKey)
-                            } set: { on in
-                                settings.values.setEffect(on, onScreen: screen.wallpaperKey)
-                            })
-                        }
-                    }
+                    ScreensSection()
                 }
                 Section("Caduta") {
                     slider("Quantità", $settings.values.flakeCount, Density.range, "%.0f")

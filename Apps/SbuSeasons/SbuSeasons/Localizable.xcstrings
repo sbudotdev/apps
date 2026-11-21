@@ -12710,6 +12710,52 @@
         }
       }
     },
+    "L'ultimo schermo acceso non si spegne: per togliere l'effetto da tutti usa Mostra l'effetto (⌘S) nel menu ❄︎.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The last display that's on can't be turned off: to remove the effect from all of them, use Show the Effect (⌘S) in the ❄︎ menu."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der letzte eingeschaltete Bildschirm lässt sich nicht ausschalten: Um den Effekt überall zu entfernen, nutze „Effekt zeigen“ (⌘S) im Menü ❄︎."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le dernier écran allumé ne peut pas être éteint : pour retirer l’effet partout, utilise Afficher l’effet (⌘S) dans le menu ❄︎."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La última pantalla encendida no se puede apagar: para quitar el efecto de todas, usa Mostrar el efecto (⌘S) en el menú ❄︎."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最後にオンになっているディスプレイはオフにできません。すべてから外すには、❄︎メニューの「エフェクトを表示」（⌘S）を使ってください。"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A última tela ligada não pode ser desligada: para tirar o efeito de todas, use Mostrar o efeito (⌘S) no menu ❄︎."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Het laatste scherm dat aan staat kan niet uit: om het effect overal weg te halen, gebruik je Toon het effect (⌘S) in het menu ❄︎."
+          }
+        }
+      }
+    },
     "Nessun vento": {
       "localizations": {
         "en": {
