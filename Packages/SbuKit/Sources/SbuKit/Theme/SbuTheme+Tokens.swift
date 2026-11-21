@@ -97,7 +97,7 @@ public extension SbuTheme {
     nonisolated static let accentOs = Color("accent-os", bundle: .module)
     /// Accento di Sbu ZTL: solo il punto fermo `set` e il campo dell'icona (valore light). Famiglia OKLCH L 0.52/0.76, C ≤ 0.15: stesso peso per ogni app, cambia solo la tinta.
     nonisolated static let accentZtl = Color("accent-ztl", bundle: .module)
-    /// Accento di Sbu Prompter (segnaposto in attesa della scelta di Matteo, SBU-168): solo il punto fermo `set` e il campo dell'icona (valore light). Famiglia OKLCH L 0.52/0.76, C ≤ 0.15: stesso peso per ogni app, cambia solo la tinta.
+    /// Accento di Sbu Prompter (ciano, scelto da Matteo in SBU-174): solo il punto fermo `set` e il campo dell'icona (valore light). Famiglia OKLCH L 0.52/0.76, C ≤ 0.15: stesso peso per ogni app, cambia solo la tinta.
     nonisolated static let accentPrompter = Color("accent-prompter", bundle: .module)
     /// Punto fermo di Sbu Subscriptions dentro il blocco d'inchiostro della Chiusura: OKLCH L 0.70 su `ink` in light, l'accento light sul blocco chiaro in dark.
     nonisolated static let accentOnInkSubscriptions = Color("accent-on-ink-subscriptions", bundle: .module)
@@ -173,7 +173,7 @@ public extension SbuTheme {
     nonisolated static let accentOnInkOs = Color("accent-on-ink-os", bundle: .module)
     /// Punto fermo di Sbu ZTL dentro il blocco d'inchiostro della Chiusura: OKLCH L 0.70 su `ink` in light, l'accento light sul blocco chiaro in dark.
     nonisolated static let accentOnInkZtl = Color("accent-on-ink-ztl", bundle: .module)
-    /// Punto fermo di Sbu Prompter dentro il blocco d'inchiostro della Chiusura (segnaposto, SBU-168): OKLCH L 0.70 su `ink` in light, l'accento light sul blocco chiaro in dark.
+    /// Punto fermo di Sbu Prompter dentro il blocco d'inchiostro della Chiusura: OKLCH L 0.70 su `ink` in light, l'accento light sul blocco chiaro in dark.
     nonisolated static let accentOnInkPrompter = Color("accent-on-ink-prompter", bundle: .module)
     /// Testo sopra un accento: solo marketing e icone. Nelle app nessun testo sta su un accento (tint in `ink`).
     nonisolated static let onAccent = Color("on-accent", bundle: .module)

@@ -35,7 +35,7 @@ La regola per il codice nuovo: in SbuKit SwiftUI puro quando basta; `#if canImpo
 
 ## Token
 
-`Tools/sync_tokens.py` genera SwiftUI puro (`Color("…", bundle: .module)`) e colorset `universal`: lo stesso output compila su iOS, watchOS e macOS. Nessun generatore separato per il Mac. Ogni app Mac ha il suo `accent-<app>` e `accent-on-ink-<app>` come le altre; `accent-prompter` per ora è un segnaposto finché Matteo non sceglie il colore.
+`Tools/sync_tokens.py` genera SwiftUI puro (`Color("…", bundle: .module)`) e colorset `universal`: lo stesso output compila su iOS, watchOS e macOS. Nessun generatore separato per il Mac. Ogni app Mac ha il suo `accent-<app>` e `accent-on-ink-<app>` come le altre; `accent-prompter` è il ciano scelto da Matteo in SBU-174 (`#02787d` chiaro, `#46c6cd` scuro, `#2bb3b9` nella Chiusura).
 
 ## Test
 
