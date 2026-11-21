@@ -3,6 +3,7 @@ options:
   bundleIdPrefix: dev.sbu
   deploymentTarget:
     macOS: "14.0"
+  # Le altre lingue (en, de, fr, es, ja, pt, nl) le trova XcodeGen nei .xcstrings e le mette in knownRegions (SBU-199).
   developmentLanguage: it
   createIntermediateGroups: true
 settings:

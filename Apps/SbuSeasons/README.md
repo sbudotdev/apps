@@ -30,6 +30,8 @@ L'impostazione si segue anche mentre l'app è aperta.
 quello schermo si ferma e sparisce, e riparte quando l'app esce dallo schermo intero; quando i display dormono si ferma
 su tutti (SBU-177). Prima la neve restava visibile anche sopra le app a schermo intero.
 
+Lingue: italiano, inglese, tedesco, francese, spagnolo, giapponese, portoghese (Brasile) e olandese (SBU-199). `CatalogTests` controlla che ogni voce ci sia in tutte; gli screenshot per lingua li fa `LanguageShotsTests`.
+
 Requisiti: macOS 14+, Xcode 26+, XcodeGen (`brew install xcodegen`).
 
 ## Novità della 2.1

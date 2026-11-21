@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import SbuSeasons
 
-/// Le stringhe stanno in `Localizable.xcstrings` (ADR-0022): italiano di sviluppo, più l'inglese.
+/// Le stringhe stanno in `Localizable.xcstrings` (ADR-0022): italiano di sviluppo, inglese e altre sei lingue (`CatalogTests`).
 struct LocalizationTests {
     private static let english = Bundle.main.path(forResource: "en", ofType: "lproj").flatMap(Bundle.init(path:))
 
