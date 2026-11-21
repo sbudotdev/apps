@@ -9,22 +9,29 @@ nonisolated struct RemoteGate<Peer: Hashable> {
         case perform(PrompterCommand)
     }
 
-    /// Wrong codes in a row before the code changes, so it cannot be guessed by trying them all.
+    /// Wrong codes in a row before the code changes and pairing closes for a while.
     static var maxFailures: Int { 5 }
+    /// The first pause after too many wrong codes; it doubles each time, until a pairing succeeds,
+    /// so trying all 10 000 codes takes years.
+    static var firstLockout: TimeInterval { 30 }
 
     private(set) var code: String
     /// Tokens of the iPhones paired before; saved by the caller.
     private(set) var tokens: Set<String>
     private var trusted: Set<Peer> = []
     private var failures = 0
+    private var lockouts = 0
+    private var lockedUntil: Date?
     private let makeCode: () -> String
     private let makeToken: () -> String
+    private let now: () -> Date
 
     init(tokens: Set<String> = [], makeCode: @escaping () -> String = Self.randomCode,
-         makeToken: @escaping () -> String = { UUID().uuidString }) {
+         makeToken: @escaping () -> String = { UUID().uuidString }, now: @escaping () -> Date = Date.init) {
         self.tokens = tokens
         self.makeCode = makeCode
         self.makeToken = makeToken
+        self.now = now
         code = makeCode()
     }
 
@@ -35,13 +42,20 @@ nonisolated struct RemoteGate<Peer: Hashable> {
     mutating func receive(_ message: RemoteMessage, from peer: Peer) -> [Action] {
         switch message {
         case .pair(let attempt):
+            if let lockedUntil, now() < lockedUntil { return [.send(.pairingRequired)] }
             guard attempt == code else {
                 failures += 1
-                if failures >= Self.maxFailures { newCode() }
+                if failures >= Self.maxFailures {
+                    lockedUntil = now().addingTimeInterval(Self.firstLockout * pow(2, Double(lockouts)))
+                    lockouts += 1
+                    newCode()
+                }
                 return [.send(.pairingRequired)]
             }
             let token = makeToken()
             tokens.insert(token)
+            lockouts = 0
+            lockedUntil = nil
             newCode()
             return trust(peer, token: token)
         case .resume(let token):

@@ -1,10 +1,20 @@
+import Foundation
 import Testing
 @testable import SbuPrompter
 
+final class Clock {
+    var now = Date(timeIntervalSince1970: 0)
+}
+
 struct RemoteGateTests {
-    private func gate(tokens: Set<String> = []) -> RemoteGate<String> {
-        var codes = ["1234", "5678", "9012"].makeIterator()
-        return RemoteGate(tokens: tokens, makeCode: { codes.next() ?? "0000" }, makeToken: { "token" })
+    private func gate(tokens: Set<String> = [], clock: Clock = Clock()) -> RemoteGate<String> {
+        var codes = ["1234", "5678", "9012", "3456"].makeIterator()
+        return RemoteGate(tokens: tokens, makeCode: { codes.next() ?? "0000" }, makeToken: { "token" },
+                          now: { clock.now })
+    }
+
+    private func failAll(_ gate: inout RemoteGate<String>) {
+        for _ in 0..<RemoteGate<String>.maxFailures { _ = gate.receive(.pair(code: "0000"), from: "iPhone") }
     }
 
     @Test func rightCodePairsAndSendsStatus() {
@@ -37,6 +47,34 @@ struct RemoteGateTests {
         _ = gate.receive(.pair(code: "0000"), from: "iPhone")
         #expect(gate.code == "5678")
         #expect(gate.receive(.pair(code: "1234"), from: "iPhone") == [.send(.pairingRequired)])
+    }
+
+    @Test func tooManyWrongCodesCloseThePairingForAWhile() {
+        let clock = Clock()
+        var gate = gate(clock: clock)
+        failAll(&gate)
+        // Even the right new code is refused during the pause.
+        #expect(gate.receive(.pair(code: "5678"), from: "iPhone") == [.send(.pairingRequired)])
+        clock.now += RemoteGate<String>.firstLockout
+        #expect(gate.receive(.pair(code: "5678"), from: "iPhone") == [.send(.paired(token: "token")), .sendStatus])
+    }
+
+    @Test func thePauseDoublesUntilAPairingSucceeds() {
+        let clock = Clock()
+        var gate = gate(clock: clock)
+        failAll(&gate)
+        clock.now += RemoteGate<String>.firstLockout
+        failAll(&gate)
+        clock.now += RemoteGate<String>.firstLockout
+        #expect(gate.receive(.pair(code: "9012"), from: "iPhone") == [.send(.pairingRequired)])
+        clock.now += RemoteGate<String>.firstLockout
+        #expect(gate.receive(.pair(code: "9012"), from: "iPhone") == [.send(.paired(token: "token")), .sendStatus])
+    }
+
+    @Test func savedTokensStillWorkDuringThePause() {
+        var gate = gate(tokens: ["saved"])
+        failAll(&gate)
+        #expect(gate.receive(.resume(token: "saved"), from: "iPad") == [.send(.paired(token: "saved")), .sendStatus])
     }
 
     @Test func knownTokenResumesWithoutCode() {
