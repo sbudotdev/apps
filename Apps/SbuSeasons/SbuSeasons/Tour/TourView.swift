@@ -5,7 +5,8 @@ import SwiftUI
 struct TourView: View {
     /// Chiude la finestra: la passa l'AppDelegate, che la possiede.
     var close: () -> Void = {}
-    @State private var page = TourPage.welcome
+    /// Non privata solo perché i test fotografano ogni pagina (SBU-199).
+    @State var page = TourPage.welcome
     private let progress = TourProgress.shared
 
     var body: some View {
