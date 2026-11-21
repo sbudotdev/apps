@@ -15,7 +15,7 @@ final class Bolt: SKShapeNode {
         let startX = target.x + .random(in: -60...60)
         return (0...segments).map { i in
             let f = CGFloat(i) / CGFloat(segments)
-            let jitter: CGFloat = i == 0 || i == segments ? 0 : .random(in: -18...18)
+            let jitter: CGFloat = i == 0 || i == segments ? 0 : .random(in: -32...32)
             return CGPoint(x: startX + (target.x - startX) * f + jitter, y: top + (target.y - top) * f)
         }
     }
@@ -27,9 +27,10 @@ final class Bolt: SKShapeNode {
         let path = CGMutablePath()
         path.addLines(between: Self.points(from: top, to: target, segments: Tuning.boltSegments))
         self.path = path
-        strokeColor = NSColor(srgbRed: 0.92, green: 0.95, blue: 1, alpha: 1)
-        lineWidth = 2.5
-        glowWidth = 4
+        // Un azzurro elettrico, non bianco: sugli sfondi chiari il bianco spariva.
+        strokeColor = NSColor(srgbRed: 0.55, green: 0.7, blue: 1, alpha: 1)
+        lineWidth = 3
+        glowWidth = 6
         lineJoin = .miter
         zPosition = 1.8   // davanti alle gocce sul vetro, dietro ai mucchi
     }

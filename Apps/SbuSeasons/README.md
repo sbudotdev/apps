@@ -182,6 +182,50 @@ lucciole, stelle e pioggia stanno entro ±6%, la primavera scende del 31% (i pet
 una forma da ridisegnare); neve e autunno saltano fra 0,55 e 2,5 ms a fotogramma in tutte e due le versioni, quindi lì
 la misura col disegno non dice niente. Va rifatta con l'app vera, come nelle sezioni sopra.
 
+## Meteo, secondo giro (SBU-185)
+
+Altre funzioni di KoiArt, rifatte a modo nostro. Niente rete, nessun permesso in più: il fulmine sul Dock usa l'Accessibilità
+che serve già per la neve sul Dock.
+
+- **Vento** (Impostazioni → Caduta). Il cursore va da ← 80 a 80 →: a sinistra o a destra, da brezza a forte. Il vento
+  soffia sempre dallo stesso lato, con raffiche che scendono fino al 60% (`Tuning.windGustDip`). I valori salvati
+  prima (0…80) restano validi: soffiano verso destra.
+- **Vento variabile** (Impostazioni → Meteo, spento di base). Si alza, si calma e gira ogni 3 minuti
+  (`Tuning.variableWindPeriod`, un giro intero in 6), con la forza del cursore e almeno 30 pt/s.
+  Con Riduci movimento niente vento, come prima.
+- **Pausa quando giochi a un videogioco** (Impostazioni → Energia, accesa di base). Quando un'app viene davanti,
+  `VideoGame` guarda la sua categoria (`LSApplicationCategoryType` che inizia con `public.app-category.` e finisce con
+  `games`) e il percorso (`/steamapps/`, i giochi di Steam). Se è un gioco, l'effetto si ferma e sparisce su tutti gli schermi,
+  Babbo Natale e gli altri visitatori non passano, e l'app smette anche di leggere le finestre. Riparte quando torni a
+  un'altra app. È un'altra cosa da «Metti in pausa i giochi», che ferma solo gli oggetti di Sbu Seasons.
+- **Energia** (Impostazioni → Energia). «Ferma a batteria» (spento di base) ferma tutto quando stacchi la corrente.
+  Con Risparmio energetico, o quando il Mac si scalda (`thermalState` `.serious` o `.critical`), particelle, banchi e
+  gocce sul vetro si dimezzano da soli (`Tuning.energyShare`), e tornano pieni quando passa.
+- **Schermi** (Impostazioni → Schermi, solo con più di uno schermo). Un interruttore per schermo; la scelta si salva
+  per schermo (lo stesso UUID con cui la galleria ricorda gli sfondi), quindi resta anche staccando e riattaccando il monitor.
+- **Finestre pulite** (Impostazioni → Meteo, spento di base). La neve su finestre e Dock si scioglie piano, 2 pt al secondo
+  (`Tuning.cleanMeltRate`), e resta uno strato sottile di 3 pt (`Tuning.cleanLayer`). «Sulle finestre» spento la toglie
+  tutta, come prima.
+- **Segui la stagione** (Impostazioni → Meteo, spento di base). Sceglie l'effetto dal calendario (`SeasonCalendar`):
+  dicembre–febbraio neve, marzo–maggio primavera, giugno–agosto estate, settembre–novembre autunno. Non si somma a
+  «Meteo a caso»: accenderne uno spegne l'altro. Se scegli a mano un effetto fuori stagione, «Segui la stagione» si spegne.
+- **Schizzi**. Nel temporale una goccia su tre che arriva sul bordo scoperto di una finestra o sul Dock schizza in 5
+  goccioline basse che durano meno di mezzo secondo (`Tuning.splashShare`, `splashDrops`); le altre cadono davanti.
+  Anche le gocce che scorrono sul vetro schizzano quando arrivano su un bordo. Con Riduci movimento due goccioline ferme.
+- **Fulmine sul Dock**. Con pioggia o temporale, quando chiudi un'app un fulmine azzurro scende dalla cima dello schermo
+  sulla sua icona del Dock, con un lampo e il tuono (se i suoni sono accesi). La posizione dell'icona si legge con
+  l'Accessibilità; per le app che non tieni nel Dock (l'icona sparisce appena chiudi) si usa quella letta l'ultima volta
+  che l'app è venuta davanti. Senza permesso o con Riduci movimento niente fulmine. Nessun dato esce dal Mac.
+
+Non fatto: **neve sui widget della scrivania**. Sul Mac di prova non ci sono widget sulla scrivania, Stage Manager è
+spento e lo schermo non ha la notch: non si può vedere come macOS elenca i widget (`CGWindowList`) né provare il resto.
+Aggiungerli o accendere Stage Manager avrebbe cambiato il Mac condiviso. Per la notch il mucchio sta già sotto la barra
+dei menu (`visibleFrame`), quindi sotto la notch non si posa niente.
+
+Il codice: `Engine/Weather.swift` (`Wind`, `VideoGame`, `EffectGate`, `SeasonCalendar`), `Engine/Bolt.swift`,
+`Sparks.splash`, `GlassDrops.splashes`, `Pile.melt`, `Sky.strikeNow`; gli avvisi del sistema in `AppDelegate`
+(app davanti, app chiusa, Risparmio energetico, temperatura). I numeri in `Tuning.swift`, sezione «Secondo giro meteo».
+
 ## Pioggia, temporale, nebbia, nuvole (2.0)
 
 - **Pioggia sul vetro.** Lo schermo è il vetro di una finestra: le gocce si posano a caso, quelle che si toccano
@@ -321,7 +365,8 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Engine/ShakeDetector.swift`, `Engine/WindowShakes.swift`, `Engine/Shake.swift` | Cursore e finestre scossi |
 | `Toys/Snowball/Snowball.swift` | Palla di neve (rotola), pupazzo, `snowmanTrio` |
 | `Engine/Sky.swift` | Banchi a tutto schermo (nebbia, nuvole: pochi sprite grandi e sfumati) e lampi |
-| `Engine/Weather.swift`, `Engine/Sparks.swift`, `Engine/Rainbow.swift` | Meteo a caso, cursore fermo, schermo coperto; scintille delle stelle; arcobaleno (SBU-177) |
+| `Engine/Weather.swift`, `Engine/Sparks.swift`, `Engine/Rainbow.swift` | Meteo a caso, cursore fermo, schermo coperto; scintille delle stelle; arcobaleno (SBU-177); vento, videogiochi, quando gira l'effetto, segui la stagione; schizzi (SBU-185) |
+| `Engine/Bolt.swift` | Il fulmine sull'icona del Dock di un'app chiusa mentre piove (SBU-185) |
 | `Engine/Glass.swift` | Gocce sul vetro: `GlassDrops` (logica, testata) e `Glass` (una sprite per goccia) |
 | `Toys/Christmas/` | Babbo Natale, il regalo, l'omino di pan di zenzero, il conto alla rovescia e le date di Natale |
 | `Toys/Figures/` | I personaggi: volpe, cincia con la mangiatoia, baita, lanterna, renna e i loro comandi (`FigureVisits.swift`) |
