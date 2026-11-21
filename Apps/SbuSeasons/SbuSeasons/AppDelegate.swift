@@ -28,6 +28,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private let visitors = Visitors()
     /// Le decorazioni della scrivania, «Decora» (SBU-187): restano anche quando le finestre si ricreano.
     private let desk = Desk()
+    /// Il filo di luci sotto la barra dei menu (SBU-229): anche lui con ogni effetto e a effetto spento.
+    private let topLights = TopLightsStrip()
+    private var topLightsItem: NSMenuItem?
     /// Alberi, decorazioni e pupazzi salvati (SBU-178). nil nei test: l'app ospite non tocca quelli veri.
     private let keeper = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil ? ToyKeeper() : nil
     private var lastKeep: TimeInterval = 0
@@ -346,6 +349,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         // Fiamme e lampadine di Decora: ferme anche con un videogioco davanti (SBU-193).
         desk.animates = !onBattery && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
             && !passages.paused && !gameInFront
+        updateTopLights()
+    }
+
+    /// Luci in alto (SBU-229): sugli schermi scelti, ferme quando lo sono le luci di Decora.
+    private func updateTopLights() {
+        let screens = NSScreen.screens.map { ($0.wallpaperKey, $0.frame, $0.visibleFrame.maxY) }
+        topLights.update(screens: screens, values: Settings.shared.values, animates: desk.animates)
     }
 
     private func refreshWindows() {
@@ -355,6 +365,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
             lastKeep = now
             keeper?.save(keptToys)
         }
+        // Anche le Luci in alto valgono a effetto spento: le Impostazioni si vedono entro un giro.
+        updateTopLights()
         guard isSnowing, !displaysAsleep else { return }
         let values = Settings.shared.values
         // Un videogioco davanti o «Ferma a batteria»: niente letture delle finestre, il Mac resta tutto per lui.
@@ -580,13 +592,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     /// Decora (SBU-187): una decorazione nuova dove c'è il cursore, sempre, con ogni effetto. Si toglie col clic destro.
     private func deskMenu() -> NSMenu {
         let menu = NSMenu()
+        let top = NSMenuItem(title: String(localized: "Luci in alto"), action: #selector(toggleTopLights), keyEquivalent: "")
+        top.target = self
+        top.toolTip = String(localized: "Un filo di luci sotto la barra dei menu. Colori, forma e animazione sono nelle Impostazioni.")
+        menu.addItem(top)
+        menu.addItem(.separator())
+        topLightsItem = top
         for kind in DeskItem.Kind.allCases {
             let mi = NSMenuItem(title: kind.title, action: #selector(addDeskItem(_:)), keyEquivalent: "")
             mi.target = self
             mi.representedObject = kind.rawValue
             menu.addItem(mi)
         }
-        menu.items.first?.toolTip = String(localized: "Trascina le due estremità per appenderle dove vuoi.")
+        menu.items.first { $0.representedObject as? String == DeskItem.Kind.lights.rawValue }?.toolTip =
+            String(localized: "Trascina le due estremità per appenderle dove vuoi.")
         menu.addItem(.separator())
         let clear = NSMenuItem(title: String(localized: "Togli le decorazioni"), action: #selector(clearDesk), keyEquivalent: "")
         clear.target = self
@@ -601,6 +620,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     }
 
     @objc private func clearDesk() { desk.removeAll() }
+
+    @objc private func toggleTopLights() {
+        Settings.shared.values.topLights.toggle()
+        updateTopLights()
+    }
 
     /// Notte: le stesse tre scelte delle Impostazioni. L'ora di inizio resta nelle Impostazioni.
     private func nightMenu() -> NSMenu {
@@ -632,6 +656,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         let values = Settings.shared.values
         behindItem?.state = values.behindWindows ? .on : .off
         soundsItem?.state = values.sounds ? .on : .off
+        topLightsItem?.state = values.topLights ? .on : .off
         for mi in nightItems { mi.state = mi.representedObject as? String == values.night.rawValue ? .on : .off }
         cableCarItem?.title = overlays.contains(where: \.hasCableCar)
             ? String(localized: "Togli la funivia") : String(localized: "Monta la funivia")

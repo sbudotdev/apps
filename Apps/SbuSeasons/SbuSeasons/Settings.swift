@@ -196,6 +196,7 @@ struct SettingsView: View {
                 if NSScreen.screens.count > 1 {
                     ScreensSection()
                 }
+                TopLightsSection()
                 Section("Caduta") {
                     slider("Quantità", $settings.values.flakeCount, Density.range, "%.0f")
                     slider("Dimensione", $settings.values.flakeSize, 0.5...2.5, "%.1f×")

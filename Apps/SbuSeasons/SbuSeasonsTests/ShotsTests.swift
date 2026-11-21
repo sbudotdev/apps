@@ -295,6 +295,45 @@ struct ShotsTests {
         try write(try #require(rep.cgImage), as: "14-decora")
     }
 
+    // MARK: - Luci in alto
+
+    /// Le Luci in alto (SBU-229) sotto una barra dei menu finta: una foto per forma, e i colori. `luci-in-alto-*.png`.
+    @Test func topLights() throws {
+        let size = CGSize(width: 720, height: 160)
+        let menuBar: CGFloat = 24
+        let looks: [(String, TopLights.Shape, TopLights.Palette, TopLights.SingleColor, TopLights.Animation, Double)] = [
+            ("tonde-multicolore", .round, .multicolor, .red, .steady, 0),
+            ("goccia-caldi-a-turno", .drop, .warm, .red, .chase, 0),
+            ("stella-freddi-onda", .star, .cold, .red, .wave, 0.6),
+            ("tonde-oro-lampeggio", .round, .single, .gold, .slowBlink, 1.2),
+        ]
+        for (name, shape, palette, single, animation, time) in looks {
+            let board = NSView(frame: CGRect(origin: .zero, size: size))
+            board.wantsLayer = true
+            if let url = Bundle.main.url(forResource: "01-prima-neve-16x10", withExtension: "jpg"), let image = NSImage(contentsOf: url) {
+                let wallpaper = NSImageView(frame: board.bounds)
+                wallpaper.image = image
+                wallpaper.imageScaling = .scaleAxesIndependently
+                board.addSubview(wallpaper)
+            }
+            let bar = NSView(frame: CGRect(x: 0, y: size.height - menuBar, width: size.width, height: menuBar))
+            bar.wantsLayer = true
+            bar.layer?.backgroundColor = NSColor(white: 0.96, alpha: 0.8).cgColor
+            board.addSubview(bar)
+            let lights = TopLightsView(frame: CGRect(x: 0, y: size.height - menuBar - Tuning.topLightsHeight,
+                                                    width: size.width, height: Tuning.topLightsHeight))
+            lights.shape = shape
+            lights.palette = palette
+            lights.single = single
+            lights.animation = animation
+            lights.time = time
+            board.addSubview(lights)
+            let rep = try #require(board.bitmapImageRepForCachingDisplay(in: board.bounds))
+            board.cacheDisplay(in: board.bounds, to: rep)
+            try write(try #require(rep.cgImage), as: "luci-in-alto-\(name)")
+        }
+    }
+
     // MARK: - Pioggia sul vetro
 
     /// Il cursore passa da sinistra a destra sul vetro bagnato (SBU-228): una foto della scia appena fatta, una a metà
