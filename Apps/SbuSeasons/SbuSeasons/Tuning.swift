@@ -33,6 +33,8 @@ nonisolated enum Tuning {
 
     // MARK: Cursore
 
+    /// Sulla pioggia sul vetro il cursore asciuga un cerchio ogni mezzo raggio di strada (QA SBU-231).
+    static let wipeStep: CGFloat = 0.5
     /// Quanto un movimento veloce del mouse trascina con sé i fiocchi (0…1).
     static let cursorDrag: CGFloat = 0.55
     /// Quanto velocemente la spinta del cursore si esaurisce (più alto = si fermano prima).

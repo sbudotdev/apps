@@ -23,7 +23,7 @@ struct GlassWipeTests {
         glass.bead(at: CGPoint(x: 210, y: 150), radius: 2)
         glass.bead(at: CGPoint(x: 300, y: 150), radius: 2)
         let near = glass.drops[0].id
-        glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: false, wipe: (center, 40))
+        glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: false, wipe: (center, center, 40))
         #expect(glass.drops.map(\.position) == [CGPoint(x: 300, y: 150)])
         #expect(glass.wiped == [near])   // chi disegna la fa sparire
     }
@@ -32,7 +32,7 @@ struct GlassWipeTests {
         var glass = GlassDrops(rain: heavy)
         for _ in 0..<40 { glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: false) }
         #expect(inside(glass) > 0)
-        glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: false, wipe: (center, 40))
+        glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: false, wipe: (center, center, 40))
         glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: false)
         #expect(inside(glass, radius: 35) == 0)
     }
@@ -41,7 +41,7 @@ struct GlassWipeTests {
         for calm in [false, true] {
             var glass = GlassDrops(rain: heavy)
             for _ in 0..<40 { glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: calm) }
-            glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: calm, wipe: (center, 40))
+            glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: calm, wipe: (center, center, 40))
             // Prima del tempo più corto la scia c'è ancora.
             let early = Int((RainTuning.wipeClose.lowerBound - 0.2) / 0.05)
             for _ in 0..<early { glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: calm) }
@@ -58,11 +58,25 @@ struct GlassWipeTests {
     @Test func withReduceMotionTheTrailClosesAllAtOnce() {
         var glass = GlassDrops(rain: heavy)
         for _ in 0..<40 { glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: true) }
-        glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: true, wipe: (center, 40))
+        glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: true, wipe: (center, center, 40))
         for _ in 0..<Int((RainTuning.wipeClose.lowerBound - 0.2) / 0.05) {
             glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: true)
         }
         #expect(inside(glass, radius: 35) == 0)
+    }
+
+    /// Col cursore veloce asciuga tutto il tratto tra la posizione di prima e quella di adesso, non solo i due punti
+    /// (QA SBU-231): la scia non resta a buchi.
+    @Test func aFastCursorWipesTheWholeStretch() {
+        var glass = GlassDrops(rain: still)
+        let middle = [CGPoint(x: 130, y: 150), CGPoint(x: 200, y: 150), CGPoint(x: 270, y: 150)]
+        for point in middle { glass.bead(at: point, radius: 2) }
+        glass.bead(at: CGPoint(x: 200, y: 260), radius: 2)   // fuori dal tratto: resta
+        glass.step(dt: 0.05, size: size, ledges: [], amount: 1, calm: false,
+                   wipe: (CGPoint(x: 50, y: 150), CGPoint(x: 350, y: 150), 20))
+        #expect(glass.drops.map(\.position) == [CGPoint(x: 200, y: 260)])
+        // La scia copre tutto il tratto: la pioggia non ci torna subito in mezzo.
+        #expect(glass.trail.contains { hypot($0.center.x - 200, $0.center.y - 150) < 20 })
     }
 
     @Test func behindWindowsOnlyTheVisibleDesktopIsWiped() {
