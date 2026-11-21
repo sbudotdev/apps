@@ -787,6 +787,50 @@
           }
         }
       }
+    },
+    "Codice per l'iPhone: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code for iPhone: %@"
+          }
+        }
+      }
+    },
+    "Telecomando: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remote: %@"
+          }
+        }
+      }
+    },
+    "Impostazioni": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "Dimentica gli iPhone abbinati": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forget Paired iPhones"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

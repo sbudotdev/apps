@@ -36,6 +36,16 @@ struct MenuContent: View {
         Button("Più lento") { model.perform(.slower) }
 
         Divider()
+        if let name = model.remote.connectedName {
+            Text("Telecomando: \(name)")
+        } else {
+            // The iPhone asks for this code the first time; it changes after each pairing.
+            Text("Codice per l'iPhone: \(model.remote.code)")
+        }
+        // Always there: it also gives a new code when someone nearby has been guessing it.
+        Button("Dimentica gli iPhone abbinati") { model.remote.forgetAll() }
+
+        Divider()
         Button("Libreria…") {
             NSApp.activate()
             openWindow(id: LibraryView.windowID)

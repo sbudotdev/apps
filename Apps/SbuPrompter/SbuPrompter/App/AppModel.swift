@@ -8,6 +8,7 @@ final class AppModel {
     let controller = PrompterController()
     let settings = PrompterSettings()
     let speech = SpeechFollower()
+    let remote = RemoteServer()
     let container: ModelContainer
     private(set) var activeScriptID: UUID?
     private(set) var isPrompterVisible = false
@@ -25,8 +26,16 @@ final class AppModel {
         applySettings()
         settings.onChange = { [weak self] in self?.applySettings() }
         speech.onWords = { [weak self] words in self?.controller.heard(words) }
+        // Play and pause also come from the panel button and the end of the text, not only from `perform`.
+        controller.onPlayingChange = { [weak self] in
+            self?.window?.updateTicking()
+            self?.syncSpeech()
+        }
         hotKeys.onAction = { [weak self] action in self?.perform(action.command) }
         hotKeys.register(settings.shortcuts)
+        remote.onCommand = { [weak self] command in self?.perform(command) }
+        remote.status = { [weak self] in self?.controller.status }
+        remote.start()
 
         let window = PrompterWindowController(model: self)
         self.window = window
@@ -53,8 +62,7 @@ final class AppModel {
         }
         controller.perform(command)
         if settings.speed != controller.speed { settings.speed = controller.speed }
-        window?.updateTicking()
-        syncSpeech()
+        // Ticking and the microphone follow `onPlayingChange`: calling them here too started the microphone twice.
     }
 
     /// Loads `script` into the prompter, from the top, and shows it.

@@ -21,7 +21,7 @@ enum DebugSnapshots {
                 try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
                 save(window.contentView, folder.appending(path: "live-\(count).png"))
                 let status = model.controller.status
-                let line = "LIVE \(count) offset=\(Int(model.controller.engine.offset))/\(Int(model.controller.engine.maxOffset)) speed=\(model.controller.speed) playing=\(status.isPlaying) hover=\(model.controller.isHoverPaused) words=\(model.controller.readWordCount) cue=\(status.currentCue.map(String.init) ?? "-") listening=\(model.speech.isListening) problem=\(String(describing: model.speech.problem)) level=\(model.speech.level) ticks=\(window.ticks) occluded=\(window.isOccluded)\n"
+                let line = "LIVE \(count) offset=\(Int(model.controller.engine.offset))/\(Int(model.controller.engine.maxOffset)) speed=\(model.controller.speed) playing=\(status.isPlaying) hover=\(model.controller.isHoverPaused) words=\(model.controller.readWordCount) cue=\(status.currentCue.map(String.init) ?? "-") listening=\(model.speech.isListening) problem=\(String(describing: model.speech.problem)) level=\(model.speech.level) ticks=\(window.ticks) occluded=\(window.isOccluded) remoteCode=\(model.remote.code) remote=\(model.remote.connectedName ?? "-")\n"
                 FileHandle.standardError.write(Data(line.utf8))
             }
         }

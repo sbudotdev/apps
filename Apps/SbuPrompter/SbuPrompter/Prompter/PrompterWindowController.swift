@@ -73,8 +73,9 @@ final class PrompterWindowController: NSObject {
     func updateTicking() {
         let shouldTick = panel.isVisible && model.controller.isPlaying
         if shouldTick, displayLink == nil {
-            let link = panel.contentView?.displayLink(target: self, selector: #selector(step))
-            link?.add(to: .main, forMode: .common)
+            // From the window, not its content view: `layout()` replaces the view while the text scrolls.
+            let link = panel.displayLink(target: self, selector: #selector(step))
+            link.add(to: .main, forMode: .common)
             displayLink = link
             lastTimestamp = nil
         } else if !shouldTick, let link = displayLink {
@@ -94,7 +95,6 @@ final class PrompterWindowController: NSObject {
         let hovering = panel.frame.contains(NSEvent.mouseLocation)
         if model.controller.isHoverPaused != hovering { model.controller.isHoverPaused = hovering }
         model.controller.tick(seconds)
-        if !model.controller.isPlaying { updateTicking() }
     }
 
     @objc private func screensChanged() {
