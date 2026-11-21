@@ -37,6 +37,11 @@ final class Passages {
     /// Quando ripassa (secondi dell'orologio di `tick`).
     private var next: TimeInterval?
     private let random: () -> Double
+    /// "Babbo Natale passa da solo" (Impostazioni → Visitatori, SBU-187), acceso all'inizio. Dal menu passa sempre.
+    static let autoKey = "santaVisits"
+    var passesAlone: () -> Bool = { UserDefaults.standard.object(forKey: Passages.autoKey) as? Bool ?? true }
+    /// Quanto spesso passa da solo; il giro chiamato dal menu tiene il suo ritmo.
+    var frequency: () -> VisitFrequency = { VisitFrequency.saved }
 
     /// `random` in 0..<1: i test lo fissano.
     init(random: @escaping () -> Double = { .random(in: 0..<1) }) {
@@ -74,15 +79,18 @@ final class Passages {
     /// Ogni tanto (`AppDelegate`, mentre l'effetto è acceso): è ora di ripassare?
     func tick(at now: TimeInterval) {
         guard !paused, flight == nil, let lead = scenes.first, lead.season is Snow else { return }
+        guard looping || passesAlone() else { return }
+        let frequency = frequency()
         guard let next else {
-            self.next = now + delay(looping ? Tuning.santaLoopInterval : Tuning.santaFirstVisit)
+            self.next = now + delay(looping ? Tuning.santaLoopInterval : frequency.scaled(Tuning.santaFirstVisit))
             return
         }
         guard now >= next else { return }
         // La data si guarda solo all'ora del passaggio: niente calendario a ogni controllo.
         let clock = lead.christmas
         if looping || clock.isChristmasTime { send(at: now, manual: false) }
-        self.next = now + delay(looping ? Tuning.santaLoopInterval : clock.isEve ? Tuning.santaEveInterval : Tuning.santaInterval)
+        self.next = now + delay(looping ? Tuning.santaLoopInterval
+                                        : frequency.scaled(clock.isEve ? Tuning.santaEveInterval : Tuning.santaInterval))
     }
 
     /// Cambiando stagione finiscono il loop e la pausa (fuori dall'inverno la voce della pausa è spenta, QA SBU-63).

@@ -24,6 +24,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private var dockIcons: [String: CGRect] = [:]
     /// «Novità» in cima al menu dopo un aggiornamento (SBU-179).
     private let whatsNew = WhatsNewCard()
+    /// Yeti e trenino con l'elfo su tutti gli schermi (SBU-178).
+    private let visitors = Visitors()
+    /// Le decorazioni della scrivania, «Decora» (SBU-187): restano anche quando le finestre si ricreano.
+    private let desk = Desk()
+    /// Alberi, decorazioni e pupazzi salvati (SBU-178). nil nei test: l'app ospite non tocca quelli veri.
+    private let keeper = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil ? ToyKeeper() : nil
+    private var lastKeep: TimeInterval = 0
 
     // Salvato in UserDefaults, così l'app se lo ricorda al prossimo avvio.
     // (Le altre impostazioni sono in Settings.swift.)
@@ -63,6 +70,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private var countdownItem: NSMenuItem?
     /// Il conto alla rovescia per Natale: creato la prima volta che si accende.
     private var countdownPanel: CountdownPanel?
+    /// La letterina a Babbo Natale aperta: una finestra nuova ogni volta, così il testo non resta.
+    private var letterWindow: NSWindow?
 
     /// "Conto alla rovescia per Natale" acceso: si ricorda al prossimo avvio.
     private var showsCountdown: Bool {
@@ -118,6 +127,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         setupStatusItem()
         setupMainMenu()
         rebuildOverlays()
+        // Dopo il primo `rebuildOverlays`: prima la scrivania salvata non è ancora tornata.
+        desk.onChange = { [weak self] in
+            guard let self else { return }
+            self.keeper?.save(self.keptToys)
+        }
         if showsCountdown { setCountdownVisible(true) }
         updateAmbience()
         // La stagione cambia dal menu ❄︎ o dalle Impostazioni: neve e icona seguono subito.
@@ -238,29 +252,56 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     }
 
     private func rebuildOverlays() {
+        // Alberi e pupazzi passano dalle finestre vecchie alle nuove (prima, collegando un monitor, sparivano).
+        let first = overlays.isEmpty
+        let kept = first ? keeper?.load() : keptToys
         overlays.forEach { $0.close() }
         overlays = NSScreen.screens.map { OverlayWindow(screen: $0) }
         for overlay in overlays { overlay.scene.onGlobeShaken = { TourProgress.shared.complete(.shakeGlobe) } }
         passages.scenes = overlays.map(\.scene)
+        visitors.scenes = overlays.map(\.scene)
         powerSourceDidChange()
         applyRunning()
+        // Prima di leggere le finestre: se no il primo salvataggio scriverebbe una scrivania vuota.
+        kept?.restore(into: overlays.map { ($0.screenKey, $0.scene) })
+        desk.use(screens: NSScreen.screens.map { ($0.wallpaperKey, $0.frame) })
+        if first, let saved = kept?.desk { desk.restore(saved) }
         refreshWindows()
+    }
+
+    /// Alberi e pupazzi di tutti gli schermi, da salvare.
+    private var keptToys: KeptToys {
+        overlays.map { $0.scene.keptToys(screen: $0.screenKey) }.reduce(KeptToys(desk: desk.items), +)
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        keeper?.save(keptToys)
     }
 
     /// L'effetto gira su uno schermo se è acceso dal menu, i display sono svegli e nessuna app a schermo intero lo copre.
     private func applyRunning() {
         let values = Settings.shared.values
+        let gameInFront = frontIsGame && values.pauseForVideoGames
         for overlay in overlays {
             let gate = EffectGate(snowing: isSnowing, displaysAsleep: displaysAsleep,
                                   screenCovered: overlay.screenID.map(coveredScreens.contains) ?? false,
-                                  gameInFront: frontIsGame && values.pauseForVideoGames,
+                                  gameInFront: gameInFront,
                                   screenOff: !values.showsEffect(onScreen: overlay.screenKey, screenCount: NSScreen.screens.count),
                                   stopOnBattery: values.stopOnBattery, onBattery: onBattery)
             overlay.setSnowing(gate.runs)
         }
+        // Fiamme e lampadine di Decora: ferme anche con un videogioco davanti (SBU-193).
+        desk.animates = !onBattery && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+            && !passages.paused && !gameInFront
     }
 
     private func refreshWindows() {
+        let now = ProcessInfo.processInfo.systemUptime
+        // Prima della guardia: Decora vale anche a effetto spento (pizzichi e rotazioni si salvano qui, QA SBU-188).
+        if now - lastKeep >= Tuning.keepInterval {
+            lastKeep = now
+            keeper?.save(keptToys)
+        }
         guard isSnowing, !displaysAsleep else { return }
         let values = Settings.shared.values
         // Un videogioco davanti o «Ferma a batteria»: niente letture delle finestre, il Mac resta tutto per lui.
@@ -284,7 +325,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
             shuffleWeather()
         }
         overlays.forEach { $0.updateWindows(edges, dock: dock) }
-        passages.tick(at: ProcessInfo.processInfo.systemUptime)
+        passages.tick(at: now)
+        visitors.tick(at: now)
         let shaken = windowShakes.update(edges, at: ProcessInfo.processInfo.systemUptime)
         if !shaken.isEmpty { overlays.forEach { $0.windowsShaken(shaken) } }
     }
@@ -367,6 +409,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         menu.addItem(.separator())
         menu.addItem(submenu(String(localized: "Giochi"), toysMenu()))
         menu.addItem(submenu(String(localized: "Natale"), christmasMenu()))
+        menu.addItem(submenu(String(localized: "Decora"), deskMenu()))
         menu.addItem(submenu(String(localized: "Notte"), nightMenu()))
 
         let galleryItem = NSMenuItem(title: String(localized: "Sfondi…"), action: #selector(openGallery), keyEquivalent: "")
@@ -430,7 +473,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         let cableCar = item(String(localized: "Monta la funivia"), #selector(toggleCableCar),
                             tip: String(localized: "Trascina il gancio sul bordo di una finestra: la cabina corre sul cavo."))
         let tree = item(String(localized: "Pianta un albero di Natale"), #selector(plantTree),
-                        tip: String(localized: "Fai clic sui rami per appendere le palline. Trascina l'albero per spostarlo."))
+                        tip: String(localized: "Fai clic sui rami per appendere una decorazione; col clic destro scegli quale, lo fai crescere o lo tagli. Trascina l'albero per spostarlo."))
         let clear = item(String(localized: "Togli alberi, neve e slitte"), #selector(clearWinterPlay))
         let pause = item(String(localized: "Metti in pausa i giochi"), #selector(togglePause))
         winterItems = [plough, dockFirst, sled, cableCar, tree, clear, pause]
@@ -463,14 +506,48 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         man.toolTip = String(localized: "Corre lungo il Dock: prova a prenderlo col cursore.")
         let countdown = NSMenuItem(title: String(localized: "Conto alla rovescia per Natale"), action: #selector(toggleCountdown), keyEquivalent: "")
         countdown.toolTip = String(localized: "Un pannellino sulla scrivania con giorni, ore e minuti. Trascinalo dove vuoi.")
-        for mi in [santa, man, countdown] {
+        // SBU-178: la letterina, lo Yeti e il trenino con l'elfo.
+        let letter = NSMenuItem(title: String(localized: "Scrivi a Babbo Natale…"), action: #selector(openLetter), keyEquivalent: "")
+        letter.toolTip = String(localized: "Scrivi un desiderio: la slitta passa e se lo porta via. Il testo non si salva.")
+        let yeti = NSMenuItem(title: String(localized: "Fai passare lo Yeti"), action: #selector(sendYeti), keyEquivalent: "")
+        yeti.toolTip = String(localized: "Prova a portarsi via un pupazzo: fai clic sullo Yeti per scacciarlo.")
+        let train = NSMenuItem(title: String(localized: "Fai passare il trenino"), action: #selector(sendTrain), keyEquivalent: "")
+        train.toolTip = String(localized: "L'elfo lascia un regalo: dentro c'è qualcosa per l'albero o il pupazzo.")
+        let elves = NSMenuItem(title: String(localized: "Fai passare gli elfi"), action: #selector(sendElves), keyEquivalent: "")
+        elves.toolTip = String(localized: "Un elfo esce dalla neve, rotola tre palle e fa un pupazzo.")
+        for mi in [santa, letter, man, yeti, train, elves, countdown] {
             mi.target = self
             menu.addItem(mi)
         }
-        winterItems += [santa, man]
+        winterItems += [santa, letter, man, yeti, train, elves]
         countdownItem = countdown
         return menu
     }
+
+    /// Decora (SBU-187): una decorazione nuova dove c'è il cursore, sempre, con ogni effetto. Si toglie col clic destro.
+    private func deskMenu() -> NSMenu {
+        let menu = NSMenu()
+        for kind in DeskItem.Kind.allCases {
+            let mi = NSMenuItem(title: kind.title, action: #selector(addDeskItem(_:)), keyEquivalent: "")
+            mi.target = self
+            mi.representedObject = kind.rawValue
+            menu.addItem(mi)
+        }
+        menu.items.first?.toolTip = String(localized: "Trascina le due estremità per appenderle dove vuoi.")
+        menu.addItem(.separator())
+        let clear = NSMenuItem(title: String(localized: "Togli le decorazioni"), action: #selector(clearDesk), keyEquivalent: "")
+        clear.target = self
+        clear.toolTip = String(localized: "Per toglierne una sola, fai clic destro sulla decorazione.")
+        menu.addItem(clear)
+        return menu
+    }
+
+    @objc private func addDeskItem(_ sender: NSMenuItem) {
+        guard let raw = sender.representedObject as? String, let kind = DeskItem.Kind(rawValue: raw) else { return }
+        desk.add(kind, at: NSEvent.mouseLocation)
+    }
+
+    @objc private func clearDesk() { desk.removeAll() }
 
     /// Notte: le stesse tre scelte delle Impostazioni. L'ora di inizio resta nelle Impostazioni.
     private func nightMenu() -> NSMenu {
@@ -615,6 +692,48 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         passages.send(at: ProcessInfo.processInfo.systemUptime)
     }
 
+    @objc private func sendYeti() {
+        guard isSnowing else { return }
+        visitors.send(.yeti)
+    }
+
+    @objc private func sendElves() {
+        guard isSnowing else { return }
+        visitors.send(.elves)
+    }
+
+    @objc private func sendTrain() {
+        guard isSnowing else { return }
+        visitors.send(.train)
+    }
+
+    /// La letterina: una finestra per scrivere il desiderio. "Spedisci" la chiude e la busta vola dalla slitta
+    /// sullo schermo della finestra. Il testo sparisce con la finestra.
+    @objc private func openLetter() {
+        letterWindow?.close()
+        let window = NSWindow(contentRect: .zero, styleMask: [.titled, .closable], backing: .buffered, defer: false)
+        window.title = String(localized: "Letterina a Babbo Natale")
+        window.isReleasedWhenClosed = false
+        window.delegate = self
+        window.contentViewController = NSHostingController(rootView: LetterView(
+            send: { [weak self, weak window] in
+                guard let self, let window else { return }
+                let center = CGPoint(x: window.frame.midX, y: window.frame.midY)
+                let overlay = self.overlays.first { $0.frame.contains(center) } ?? self.currentOverlay
+                if let overlay, self.isSnowing {
+                    overlay.scene.mailLetter(from: CGPoint(x: center.x - overlay.frame.minX, y: center.y - overlay.frame.minY))
+                }
+                window.close()
+            },
+            cancel: { [weak window] in window?.close() }))
+        window.center()
+        letterWindow = window
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate()
+        window.makeKeyAndOrderFront(nil)
+        window.orderFrontRegardless()
+    }
+
     @objc private func sendGingerbreadMan() {
         (overlays.first(where: \.hasDock) ?? currentOverlay)?.scene.sendGingerbreadMan()
     }
@@ -636,6 +755,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     @objc private func togglePause() {
         passages.paused.toggle()
+        powerSourceDidChange()   // fiamme e lampadine della scrivania si fermano con i giochi
         updateMenuState()
     }
 
@@ -658,6 +778,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         }
         lastSeasonID = season.id
         passages.seasonChanged()
+        visitors.seasonChanged()
+        powerSourceDidChange()   // cambiando stagione la pausa finisce: le fiamme ripartono
         updateAmbience()
         updateMenuState()
     }
@@ -744,6 +866,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     func windowWillClose(_ notification: Notification) {
         // Via dal Dock quando si chiude l'ultima delle nostre finestre: resta solo la neve.
         let closing = notification.object as? NSWindow
+        if closing === letterWindow { letterWindow = nil }   // la letterina se ne va con la sua finestra
         // NSApp.windows e non le lazy var: leggerle creerebbe una finestra mai aperta.
         guard !NSApp.windows.contains(where: { $0 !== closing && $0.isVisible && $0.delegate === self }) else { return }
         NSApp.setActivationPolicy(.accessory)

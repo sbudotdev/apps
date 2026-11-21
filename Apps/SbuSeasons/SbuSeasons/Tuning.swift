@@ -105,9 +105,8 @@ nonisolated enum Tuning {
     static let cablePylonHeight: CGFloat = 60
     /// La velocità della cabina sul cavo (pt/s).
     static let cableSpeed: CGFloat = 70
-    static let maxTrees = 5
-    /// Le palline su un albero, al massimo.
-    static let maxBaubles = 40
+    /// Fino a 3 alberi, come in KoiArt (SBU-178): oltre sparisce il più vecchio.
+    static let maxTrees = 3
 
     // MARK: Natale
 
@@ -282,4 +281,87 @@ nonisolated enum Tuning {
     static let momentJPEGQuality = 0.9
     /// La qualità dei fotogrammi dell'HEIC dinamico, scritto una volta per sfondo in Application Support.
     static let dynamicWallpaperQuality = 0.8
+
+    // MARK: Albero da decorare, pupazzo, visitatori (SBU-178)
+
+    /// Le decorazioni su un albero, al massimo (la stella non conta: ce n'è una sola e sostituisce la vecchia).
+    static let maxDecorations = 40
+    /// Quanto può crescere un albero (1 = come lo pianti) e quanto si ingrandisce o rimpicciolisce una decorazione.
+    static let treeGrowth: ClosedRange<CGFloat> = 1...2.2
+    static let decorationScale: ClosedRange<CGFloat> = 0.5...2.5
+    /// La rotella: un punto di scorrimento ingrandisce dell'1% (con ⇧ o ⌥ gira di un grado).
+    static let scrollResize: CGFloat = 0.01
+
+    /// Ogni quanto si salvano alberi e pupazzi (s), se sono cambiati; poi all'uscita e quando si ricreano gli schermi.
+    static let keepInterval: TimeInterval = 5
+
+    /// Lo Yeti passa da solo ogni 4–9 minuti, solo se c'è almeno un pupazzo da portare via.
+    static let yetiInterval: ClosedRange<CGFloat> = 240...540
+    /// Cammina a `yetiWalk` pt/s, scappa a `yetiDash` quando lo scacci; con il pupazzo in spalla va a `yetiCarry`.
+    static let yetiWalk: CGFloat = 70
+    static let yetiCarry: CGFloat = 55
+    static let yetiDash: CGFloat = 320
+    /// Il trenino con l'elfo passa da solo ogni 5–10 minuti, a `trainSpeed` pt/s, e lascia un regalo.
+    static let trainInterval: ClosedRange<CGFloat> = 300...600
+    static let trainSpeed: CGFloat = 130
+    /// La lettera sale fino alla slitta a `letterRise` pt/s.
+    static let letterRise: CGFloat = 160
+    /// Con Riduci movimento la busta compare lassù in `letterFadeIn` s, resta `letterStay` s e svanisce in `letterFadeOut` s.
+    static let letterFadeIn: TimeInterval = 0.4
+    static let letterStay: TimeInterval = 1.2
+    static let letterFadeOut: TimeInterval = 0.6
+
+    /// Lo Yeti prende il pupazzo a meno di `yetiReach` pt; più in alto, a meno di `yetiJumpReach` pt, ci salta sopra
+    /// arrivando `yetiJumpClearance` pt più su del pupazzo.
+    static let yetiReach: CGFloat = 8
+    static let yetiJumpReach: CGFloat = 40
+    static let yetiJumpClearance: CGFloat = 24
+    /// Dove l'elfo lancia il regalo, in frazioni della larghezza dello schermo (lontano dai bordi).
+    static let elfDropSpan: ClosedRange<CGFloat> = 0.15...0.85
+    /// Il regalo parte dal vagone a `elfGiftHeight` pt, lanciato indietro a `elfGiftThrow.dx` e in su a `elfGiftThrow.dy` pt/s.
+    static let elfGiftHeight: CGFloat = 26
+    static let elfGiftThrow = CGVector(dx: 60, dy: 240)
+    /// L'altezza (pt dai piedi, albero a grandezza 1) dove l'elfo appende la sua decorazione.
+    static let elfDecorationHeight: ClosedRange<CGFloat> = 16...60
+
+    // MARK: Pupazzi vivi (SBU-187)
+
+    /// Una palla o un pupazzo lanciati più forte di così (pt/s) si rompono in neve al primo urto.
+    /// Cadere da soli non li rompe: solo il lancio.
+    static let shatterThrow: CGFloat = 1000
+    /// Quanti granelli di neve lascia una palla rotta (un pupazzo ne lascia tre volte tanti).
+    static let shatterGrains = 40
+    /// Una finestra scossa fa saltare i pupazzi e le palle che ci stanno sopra (pt/s in su, e un po' di lato).
+    static let shakeHop: CGFloat = 380
+    static let shakeHopSide: CGFloat = 30
+    /// Due pupazzi sullo stesso bordo, a questa distanza (pt), ogni tanto si tirano una palla (Impostazioni → Visitatori).
+    static let fightReach: ClosedRange<CGFloat> = 40...260
+    static let fightInterval: ClosedRange<CGFloat> = 25...70
+    /// Quanto vola la palla tra i due (s).
+    static let fightFlight: CGFloat = 0.8
+    /// Lo Yeti colpito da una palla cade e sparisce in tanti secondi.
+    static let yetiFall: CGFloat = 1.2
+    /// Gli elfi passano da soli ogni 1½–3 ore (Impostazioni → Visitatori). Escono dalla neve in `elfRise` s,
+    /// rotolano una palla ogni `elfRollInterval` s a `elfBallGap` pt l'una dall'altra, poi se ne vanno a `elfWalk` pt/s.
+    static let elvesInterval: ClosedRange<CGFloat> = 5400...10_800
+    static let elfRise: CGFloat = 0.5
+    static let elfRollInterval: CGFloat = 1
+    static let elfBallGap: CGFloat = 14
+    static let elfWalk: CGFloat = 60
+
+    // MARK: Decora (SBU-187)
+
+    /// Le decorazioni sulla scrivania, per schermo: oltre sparisce la più vecchia.
+    static let maxDeskItems = 12
+    /// Quanto si ingrandisce o rimpicciolisce una decorazione.
+    static let deskScale: ClosedRange<CGFloat> = 0.5...3
+    /// Le luci pendono in mezzo di questa parte della loro lunghezza, almeno `lightsMinSag` pt.
+    static let lightsSag: CGFloat = 0.18
+    static let lightsMinSag: CGFloat = 12
+    /// Un'estremità delle luci si prende entro tanti pt; le lampadine sono a `bulbGap` pt l'una dall'altra.
+    static let lightsGrab: CGFloat = 14
+    static let bulbRadius: CGFloat = 4
+    static let bulbGap: CGFloat = 18
+    /// Fiamme e lampadine si ridisegnano tante volte al secondo: bastano, e costano poco.
+    static let deskFlickerFPS: Double = 8
 }

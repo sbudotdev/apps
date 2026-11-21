@@ -60,6 +60,7 @@ final class OverlayWindow: NSPanel {
         contentView = skView
         skView.presentScene(scene)
 
+        scene.onCard = { toy, point in ToyCard.shared.show(for: toy, at: point) }
         setFrame(frame, display: true)
         let link = skView.displayLink(target: self, selector: #selector(step))
         link.add(to: .main, forMode: .common)
@@ -113,7 +114,8 @@ final class OverlayWindow: NSPanel {
     func shakeGlobe() { scene.shakeGlobe() }
     /// Lo schermo di questa finestra, per la pausa automatica.
     let screenID: CGDirectDisplayID?
-    /// Lo schermo, per la scelta degli schermi (SBU-185): lo stesso UUID con cui la galleria ricorda gli sfondi.
+    /// Lo schermo, per la scelta degli schermi (SBU-185) e per alberi e pupazzi salvati (`KeptToys`): lo stesso UUID
+    /// con cui la galleria ricorda gli sfondi, uguale tra un avvio e l'altro.
     let screenKey: String
     /// L'effetto gira su questo schermo adesso.
     var isRunning: Bool { running ?? false }
@@ -160,4 +162,9 @@ final class OverlayWindow: NSPanel {
 /// il clic su un oggetto servirebbe solo ad "attivarla" e andrebbe perso.
 private final class OverlaySKView: SKView {
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+    // Clic destro, pizzico, rotazione e rotella vanno alla scena (decorazioni, albero, schede: SBU-178).
+    override func rightMouseDown(with event: NSEvent) { scene?.rightMouseDown(with: event) }
+    override func magnify(with event: NSEvent) { scene?.magnify(with: event) }
+    override func rotate(with event: NSEvent) { scene?.rotate(with: event) }
+    override func scrollWheel(with event: NSEvent) { scene?.scrollWheel(with: event) }
 }

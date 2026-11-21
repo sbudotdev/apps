@@ -40,6 +40,8 @@ nonisolated struct SnowSettings: Codable, Equatable {
     var screensOff: [String] = []   // schermi senza effetto, per `NSScreen.wallpaperKey`
     var cleanWindows = false        // la neve su finestre e Dock si scioglie fino a uno strato sottile
     var followSeason = false        // l'effetto segue il calendario (`SeasonCalendar`)
+    // Due pupazzi vicini ogni tanto si tirano una palla di neve (SBU-187)
+    var snowballFights = true
 }
 
 extension SnowSettings {
@@ -252,6 +254,7 @@ struct SettingsView: View {
                         .foregroundStyle(Quaderno.inkMuted.color)
                 }
                 wallpaperSection
+                VisitorsSection()
                 Section {
                     Toggle("Apri al login", isOn: $openAtLogin)
                         .onChange(of: openAtLogin) { _, on in setOpenAtLogin(on) }

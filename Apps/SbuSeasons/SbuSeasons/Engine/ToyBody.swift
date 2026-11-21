@@ -30,9 +30,9 @@ nonisolated struct ToyBody: Equatable {
         self.velocity = CGVector(dx: velocity.dx * scale, dy: velocity.dy * scale)
     }
 
-    /// Un passo. `ledges`: dove si può posare; `width`: la larghezza dello schermo, da cui non esce;
+    /// Un passo. `ledges`: dove si può posare; `width`: la larghezza dello schermo, da cui non esce (nil = può uscire);
     /// `bounce`: quanta velocità resta dopo un urto (0 = si ferma subito); `friction`: quanto frena sul bordo.
-    mutating func step(dt: CGFloat, ledges: [Ledge], width: CGFloat, bounce: CGFloat,
+    mutating func step(dt: CGFloat, ledges: [Ledge], width: CGFloat?, bounce: CGFloat,
                        friction: CGFloat = Tuning.toyFriction) {
         guard !isHeld else { return }
         let previous = position
@@ -46,7 +46,7 @@ nonisolated struct ToyBody: Equatable {
             position.x += velocity.dx * dt
             position.y += velocity.dy * dt
         }
-        if position.x < 0 || position.x > width {
+        if let width, position.x < 0 || position.x > width {
             position.x = min(max(position.x, 0), width)
             velocity.dx = -velocity.dx * bounce
         }
