@@ -121,6 +121,14 @@ struct MeteoSecondRoundTests {
         #expect(settings.screensOff.isEmpty)
     }
 
+    @Test func withASingleScreenTheEffectShowsButTheChoiceStaysSaved() {
+        var settings = SnowSettings()
+        settings.setEffect(false, onScreen: "Built-in Retina Display")
+        #expect(!settings.showsEffect(onScreen: "Built-in Retina Display", screenCount: 2))
+        #expect(settings.showsEffect(onScreen: "Built-in Retina Display", screenCount: 1))   // la sezione Schermi è nascosta
+        #expect(settings.screensOff == ["Built-in Retina Display"])                         // ricolleghi: torna spento
+    }
+
     // MARK: - Finestre pulite
 
     @Test func cleanWindowsMeltsThePileSlowlyDownToAThinLayer() {

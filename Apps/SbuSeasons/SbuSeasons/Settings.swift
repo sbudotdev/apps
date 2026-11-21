@@ -49,6 +49,11 @@ extension SnowSettings {
     /// L'effetto è acceso su quello schermo (`NSScreen.wallpaperKey`)? Di base sì, su tutti.
     func showsEffect(onScreen key: String) -> Bool { !screensOff.contains(key) }
 
+    /// Con un solo schermo la sezione Schermi è nascosta: l'effetto si vede, la scelta resta salvata.
+    func showsEffect(onScreen key: String, screenCount: Int) -> Bool {
+        screenCount < 2 || showsEffect(onScreen: key)
+    }
+
     mutating func setEffect(_ on: Bool, onScreen key: String) {
         screensOff.removeAll { $0 == key }
         if !on { screensOff.append(key) }

@@ -248,7 +248,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
             let gate = EffectGate(snowing: isSnowing, displaysAsleep: displaysAsleep,
                                   screenCovered: overlay.screenID.map(coveredScreens.contains) ?? false,
                                   gameInFront: frontIsGame && values.pauseForVideoGames,
-                                  screenOff: !values.showsEffect(onScreen: overlay.screenKey),
+                                  screenOff: !values.showsEffect(onScreen: overlay.screenKey, screenCount: NSScreen.screens.count),
                                   stopOnBattery: values.stopOnBattery, onBattery: onBattery)
             overlay.setSnowing(gate.runs)
         }
