@@ -8,6 +8,7 @@ final class MacLink: NSObject {
     private let peer = MCPeerID(displayName: UIDevice.current.name)
     private let session: MCSession
     private let browser: MCNearbyServiceBrowser
+    /// The Macs nearby by the name shown; two Macs with the same name get "Studio (2)".
     private var found: [String: MCPeerID] = [:]
 
     init(model: RemoteModel) {
@@ -27,6 +28,7 @@ final class MacLink: NSObject {
         browser.stopBrowsingForPeers()
         session.disconnect()
         found = [:]
+        names = [:]
         if let mac = model.currentMac { model.disconnected(from: mac) }
         model.found([])
         browser.startBrowsingForPeers()
@@ -52,8 +54,23 @@ final class MacLink: NSObject {
         }
     }
 
+    /// One label per peer, so the session's callbacks use the name shown in the list.
+    private var names: [MCPeerID: String] = [:]
+
+    private func name(for mac: MCPeerID) -> String {
+        if let name = names[mac] { return name }
+        let name = Self.label(for: mac.displayName, taken: Set(names.values))
+        names[mac] = name
+        return name
+    }
+
     private func foundChanged() {
         model.found(Array(found.keys))
+    }
+
+    static func label(for name: String, taken: Set<String>) -> String {
+        guard taken.contains(name) else { return name }
+        return (2...).lazy.map { "\(name) (\($0))" }.first { !taken.contains($0) }!
     }
 }
 
@@ -61,14 +78,16 @@ extension MacLink: MCNearbyServiceBrowserDelegate {
     nonisolated func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID,
                              withDiscoveryInfo info: [String: String]?) {
         Task { @MainActor in
-            self.found[peerID.displayName] = peerID
+            self.found[self.name(for: peerID)] = peerID
             self.foundChanged()
         }
     }
 
     nonisolated func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
         Task { @MainActor in
-            self.found[peerID.displayName] = nil
+            self.found[self.name(for: peerID)] = nil
+            // A relaunched Mac comes back as a new peer: let it take its plain name again.
+            self.names[peerID] = nil
             self.foundChanged()
         }
     }
@@ -78,8 +97,8 @@ extension MacLink: MCSessionDelegate {
     nonisolated func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         Task { @MainActor in
             switch state {
-            case .connected: self.model.connected(to: peerID.displayName)
-            case .notConnected: self.model.disconnected(from: peerID.displayName)
+            case .connected: self.model.connected(to: self.name(for: peerID))
+            case .notConnected: self.model.disconnected(from: self.name(for: peerID))
             case .connecting: break
             @unknown default: break
             }

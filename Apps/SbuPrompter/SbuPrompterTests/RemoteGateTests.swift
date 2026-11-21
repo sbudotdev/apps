@@ -46,15 +46,15 @@ struct RemoteGateTests {
         }
         _ = gate.receive(.pair(code: "0000"), from: "iPhone")
         #expect(gate.code == "5678")
-        #expect(gate.receive(.pair(code: "1234"), from: "iPhone") == [.send(.pairingRequired)])
+        #expect(gate.receive(.pair(code: "1234"), from: "iPhone") == [.send(.pairingPaused)])
     }
 
     @Test func tooManyWrongCodesCloseThePairingForAWhile() {
         let clock = Clock()
         var gate = gate(clock: clock)
         failAll(&gate)
-        // Even the right new code is refused during the pause.
-        #expect(gate.receive(.pair(code: "5678"), from: "iPhone") == [.send(.pairingRequired)])
+        // Even the right new code is refused during the pause, and the iPhone is told to wait.
+        #expect(gate.receive(.pair(code: "5678"), from: "iPhone") == [.send(.pairingPaused)])
         clock.now += RemoteGate<String>.firstLockout
         #expect(gate.receive(.pair(code: "5678"), from: "iPhone") == [.send(.paired(token: "token")), .sendStatus])
     }
@@ -66,7 +66,7 @@ struct RemoteGateTests {
         clock.now += RemoteGate<String>.firstLockout
         failAll(&gate)
         clock.now += RemoteGate<String>.firstLockout
-        #expect(gate.receive(.pair(code: "9012"), from: "iPhone") == [.send(.pairingRequired)])
+        #expect(gate.receive(.pair(code: "9012"), from: "iPhone") == [.send(.pairingPaused)])
         clock.now += RemoteGate<String>.firstLockout
         #expect(gate.receive(.pair(code: "9012"), from: "iPhone") == [.send(.paired(token: "token")), .sendStatus])
     }
@@ -108,7 +108,25 @@ struct RemoteGateTests {
         _ = gate.receive(.pair(code: "1234"), from: "iPhone")
         gate.disconnected("iPhone")
         #expect(!gate.isTrusted("iPhone"))
-        #expect(!gate.hasTrustedPeer)
+        #expect(gate.driver == nil)
+    }
+
+    @Test func theFifthWrongCodeAlreadySaysToWait() {
+        var gate = gate()
+        for _ in 1..<RemoteGate<String>.maxFailures { _ = gate.receive(.pair(code: "0000"), from: "iPhone") }
+        #expect(gate.receive(.pair(code: "0000"), from: "iPhone") == [.send(.pairingPaused)])
+    }
+
+    @Test func theDriverIsTheLastPairedIPhoneStillConnected() {
+        var gate = gate(tokens: ["saved"])
+        #expect(gate.driver == nil)
+        _ = gate.receive(.resume(token: "saved"), from: "Primo")
+        _ = gate.receive(.resume(token: "saved"), from: "Secondo")
+        #expect(gate.driver == "Secondo")
+        gate.disconnected("Secondo")
+        #expect(gate.driver == "Primo")
+        gate.disconnected("Primo")
+        #expect(gate.driver == nil)
     }
 
     @Test func forgettingDropsTokensAndPeers() {
@@ -119,7 +137,7 @@ struct RemoteGateTests {
         #expect(!gate.isTrusted("iPhone"))
     }
 
-    @Test(arguments: [RemoteMessage.paired(token: "x"), .pairingRequired, .status(RemoteCodecTests.status)])
+    @Test(arguments: [RemoteMessage.paired(token: "x"), .pairingRequired, .pairingPaused, .status(RemoteCodecTests.status)])
     func macIgnoresMessagesMeantForTheIPhone(_ message: RemoteMessage) {
         var gate = gate()
         #expect(gate.receive(message, from: "iPhone").isEmpty)

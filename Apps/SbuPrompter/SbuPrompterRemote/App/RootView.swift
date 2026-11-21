@@ -14,7 +14,9 @@ struct RootView: View {
             case .searching, .connecting, .outdated:
                 NoMacView(model: model)
             case .needsCode(let mac, let wrong):
-                PairingView(mac: mac, wrong: wrong) { model.enter(code: $0) }
+                PairingView(mac: mac, wrong: wrong, paused: model.isPairingPaused) { model.enter(code: $0) }
+                    // A fresh view, so an empty field, after every wrong code.
+                    .id(model.wrongCodes)
             case .connected(let mac):
                 ControlView(model: model, mac: mac)
             }
@@ -22,15 +24,19 @@ struct RootView: View {
             MacSection(model: model)
         }
         .onChange(of: scenePhase, initial: true) { _, phase in
-            // iOS drops the session in the background: look again when the app comes back.
-            guard phase == .active, !isPreview else { return }
+            guard model.sceneChanged(to: phase), !isOffline else { return }
             if link == nil { link = MacLink(model: model) }
             link?.restart()
         }
+        .onChange(of: model.keepsScreenOn, initial: true) { _, keepsOn in
+            UIApplication.shared.isIdleTimerDisabled = keepsOn
+        }
     }
 
-    private var isPreview: Bool {
-        ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
+    /// Previews, and the UI test of the empty screen, run without the network.
+    private var isOffline: Bool {
+        let environment = ProcessInfo.processInfo.environment
+        return environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" || environment["SBU_PROMPTER_OFFLINE"] == "1"
     }
 }
 

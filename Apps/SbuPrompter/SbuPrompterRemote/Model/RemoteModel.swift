@@ -1,6 +1,7 @@
 import CoreGraphics
 import Foundation
 import Observation
+import SwiftUI
 
 /// The remote's state: which Macs are nearby, pairing, and the prompter's status.
 /// `MacLink` feeds it what happens on the network and carries out `send` and `connect`.
@@ -26,6 +27,11 @@ final class RemoteModel {
     private(set) var status: PrompterStatus?
     /// Grows with every command sent, so the view plays one haptic each.
     private(set) var commandCount = 0
+    /// Wrong codes so far; the code field starts empty again after each one.
+    private(set) var wrongCodes = 0
+    /// The Mac refuses codes for a while after too many wrong ones.
+    private(set) var isPairingPaused = false
+    private(set) var isInBackground = false
 
     @ObservationIgnored var send: (RemoteMessage) -> Void = { _ in }
     @ObservationIgnored var connect: (String) -> Void = { _ in }
@@ -34,6 +40,7 @@ final class RemoteModel {
     @ObservationIgnored private var sentCode = false
     /// Failed invitations to the current Mac; Multipeer often drops the first after a relaunch.
     @ObservationIgnored private var failedAttempts = 0
+    @ObservationIgnored private var hasStarted = false
     static let maxAttempts = 3
     private static let tokensKey = "macTokens"
 
@@ -49,6 +56,28 @@ final class RemoteModel {
     }
 
     func isPaired(with mac: String) -> Bool { tokens[mac] != nil }
+
+    /// The reader holds the phone without touching it: no auto-lock while it drives the Mac.
+    var keepsScreenOn: Bool {
+        guard case .connected = phase else { return false }
+        return !isInBackground
+    }
+
+    /// Returns true when the link has to start looking again: at launch and back from the
+    /// background, where iOS drops the session. Control Center and notifications only make the
+    /// app inactive, and the session survives them.
+    func sceneChanged(to scene: ScenePhase) -> Bool {
+        switch scene {
+        case .background:
+            isInBackground = true
+            return false
+        case .active:
+            defer { hasStarted = true; isInBackground = false }
+            return !hasStarted || isInBackground
+        default:
+            return false
+        }
+    }
 
     // MARK: From the network
 
@@ -89,10 +118,13 @@ final class RemoteModel {
         switch message {
         case .paired(let token):
             failedAttempts = 0
+            isPairingPaused = false
             tokens[mac] = token
             phase = .connected(mac)
-        case .pairingRequired:
+        case .pairingRequired, .pairingPaused:
             tokens[mac] = nil
+            if sentCode { wrongCodes += 1 }
+            isPairingPaused = message == .pairingPaused
             phase = .needsCode(mac: mac, wrong: sentCode)
         case .status(let status):
             self.status = status

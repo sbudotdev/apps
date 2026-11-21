@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 import Testing
 @testable import SbuPrompterRemote
 
@@ -177,6 +178,71 @@ struct RemoteModelTests {
     @Test(arguments: [CGSize.zero, CGSize(width: 3, height: -4)])
     func dragsThatBarelyMoveAreTaps(_ translation: CGSize) {
         #expect(RemoteModel.command(forSwipe: translation) == .togglePlay)
+    }
+
+    // MARK: Scene, screen lock, pairing replies (QA SBU-173)
+
+    @Test func theLinkStartsAtLaunchButSurvivesTheControlCenter() {
+        #expect(model.sceneChanged(to: .active))
+        // Control Center, a notification, the app switcher glance: inactive, never background.
+        #expect(!model.sceneChanged(to: .inactive))
+        #expect(!model.sceneChanged(to: .active))
+    }
+
+    @Test func theLinkStartsAgainBackFromTheBackground() {
+        _ = model.sceneChanged(to: .active)
+        _ = model.sceneChanged(to: .inactive)
+        #expect(!model.sceneChanged(to: .background))
+        #expect(!model.sceneChanged(to: .inactive))
+        #expect(model.sceneChanged(to: .active))
+        #expect(!model.sceneChanged(to: .active))
+    }
+
+    @Test func theScreenStaysOnOnlyWhileConnectedAndInFront() {
+        _ = model.sceneChanged(to: .active)
+        #expect(!model.keepsScreenOn)
+        pair()
+        #expect(model.keepsScreenOn)
+        _ = model.sceneChanged(to: .inactive)
+        #expect(model.keepsScreenOn)
+        _ = model.sceneChanged(to: .background)
+        #expect(!model.keepsScreenOn)
+        _ = model.sceneChanged(to: .active)
+        #expect(model.keepsScreenOn)
+        model.disconnected(from: "Studio")
+        #expect(!model.keepsScreenOn)
+    }
+
+    @Test func everyWrongCodeIsCountedSoTheFieldEmptiesEachTime() {
+        model.found(["Studio"])
+        model.connected(to: "Studio")
+        for attempt in 1...3 {
+            model.enter(code: "0000")
+            model.receive(.pairingRequired)
+            #expect(model.wrongCodes == attempt)
+        }
+        // A refused token is not a wrong code.
+        model.receive(.pairingRequired)
+        #expect(model.wrongCodes == 3)
+    }
+
+    @Test func aPausedMacAsksToWait() {
+        model.found(["Studio"])
+        model.connected(to: "Studio")
+        model.enter(code: "1234")
+        model.receive(.pairingPaused)
+        #expect(model.phase == .needsCode(mac: "Studio", wrong: true))
+        #expect(model.isPairingPaused)
+        #expect(model.wrongCodes == 1)
+        model.enter(code: "5678")
+        model.receive(.paired(token: "t1"))
+        #expect(!model.isPairingPaused)
+    }
+
+    @Test func twoMacsWithTheSameNameGetDifferentLabels() {
+        #expect(MacLink.label(for: "Studio", taken: []) == "Studio")
+        #expect(MacLink.label(for: "Studio", taken: ["Studio"]) == "Studio (2)")
+        #expect(MacLink.label(for: "Studio", taken: ["Studio", "Studio (2)"]) == "Studio (3)")
     }
 
     private func pair() {

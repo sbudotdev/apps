@@ -29,6 +29,12 @@ final class RemoteWithMacUITests: XCTestCase {
         XCTAssertTrue(pad.waitForExistence(timeout: 15), "The Mac did not pair")
         snapshot(app, "2-collegato")
 
+        // Every control fits on the screen without scrolling (QA SBU-173: Riavvolgi and Sezioni were below the fold).
+        let screen = app.windows.firstMatch.frame
+        for button in [app.buttons["Riavvolgi"], app.buttons["cues"], app.buttons["Più veloce"]] {
+            XCTAssertTrue(screen.contains(button.frame), "\(button.label) is below the fold")
+        }
+
         // Start from the top: a previous run may have left the Mac at the end of the script.
         app.buttons["Riavvolgi"].tap()
         let play = app.buttons["playPause"]

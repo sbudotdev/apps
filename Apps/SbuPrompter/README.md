@@ -18,7 +18,7 @@ TEST_RUNNER_SBU_PROMPTER_CODE=1234 TEST_RUNNER_SBU_PROMPTER_SHOTS=/tmp/prompter-
   -destination 'platform=iOS Simulator,name=<iPhone>' -only-testing:SbuPrompterRemoteUITests
 ```
 
-Deve girare un solo Sbu Prompter sul Mac: due copie si annunciano con lo stesso nome e l'iPhone può collegarsi a quella sbagliata. Con Xcode 27 `xcodebuild` a volte resta appeso dopo "Test Suite 'All tests' passed": il risultato è già nel log, e gli screenshot sono nella cartella di `TEST_RUNNER_SBU_PROMPTER_SHOTS`.
+Deve girare un solo Sbu Prompter sul Mac: due copie si annunciano con lo stesso nome, l'iPhone le mostra come «Mac (2)» e il test non sa quale scegliere. Con Xcode 27 `xcodebuild` a volte resta appeso dopo "Test Suite 'All tests' passed": il risultato è già nel log, e gli screenshot sono nella cartella di `TEST_RUNNER_SBU_PROMPTER_SHOTS`.
 
 ## Dove sta cosa
 

@@ -12,8 +12,6 @@ final class RemoteServer: NSObject {
     private static let statusInterval: TimeInterval = 0.25
 
     private(set) var gate: RemoteGate<MCPeerID>
-    /// The paired iPhone driving the prompter now, if any.
-    private(set) var connectedName: String?
 
     @ObservationIgnored var onCommand: ((PrompterCommand) -> Void)?
     @ObservationIgnored var status: () -> PrompterStatus? = { nil }
@@ -39,6 +37,8 @@ final class RemoteServer: NSObject {
     }
 
     var code: String { gate.code }
+    /// The paired iPhone driving the prompter now, if any.
+    var connectedName: String? { gate.driver?.displayName }
 
     func start() {
         advertiser.startAdvertisingPeer()
@@ -52,7 +52,6 @@ final class RemoteServer: NSObject {
         gate.forgetAll()
         saveTokens()
         session.disconnect()
-        connectedName = nil
     }
 
     private func receive(_ data: Data, from peer: MCPeerID) {
@@ -63,7 +62,6 @@ final class RemoteServer: NSObject {
             switch action {
             case .send(let reply): send(reply, to: [peer])
             case .sendStatus:
-                connectedName = peer.displayName
                 if let status = status() { send(.status(status), to: [peer]) }
             case .perform(let command): onCommand?(command)
             }
@@ -86,7 +84,6 @@ final class RemoteServer: NSObject {
     private func peerChanged(_ peer: MCPeerID, connected: Bool) {
         guard !connected else { return }
         gate.disconnected(peer)
-        if connectedName == peer.displayName, !gate.hasTrustedPeer { connectedName = nil }
     }
 
     private func saveTokens() {

@@ -19,6 +19,8 @@ nonisolated struct RemoteGate<Peer: Hashable> {
     /// Tokens of the iPhones paired before; saved by the caller.
     private(set) var tokens: Set<String>
     private var trusted: Set<Peer> = []
+    /// The paired iPhone that joined last and is still connected: the one the menu names.
+    private(set) var driver: Peer?
     private var failures = 0
     private var lockouts = 0
     private var lockedUntil: Date?
@@ -35,20 +37,19 @@ nonisolated struct RemoteGate<Peer: Hashable> {
         code = makeCode()
     }
 
-    var hasTrustedPeer: Bool { !trusted.isEmpty }
-
     func isTrusted(_ peer: Peer) -> Bool { trusted.contains(peer) }
 
     mutating func receive(_ message: RemoteMessage, from peer: Peer) -> [Action] {
         switch message {
         case .pair(let attempt):
-            if let lockedUntil, now() < lockedUntil { return [.send(.pairingRequired)] }
+            if let lockedUntil, now() < lockedUntil { return [.send(.pairingPaused)] }
             guard attempt == code else {
                 failures += 1
                 if failures >= Self.maxFailures {
                     lockedUntil = now().addingTimeInterval(Self.firstLockout * pow(2, Double(lockouts)))
                     lockouts += 1
                     newCode()
+                    return [.send(.pairingPaused)]
                 }
                 return [.send(.pairingRequired)]
             }
@@ -63,13 +64,14 @@ nonisolated struct RemoteGate<Peer: Hashable> {
             return trust(peer, token: token)
         case .command(let command):
             return trusted.contains(peer) ? [.perform(command)] : [.send(.pairingRequired)]
-        case .paired, .pairingRequired, .status:
+        case .paired, .pairingRequired, .pairingPaused, .status:
             return []
         }
     }
 
     mutating func disconnected(_ peer: Peer) {
         trusted.remove(peer)
+        if driver == peer { driver = trusted.first }
     }
 
     /// "Dimentica gli iPhone": every iPhone needs the code again, and a pause caused by
@@ -77,6 +79,7 @@ nonisolated struct RemoteGate<Peer: Hashable> {
     mutating func forgetAll() {
         tokens = []
         trusted = []
+        driver = nil
         lockouts = 0
         lockedUntil = nil
         newCode()
@@ -88,6 +91,7 @@ nonisolated struct RemoteGate<Peer: Hashable> {
 
     private mutating func trust(_ peer: Peer, token: String) -> [Action] {
         trusted.insert(peer)
+        driver = peer
         return [.send(.paired(token: token)), .sendStatus]
     }
 

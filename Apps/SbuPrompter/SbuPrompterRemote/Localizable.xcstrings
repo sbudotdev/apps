@@ -1,17 +1,6 @@
 {
   "sourceLanguage": "it",
   "strings": {
-    "Abbina": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pair"
-          }
-        }
-      }
-    },
     "Abbina il Mac": {
       "extractionState": "manual",
       "localizations": {
@@ -377,6 +366,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tap to start or pause. Swipe up and down for speed, left and right for sections."
+          }
+        }
+      }
+    },
+    "Troppi codici sbagliati: il Mac ne mostra uno nuovo e per un po' non accetta codici. Aspetta, oppure scegli Dimentica gli iPhone abbinati nel menu del Mac.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too many wrong codes: the Mac shows a new one and won't accept codes for a while. Wait, or choose Forget Paired iPhones in the Mac's menu."
           }
         }
       }

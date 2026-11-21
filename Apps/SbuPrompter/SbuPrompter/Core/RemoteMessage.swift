@@ -9,6 +9,8 @@ nonisolated enum RemoteMessage: Codable, Sendable, Equatable {
     case paired(token: String)
     /// Mac: the code or token is wrong or missing; ask for the code.
     case pairingRequired
+    /// Mac: too many wrong codes; pairing is closed for a while, even with the right code.
+    case pairingPaused
     /// iPhone: drive the prompter.
     case command(PrompterCommand)
     /// Mac: where the prompter is now.

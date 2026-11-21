@@ -19,14 +19,6 @@ struct ControlView: View {
                           accessibilityLabel: Text("Tempo di lettura \(elapsed). \(context)"))
                 GesturePad(isPlaying: isPlaying) { model.perform($0) }
                 transport
-                HStack(spacing: SbuTheme.space3) {
-                    Button("Riavvolgi", systemImage: "backward.end") { model.perform(.rewind) }
-                    Spacer()
-                    Button("Sezioni", systemImage: "list.bullet") { isShowingCues = true }
-                        .accessibilityIdentifier("cues")
-                        .disabled(status?.cueTitles.isEmpty ?? true)
-                }
-                .buttonStyle(.bordered)
             }
             .padding(SbuTheme.space4)
         }
@@ -52,17 +44,25 @@ struct ControlView: View {
 
     private var transport: some View {
         VStack(spacing: SbuTheme.space3) {
-            HStack(spacing: SbuTheme.space3) {
+            // Rewind and the cue list flank the play row, so everything fits on an iPhone screen.
+            HStack(spacing: SbuTheme.space2) {
+                Button("Riavvolgi", systemImage: "backward.end") { model.perform(.rewind) }
+                    .labelStyle(.iconOnly)
                 Button("Sezione precedente", systemImage: "chevron.left") { model.perform(.previousCue) }
                     .labelStyle(.iconOnly)
                 Button(isPlaying ? "Pausa" : "Avvia", systemImage: isPlaying ? "pause.fill" : "play.fill") {
                     model.perform(.togglePlay)
                 }
+                .lineLimit(1)
                 .buttonStyle(.borderedProminent)
                 .frame(maxWidth: .infinity)
                 .accessibilityIdentifier("playPause")
                 Button("Sezione successiva", systemImage: "chevron.right") { model.perform(.nextCue) }
                     .labelStyle(.iconOnly)
+                Button("Sezioni", systemImage: "list.bullet") { isShowingCues = true }
+                    .labelStyle(.iconOnly)
+                    .accessibilityIdentifier("cues")
+                    .disabled(status?.cueTitles.isEmpty ?? true)
             }
             HStack(spacing: SbuTheme.space3) {
                 Button("Più lento", systemImage: "tortoise") { model.perform(.slower) }
