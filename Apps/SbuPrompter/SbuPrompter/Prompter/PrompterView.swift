@@ -8,6 +8,7 @@ struct PrompterView: View {
     let speech: SpeechFollower
     let chrome: PrompterChrome
     let isEmpty: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -87,7 +88,7 @@ struct PrompterView: View {
                 Capsule()
                     .fill(SbuAccent.prompter.base)
                     .frame(width: max(SbuTheme.space1, speech.level * 120), height: 3)
-                    .animation(.linear(duration: 0.1), value: speech.level)
+                    .animation(SbuMotion.animation(SbuMotion.short, reduceMotion: reduceMotion), value: speech.level)
                     .accessibilityHidden(true)
             }
         }

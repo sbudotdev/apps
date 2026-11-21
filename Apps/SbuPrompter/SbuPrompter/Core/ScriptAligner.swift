@@ -13,6 +13,8 @@ nonisolated struct ScriptAligner: Sendable {
     private let tailLength = 10
     /// Only alignments ending on one of the last few spoken words count.
     private let recentRows = 3
+    /// Words a two-word match may skip.
+    private let nearJump = 2
 
     init(script: [String], position: Int = 0, window: Int = 40) {
         self.script = script
@@ -46,8 +48,12 @@ nonisolated struct ScriptAligner: Sendable {
 
                 guard match > 0, i > tail.count - recentRows, index >= position else { continue }
                 let score = dp[i][j]
-                // A lone word only counts when it is exactly the next one.
-                let accepted = score >= 4 || (score >= 2 && index == position)
+                // A lone word counts only as the next one. Farther than a couple of words, the last
+                // three spoken words must match in a row: common pairs ("e il", "and the") are
+                // everywhere, and words already read would otherwise lend their score to the jump.
+                let ahead = index - position
+                let accepted = (score >= 2 && ahead == 0)
+                    || (score >= 4 && (ahead <= nearJump || Self.lastThreeMatch(tail, endingAt: i - 1, script, index)))
                 guard accepted else { continue }
                 if let current = best {
                     let better = score > current.score
@@ -61,6 +67,11 @@ nonisolated struct ScriptAligner: Sendable {
         }
         if let best { position = best.index + 1 }
         return position
+    }
+
+    private static func lastThreeMatch(_ tail: [String], endingAt row: Int, _ script: [String], _ index: Int) -> Bool {
+        guard row >= 2, index >= 2 else { return false }
+        return (0..<3).allSatisfy { score(tail[row - $0], script[index - $0]) > 0 }
     }
 
     /// 2 for the same word, 1 for a close one (recognition slip), -1 otherwise.

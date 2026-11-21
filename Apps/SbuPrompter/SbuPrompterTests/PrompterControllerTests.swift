@@ -160,4 +160,37 @@ struct PrompterControllerTests {
         #expect(controller.engine.offset == 0)
         #expect(controller.currentLine == 0)
     }
+
+    @Test func switchingToVoiceKeepsThePlace() {
+        let controller = makeController()
+        controller.perform(.togglePlay)
+        controller.tick(3) // 40 pt/s: at the end, 120 pt
+        #expect(controller.engine.offset == 120)
+        controller.mode = .voice
+        controller.tick(1)
+        #expect(controller.engine.offset > 90)
+    }
+
+    @Test func fixedModeStopsAtTheEnd() {
+        let controller = makeController()
+        controller.perform(.togglePlay)
+        controller.tick(5)
+        #expect(controller.engine.isAtEnd)
+        #expect(!controller.isPlaying)
+        let elapsed = controller.elapsed
+        controller.tick(1)
+        #expect(controller.elapsed == elapsed)
+    }
+
+    /// The panel's own button calls the controller: the app must still hear about it
+    /// to restart the frame clock and turn the microphone on or off.
+    @Test func reportsPlayStateChanges() {
+        let controller = makeController()
+        var changes: [Bool] = []
+        controller.onPlayingChange = { changes.append(controller.isPlaying) }
+        controller.perform(.togglePlay)
+        controller.perform(.togglePlay)
+        controller.pause()
+        #expect(changes == [true, false])
+    }
 }

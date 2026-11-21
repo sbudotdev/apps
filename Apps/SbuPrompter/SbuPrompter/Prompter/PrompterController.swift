@@ -12,9 +12,16 @@ final class PrompterController {
     static let readingAnchor = 0.2
 
     private(set) var script = ParsedScript("")
-    var mode: Mode = .fixed
+    var mode: Mode = .fixed {
+        // Fixed mode leaves the aligner behind: voice must start from the line on screen.
+        didSet { if mode != oldValue { syncVoicePositionToOffset() } }
+    }
     var countdownSeconds = 3
-    private(set) var isPlaying = false
+    private(set) var isPlaying = false {
+        didSet { if isPlaying != oldValue { onPlayingChange?() } }
+    }
+    /// Called whenever play starts or stops, whoever asked (menu, shortcut, panel button, end of text).
+    @ObservationIgnored var onPlayingChange: (() -> Void)?
     /// The pointer is over the prompter: stop while it stays there.
     var isHoverPaused = false
     private(set) var countdownLeft: Int?
@@ -105,7 +112,9 @@ final class PrompterController {
         guard !isHoverPaused else { return }
         elapsed += seconds
         switch mode {
-        case .fixed: engine.advance(by: seconds)
+        case .fixed:
+            engine.advance(by: seconds)
+            if engine.isAtEnd { pause() }
         case .voice: engine.approach(targetOffset(forLine: currentLine), by: seconds)
         }
     }
