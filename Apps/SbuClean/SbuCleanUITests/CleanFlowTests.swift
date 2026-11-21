@@ -43,6 +43,17 @@ final class CleanFlowTests: XCTestCase {
             if issue.auditType == .textClipped, let label = issue.element?.label, label == label.uppercased() {
                 return true
             }
+            // On iPhone 16e the audit flags these two as clipped though they are whole on screen:
+            // the home's "1 elemento" and the system title "Screenshot" (SBU-85). Only these
+            // labels: iOS 27 gives a truly clipped text the same "larger Dynamic Type" reason (SBU-87).
+            if issue.auditType == .textClipped, let label = issue.element?.label, ["1 elemento", "Screenshot"].contains(label) {
+                return true
+            }
+            // At the largest text size the audit also flags a text it cannot name (no element, so
+            // nothing to check or fix); that test checks large text on its screenshot instead (SBU-87).
+            if issue.auditType == .textClipped, issue.element == nil, app.launchArguments.contains("UICTContentSizeCategoryAccessibilityXXXL") {
+                return true
+            }
             issues.append("\(issue.compactDescription): \(issue.element?.label ?? "no element") \(issue.element?.frame ?? .zero)")
             return true
         }
