@@ -8,6 +8,7 @@ final class AppModel {
     let controller = PrompterController()
     let settings = PrompterSettings()
     let speech = SpeechFollower()
+    let remote = RemoteServer()
     let container: ModelContainer
     private(set) var activeScriptID: UUID?
     private(set) var isPrompterVisible = false
@@ -27,6 +28,9 @@ final class AppModel {
         speech.onWords = { [weak self] words in self?.controller.heard(words) }
         hotKeys.onAction = { [weak self] action in self?.perform(action.command) }
         hotKeys.register(settings.shortcuts)
+        remote.onCommand = { [weak self] command in self?.perform(command) }
+        remote.status = { [weak self] in self?.controller.status }
+        remote.start()
 
         let window = PrompterWindowController(model: self)
         self.window = window

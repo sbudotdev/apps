@@ -68,6 +68,23 @@
           }
         }
       }
+    },
+    "NSLocalNetworkUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Prompter lets your iPhone find it on Wi-Fi, so you can use it as a remote. Nothing leaves your home network."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Prompter si fa trovare dal tuo iPhone sulla Wi-Fi, per usarlo come telecomando. Nulla esce dalla rete di casa."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

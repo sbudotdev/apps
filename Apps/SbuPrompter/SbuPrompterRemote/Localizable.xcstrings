@@ -1,0 +1,397 @@
+{
+  "sourceLanguage": "it",
+  "strings": {
+    "Abbina": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pair"
+          }
+        }
+      }
+    },
+    "Abbina il Mac": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pair the Mac"
+          }
+        }
+      }
+    },
+    "Al prossimo collegamento ti servirà il codice.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You will need the code next time you connect."
+          }
+        }
+      }
+    },
+    "Apri Sbu Prompter sul Mac e tieni l'iPhone sulla stessa Wi-Fi. Il Mac compare qui da solo.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Sbu Prompter on your Mac and keep your iPhone on the same Wi-Fi. The Mac shows up here on its own."
+          }
+        }
+      }
+    },
+    "Area dei gesti": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesture area"
+          }
+        }
+      }
+    },
+    "Avvia": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start"
+          }
+        }
+      }
+    },
+    "Chiudi": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "Codice": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code"
+          }
+        }
+      }
+    },
+    "Codice sbagliato. Dopo 5 tentativi il Mac ne mostra uno nuovo.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wrong code. After 5 tries the Mac shows a new one."
+          }
+        }
+      }
+    },
+    "Collega %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect %@"
+          }
+        }
+      }
+    },
+    "Collegamento a %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecting to %@"
+          }
+        }
+      }
+    },
+    "Dimentica questo Mac": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forget This Mac"
+          }
+        }
+      }
+    },
+    "Il Mac usa un'altra versione di Sbu Prompter. Aggiorna l'app sul Mac e sull'iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Mac runs another version of Sbu Prompter. Update the app on your Mac and your iPhone."
+          }
+        }
+      }
+    },
+    "Il telecomando parla con Sbu Prompter solo sulla tua Wi-Fi, senza internet. La prima volta chiede il codice che il Mac mostra nel suo menu.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The remote talks to Sbu Prompter only on your Wi-Fi, without the internet. The first time it asks for the code the Mac shows in its menu."
+          }
+        }
+      }
+    },
+    "In attesa del Mac": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for the Mac"
+          }
+        }
+      }
+    },
+    "In lettura": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading now"
+          }
+        }
+      }
+    },
+    "Mac": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mac"
+          }
+        }
+      }
+    },
+    "Nessun Mac": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Mac"
+          }
+        }
+      }
+    },
+    "Nessun copione aperto sul Mac": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No script open on the Mac"
+          }
+        }
+      }
+    },
+    "Parte tra %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starts in %lld"
+          }
+        }
+      }
+    },
+    "Pausa": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause"
+          }
+        }
+      }
+    },
+    "Più lento": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slower"
+          }
+        }
+      }
+    },
+    "Più veloce": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faster"
+          }
+        }
+      }
+    },
+    "Riavvolgi": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rewind"
+          }
+        }
+      }
+    },
+    "Sbu Prompter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Prompter"
+          }
+        }
+      }
+    },
+    "Scrivi il codice di 4 cifre che trovi nel menu di Sbu Prompter, nella barra dei menu del Mac.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type the 4-digit code you find in the Sbu Prompter menu, in the Mac menu bar."
+          }
+        }
+      }
+    },
+    "Segue la voce": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follows your voice"
+          }
+        }
+      }
+    },
+    "Sezione %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Section %lld"
+          }
+        }
+      }
+    },
+    "Sezione precedente": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous Section"
+          }
+        }
+      }
+    },
+    "Sezione successiva": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next Section"
+          }
+        }
+      }
+    },
+    "Sezioni": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sections"
+          }
+        }
+      }
+    },
+    "Telecomando": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remote"
+          }
+        }
+      }
+    },
+    "Tempo di lettura %@. %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading time %1$@. %2$@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tempo di lettura %1$@. %2$@"
+          }
+        }
+      }
+    },
+    "Tocca per avviare o fermare. Scorri su e giù per la velocità, a sinistra e a destra per le sezioni.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to start or pause. Swipe up and down for speed, left and right for sections."
+          }
+        }
+      }
+    },
+    "Velocità %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speed %lld"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
