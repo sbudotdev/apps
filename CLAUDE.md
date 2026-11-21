@@ -56,7 +56,7 @@ Direction **Quaderno** (v5, ADR-0013, supersedes v4 "Carta e punto fermo"): Sbu 
 - One type per file; folders by feature (`Level/`, `Views/`).
 - Logic in `@Observable` models or pure types with Swift Testing tests (structs, `#expect`, parameterized). XCTest only for UI tests: the snapshot test and flow tests that drive the screen and run `performAccessibilityAudit`.
 - `#Preview` light and dark for every view.
-- After changing Swift: `xcodebuild test` on an iPhone simulator for SbuKit and the touched app, as CI does.
+- After changing Swift: `xcodebuild test` on an iPhone simulator for SbuKit and the touched app, as CI does. SbuKit also runs on macOS 15 (ADR-0024): test it with `-destination platform=macOS` too.
 - Commit after each completed step.
 
 ## Agent skills

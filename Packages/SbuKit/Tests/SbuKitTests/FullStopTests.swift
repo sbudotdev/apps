@@ -8,10 +8,10 @@ struct FullStopTests {
     func sizeIsACell(size: SbuFullStop.Size, side: Double, gap: Double) throws {
         let renderer = ImageRenderer(content: SbuFullStop(.set, size: size).fixedSize())
         renderer.scale = 1
-        let image = try #require(renderer.uiImage)
+        let image = try #require(renderer.pointSize)
 
-        #expect(abs(image.size.width - (side + gap)) <= 1)
-        #expect(abs(image.size.height - side) <= 1)
+        #expect(abs(image.width - (side + gap)) <= 1)
+        #expect(abs(image.height - side) <= 1)
     }
 
     @Test func heroIsExactlyOneGridCell() {

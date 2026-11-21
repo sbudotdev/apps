@@ -27,10 +27,10 @@ struct FigureTests {
             .environment(\.sbuAccent, .habits)
         let renderer = ImageRenderer(content: figure)
         renderer.proposedSize = ProposedViewSize(width: 358, height: nil)
-        let image = try #require(renderer.uiImage)
+        let image = try #require(renderer.pointSize)
 
         let block = SbuFigure.heroSize(for: text) + SbuFigure.descentInCells(size: SbuFigure.heroSize(for: text))
-        #expect(image.size.height <= block)
+        #expect(image.height <= block)
     }
 
     @Test(arguments: [144.0, 216])
@@ -65,7 +65,7 @@ struct FigureTests {
 
     @Test func cartiglioFontIsPlexMono() throws {
         #expect(SbuFont.isRegistered)
-        let font = try #require(UIFont(name: SbuFont.monoPostScriptName, size: SbuTheme.cartiglioSize))
+        let font = try #require(PlatformFont(name: SbuFont.monoPostScriptName, size: SbuTheme.cartiglioSize))
         #expect(font.familyName == "IBM Plex Mono")
     }
 
@@ -77,6 +77,6 @@ struct FigureTests {
     }
 
     private func width(of text: String, font: CTFont) -> CGFloat {
-        (text as NSString).size(withAttributes: [.font: font as UIFont]).width
+        (text as NSString).size(withAttributes: [.font: font as PlatformFont]).width
     }
 }
