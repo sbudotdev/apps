@@ -231,3 +231,57 @@ func theWeatherSettingsAreTranslated(_ italian: String, _ english: String) throw
     let bundle = try #require(Bundle(path: path))
     #expect(bundle.localizedString(forKey: italian, value: nil, table: nil) == english)
 }
+
+/// Le funzioni nella scena vera, col cursore finto (`pointerLocation`).
+@MainActor
+struct MeteoSceneTests {
+    private let size = CGSize(width: 800, height: 600)
+
+    private func run(_ scene: SeasonScene, seconds: Double, from start: TimeInterval = 1) -> TimeInterval {
+        var t = start
+        for _ in 0..<Int(seconds / 0.05) { scene.step(at: t); t += 0.05 }
+        return t
+    }
+
+    private func lights(_ scene: SeasonScene) -> [CGPoint] {
+        scene.children.compactMap { $0 as? SKSpriteNode }.filter { $0.zPosition <= 1 }.map(\.position)
+    }
+
+    private func near(_ points: [CGPoint], _ target: CGPoint) -> Int {
+        points.filter { hypot($0.x - target.x, $0.y - target.y) < Tuning.gatherRing.upperBound + 20 }.count
+    }
+
+    @Test func firefliesGatherAroundAStillCursorAndScatterWhenItMoves() {
+        let scene = SeasonScene(size: size, screenOrigin: .zero, season: Clear())
+        var cursor = CGPoint(x: 400, y: 300)
+        scene.pointerLocation = { cursor }
+        scene.setSeason(Fireflies())
+        let before = near(lights(scene), cursor)
+        let t = run(scene, seconds: Double(Tuning.gatherDelay + Tuning.gatherRamp) + 6)
+        let gathered = near(lights(scene), cursor)
+        #expect(gathered > before)
+        #expect(gathered >= lights(scene).count / 2)
+
+        let still = cursor
+        cursor = CGPoint(x: 100, y: 100)   // il cursore riparte, lontano
+        _ = run(scene, seconds: 4, from: t)
+        #expect(near(lights(scene), still) < gathered)
+    }
+
+    @Test func aShootingStarBreaksIntoSparksOnAWindowEdge() {
+        let scene = SeasonScene(size: size, screenOrigin: .zero, season: Clear())
+        scene.pointerLocation = { CGPoint(x: -1000, y: -1000) }
+        scene.setSeason(Meteors())
+        // Una finestra larga quanto lo schermo, a metà altezza: ogni stella che scende la attraversa.
+        let edge = WindowEdge(id: 1, rect: CGRect(x: 0, y: 0, width: 800, height: 300), visible: [0...800])
+        scene.updateWindows([edge], dock: nil, ceiling: 1000)
+        var t: TimeInterval = 1
+        var burst = false
+        for _ in 0..<2400 where !burst {   // le stelle aspettano fino a 45 s prima di passare
+            scene.step(at: t)
+            t += 0.05
+            burst = scene.sparks.count > 0
+        }
+        #expect(burst)
+    }
+}

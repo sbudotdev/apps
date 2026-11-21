@@ -86,6 +86,8 @@ final class SeasonScene: SKScene {
     /// Da quanto il cursore sta fermo, e se le lucciole si stavano radunando (per disperderle quando riparte).
     private var stillness = Stillness()
     private var gathering = false
+    /// Dove è il cursore, in coordinate globali. Si sostituisce nei test e per registrare le prove fuori schermo.
+    var pointerLocation: () -> CGPoint = { NSEvent.mouseLocation }
     private var nightClock: CGFloat = .infinity
 
     /// Natale (`Toys/Christmas/`): che giorno è e il diario dei regali, la slitta in volo.
@@ -283,16 +285,22 @@ final class SeasonScene: SKScene {
     /// orizzontale (`drift` ± `spread`) e un saltello verticale (`pop`). Poi ci pensa la gravità.
     private func spawnPowder(_ points: [CGPoint], from source: Pile? = nil, drift: CGFloat = 0,
                              spread: CGFloat = 8, pop: ClosedRange<CGFloat> = -5...5) {
+        // Un mucchio di foglie si stacca in meno pezzi della neve: interi, troppi farebbero un grumo.
+        // I petali posati no: ogni punto è un petalo vero.
+        let thin = piecesAreWhole && season.linger == nil
         for point in points where grains.count < Tuning.maxGrains {
+            if thin, Int.random(in: 0..<Tuning.leafPieceShare) != 0 { continue }
             let node = SKSpriteNode(texture: flakeTexture)
             let diameter = CGFloat.random(in: season.pieceSize)   // la neve è polvere, foglie e petali restano interi
             node.size = CGSize(width: diameter, height: diameter)
             let whole = piecesAreWhole && !reduceMotion
             if whole { node.zRotation = .random(in: 0...(2 * .pi)) }
             node.alpha = .random(in: 0.8...1)
-            // È un pezzo del mucchio: ha il suo colore (una foglia senza tinta sarebbe bianca).
-            node.color = season.pileColor
-            node.colorBlendFactor = 1
+            // È un pezzo del mucchio: ha il suo colore (una foglia senza tinta sarebbe bianca). Una foglia intera
+            // ha la tinta di una foglia vera, un petalo il suo disegno.
+            let tint = piecesAreWhole ? season.particle(depth: 0.5).tint : nil
+            node.color = tint ?? season.pileColor
+            node.colorBlendFactor = tint == nil && piecesAreWhole ? 0 : 1
             node.zPosition = 1.5
             node.position = point
             addChild(node)
@@ -599,7 +607,7 @@ final class SeasonScene: SKScene {
         let wind = sin(elapsed * 0.11) * maxWind + sin(elapsed * 0.37) * maxWind * 0.3
 
         // Posizione e velocità del cursore in coordinate della scena.
-        let global = NSEvent.mouseLocation
+        let global = pointerLocation()
         let mouse = CGPoint(x: global.x - screenOrigin.x, y: global.y - screenOrigin.y)
         var mouseVelocity = CGVector.zero
         if let last = lastMouse {
@@ -615,6 +623,10 @@ final class SeasonScene: SKScene {
         let gather = season.gathers && onScreen ? Tuning.gatherPull(still: stillness.seconds, calm: reduceMotion) : 0
         let scatter = gathering && gather == 0
         gathering = gather > 0
+        // Letti una volta per fotogramma, non per particella: `season` è un protocollo e ogni lettura costa.
+        let shatters = season.shatters
+        let linger = season.linger
+        let settles = season.settles
 
         let decay = CGFloat(exp(-Double(Tuning.cursorDamping * dt)))
         let dragBlend = min(1, dt * 10)
@@ -675,7 +687,7 @@ final class SeasonScene: SKScene {
                 p.x += (mouse.x + cos(angle) * ring - p.x) * pull
                 p.y += (mouse.y + sin(angle) * ring - p.y) * pull
             }
-            if season.shatters, !waiting, flake.drift != 0 {
+            if shatters, !waiting, flake.drift != 0 {
                 // La testa della stella (davanti al centro della scia) tocca un bordo scoperto: si rompe in scintille.
                 let length = hypot(flake.drift, flake.fallSpeed)
                 let lead = CGVector(dx: flake.drift / length * flake.extent, dy: -flake.fallSpeed / length * flake.extent)
@@ -709,10 +721,10 @@ final class SeasonScene: SKScene {
             }
 
             // --- Si posa? Ha attraversato la superficie di un mucchio in questo passo ---
-            guard season.settles else { return false }
+            guard settles else { return false }
             for pile in allPiles {
                 if let top = pile.surface(at: p.x), previousY >= top, p.y < top {
-                    if let linger = season.linger {
+                    if let linger {
                         pile.rest(restingCopy(of: flake), atX: p.x, life: .random(in: linger))   // i petali restano interi
                     } else {
                         pile.add(atX: p.x, radius: flake.radius, growth: CGFloat(settings.growth) * .random(in: season.pileGrowth))

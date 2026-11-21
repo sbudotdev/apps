@@ -173,6 +173,8 @@ nonisolated enum Tuning {
     /// Foglie e petali presi dal cursore: quanto in su e di lato volano via dal mucchio (pt/s).
     static let leafScatterPop: ClosedRange<CGFloat> = 60...220
     static let leafScatterSpread: CGFloat = 120
+    /// Di un mucchio di foglie si stacca un pezzo ogni tanti granelli di neve.
+    static let leafPieceShare = 3
     /// Foglie e petali in volo: pesano meno della polvere e l'aria li frena di più (`grainGravity`, `grainAirDrag`).
     static let leafGravity: CGFloat = 160
     static let leafAirDrag: CGFloat = 2.5

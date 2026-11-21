@@ -51,7 +51,7 @@ final class OverlayWindow: NSPanel {
 
         level = Self.level(behindWindows: false)
 
-        // Visibile in tutte le Scrivanie (Spaces) e anche sopra le app a schermo intero.
+        // Visibile in tutte le Scrivanie (Spaces); sopra un'app a schermo intero si ferma e sparisce (`AppDelegate.applyRunning`).
         collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle, .fullScreenAuxiliary]
 
         skView.allowsTransparency = true

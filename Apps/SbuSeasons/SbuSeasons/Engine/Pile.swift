@@ -122,7 +122,9 @@ final class Pile {
         dirty = true
         let shift = CGVector(dx: minX - other.minX, dy: baseY - other.baseY)
         for petal in other.resting {
-            petal.node.move(toParent: node)
+            // Tutti e due i mucchi sono in coordinate della scena: si sposta il figlio così com'è, più lo spostamento.
+            petal.node.removeFromParent()
+            node.addChild(petal.node)
             petal.node.position.x += shift.dx
             petal.node.position.y += shift.dy
         }

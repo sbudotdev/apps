@@ -28,5 +28,5 @@ nonisolated enum RainTuning {
     /// Con "Media" 30 gocce al secondo su uno schermo da 1440×900, al massimo 400 sul vetro.
     static let glass = GlassRain(beads: 30, size: 2...5, slide: 7, most: 400, color: water)
     /// Ogni tanto un lampo lontano anche nella pioggia: più di rado e più debole del temporale (SBU-177).
-    static let lightning = Lightning(every: 40...120, strength: 0.45)
+    static let lightning = Lightning(every: 40...120, strength: 0.7)
 }
