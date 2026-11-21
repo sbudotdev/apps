@@ -45,6 +45,7 @@ struct LocalizationTests {
         ("Scrivi a Babbo Natale…", "Write to Santa…"),
         ("Taglia l'albero", "Cut Down the Tree"),
         ("Visitatori", "Visitors"),
+        ("Manda…", "Send…"),
         ("Nata da un'idea di Simone Antoniciello", "Based on an idea by Simone Antoniciello"),
     ])
     func theEnglishTranslationIsInTheBundle(_ italian: String, _ english: String) throws {

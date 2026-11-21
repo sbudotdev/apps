@@ -54,6 +54,60 @@
           }
         }
       }
+    },
+    "Oggetto di Sbu Seasons": {
+      "comment": "Il tipo del file .sbuseasons nel Finder (CFBundleTypeName e UTTypeDescription, SBU-200).",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Seasons Item"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objekt von Sbu Seasons"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objet de Sbu Seasons"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objeto de Sbu Seasons"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Seasonsのアイテム"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objeto do Sbu Seasons"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voorwerp van Sbu Seasons"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oggetto di Sbu Seasons"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

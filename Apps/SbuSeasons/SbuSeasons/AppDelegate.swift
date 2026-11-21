@@ -31,6 +31,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     /// Alberi, decorazioni e pupazzi salvati (SBU-178). nil nei test: l'app ospite non tocca quelli veri.
     private let keeper = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil ? ToyKeeper() : nil
     private var lastKeep: TimeInterval = 0
+    /// File `.sbuseasons` aperti prima che ci siano le finestre (l'app lanciata da un doppio clic, SBU-200).
+    private var pendingFiles: [URL] = []
 
     // Salvato in UserDefaults, così l'app se lo ricorda al prossimo avvio.
     // (Le altre impostazioni sono in Settings.swift.)
@@ -134,6 +136,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         }
         if showsCountdown { setCountdownVisible(true) }
         updateAmbience()
+        // Lanciata col doppio clic su un file: si apre il file, non le Impostazioni (SBU-205).
+        let launchedForFiles = !pendingFiles.isEmpty
+        pendingFiles.forEach(receive)
+        pendingFiles = []
         // La stagione cambia dal menu ❄︎ o dalle Impostazioni: neve e icona seguono subito.
         Settings.shared.observeSeason { [weak self] in self?.seasonDidChange() }
 
@@ -197,11 +203,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         whatsNew.launched(firstRun: TourProgress.shared.opensAtLaunch)
 
         // La prima volta il tour di benvenuto. Poi, aperta a mano (doppio clic, `open`), le Impostazioni.
-        // All'avvio automatico al login no: lì vogliamo solo la neve.
+        // All'avvio automatico al login no: lì vogliamo solo la neve. Né quando si apre per un file ricevuto.
         if TourProgress.shared.opensAtLaunch {
             TourProgress.shared.markSeen()
             openTour()
-        } else if !launchedAsLoginItem() {
+        } else if !launchedAsLoginItem() && !launchedForFiles {
             openSettings()
         }
 
@@ -272,6 +278,52 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     /// Alberi e pupazzi di tutti gli schermi, da salvare.
     private var keptToys: KeptToys {
         overlays.map { $0.scene.keptToys(screen: $0.screenKey) }.reduce(KeptToys(desk: desk.items), +)
+    }
+
+    // MARK: - Oggetti ricevuti (SBU-200)
+
+    /// Doppio clic su un file `.sbuseasons`, o AirDrop che lo apre con Sbu Seasons.
+    func application(_ application: NSApplication, open urls: [URL]) {
+        guard !overlays.isEmpty else {
+            pendingFiles += urls
+            return
+        }
+        urls.forEach(receive)
+    }
+
+    /// Le decorazioni arrivano sulla scrivania tutto l'anno; pupazzi e alberi li porta il trenino sullo schermo
+    /// principale, solo d'inverno (fuori dall'inverno si scioglierebbero: lo dice un avviso). Se l'effetto è spento, si accende.
+    private func receive(_ url: URL) {
+        let toy: ToyFile
+        do {
+            toy = try ToyFile(contentsOf: url)
+        } catch {
+            tell(String(localized: "Questo file non si apre"), (error as? ToyFile.ReadError ?? .unreadable).explanation)
+            return
+        }
+        let arriving: Toy
+        switch toy {
+        case .decoration(let item):
+            desk.receive(item)
+            return
+        case .snowman(let look): arriving = Snowman(at: .zero, look: look)
+        case .tree(let look): arriving = ChristmasTree(at: .zero, look: look)
+        }
+        guard let scene = overlays.first?.scene, scene.season is Snow else {
+            tell(String(localized: "Pupazzi e alberi arrivano solo con la neve"),
+                 String(localized: "Scegli Neve dal menu di Sbu Seasons → Effetto e apri di nuovo il file."))
+            return
+        }
+        if !isSnowing { toggleSnow() }
+        scene.receive(arriving)
+    }
+
+    private func tell(_ message: String, _ explanation: String) {
+        let alert = NSAlert()
+        alert.messageText = message
+        alert.informativeText = explanation
+        NSApp.activate()
+        alert.runModal()
     }
 
     func applicationWillTerminate(_ notification: Notification) {

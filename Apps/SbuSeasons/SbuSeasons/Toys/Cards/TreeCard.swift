@@ -6,6 +6,8 @@ import SwiftUI
 struct TreeCard: View {
     @Bindable var tree: ChristmasTree
     let cut: () -> Void
+    /// «Manda…»: l'albero, con le decorazioni, diventa un file da mandare (SBU-200).
+    var send: () -> Void = {}
 
     var body: some View {
         Form {
@@ -36,6 +38,7 @@ struct TreeCard: View {
                 }
             }
             Section {
+                Button("Manda…", action: send)
                 Button("Taglia l'albero", role: .destructive, action: cut)
             }
         }

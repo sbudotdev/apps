@@ -25,13 +25,22 @@ final class ToyCard: NSPanel {
         switch toy {
         case let snowman as Snowman:
             title = String(localized: "Pupazzo")
-            content = AnyView(SnowmanCard(look: snowman.look) { [weak snowman] in snowman?.look = $0 })
+            content = AnyView(SnowmanCard(look: snowman.look,
+                                          send: { [weak self, weak snowman] in
+                                              guard let self, let snowman else { return }
+                                              self.send(.snowman(snowman.look))
+                                          },
+                                          apply: { [weak snowman] in snowman?.look = $0 }))
         case let tree as ChristmasTree:
             title = String(localized: "Albero di Natale")
             content = AnyView(TreeCard(tree: tree,
                                        cut: { [weak self, weak tree] in
                                            tree?.cut()
                                            self?.close()
+                                       },
+                                       send: { [weak self, weak tree] in
+                                           guard let self, let tree else { return }
+                                           self.send(.tree(tree.look))
                                        }))
         default:
             return
@@ -48,6 +57,12 @@ final class ToyCard: NSPanel {
         }
         setFrameOrigin(origin)
         makeKeyAndOrderFront(nil)
+    }
+
+    /// Il menu di condivisione esce dal fondo della scheda.
+    private func send(_ toy: ToyFile) {
+        guard let contentView else { return }
+        ToySharing.shared.share(toy, from: contentView)
     }
 
     override func cancelOperation(_ sender: Any?) { close() }
