@@ -352,7 +352,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         let cableCar = item(String(localized: "Monta la funivia"), #selector(toggleCableCar),
                             tip: String(localized: "Trascina il gancio sul bordo di una finestra: la cabina corre sul cavo."))
         let tree = item(String(localized: "Pianta un albero di Natale"), #selector(plantTree),
-                        tip: String(localized: "Fai clic sui rami per appendere le palline. Trascina l'albero per spostarlo."))
+                        tip: String(localized: "Fai clic sui rami per appendere una decorazione; col clic destro scegli quale, lo fai crescere o lo tagli. Trascina l'albero per spostarlo."))
         let clear = item(String(localized: "Togli alberi, neve e slitte"), #selector(clearWinterPlay))
         let pause = item(String(localized: "Metti in pausa i giochi"), #selector(togglePause))
         winterItems = [plough, dockFirst, sled, cableCar, tree, clear, pause]
