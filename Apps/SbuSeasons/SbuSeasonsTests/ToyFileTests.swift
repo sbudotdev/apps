@@ -142,7 +142,7 @@ struct ToyFileTests {
     }
 
     @Test func aGiantTreeIsCutDownToSize() throws {
-        let decorations = (0..<500).map { _ in #"{"kind":"bauble","position":[99999,-5000],"scale":80,"rotation":1e300,"color":-7}"# }
+        let decorations = (0..<500).map { _ in #"{"kind":"bauble","position":[0,30],"scale":80,"rotation":1e300,"color":-7}"# }
         let toppers = #"{"kind":"star","position":[3,3],"scale":1,"rotation":0,"color":0},{"kind":"angel","position":[0,0],"scale":1,"rotation":0,"color":0}"#
         let json = #"{"format":"sbuseasons","version":1,"tree":{"growth":1e300,"hanging":"lights","decorations":["#
             + decorations.joined(separator: ",") + "," + toppers + "]}}"
@@ -152,11 +152,19 @@ struct ToyFileTests {
         #expect(look.decorations.last?.kind == .angel && look.decorations.last?.position == TreeLook.tip)
         #expect(look.decorations.count <= Tuning.maxDecorations + 1)
         let bauble = try #require(look.decorations.first)
-        #expect(abs(bauble.position.x) <= TreeLook.halfWidth)
-        #expect(bauble.position.y >= 0 && bauble.position.y <= TreeLook.tip.y)
         #expect(bauble.scale == Tuning.decorationScale.upperBound)
         #expect(abs(bauble.rotation) <= 2 * .pi)
         #expect((0..<TreeLook.colorCount).contains(bauble.color))
+    }
+
+    /// Il rettangolo della chioma non basta: gli angoli in alto sono fuori dal triangolo dei rami (SBU-205).
+    @Test(arguments: [CGPoint(x: 99999, y: -5000), CGPoint(x: 28, y: 70), CGPoint(x: -29, y: 60), CGPoint(x: 0, y: 5)])
+    func aDecorationOffTheBranchesIsDropped(_ point: CGPoint) throws {
+        var onBranch = TreeLook()
+        onBranch.hang(at: CGPoint(x: 0, y: 30))
+        var look = onBranch
+        look.decorations.append(Decoration(kind: .bauble, position: point))
+        #expect(try roundTrip(.tree(look)) == .tree(onBranch))
     }
 
     @Test func aTinyTreeGrowsBackToTheSmallest() throws {

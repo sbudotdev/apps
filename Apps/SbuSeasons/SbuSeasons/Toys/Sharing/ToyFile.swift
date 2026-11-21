@@ -133,11 +133,10 @@ nonisolated enum ToyFile: Equatable, Sendable {
         var look = look
         look.growth = clamp(look.growth, Tuning.treeGrowth, fallback: 1)
         let topper = look.decorations.last { $0.kind.isTopper }.map { Decoration(kind: $0.kind, position: TreeLook.tip, scale: $0.scale, rotation: $0.rotation) }
-        let hanging = look.decorations.filter { !$0.kind.isTopper }.prefix(Tuning.maxDecorations)
+        // Fuori dai rami si toglie, come quando la trascini via dall'albero (`TreeLook.drop`).
+        let hanging = look.decorations.filter { !$0.kind.isTopper && TreeLook.isOnBranch($0.position) }.prefix(Tuning.maxDecorations)
         look.decorations = (Array(hanging) + (topper.map { [$0] } ?? [])).map { decoration in
             var d = decoration
-            d.position = CGPoint(x: clamp(d.position.x, -TreeLook.halfWidth...TreeLook.halfWidth, fallback: 0),
-                                 y: clamp(d.position.y, 0...TreeLook.tip.y, fallback: TreeLook.foliage.lowerBound))
             d.scale = clamp(d.scale, Tuning.decorationScale, fallback: 1)
             d.rotation = angle(d.rotation)
             d.color = min(max(d.color, 0), TreeLook.colorCount - 1)
