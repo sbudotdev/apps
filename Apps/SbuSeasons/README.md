@@ -34,6 +34,23 @@ Lingue: italiano, inglese, tedesco, francese, spagnolo, giapponese, portoghese (
 
 Requisiti: macOS 14+, Xcode 26+, XcodeGen (`brew install xcodegen`).
 
+## Novità della 2.2
+
+Le quattro funzioni scelte da Matteo dopo l'analisi della SBU-223 (risposta nella SBU-225).
+
+- **Su quali schermi** (SBU-227, Impostazioni → Schermi, solo con più di uno schermo). Un interruttore per schermo, col
+  nome dello schermo; di base sono tutti accesi. La scelta si salva per UUID del display (`NSScreen.wallpaperKey`, come
+  gli sfondi): uno schermo nuovo parte acceso, uno scollegato e ricollegato ritrova la sua scelta. Su uno schermo spento
+  la finestra degli effetti non c'è (`orderOut`, `SKView` e display link in pausa): niente si posa, CPU zero per quello
+  schermo. Riaccendendolo l'effetto riparte entro un giro di `refreshWindows`.
+  - **L'ultimo acceso non si spegne:** il suo interruttore è grigio (`SnowSettings.canTurnOffEffect`). Per spegnere
+    tutto c'è «Mostra l'effetto» (⌘S). Se tutti gli schermi collegati risultano spenti (l'unico acceso è stato
+    scollegato), l'effetto si vede su tutti finché non torna quello acceso (`showsEffect(onScreen:connected:)`).
+  - **Giochi già posati su uno schermo spento si nascondono** con la sua finestra e restano fermi dove sono: quando lo
+    riaccendi tornano al loro posto. Alberi e pupazzi si salvano come sempre (`KeptToys`). Babbo Natale, Yeti,
+    trenino ed elfi saltano gli schermi spenti (`ScreenRoute`, `effectRuns`). Le decorazioni di **Decora** sono finestre
+    a parte sulla scrivania: restano visibili anche lì.
+
 ## Novità della 2.1
 
 Le funzioni di KoiArt che mancavano, rifatte a modo nostro (SBU-175): tre filoni, riuniti nel ramo SBU-193.
@@ -228,6 +245,7 @@ che serve già per la neve sul Dock.
   gocce sul vetro si dimezzano da soli (`Tuning.energyShare`), e tornano pieni quando passa.
 - **Schermi** (Impostazioni → Schermi, solo con più di uno schermo). Un interruttore per schermo; la scelta si salva
   per schermo (lo stesso UUID con cui la galleria ricorda gli sfondi), quindi resta anche staccando e riattaccando il monitor.
+  Dalla 2.2 l'ultimo schermo acceso non si spegne (vedi «Novità della 2.2»).
 - **Finestre pulite** (Impostazioni → Meteo, spento di base). La neve su finestre e Dock si scioglie piano, 2 pt al secondo
   (`Tuning.cleanMeltRate`), e resta uno strato sottile di 3 pt (`Tuning.cleanLayer`). «Sulle finestre» spento la toglie
   tutta, come prima.
@@ -517,6 +535,7 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Seasons/Clear/Clear.swift` | Il sereno: non cade niente (per chi vuole solo gli oggetti o lo sfondo) |
 | `PowerSource.swift` | Batteria o corrente (per i fotogrammi al secondo) |
 | `Settings.swift` | Le impostazioni e la stagione (salvate in UserDefaults) e la finestra SwiftUI per regolarle |
+| `ScreensSection.swift` | Impostazioni → Schermi: un interruttore per schermo, l'ultimo acceso non si spegne (SBU-227) |
 | `Localizable.xcstrings`, `InfoPlist.xcstrings` | Le stringhe in italiano e inglese; il nome "Sbu Seasons" nel menu dell'app in alto |
 | `Density.swift` | Le scorciatoie Leggera / Media / Forte del menu |
 | `Tuning.swift` | I parametri fissi del motore (fisica, cursore, mucchi, lettura delle finestre) e i momenti del giorno |
