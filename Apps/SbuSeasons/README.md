@@ -98,7 +98,7 @@ con il download da sbu.dev (ADR-0022, `docs/adr/0022-app-mac.md`).
 Build Release universale (arm64 + x86_64), firma Developer ID, `.dmg` con il collegamento ad Applicazioni,
 notarizzazione e `stapler staple`; alla fine `spctl` deve dire `Notarized Developer ID`.
 Usa `SBU_TEAM_ID` e la chiave API di App Store Connect di fastlane (`ASC_KEY_PATH`, `ASC_KEY_ID`, `ASC_ISSUER_ID`).
-Le versioni sono nelle [release della repo](https://github.com/sbudotdev/SbuSeasons/releases); l'ultima è la [2.0.3](https://github.com/sbudotdev/SbuSeasons/releases/tag/v2.0.3).
+Le versioni sono nelle [release della repo](https://github.com/sbudotdev/SbuSeasons/releases); l'ultima è la [2.1.0](https://github.com/sbudotdev/SbuSeasons/releases/tag/v2.1.0).
 
 **2.0.1 (9).** Uguale alla 2.0, con il credito nuovo: "Nata da un'idea di Simone Antoniciello" (SBU-93).
 
