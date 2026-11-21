@@ -95,6 +95,14 @@ final class Sky: SKNode {
         return Mass(node: node, kind: bank, speed: .random(in: bank.speed), alpha: alpha)
     }
 
+    /// Un lampo adesso, col suo tuono (il fulmine sul Dock, SBU-185). Senza lampi nella stagione non fa niente.
+    func strikeNow() {
+        guard let lightning else { return }
+        strike = clock
+        thunder = clock + .random(in: 0.3...0.8)   // vicino: il tuono arriva subito
+        nextStrike = clock + .random(in: lightning.every)
+    }
+
     func step(dt: CGFloat, width: CGFloat, calm: Bool) {
         clock += dt
         let pace = calm ? 0.4 : 1

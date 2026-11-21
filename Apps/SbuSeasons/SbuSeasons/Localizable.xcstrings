@@ -1561,6 +1561,176 @@
           }
         }
       }
+    },
+    "Meteo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weather"
+          }
+        }
+      }
+    },
+    "Meteo a caso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Random Weather"
+          }
+        }
+      }
+    },
+    "Arcobaleno dopo la pioggia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rainbow After the Rain"
+          }
+        }
+      }
+    },
+    "Mucchi più alti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taller Piles"
+          }
+        }
+      }
+    },
+    "120 fps sugli schermi ProMotion": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "120 fps on ProMotion Displays"
+          }
+        }
+      }
+    },
+    "Segui la stagione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follow the Season"
+          }
+        }
+      }
+    },
+    "Vento variabile": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Variable Wind"
+          }
+        }
+      }
+    },
+    "Finestre pulite": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clean Windows"
+          }
+        }
+      }
+    },
+    "Pausa quando giochi a un videogioco": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause While You Play a Video Game"
+          }
+        }
+      }
+    },
+    "Ferma a batteria": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop on Battery"
+          }
+        }
+      }
+    },
+    "Energia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Energy"
+          }
+        }
+      }
+    },
+    "Schermi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Displays"
+          }
+        }
+      }
+    },
+    "Nessun vento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No wind"
+          }
+        }
+      }
+    },
+    "%lld verso sinistra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld to the left"
+          }
+        }
+      }
+    },
+    "%lld verso destra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld to the right"
+          }
+        }
+      }
+    },
+    "Segui la stagione sceglie l'effetto dal calendario: neve d'inverno, fiori in primavera, estate, foglie in autunno. Meteo a caso cambia effetto da solo ogni 10–25 minuti, tra quelli della stagione dell'anno. Vento variabile si alza, si calma e gira ogni pochi minuti. Con Finestre pulite la neve su finestre e Dock si scioglie piano e resta uno strato sottile. I 120 fps valgono solo a corrente e senza Riduci movimento.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follow the Season picks the effect from the calendar: snow in winter, blossoms in spring, summer, leaves in autumn. Random Weather changes the effect on its own every 10–25 minutes, among those of the time of year. Variable Wind picks up, dies down and turns every few minutes. With Clean Windows the snow on windows and the Dock melts slowly, leaving a thin layer. 120 fps only applies on power and without Reduce Motion."
+          }
+        }
+      }
+    },
+    "Con un videogioco davanti si fermano meteo e visitatori: lo riconosce dalla categoria dell'app o da Steam, sul Mac, senza mandare niente. Con Risparmio energetico, o quando il Mac si scalda, l'effetto si dimezza da solo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "While a video game is in front, weather and visitors stop: it is recognised from the app's category or from Steam, on your Mac, without sending anything. In Low Power Mode, or when your Mac gets hot, the effect halves on its own."
+          }
+        }
+      }
     }
   }
 }

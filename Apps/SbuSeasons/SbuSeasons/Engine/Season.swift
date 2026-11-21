@@ -32,6 +32,17 @@ protocol Season {
     var glass: GlassRain? { get }
     /// Il sottofondo in loop (`vento`, `pioggia`), se i suoni sono accesi. nil = silenzio.
     var ambience: String? { get }
+    /// Quanto sono grandi (diametro, pt) i pezzi che il cursore stacca da un mucchio: polvere per la neve,
+    /// foglie e petali interi per autunno e primavera, che volano via invece di cadere come polvere.
+    var pieceSize: ClosedRange<CGFloat> { get }
+    /// Una particella che si posa resta lì, intera, per questi secondi e poi sfuma (i petali). nil = diventa mucchio.
+    var linger: ClosedRange<CGFloat>? { get }
+    /// Le particelle si radunano piano dove il cursore si ferma e si disperdono quando riparte (le lucciole).
+    var gathers: Bool { get }
+    /// Una particella che tocca il bordo scoperto di una finestra si rompe in scintille (le stelle cadenti).
+    var shatters: Bool { get }
+    /// La pioggia schizza sul bordo scoperto di una finestra (SBU-185): le gocce del temporale e quelle sul vetro.
+    var splashes: Bool { get }
 }
 
 extension Season {
@@ -42,6 +53,11 @@ extension Season {
     var lightning: Lightning? { nil }
     var glass: GlassRain? { nil }
     var ambience: String? { nil }
+    var pieceSize: ClosedRange<CGFloat> { 2...4 }
+    var linger: ClosedRange<CGFloat>? { nil }
+    var gathers: Bool { false }
+    var shatters: Bool { false }
+    var splashes: Bool { false }
 }
 
 /// Un tipo di banco che attraversa lo schermo da sinistra a destra: strati di nebbia o nuvole.

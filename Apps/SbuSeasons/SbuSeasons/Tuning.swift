@@ -13,7 +13,11 @@ nonisolated enum Tuning {
 
     /// 60 fotogrammi al secondo, 30 a batteria per consumare meno (decisione di Matteo, MGS-416)
     /// e con "Riduci movimento" di macOS, che chiede meno movimento.
-    static func framesPerSecond(onBattery: Bool, reduceMotion: Bool) -> Int { onBattery || reduceMotion ? 30 : 60 }
+    /// `highRate`: «120 fps sugli schermi ProMotion» (spento di base, SBU-177), solo se lo schermo li fa (`maxFPS`).
+    static func framesPerSecond(onBattery: Bool, reduceMotion: Bool, highRate: Bool = false, maxFPS: Int = 60) -> Int {
+        if onBattery || reduceMotion { return 30 }
+        return highRate && maxFPS >= 120 ? 120 : 60
+    }
 
     // MARK: Riduci movimento
 
@@ -163,4 +167,84 @@ nonisolated enum Tuning {
     static let globeLift: ClosedRange<CGFloat> = 250...650
     /// Dopo una scossa la palla di vetro riposa per qualche secondo: chi continua a scuotere non la rifà subito.
     static let globeRest: CGFloat = 3
+
+    // MARK: Meteo (SBU-177)
+
+    /// Foglie e petali presi dal cursore: quanto in su e di lato volano via dal mucchio (pt/s).
+    static let leafScatterPop: ClosedRange<CGFloat> = 60...220
+    static let leafScatterSpread: CGFloat = 120
+    /// Di un mucchio di foglie si stacca un pezzo ogni tanti granelli di neve.
+    static let leafPieceShare = 3
+    /// Foglie e petali in volo: pesano meno della polvere e l'aria li frena di più (`grainGravity`, `grainAirDrag`).
+    static let leafGravity: CGFloat = 160
+    static let leafAirDrag: CGFloat = 2.5
+    /// Petali posati sulle finestre, al massimo per finestra: oltre se ne va il più vecchio.
+    static let maxRestingPerPile = 60
+    /// L'ultimo tratto della vita di un petalo posato, in cui sfuma (s).
+    static let restingFade: CGFloat = 3
+
+    /// Le lucciole cominciano a radunarsi quando il cursore è fermo da `gatherDelay` s; in `gatherRamp` s arrivano
+    /// alla forza piena `gatherRate` (frazione della distanza al secondo). Stanno in un anello di `gatherRing` pt.
+    /// Un movimento di più di `stillSlop` pt le disperde.
+    static let gatherDelay: CGFloat = 1.5
+    static let gatherRamp: CGFloat = 4
+    static let gatherRate: CGFloat = 0.6
+    static let gatherRing: ClosedRange<CGFloat> = 18...70
+    static let stillSlop: CGFloat = 4
+
+    /// Quanto tira il cursore fermo le lucciole (0 = niente): Riduci movimento a metà.
+    static func gatherPull(still: CGFloat, calm: Bool) -> CGFloat {
+        guard still >= gatherDelay else { return 0 }
+        return gatherRate * min(1, (still - gatherDelay) / gatherRamp) * (calm ? 0.5 : 1)
+    }
+
+    /// Una stella cadente che tocca un bordo si rompe in tante scintille, che vivono `sparkLife` s.
+    /// Con Riduci movimento ne nascono un terzo e non volano: si spengono dove sono.
+    static let sparksPerBurst = 14
+    static let sparkLife: ClosedRange<CGFloat> = 0.5...1.1
+    static let sparkSpeed: ClosedRange<CGFloat> = 60...220
+    static let sparkGravity: CGFloat = 260
+
+    /// L'arcobaleno dopo la pioggia: entra in `rainbowFadeIn` s, resta, sfuma negli ultimi `rainbowFadeOut`.
+    static let rainbowLife: CGFloat = 40
+    static let rainbowFadeIn: CGFloat = 4
+    static let rainbowFadeOut: CGFloat = 8
+    /// Quanto è coprente nel pieno: un velo, non una bandiera.
+    static let rainbowOpacity: CGFloat = 0.35
+
+    /// «Meteo a caso»: l'effetto cambia da solo ogni 10–25 minuti, con una dissolvenza di `weatherFade` s per lato.
+    static let weatherShuffle: ClosedRange<TimeInterval> = 600...1500
+    static let weatherFade: TimeInterval = 1.2
+
+    /// «Mucchi più alti»: l'altezza massima dei mucchi (Impostazioni → Dove si posa) moltiplicata per tanto.
+    static let tallSnowFactor: Double = 2.5
+
+    // MARK: Secondo giro meteo (SBU-185)
+
+    /// Vento fisso: le raffiche scendono al massimo a questa parte della forza scelta, senza cambiare lato.
+    static let windGustDip: CGFloat = 0.6
+    /// «Vento variabile»: gira ogni mezzo periodo (3 minuti), con almeno questa forza anche col cursore a zero (pt/s).
+    static let variableWindPeriod: CGFloat = 360
+    static let variableWindFloor: CGFloat = 30
+
+    /// Con Risparmio energetico, o con il Mac caldo (`thermalState` da `.serious` in su), metà effetto.
+    static func energyShare(lowPower: Bool, thermal: ProcessInfo.ThermalState) -> CGFloat {
+        lowPower || thermal == .serious || thermal == .critical ? 0.5 : 1
+    }
+
+    /// «Finestre pulite»: la neve su finestre e Dock si scioglie di `cleanMeltRate` pt al secondo
+    /// fino a uno strato di `cleanLayer` pt.
+    static let cleanLayer: CGFloat = 3
+    static let cleanMeltRate: CGFloat = 2
+
+    /// Gli schizzi della pioggia sul bordo di una finestra: poche goccioline basse che durano un attimo.
+    /// Solo una goccia del temporale su `1/splashShare` si rompe sul bordo: le altre cadono davanti.
+    static let splashDrops = 5
+    static let splashShare = 0.35
+    static let splashSpeed: ClosedRange<CGFloat> = 40...110
+    static let splashLife: ClosedRange<CGFloat> = 0.2...0.45
+
+    /// Il fulmine sull'icona del Dock di un'app che chiudi mentre piove: quanti tratti e quanto resta (s).
+    static let boltSegments = 10
+    static let boltLife: CGFloat = 0.45
 }

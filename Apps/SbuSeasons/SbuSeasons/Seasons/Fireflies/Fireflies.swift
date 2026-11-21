@@ -11,6 +11,7 @@ struct Fireflies: Season {
     var pileColor: NSColor { FirefliesTuning.core }
     var settles: Bool { false }
     var abundance: Double { FirefliesTuning.abundance }
+    var gathers: Bool { true }
 
     func particle(depth: CGFloat) -> Particle {
         Particle(

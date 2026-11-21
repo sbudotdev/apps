@@ -22,6 +22,9 @@ final class Pile {
     private let capacity: [CGFloat]
     private var dirty = false
     let cornerRadius: CGFloat
+    /// Petali posati interi (`Season.linger`): figli di `node`, in coordinate della scena, con i secondi che restano.
+    private var resting: [(node: SKSpriteNode, life: CGFloat)] = []
+    var restingCount: Int { resting.count }
 
     let node = SKShapeNode()
 
@@ -95,12 +98,14 @@ final class Pile {
                 dirty = true
             }
         }
+        // I petali finiti sotto un'altra finestra volano via anche loro.
+        if !resting.isEmpty { released += dropResting { self.column(at: $0.node.position.x).map { !self.open[$0] } ?? true } }
         return released
     }
 
     /// Tutta la neve diventa fiocchi (finestra spostata o chiusa).
     func releaseAll() -> [CGPoint] {
-        var released: [CGPoint] = []
+        var released = dropResting { _ in true }
         for i in heights.indices where heights[i] > 0 {
             released += flakes(column: i, amount: heights[i])
             heights[i] = 0
@@ -115,9 +120,63 @@ final class Pile {
         guard other.heights.count == heights.count else { return }
         heights = other.heights
         dirty = true
+        let shift = CGVector(dx: minX - other.minX, dy: baseY - other.baseY)
+        for petal in other.resting {
+            // Tutti e due i mucchi sono in coordinate della scena: si sposta il figlio così com'è, più lo spostamento.
+            petal.node.removeFromParent()
+            node.addChild(petal.node)
+            petal.node.position.x += shift.dx
+            petal.node.position.y += shift.dy
+        }
+        resting = other.resting
+        other.resting = []
+    }
+
+    // MARK: - Petali posati
+
+    /// Una particella si posa intera in `x`, sulla superficie, e resta `life` secondi. Oltre il massimo
+    /// (`Tuning.maxRestingPerPile`) se ne va la più vecchia.
+    func rest(_ petal: SKSpriteNode, atX x: CGFloat, life: CGFloat) {
+        guard let top = surface(at: x) else { return }
+        petal.position = CGPoint(x: x, y: top + petal.size.height * 0.15)
+        node.addChild(petal)
+        resting.append((petal, life))
+        if resting.count > Tuning.maxRestingPerPile { resting.removeFirst().node.removeFromParent() }
+    }
+
+    /// Passa il tempo: i petali sfumano nell'ultimo tratto (`Tuning.restingFade`) e poi spariscono.
+    func age(by dt: CGFloat) {
+        guard !resting.isEmpty else { return }
+        for i in resting.indices {
+            resting[i].life -= dt
+            resting[i].node.alpha = min(1, max(0, resting[i].life / Tuning.restingFade))
+        }
+        dropResting { $0.life <= 0 }
+    }
+
+    /// Toglie i petali che rispondono a `where` e restituisce dove stavano (per farli volare via).
+    @discardableResult
+    private func dropResting(where gone: ((node: SKSpriteNode, life: CGFloat)) -> Bool) -> [CGPoint] {
+        var spots: [CGPoint] = []
+        resting.removeAll { petal in
+            guard gone(petal) else { return false }
+            spots.append(petal.node.position)
+            petal.node.removeFromParent()
+            return true
+        }
+        return spots
+    }
+
+    /// «Finestre pulite» (SBU-185): ogni colonna più alta di `floor` scende di `amount`, senza andare sotto `floor`.
+    func melt(downTo floor: CGFloat, by amount: CGFloat) {
+        for i in heights.indices where heights[i] > floor {
+            heights[i] = max(floor, heights[i] - amount)
+            dirty = true
+        }
     }
 
     func clear() {
+        dropResting { _ in true }
         guard !isEmpty else { return }
         heights = heights.map { _ in 0 }
         dirty = true
@@ -130,7 +189,7 @@ final class Pile {
               let first = column(at: max(minX, point.x - radius)),
               let last = column(at: min(minX + CGFloat(heights.count) * Self.step - 0.01, point.x + radius))
         else { return [] }
-        var released: [CGPoint] = []
+        var released = dropResting { abs($0.node.position.x - point.x) <= radius }
         for i in first...last where heights[i] > 0 && point.y < base(i) + heights[i] + 3 {
             released += flakes(column: i, amount: heights[i])
             heights[i] = 0
