@@ -13031,6 +13031,420 @@
           }
         }
       }
+    },
+    "Manda…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Senden …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviar…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "送る…"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviar…"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stuur…"
+          }
+        }
+      }
+    },
+    "Salva…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sichern …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存…"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvar…"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bewaar…"
+          }
+        }
+      }
+    },
+    "Diventa un file da mandare con AirDrop, Messaggi o Mail. Chi lo apre con Sbu Seasons se lo trova sullo schermo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It becomes a file to send with AirDrop, Messages or Mail. Whoever opens it with Sbu Seasons finds it on their screen."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Er wird zu einer Datei, die du per AirDrop, Nachrichten oder Mail senden kannst. Wer sie mit Sbu Seasons öffnet, findet ihn auf dem Bildschirm."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il devient un fichier à envoyer par AirDrop, Messages ou Mail. Qui l’ouvre avec Sbu Seasons le retrouve sur son écran."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se convierte en un archivo para enviar por AirDrop, Mensajes o Mail. Quien lo abra con Sbu Seasons lo verá en su pantalla."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AirDrop、メッセージ、メールで送れるファイルになります。Sbu Seasonsで開いた人の画面に現れます。"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vira um arquivo para enviar por AirDrop, Mensagens ou Mail. Quem abrir com o Sbu Seasons o encontra na tela."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Het wordt een bestand dat je met AirDrop, Berichten of Mail stuurt. Wie het met Sbu Seasons opent, vindt het op het scherm."
+          }
+        }
+      }
+    },
+    "Questo file non si apre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This File Can’t Be Opened"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Datei lässt sich nicht öffnen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce fichier ne peut pas être ouvert"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este archivo no se puede abrir"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このファイルは開けません"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este arquivo não abre"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dit bestand gaat niet open"
+          }
+        }
+      }
+    },
+    "È troppo grande per essere un oggetto di Sbu Seasons.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It’s too big to be a Sbu Seasons item."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sie ist zu groß für ein Objekt von Sbu Seasons."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il est trop gros pour être un objet de Sbu Seasons."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es demasiado grande para ser un objeto de Sbu Seasons."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Seasonsのアイテムにしては大きすぎます。"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "É grande demais para ser um objeto do Sbu Seasons."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Het is te groot voor een voorwerp van Sbu Seasons."
+          }
+        }
+      }
+    },
+    "Non è un oggetto di Sbu Seasons, oppure è rovinato.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It isn’t a Sbu Seasons item, or it’s damaged."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sie ist kein Objekt von Sbu Seasons oder beschädigt."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce n’est pas un objet de Sbu Seasons, ou il est abîmé."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No es un objeto de Sbu Seasons, o está dañado."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Seasonsのアイテムではないか、壊れています。"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não é um objeto do Sbu Seasons, ou está danificado."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Het is geen voorwerp van Sbu Seasons, of het is beschadigd."
+          }
+        }
+      }
+    },
+    "L'ha fatto una versione più nuova di Sbu Seasons. Aggiorna l'app e riprova.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A newer version of Sbu Seasons made it. Update the app and try again."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine neuere Version von Sbu Seasons hat sie erstellt. Aktualisiere die App und versuch es noch einmal."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une version plus récente de Sbu Seasons l’a créé. Mets l’app à jour et réessaie."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lo hizo una versión más nueva de Sbu Seasons. Actualiza la app y vuelve a intentarlo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新しいバージョンのSbu Seasonsで作られています。アプリをアップデートしてもう一度試してください。"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foi feito por uma versão mais nova do Sbu Seasons. Atualize o app e tente de novo."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Een nieuwere versie van Sbu Seasons heeft het gemaakt. Werk de app bij en probeer het opnieuw."
+          }
+        }
+      }
+    },
+    "Pupazzi e alberi arrivano solo con la neve": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snowmen and Trees Only Arrive with Snow"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schneemänner und Bäume kommen nur mit Schnee"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bonshommes et sapins n’arrivent qu’avec la neige"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muñecos y árboles solo llegan con la nieve"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "雪だるまとツリーは雪のときだけ届きます"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bonecos e árvores só chegam com a neve"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sneeuwpoppen en bomen komen alleen met sneeuw"
+          }
+        }
+      }
+    },
+    "Scegli Neve dal menu di Sbu Seasons → Effetto e apri di nuovo il file.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick Snow from the Sbu Seasons menu → Effect and open the file again."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle Schnee im Menü von Sbu Seasons → Effekt und öffne die Datei noch einmal."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis Neige dans le menu de Sbu Seasons → Effet et rouvre le fichier."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige Nieve en el menú de Sbu Seasons → Efecto y vuelve a abrir el archivo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Seasonsのメニュー → エフェクトで「雪」を選んで、もう一度ファイルを開いてください。"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha Neve no menu do Sbu Seasons → Efeito e abra o arquivo de novo."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies Sneeuw in het menu van Sbu Seasons → Effect en open het bestand opnieuw."
+          }
+        }
+      }
     }
   }
 }

@@ -50,6 +50,22 @@ final class Desk {
         onChange?()
     }
 
+    /// Una decorazione ricevuta in un file (SBU-200): nuova, in mezzo allo schermo principale, e compare piano.
+    func receive(_ item: DeskItem) {
+        guard let main = screens.first else { return }
+        let arrived = item.arriving(on: main.key, size: main.frame.size)
+        items = DeskItem.adding(arrived, to: items)
+        rebuildPanels()
+        if let panel = panels[arrived.id] {
+            panel.alphaValue = 0
+            NSAnimationContext.runAnimationGroup { context in
+                context.duration = Tuning.receivedFadeIn
+                panel.animator().alphaValue = 1
+            }
+        }
+        onChange?()
+    }
+
     func remove(_ id: UUID) {
         items.removeAll { $0.id == id }
         rebuildPanels()

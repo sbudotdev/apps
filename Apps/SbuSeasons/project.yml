@@ -24,6 +24,23 @@ targets:
       # Fonts and licences straight from Design/fonts, the same files SbuKit and the site ship.
       - path: ../../Design/fonts
         buildPhase: resources
+    # Il file .sbuseasons (SBU-200): un pupazzo, un albero o una decorazione da mandare. Il tipo è nostro (esportato);
+    # aprendo il file, l'oggetto arriva sullo schermo (`AppDelegate.application(_:open:)`). Le chiavi generate restano.
+    info:
+      path: Info.plist
+      properties:
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: dev.sbu.seasons.toy
+            UTTypeDescription: Oggetto di Sbu Seasons
+            UTTypeConformsTo: [public.data, public.content]
+            UTTypeTagSpecification:
+              public.filename-extension: [sbuseasons]
+              public.mime-type: [application/x-sbuseasons]
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: Oggetto di Sbu Seasons
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Owner
+            LSItemContentTypes: [dev.sbu.seasons.toy]
     dependencies:
       # Il salvaschermo viaggia dentro l'app, in Contents/Resources: "Installa il salvaschermo" lo copia (SBU-179).
       - target: SbuSeasonsSaver

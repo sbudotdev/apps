@@ -10,6 +10,8 @@ final class Train {
     let heading: CGFloat
     /// Dove lascia il regalo (x della scena). nil = già lasciato, o non lo porta.
     var dropX: CGFloat?
+    /// Un oggetto ricevuto in un file (SBU-200): lo lascia in `dropX` al posto del regalo.
+    var cargo: Toy?
 
     init(heading: CGFloat) {
         self.heading = heading

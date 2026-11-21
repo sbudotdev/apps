@@ -144,6 +144,22 @@ nonisolated struct DeskItem: Codable, Equatable, Sendable, Identifiable {
         return item
     }
 
+    /// Una decorazione ricevuta in un file (SBU-200): nuova, in mezzo allo schermo `screen` grande `size`.
+    /// Le luci più lunghe dello schermo si accorciano, con la stessa pendenza.
+    func arriving(on screen: String, size: CGSize) -> DeskItem {
+        var item = self
+        item.id = UUID()
+        if kind == .lights {
+            let room = CGSize(width: size.width * 0.9, height: size.height * 0.9)
+            let dx = end.x - start.x, dy = end.y - start.y
+            let shrink = min(1, room.width / max(abs(dx), 1), room.height / max(abs(dy), 1))
+            item.start = CGPoint(x: center.x - dx * shrink / 2, y: center.y - dy * shrink / 2)
+            item.end = CGPoint(x: center.x + dx * shrink / 2, y: center.y + dy * shrink / 2)
+        }
+        item.move(by: CGVector(dx: size.width / 2 - center.x, dy: size.height / 2 - center.y))
+        return item.placed(on: screen, size: size)
+    }
+
     /// Dopo un trascinamento: se il centro di `id` è finito su un altro schermo, la decorazione passa a quello,
     /// con le coordinate del nuovo schermo e il suo limite (QA SBU-188). `screens` in coordinate globali.
     static func settling(_ id: UUID, in items: [DeskItem], screens: [(key: String, frame: CGRect)]) -> [DeskItem] {
