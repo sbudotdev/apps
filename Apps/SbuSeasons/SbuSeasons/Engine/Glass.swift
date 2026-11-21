@@ -12,6 +12,17 @@ nonisolated struct Drop: Equatable {
     var falling = false
 }
 
+/// Un tratto di vetro asciugato dal cursore (SBU-228): la pioggia non ci si posa, poi torna a coprirlo in `life` secondi.
+nonisolated struct Wiped: Equatable {
+    var center: CGPoint
+    var radius: CGFloat
+    /// Quando è stato asciugato l'ultima volta (orologio di `GlassDrops`).
+    var born: CGFloat
+    var life: CGFloat
+    /// Gocce già tornate.
+    var filled = 0
+}
+
 /// La pioggia sul vetro, senza disegno (lo fa `Glass`): le gocce si posano a caso; una goccia che ne tocca
 /// un'altra la assorbe; quando è abbastanza pesante scorre giù, raccoglie quelle che incontra e lascia dietro
 /// goccioline; arrivata sul bordo di una finestra o sul Dock cade, e sparisce sotto lo schermo.
@@ -22,8 +33,13 @@ nonisolated struct GlassDrops {
     private(set) var removed: [Int] = []
     /// Dove una goccia è arrivata su un bordo nell'ultimo passo: lì schizza (SBU-185).
     private(set) var splashes: [CGPoint] = []
+    /// Le gocce asciugate dal cursore nell'ultimo passo: chi le disegna le fa sparire.
+    private(set) var wiped: [Int] = []
+    /// La scia del cursore che si sta richiudendo.
+    private(set) var trail: [Wiped] = []
     private var nextID = 0
     private var due: CGFloat = 0
+    private var clock: CGFloat = 0
 
     init(rain: GlassRain) { self.rain = rain }
 
@@ -46,11 +62,16 @@ nonisolated struct GlassDrops {
         }
     }
 
-    /// Un passo. `amount`: intensità rispetto a "Media"; `ledges`: i bordi da cui una goccia cade; `calm`: Riduci movimento.
-    mutating func step(dt: CGFloat, size: CGSize, ledges: [Ledge], amount: CGFloat, calm: Bool) {
+    /// Un passo. `amount`: intensità rispetto a "Media"; `ledges`: i bordi da cui una goccia cade; `calm`: Riduci movimento;
+    /// `wipe`: dove passa il cursore, col suo raggio.
+    mutating func step(dt: CGFloat, size: CGSize, ledges: [Ledge], amount: CGFloat, calm: Bool,
+                       wipe: (point: CGPoint, radius: CGFloat)? = nil) {
         removed = []
         splashes = []
+        wiped = []
+        clock += dt
         guard size.width > 0, size.height > 0 else { return }
+        if let wipe { self.wipe(at: wipe.point, radius: wipe.radius) }
         let area = size.width * size.height / Tuning.referenceScreenArea
         // Nuove gocce.
         due += rain.beads * amount * area * (calm ? 0.5 : 1) * dt
@@ -62,9 +83,15 @@ nonisolated struct GlassDrops {
                 // Vetro pieno: la pioggia cade sulle gocce che ci sono, che crescono e prima o poi scorrono.
                 absorb(radius, into: i)
             } else {
-                bead(at: CGPoint(x: .random(in: 0...size.width), y: .random(in: 0...size.height)), radius: radius)
+                let point = CGPoint(x: .random(in: 0...size.width), y: .random(in: 0...size.height))
+                // Sulla scia del cursore no: lì la pioggia torna da sola, a suo tempo.
+                if !trail.contains(where: { hypot($0.center.x - point.x, $0.center.y - point.y) < $0.radius }) {
+                    bead(at: point, radius: radius)
+                }
             }
         }
+        // Fitta come il vetro intorno.
+        refill(density: CGFloat(drops.count) / (size.width * size.height), calm: calm)
 
         // Le gocce si muovono.
         var trail: [(CGPoint, CGFloat)] = []
@@ -120,6 +147,43 @@ nonisolated struct GlassDrops {
         }
     }
 
+    /// Il cursore passa: le gocce ferme o che scorrono nel raggio spariscono (quelle che cadono vanno per la loro strada).
+    private mutating func wipe(at point: CGPoint, radius: CGFloat) {
+        drops.removeAll { drop in
+            guard !drop.falling, hypot(drop.position.x - point.x, drop.position.y - point.y) < radius else { return false }
+            wiped.append(drop.id)
+            return true
+        }
+        // Ripassando su un tratto ancora fresco, si riasciuga; uno nuovo ogni mezzo raggio di strada.
+        var near = false
+        for i in trail.indices where hypot(trail[i].center.x - point.x, trail[i].center.y - point.y) < radius {
+            trail[i].born = clock
+            trail[i].filled = 0
+            if hypot(trail[i].center.x - point.x, trail[i].center.y - point.y) < radius / 2 { near = true }
+        }
+        if !near {
+            trail.append(Wiped(center: point, radius: radius, born: clock, life: .random(in: RainTuning.wipeClose)))
+        }
+    }
+
+    /// La pioggia ricopre la scia: a poco a poco fino a `life`; con Riduci movimento tutta insieme, alla fine.
+    private mutating func refill(density: CGFloat, calm: Bool) {
+        guard !trail.isEmpty else { return }
+        for i in trail.indices {
+            let spot = trail[i]
+            let age = clock - spot.born
+            let share = calm ? (age >= spot.life ? 1 : 0) : min(1, age / spot.life)
+            let target = Int(density * .pi * spot.radius * spot.radius * share)
+            for _ in spot.filled..<max(spot.filled, target) {
+                let angle = CGFloat.random(in: 0..<2 * .pi), r = spot.radius * sqrt(.random(in: 0...1))
+                bead(at: CGPoint(x: spot.center.x + cos(angle) * r, y: spot.center.y + sin(angle) * r),
+                     radius: .random(in: rain.size))
+            }
+            trail[i].filled = max(spot.filled, target)
+        }
+        trail.removeAll { clock - $0.born >= $0.life }
+    }
+
     private func touch(_ drop: Drop, _ point: CGPoint, _ radius: CGFloat) -> Bool {
         hypot(drop.position.x - point.x, drop.position.y - point.y) < drop.radius + radius
     }
@@ -147,12 +211,17 @@ final class Glass: SKNode {
     /// Dove le gocce sono arrivate su un bordo nell'ultimo passo.
     var splashes: [CGPoint] { model?.splashes ?? [] }
 
-    func step(dt: CGFloat, size: CGSize, ledges: [Ledge], amount: CGFloat, calm: Bool) {
+    func step(dt: CGFloat, size: CGSize, ledges: [Ledge], amount: CGFloat, calm: Bool,
+              wipe: (point: CGPoint, radius: CGFloat)? = nil) {
         guard var model, let texture else { return }
-        model.step(dt: dt, size: size, ledges: ledges, amount: amount, calm: calm)
+        model.step(dt: dt, size: size, ledges: ledges, amount: amount, calm: calm, wipe: wipe)
         self.model = model
         for id in model.removed {
             nodes.removeValue(forKey: id)?.removeFromParent()
+        }
+        for id in model.wiped {
+            guard let node = nodes.removeValue(forKey: id) else { continue }
+            if calm { node.removeFromParent() } else { node.run(.sequence([.fadeOut(withDuration: RainTuning.wipeFade), .removeFromParent()])) }
         }
         for drop in model.drops {
             let node = nodes[drop.id] ?? {

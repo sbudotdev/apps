@@ -30,4 +30,8 @@ nonisolated enum RainTuning {
     static let glass = GlassRain(beads: 30, size: 2...5, slide: 7, most: 400, color: water)
     /// Ogni tanto un lampo lontano anche nella pioggia: più di rado e più debole del temporale (SBU-177).
     static let lightning = Lightning(every: 40...120, strength: 0.7)
+    /// Il vetro asciugato dal cursore torna coperto in 3–6 s, a caso per ogni tratto (SBU-228).
+    static let wipeClose: ClosedRange<CGFloat> = 3...6
+    /// Una goccia asciugata svanisce in 0,15 s (con Riduci movimento sparisce subito).
+    static let wipeFade: TimeInterval = 0.15
 }

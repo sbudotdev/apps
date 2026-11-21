@@ -82,6 +82,8 @@ final class SeasonScene: SKScene {
     let sky = Sky()
     /// Le gocce sul vetro della stagione.
     let glass = Glass()
+    /// Finestre e Dock in coordinate della scena: con "Dietro le finestre" coprono il vetro.
+    private var covers: [CGRect] = []
     /// La notte: schermo più scuro e la candela (Impostazioni → Notte). Si ricontrolla una volta al secondo.
     let night = Night()
     /// Le scintille delle stelle cadenti che si rompono sui bordi e l'arcobaleno dopo la pioggia (SBU-177).
@@ -644,10 +646,17 @@ final class SeasonScene: SKScene {
 
     // MARK: - Finestre
 
+    /// Il cursore asciuga il vetro in quel punto? Con "Dietro le finestre" no sopra una finestra o il Dock:
+    /// lì il vetro bagnato non si vede.
+    static func wipesGlass(at point: CGPoint, behindWindows: Bool, covers: [CGRect]) -> Bool {
+        !behindWindows || !covers.contains { $0.contains(point) }
+    }
+
     /// Riceve finestre e Dock attuali (coordinate globali) e aggiorna i mucchi di neve.
     /// `ceiling`: dove finisce la zona libera dello schermo, sotto la barra dei menu (coordinate della scena).
     func updateWindows(_ edges: [WindowEdge], dock dockFrame: CGRect?, ceiling: CGFloat) {
         self.ceiling = ceiling
+        covers = (edges.map(\.rect) + [dockFrame].compactMap { $0 }).map { $0.offsetBy(dx: -screenOrigin.x, dy: -screenOrigin.y) }
         updateDock(dockFrame)
         let maxPile = CGFloat(Settings.shared.values.pileHeight)
         var seen = Set<CGWindowID>()
@@ -897,7 +906,11 @@ final class SeasonScene: SKScene {
 
         // --- Nebbia, nuvole, lampi e gocce sul vetro ---
         sky.step(dt: dt, width: size.width, calm: reduceMotion)
-        glass.step(dt: dt, size: size, ledges: ledges, amount: intensity * energyShare, calm: reduceMotion)
+        // Il cursore che passa asciuga il vetro (SBU-228); "Dietro le finestre" solo dove si vede la scrivania.
+        let wipe = glass.model != nil && onScreen && mouseVelocity != .zero
+            && Self.wipesGlass(at: mouse, behindWindows: settings.behindWindows, covers: covers)
+        glass.step(dt: dt, size: size, ledges: ledges, amount: intensity * energyShare, calm: reduceMotion,
+                   wipe: wipe ? (mouse, cursorRadius) : nil)
         for point in glass.splashes { sparks.splash(at: point, color: season.pileColor, calm: reduceMotion) }
         if !bolts.isEmpty {
             bolts.removeAll { bolt in
