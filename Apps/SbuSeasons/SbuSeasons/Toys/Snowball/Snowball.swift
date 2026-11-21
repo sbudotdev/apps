@@ -16,6 +16,7 @@ final class Snowball: Toy {
         node.addChild(ball)
         bounce = 0.3
         friction = Tuning.snowballFriction
+        breaks = true
     }
 
     /// Quanto ha girato, in radianti.

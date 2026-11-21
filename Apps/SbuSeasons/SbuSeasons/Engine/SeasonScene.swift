@@ -73,6 +73,8 @@ final class SeasonScene: SKScene {
     private var gathered = 0
     /// Quando è stata scossa l'ultima volta la palla di vetro (tempo della scena).
     private var lastGlobe = -CGFloat.infinity
+    /// Quando due pupazzi vicini si tirano la prossima palla (tempo della scena, `LivelySnowmen`).
+    var nextFight: CGFloat?
 
     /// Nebbia, nuvole e lampi della stagione.
     let sky = Sky()
@@ -350,7 +352,10 @@ final class SeasonScene: SKScene {
         let grip = CGVector(dx: point.x - feet.x, dy: point.y - feet.y)
         let part = toy.pressPart(at: CGPoint(x: grip.dx, y: grip.dy))
         held = (toy, grip, point, point, time, .zero, part)
-        if !part && toy.isDraggable { toy.body.hold(at: feet) }
+        if !part && toy.isDraggable {
+            toy.body.hold(at: feet)
+            toy.thrownHard = false
+        }
         // Davanti agli altri oggetti.
         toys.removeAll { $0 === toy }
         toys.append(toy)
@@ -396,6 +401,8 @@ final class SeasonScene: SKScene {
             return
         }
         held.toy.body.release(velocity: isClick || stale || reduceMotion ? .zero : held.velocity)
+        let thrown = held.toy.body.velocity
+        held.toy.thrownHard = held.toy.breaks && hypot(thrown.dx, thrown.dy) >= Tuning.shatterThrow
         if held.toy is Snowball, held.toy.body.velocity != .zero { SoundBoard.shared.play("palla-di-neve-lancio") }
         if isClick {
             let feet = held.toy.body.position
@@ -457,7 +464,31 @@ final class SeasonScene: SKScene {
     /// Finestre scosse (le riconosce `AppDelegate`, una volta per tutti gli schermi).
     func windowsShaken(_ ids: Set<CGWindowID>) {
         if !ids.isEmpty { shakeGlobe() }
-        for id in ids { toys.forEach { $0.shaken(.window(id)) } }
+        for id in ids {
+            toys.forEach { $0.shaken(.window(id)) }
+            // Palle e pupazzi sopra la finestra scossa saltano (SBU-187); con Riduci movimento no.
+            guard !reduceMotion, !toysPaused, let entry = piles[id] else { continue }
+            for toy in riders(of: entry.pile.baseY, span: entry.rect.minX...entry.rect.maxX) where toy.breaks {
+                toy.body.velocity = CGVector(dx: .random(in: -Tuning.shakeHopSide...Tuning.shakeHopSide), dy: Tuning.shakeHop)
+            }
+        }
+    }
+
+    /// Gli oggetti fermi in piedi sul bordo all'altezza `y`, dentro `span` (quelli in mano no).
+    private func riders(of y: CGFloat, span: ClosedRange<CGFloat>) -> [Toy] {
+        toys.filter { $0.body.isResting && !$0.body.isHeld && abs($0.body.position.y - y) < 0.5 && span.contains($0.body.position.x) }
+    }
+
+    /// Una palla o un pupazzo lanciati forte si rompono: spariscono in neve che cade e si posa (SBU-187).
+    func shatter(_ toy: Toy) {
+        let frame = toy.frame
+        let count = Tuning.shatterGrains * (toy is Snowman ? 3 : 1)
+        let points = (0..<count).map { _ in
+            CGPoint(x: .random(in: frame.minX...frame.maxX), y: .random(in: frame.minY...frame.maxY))
+        }
+        remove(toy)
+        spawnPowder(points, spread: 70, pop: 40...220)
+        SoundBoard.shared.play("palla-di-neve-colpo")
     }
 
     // MARK: - Palle di neve e pupazzo
@@ -578,7 +609,12 @@ final class SeasonScene: SKScene {
                     let shift = CGVector(dx: r.minX - old.rect.minX, dy: r.minY - old.rect.minY)
                     if old.rect.size == r.size, old.pile.cornerRadius == edge.cornerRadius,
                        hypot(shift.dx, shift.dy) <= Tuning.slideOffDistance {
-                        // Spostata piano: la neve resta sopra e la segue.
+                        // Spostata piano: la neve resta sopra e la segue, e con lei chi ci sta in piedi (SBU-187).
+                        for toy in riders(of: old.pile.baseY, span: old.rect.minX...old.rect.maxX) {
+                            toy.body.position.x += shift.dx
+                            toy.body.position.y = base
+                            toy.node.position = toy.body.position
+                        }
                         pile.carry(old.pile)
                         old.pile.node.removeFromParent()
                     } else {
@@ -768,14 +804,25 @@ final class SeasonScene: SKScene {
             let toyLedges = ledges + [Ledge(y: 0, span: 0...size.width)]
             // I visitatori entrano e escono di lato: per loro il fondo continua fuori dallo schermo.
             let wideLedges = ledges + [Ledge(y: 0, span: -size.width...size.width * 2)]
+            var broken: [Toy] = []
             for toy in toys {
                 // Sulle finestre attaccate alla barra dei menu un oggetto alto la coprirebbe: lì non si ferma.
                 let room = (ceiling ?? size.height) - toy.node.size.height
                 let all = toy.staysOnScreen ? toyLedges : wideLedges
                 let fit = all.contains { $0.y > room } ? all.filter { $0.y <= room } : all
                 let falling = toy.body.velocity.dy
+                let before = toy.body.velocity
                 toy.body.step(dt: dt, ledges: fit, width: toy.staysOnScreen ? size.width : nil,
                               bounce: reduceMotion ? 0 : toy.bounce, friction: toy.friction)
+                if toy.thrownHard {
+                    // Lanciata forte: al primo urto (un bordo sotto, o il lato dello schermo) si rompe.
+                    let landed = before.dy < 0 && toy.body.velocity.dy >= 0
+                    let wall = before.dx != 0 && toy.body.velocity.dx * before.dx <= 0
+                    if landed || wall {
+                        broken.append(toy)
+                        continue
+                    }
+                }
                 // Una palla che arriva forte su un bordo fa "puf"; quelle che rotolano o rimbalzano piano no.
                 if toy is Snowball, falling < -Tuning.toyMinBounce * 2, toy.body.velocity.dy >= 0 {
                     SoundBoard.shared.play("palla-di-neve-colpo")
@@ -783,6 +830,8 @@ final class SeasonScene: SKScene {
                 toy.node.position = toy.body.position
                 toy.step(dt: dt)
             }
+            broken.forEach(shatter)
+            stepLivelySnowmen()
             buildSnowman()
             stepWinterPlay()
             stepFigures(mouse: mouse)

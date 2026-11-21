@@ -17,6 +17,7 @@ final class Snowman: Toy {
         let node = SKSpriteNode(texture: Self.texture(look))
         node.size = look.size
         super.init(node: node, at: position)
+        breaks = true
     }
 
     override func clicked() {

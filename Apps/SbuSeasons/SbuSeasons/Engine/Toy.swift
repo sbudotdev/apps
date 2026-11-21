@@ -15,6 +15,10 @@ class Toy {
     var isDraggable = true
     /// false: può uscire di lato dallo schermo, e fuori dai bordi cammina sul prolungamento del fondo (i visitatori).
     var staysOnScreen = true
+    /// true: lanciato forte (`Tuning.shatterThrow`) si rompe in neve al primo urto (le palle e i pupazzi, SBU-187).
+    var breaks = false
+    /// Lanciato forte e non ancora fermo: al primo urto si rompe (se `breaks`).
+    var thrownHard = false
 
     init(node: SKSpriteNode, at position: CGPoint) {
         self.node = node

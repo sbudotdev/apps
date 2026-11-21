@@ -13,6 +13,10 @@ final class Yeti: Toy {
     private(set) var fleeing = false
     /// Gli hanno tolto il pupazzo di mano (trascinandolo via): se ne va a mani vuote.
     var gaveUp = false
+    /// Colpito da una palla di neve: cade e sparisce (`isGone` dopo `Tuning.yetiFall` s).
+    private(set) var knockedDown = false
+    private var fallClock: CGFloat = 0
+    var isGone: Bool { knockedDown && fallClock >= Tuning.yetiFall }
     private var gait: CGFloat = 0
 
     init(at position: CGPoint, heading: CGFloat) {
@@ -35,10 +39,28 @@ final class Yeti: Toy {
         SoundBoard.shared.play("yeti")
     }
 
+    /// Una palla di neve lo colpisce: molla il pupazzo, cade all'indietro e sparisce.
+    func knockDown() {
+        guard !knockedDown else { return }
+        knockedDown = true
+        fleeing = true
+        carried?.body.release(velocity: .zero)
+        carried = nil
+        body.velocity.dx = 0
+        SoundBoard.shared.play("yeti")
+    }
+
     override func step(dt: CGFloat) {
+        let calm = (node.scene as? SeasonScene)?.reduceMotion ?? true
+        if knockedDown {
+            // Cade all'indietro in un attimo (con Riduci movimento no), poi svanisce.
+            fallClock += dt
+            node.zRotation = calm ? 0 : heading * min(1, fallClock / (Tuning.yetiFall * 0.25)) * .pi / 2
+            node.alpha = 1 - min(1, max(0, (fallClock - Tuning.yetiFall * 0.5) / (Tuning.yetiFall * 0.5)))
+            return
+        }
         node.xScale = heading
         node.texture = carried == nil ? Self.walking : Self.carrying
-        let calm = (node.scene as? SeasonScene)?.reduceMotion ?? true
         guard !calm, body.isResting, abs(body.velocity.dx) > 1 else { node.zRotation = 0; return }
         gait += dt * abs(body.velocity.dx) / 8
         node.zRotation = sin(gait) * 0.06

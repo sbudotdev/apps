@@ -204,4 +204,22 @@ nonisolated enum Tuning {
     static let elfGiftThrow = CGVector(dx: 60, dy: 240)
     /// L'altezza (pt dai piedi, albero a grandezza 1) dove l'elfo appende la sua decorazione.
     static let elfDecorationHeight: ClosedRange<CGFloat> = 16...60
+
+    // MARK: Pupazzi vivi (SBU-187)
+
+    /// Una palla o un pupazzo lanciati più forte di così (pt/s) si rompono in neve al primo urto.
+    /// Cadere da soli non li rompe: solo il lancio.
+    static let shatterThrow: CGFloat = 1000
+    /// Quanti granelli di neve lascia una palla rotta (un pupazzo ne lascia tre volte tanti).
+    static let shatterGrains = 40
+    /// Una finestra scossa fa saltare i pupazzi e le palle che ci stanno sopra (pt/s in su, e un po' di lato).
+    static let shakeHop: CGFloat = 380
+    static let shakeHopSide: CGFloat = 30
+    /// Due pupazzi sullo stesso bordo, a questa distanza (pt), ogni tanto si tirano una palla (Impostazioni → Visitatori).
+    static let fightReach: ClosedRange<CGFloat> = 40...260
+    static let fightInterval: ClosedRange<CGFloat> = 25...70
+    /// Quanto vola la palla tra i due (s).
+    static let fightFlight: CGFloat = 0.8
+    /// Lo Yeti colpito da una palla cade e sparisce in tanti secondi.
+    static let yetiFall: CGFloat = 1.2
 }

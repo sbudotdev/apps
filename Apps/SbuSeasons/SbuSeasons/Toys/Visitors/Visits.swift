@@ -38,6 +38,13 @@ extension SeasonScene {
     /// Un passo dello Yeti: va dal pupazzo più vicino, lo prende, se ne va; esce di lato.
     private func stepYeti() {
         guard let yeti else { return }
+        if yeti.knockedDown {
+            yeti.body.velocity.dx = 0
+            guard yeti.isGone else { return }
+            remove(yeti)
+            onVisitorLeft?(.yeti, VisitorExit(heading: yeti.heading, fled: true))
+            return
+        }
         if let carried = yeti.carried {
             if heldToy === carried || !toys.contains(where: { $0 === carried }) {
                 // Glielo hai tolto di mano: se ne va a mani vuote.

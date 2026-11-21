@@ -28,6 +28,8 @@ nonisolated struct SnowSettings: Codable, Equatable {
     var nightStart = 22         // ora
     // Dietro le finestre: gli effetti sulla scrivania, sotto le finestre delle app
     var behindWindows = false
+    // Due pupazzi vicini ogni tanto si tirano una palla di neve (SBU-187)
+    var snowballFights = true
 }
 
 extension SnowSettings {
