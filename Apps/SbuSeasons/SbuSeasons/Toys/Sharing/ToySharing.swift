@@ -38,11 +38,21 @@ final class ToySharing: NSObject, NSSharingServicePickerDelegate {
         NSApp.activate()
         guard panel.runModal() == .OK, let target = panel.url else { return }
         do {
-            // La sostituzione l'ha già confermata il pannello.
-            if FileManager.default.fileExists(atPath: target.path) { try FileManager.default.removeItem(at: target) }
-            try FileManager.default.copyItem(at: url, to: target)
+            try Self.place(url, at: target)
         } catch {
             NSAlert(error: error).runModal()
         }
+    }
+
+    /// Mette una copia di `url` in `target`. Se `target` c'è già (la sostituzione l'ha confermata il pannello)
+    /// lo scambia in un colpo solo: se qualcosa va storto, il file di prima resta.
+    static func place(_ url: URL, at target: URL) throws {
+        let copy = url.deletingLastPathComponent().appending(path: UUID().uuidString)
+        try FileManager.default.copyItem(at: url, to: copy)
+        guard FileManager.default.fileExists(atPath: target.path) else {
+            try FileManager.default.moveItem(at: copy, to: target)
+            return
+        }
+        _ = try FileManager.default.replaceItemAt(target, withItemAt: copy)
     }
 }
