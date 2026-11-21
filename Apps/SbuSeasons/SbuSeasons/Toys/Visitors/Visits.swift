@@ -132,9 +132,12 @@ extension SeasonScene {
         train.node.position = p
         if let x = train.dropX, train.heading > 0 ? p.x >= x : p.x <= x {
             train.dropX = nil
-            let gift = Gift(at: CGPoint(x: x, y: Tuning.elfGiftHeight), fromElf: true)
+            let gift = train.cargo ?? Gift(at: .zero, fromElf: true)
+            gift.body.position = CGPoint(x: x, y: Tuning.elfGiftHeight)
+            gift.node.position = gift.body.position
             gift.body.velocity = CGVector(dx: -train.heading * Tuning.elfGiftThrow.dx, dy: Tuning.elfGiftThrow.dy)   // l'elfo lo lancia giù dal vagone
             add(gift)
+            if train.cargo != nil { arrived(gift) }
             SoundBoard.shared.play("regalo")
         }
         let half = train.node.size.width
@@ -143,6 +146,33 @@ extension SeasonScene {
             self.train = nil
             onVisitorLeft?(.train, VisitorExit(heading: train.heading))
         }
+    }
+
+    // MARK: - Oggetto ricevuto (SBU-200)
+
+    /// Un pupazzo o un albero ricevuto in un file: lo porta il trenino, che lo lascia in mezzo allo schermo.
+    /// Con Riduci movimento, i giochi in pausa o il trenino già in giro arriva subito, con le stelline.
+    /// La regola dell'inverno: pupazzi e alberi sono neve, e fuori dall'inverno non arrivano (false).
+    @discardableResult
+    func receive(_ toy: Toy) -> Bool {
+        guard season is Snow else { return false }
+        if !reduceMotion, let train = sendTrain(heading: 1, carriesGift: false) {
+            train.dropX = size.width / 2
+            train.cargo = toy
+            return true
+        }
+        toy.body.position = CGPoint(x: size.width / 2, y: 0)
+        toy.node.position = toy.body.position
+        add(toy)
+        arrived(toy)
+        return true
+    }
+
+    /// Appena arrivato: le stelline, e il limite degli alberi.
+    private func arrived(_ toy: Toy) {
+        sparkle(at: CGPoint(x: toy.body.position.x, y: toy.body.position.y + toy.node.size.height / 2))
+        let trees = toys.compactMap { $0 as? ChristmasTree }
+        trees.prefix(max(0, trees.count - Tuning.maxTrees)).forEach(remove)
     }
 
     // MARK: - Regalo dell'elfo
@@ -205,7 +235,10 @@ extension SeasonScene {
             remove(yeti)
         }
         train?.node.removeFromParent()
+        // L'oggetto ricevuto che il trenino non ha ancora lasciato arriva lo stesso.
+        let cargo = train?.dropX == nil ? nil : train?.cargo
         train = nil
+        if let cargo { _ = receive(cargo) }
         if let elf { remove(elf) }
     }
 }
