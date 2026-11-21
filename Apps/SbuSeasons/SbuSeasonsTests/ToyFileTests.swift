@@ -90,6 +90,13 @@ struct ToyFileTests {
         #expect(throws: ToyFile.ReadError.unreadable) { try decode(json) }
     }
 
+    @Test func deeplyNestedJSONDoesNotOpen() {
+        let depth = Tuning.toyFileMaxBytes / 2 - 64
+        let json = #"{"format":"sbuseasons","version":1,"snowman":{"balls":"# + String(repeating: "[", count: depth)
+            + String(repeating: "]", count: depth) + "}}"
+        #expect(throws: ToyFile.ReadError.unreadable) { try decode(json) }
+    }
+
     @Test func aFileFromANewerVersionSaysSo() {
         #expect(throws: ToyFile.ReadError.newerVersion) {
             try decode(#"{"format":"sbuseasons","version":99,"snowman":{}}"#)
