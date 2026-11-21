@@ -1562,6 +1562,266 @@
         }
       }
     },
+    "Alba": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dawn"
+          }
+        }
+      }
+    },
+    "Aurora": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak"
+          }
+        }
+      }
+    },
+    "Chiudi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "Chiudi le novità": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close What's New"
+          }
+        }
+      }
+    },
+    "Crepuscolo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dusk"
+          }
+        }
+      }
+    },
+    "Fine": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "Gli sfondi cambiano con l'ora: alba, mattina, tramonto, notte e gli altri momenti.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wallpapers change with the time: dawn, morning, sunset, night and the moments in between."
+          }
+        }
+      }
+    },
+    "Il salvaschermo con gli sfondi del borgo: lo installi dalle Impostazioni.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A screen saver with the village wallpapers: install it from Settings."
+          }
+        }
+      }
+    },
+    "Il salvaschermo non è installato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Screen Saver Wasn't Installed"
+          }
+        }
+      }
+    },
+    "Installa…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Install…"
+          }
+        }
+      }
+    },
+    "L'effetto consigliato sopra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggested Effect on Top"
+          }
+        }
+      }
+    },
+    "Lo sfondo può seguire l'effetto, su tutti gli schermi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The wallpaper can follow the effect, on every screen."
+          }
+        }
+      }
+    },
+    "Lo sfondo segue l'effetto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wallpaper Follows the Effect"
+          }
+        }
+      }
+    },
+    "Lo sfondo segue l'ora del Mac: alba, giorno, tramonto, notte.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The wallpaper follows the Mac's clock: dawn, day, sunset, night."
+          }
+        }
+      }
+    },
+    "Mattina": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Morning"
+          }
+        }
+      }
+    },
+    "Mezzogiorno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Midday"
+          }
+        }
+      }
+    },
+    "Novità della %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What's New in %@"
+          }
+        }
+      }
+    },
+    "Ora d'oro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Golden Hour"
+          }
+        }
+      }
+    },
+    "Ora del giorno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time of Day"
+          }
+        }
+      }
+    },
+    "Salvaschermo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Screen Saver"
+          }
+        }
+      }
+    },
+    "Segue l'ora del Mac": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follows the Mac's Clock"
+          }
+        }
+      }
+    },
+    "Sfondo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wallpaper"
+          }
+        }
+      }
+    },
+    "Tramonto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunset"
+          }
+        }
+      }
+    },
+    "Tutti gli schermi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All Screens"
+          }
+        }
+      }
+    },
+    "Uno diverso ogni volta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Different One Each Time"
+          }
+        }
+      }
+    },
+    "Valgono per gli sfondi del borgo messi da Sfondi…, su tutti gli schermi. Il salvaschermo lo scegli tu in Impostazioni di Sistema: l'app non lo avvia mai.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "These apply to the village wallpapers set from Wallpapers…, on every screen. You choose the screen saver in System Settings: the app never starts it."
+          }
+        }
+      }
+    },
     "Meteo": {
       "localizations": {
         "en": {

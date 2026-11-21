@@ -8,8 +8,8 @@ options:
 settings:
   base:
     SWIFT_VERSION: "6.0"
-    MARKETING_VERSION: "2.0.3"
-    CURRENT_PROJECT_VERSION: "11"
+    MARKETING_VERSION: "2.1.0"
+    CURRENT_PROJECT_VERSION: "12"
     DEVELOPMENT_TEAM: $(SBU_TEAM_ID)
     SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
     SWIFT_APPROACHABLE_CONCURRENCY: YES
@@ -23,6 +23,12 @@ targets:
       # Fonts and licences straight from Design/fonts, the same files SbuKit and the site ship.
       - path: ../../Design/fonts
         buildPhase: resources
+    dependencies:
+      # Il salvaschermo viaggia dentro l'app, in Contents/Resources: "Installa il salvaschermo" lo copia (SBU-179).
+      - target: SbuSeasonsSaver
+        embed: true
+        copy:
+          destination: resources
     settings:
       base:
         # Name chosen by Matteo on 15/11 (MGS-415): more seasons and themes may come after the snow.
@@ -40,6 +46,28 @@ targets:
         ENABLE_HARDENED_RUNTIME: YES
         # No sandbox: CGWindowListCopyWindowInfo and the Accessibility API need it off (ADR-0022).
         ENABLE_APP_SANDBOX: NO
+  # Il salvaschermo (SBU-179): lo stesso codice dell'app (sfondi, momenti, SeasonScene) senza AppDelegate,
+  # più SaverBundle/ con la ScreenSaverView. Gira dentro legacyScreenSaver di macOS: niente impostazioni dell'app.
+  SbuSeasonsSaver:
+    type: bundle
+    platform: macOS
+    sources:
+      - path: SbuSeasons
+        excludes: [App.swift, AppDelegate.swift, "Sounds/**"]
+      - SaverBundle
+    settings:
+      base:
+        PRODUCT_NAME: Sbu Seasons
+        PRODUCT_MODULE_NAME: SbuSeasonsSaver
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.SbuSeasons.Saver
+        WRAPPER_EXTENSION: saver
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_NSPrincipalClass: SbuSeasonsSaverView
+        INFOPLIST_KEY_CFBundleDisplayName: Sbu Seasons
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "-"
+        ENABLE_HARDENED_RUNTIME: YES
+        SKIP_INSTALL: YES
   SbuSeasonsTests:
     type: bundle.unit-test
     platform: macOS

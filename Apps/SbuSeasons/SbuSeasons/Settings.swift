@@ -133,6 +133,8 @@ struct SettingsView: View {
     @Bindable private var settings = Settings.shared
     @State private var openAtLogin = SMAppService.mainApp.status == .enabled
     @State private var confirmsReset = false
+    @Bindable private var wallpapers = WallpaperPrefs.shared
+    @State private var saverFailure: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -249,6 +251,7 @@ struct SettingsView: View {
                     Text("Lo schermo si scurisce un po' e in basso a destra si accende una candela. Di sera vuol dire dall'ora scelta fino alle 6.")
                         .foregroundStyle(Quaderno.inkMuted.color)
                 }
+                wallpaperSection
                 Section {
                     Toggle("Apri al login", isOn: $openAtLogin)
                         .onChange(of: openAtLogin) { _, on in setOpenAtLogin(on) }
@@ -281,6 +284,39 @@ struct SettingsView: View {
         }
         // A multipli della cella del reticolo (grid-cell). Il contenuto è più alto: si scorre.
         .frame(width: Quaderno.gridCell * 19, height: Quaderno.gridCell * 28)
+    }
+
+    /// Sfondi (SBU-179): ora del giorno, lo sfondo che segue l'effetto, il salvaschermo.
+    private var wallpaperSection: some View {
+        Section {
+            Picker("Ora del giorno", selection: $wallpapers.choice) {
+                ForEach(MomentChoice.all, id: \.self) { Text($0.title).tag($0) }
+            }
+            .onChange(of: wallpapers.choice) { WallpaperDirector.shared.refresh() }
+            Toggle("Lo sfondo segue l'effetto", isOn: $wallpapers.followsEffect)
+                .onChange(of: wallpapers.followsEffect) { _, on in if on { WallpaperDirector.shared.followEffect() } }
+            LabeledContent("Salvaschermo") {
+                Button("Installa…", action: installSaver)
+            }
+        } header: {
+            Text("Sfondi")
+        } footer: {
+            Text("Valgono per gli sfondi del borgo messi da Sfondi…, su tutti gli schermi. Il salvaschermo lo scegli tu in Impostazioni di Sistema: l'app non lo avvia mai.")
+                .foregroundStyle(Quaderno.inkMuted.color)
+        }
+        .alert("Il salvaschermo non è installato", isPresented: Binding { saverFailure != nil } set: { if !$0 { saverFailure = nil } }) {
+            Button("OK") {}
+        } message: {
+            Text(saverFailure ?? "")
+        }
+    }
+
+    private func installSaver() {
+        do {
+            try SaverInstaller.installAndOpenSettings()
+        } catch {
+            saverFailure = error.localizedDescription
+        }
     }
 
     /// Titolo e cartiglio, come `SbuScreenTitle` nelle app.

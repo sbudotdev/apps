@@ -247,4 +247,39 @@ nonisolated enum Tuning {
     /// Il fulmine sull'icona del Dock di un'app che chiudi mentre piove: quanti tratti e quanto resta (s).
     static let boltSegments = 10
     static let boltLife: CGFloat = 0.45
+    // MARK: Ora del giorno (sfondi)
+
+    /// L'ora del Mac (decimale) a cui comincia ogni momento: la notte va dalle 21 all'alba delle 5.
+    static let momentStarts: [DayMoment: Double] = [
+        .dawn: 5, .sunrise: 6.5, .morning: 8, .noon: 11,
+        .goldenHour: 16, .sunset: 18, .dusk: 19.5, .night: 21,
+    ]
+    /// Come cambia lo sfondo in ogni momento (`DayTint`). Mezzogiorno è il disegno com'è.
+    static let momentLooks: [DayMoment: MomentLook] = [
+        .dawn: MomentLook(exposure: -0.55, temperature: 7600, saturation: 0.7, contrast: 0.95,
+                          veil: (0.95, 0.62, 0.66), veilOpacity: 0.28, veilReach: 0.75),
+        .sunrise: MomentLook(exposure: -0.2, temperature: 5600, saturation: 0.9,
+                             veil: (1, 0.78, 0.55), veilOpacity: 0.22, veilReach: 0.7),
+        .morning: MomentLook(exposure: 0.05, temperature: 6900, saturation: 0.95),
+        .noon: MomentLook(),
+        .goldenHour: MomentLook(exposure: -0.05, temperature: 4700, saturation: 1.1,
+                                veil: (1, 0.8, 0.4), veilOpacity: 0.16, veilReach: 0.8),
+        .sunset: MomentLook(exposure: -0.35, temperature: 4200, saturation: 1.15, contrast: 1.05,
+                            veil: (0.98, 0.45, 0.3), veilOpacity: 0.3, veilReach: 0.75),
+        .dusk: MomentLook(exposure: -1.2, temperature: 8400, saturation: 0.8, contrast: 1.05,
+                          veil: (0.4, 0.28, 0.6), veilOpacity: 0.4, veilReach: 0.9),
+        .night: MomentLook(exposure: -2.4, temperature: 10000, saturation: 0.6, contrast: 1.1,
+                           veil: (0.03, 0.06, 0.2), veilOpacity: 0.45, veilReach: 1),
+    ]
+    /// Uno sfondo con questa luminosità media (0…1) si scurisce quanto dice `momentLooks`; uno più scuro in proporzione,
+    /// col quadrato del rapporto, ma almeno per `momentDarkFloor`.
+    static let momentReferenceBrightness: CGFloat = 0.78
+    static let momentDarkFloor: CGFloat = 0.2
+    /// Ogni quanto (s) si guarda se è cominciato un altro momento. Solo di ripiego: di solito il cambio
+    /// lo fa macOS con lo sfondo dinamico (`DynamicWallpaper`), e questo timer non parte.
+    static let momentCheckInterval: TimeInterval = 60
+    /// La qualità dei JPEG dei momenti, scritti una volta in Application Support.
+    static let momentJPEGQuality = 0.9
+    /// La qualità dei fotogrammi dell'HEIC dinamico, scritto una volta per sfondo in Application Support.
+    static let dynamicWallpaperQuality = 0.8
 }
