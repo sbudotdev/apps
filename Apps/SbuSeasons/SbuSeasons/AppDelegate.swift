@@ -136,6 +136,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         }
         if showsCountdown { setCountdownVisible(true) }
         updateAmbience()
+        // Lanciata col doppio clic su un file: si apre il file, non le Impostazioni (SBU-205).
+        let launchedForFiles = !pendingFiles.isEmpty
         pendingFiles.forEach(receive)
         pendingFiles = []
         // La stagione cambia dal menu ❄︎ o dalle Impostazioni: neve e icona seguono subito.
@@ -201,11 +203,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         whatsNew.launched(firstRun: TourProgress.shared.opensAtLaunch)
 
         // La prima volta il tour di benvenuto. Poi, aperta a mano (doppio clic, `open`), le Impostazioni.
-        // All'avvio automatico al login no: lì vogliamo solo la neve.
+        // All'avvio automatico al login no: lì vogliamo solo la neve. Né quando si apre per un file ricevuto.
         if TourProgress.shared.opensAtLaunch {
             TourProgress.shared.markSeen()
             openTour()
-        } else if !launchedAsLoginItem() {
+        } else if !launchedAsLoginItem() && !launchedForFiles {
             openSettings()
         }
 
