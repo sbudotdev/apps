@@ -1782,16 +1782,6 @@
         }
       }
     },
-    "Lo Yeti passa ogni tanto se c'è un pupazzo e prova a portarlo via: fai clic per scacciarlo. Il trenino con l'elfo lascia un regalo per l'albero o il pupazzo.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Now and then, if there is a snowman, the Yeti comes and tries to carry it off: click to scare it away. The toy train with the elf leaves a present for the tree or the snowman."
-          }
-        }
-      }
-    },
     "Luci": {
       "localizations": {
         "en": {
@@ -2058,6 +2048,366 @@
           "stringUnit": {
             "state": "translated",
             "value": "Candy Cane"
+          }
+        }
+      }
+    },
+    "A righe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Striped"
+          }
+        }
+      }
+    },
+    "Angelo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Angel"
+          }
+        }
+      }
+    },
+    "Babbo Natale passa da solo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Santa comes by on his own"
+          }
+        }
+      }
+    },
+    "Babbo Natale passa da solo dal 1° dicembre al 6 gennaio. Lo Yeti passa se c'è un pupazzo e prova a portarlo via: scaccialo con un clic o colpiscilo con una palla di neve. Il trenino con l'elfo lascia un regalo. Gli elfi passano ogni poche ore e fanno un pupazzo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Santa comes by on his own from 1 December to 6 January. The Yeti comes if there is a snowman and tries to carry it off: click to scare it away or hit it with a snowball. The elf train leaves a present. Elves come every few hours and build a snowman."
+          }
+        }
+      }
+    },
+    "Calza": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stocking"
+          }
+        }
+      }
+    },
+    "Candela": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Candle"
+          }
+        }
+      }
+    },
+    "Corna di renna": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reindeer antlers"
+          }
+        }
+      }
+    },
+    "Corona": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crown"
+          }
+        }
+      }
+    },
+    "Da cowboy": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cowboy"
+          }
+        }
+      }
+    },
+    "Da elfo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elf"
+          }
+        }
+      }
+    },
+    "Da festa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Party"
+          }
+        }
+      }
+    },
+    "Da pirata": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pirate"
+          }
+        }
+      }
+    },
+    "Decora": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decorate"
+          }
+        }
+      }
+    },
+    "Di rado": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rarely"
+          }
+        }
+      }
+    },
+    "Fai passare gli elfi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send the elves"
+          }
+        }
+      }
+    },
+    "Falò": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bonfire"
+          }
+        }
+      }
+    },
+    "Ghirlanda": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garland"
+          }
+        }
+      }
+    },
+    "Gli elfi passano da soli": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elves come by on their own"
+          }
+        }
+      }
+    },
+    "I pupazzi si tirano palle di neve": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snowmen throw snowballs at each other"
+          }
+        }
+      }
+    },
+    "Luci da appendere": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "String lights"
+          }
+        }
+      }
+    },
+    "Maglione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sweater"
+          }
+        }
+      }
+    },
+    "Mantello": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cape"
+          }
+        }
+      }
+    },
+    "Muffole": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mittens"
+          }
+        }
+      }
+    },
+    "Occhi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eyes"
+          }
+        }
+      }
+    },
+    "Ogni tanto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Now and then"
+          }
+        }
+      }
+    },
+    "Palla di vetro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snow globe"
+          }
+        }
+      }
+    },
+    "Papillon": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bow tie"
+          }
+        }
+      }
+    },
+    "Per toglierne una sola, fai clic destro sulla decorazione.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To remove just one, right-click it."
+          }
+        }
+      }
+    },
+    "Pinguino": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Penguin"
+          }
+        }
+      }
+    },
+    "Quanto spesso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How often"
+          }
+        }
+      }
+    },
+    "Spesso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Often"
+          }
+        }
+      }
+    },
+    "Stelle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stars"
+          }
+        }
+      }
+    },
+    "Togli": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove"
+          }
+        }
+      }
+    },
+    "Togli le decorazioni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove the decorations"
+          }
+        }
+      }
+    },
+    "Trascina le due estremità per appenderle dove vuoi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag the two ends to hang them wherever you like."
+          }
+        }
+      }
+    },
+    "Un elfo esce dalla neve, rotola tre palle e fa un pupazzo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An elf comes out of the snow, rolls three balls and builds a snowman."
           }
         }
       }

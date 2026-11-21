@@ -165,8 +165,8 @@ niente server, disegni nostri fatti a codice.
   sull'albero più vicino, o un vestito che il pupazzo non ha ancora; se sullo schermo non c'è né l'uno né l'altro, un albero.
   Al posto del treno verso gli amici di KoiArt, che chiede la rete: qui niente esce dal Mac.
 - I visitatori passano uno alla volta per tipo, attraversando gli schermi come Babbo Natale (`ScreenRoute`), con gli intervalli
-  casuali di `Passages.delay` (SBU-114). Impostazioni → Visitatori: «Lo Yeti passa da solo», «Il trenino passa da solo»
-  (accesi all'inizio); dal menu passano sempre.
+  casuali di `Passages.delay` (SBU-114). Impostazioni → Visitatori: chi passa da solo e quanto spesso (vedi SBU-187);
+  dal menu passano sempre.
 - **Letterina a Babbo Natale** («Scrivi a Babbo Natale…»). Una finestra con un campo per il desiderio; «Spedisci» la chiude,
   la busta sale in cielo e la slitta passa a prenderla. Il testo non si salva da nessuna parte e non arriva nemmeno alla scena:
   sparisce con la finestra.
@@ -182,6 +182,56 @@ Il codice: `Toys/Tree/` (albero, `TreeLook`, `Decoration`), `Toys/Snowball/Snowm
 la sezione delle Impostazioni), `Toys/Christmas/Letter.swift` e `LetterView.swift`. I numeri in `Tuning.swift`, sezione
 «Albero da decorare, pupazzo, visitatori». Le immagini per l'approvazione si rifanno fuori schermo con `ShotsTests`
 (istruzioni nel file).
+
+## Decora, più vestiti, pupazzi vivi, scelta dei visitatori (SBU-187)
+
+Il secondo giro di funzioni di KoiArt trovate dall'analisi (righe ★ del documento gap di SBU-176). Disegni nostri, fatti a codice.
+
+- **Decora** (menu ❄︎ → Decora). Decorazioni libere sulla scrivania: luci da appendere, ghirlanda, calza, candela, falò,
+  pinguino, palla di vetro. Ognuna nasce dove c'è il cursore ed è un pannellino sul desktop (`DeskPanel`, come il conto alla
+  rovescia): sopra le icone, **dietro le finestre** delle app; altrove i clic arrivano alla scrivania.
+  - Si **trascina**; col **pizzico** o la **rotella** si ingrandisce o rimpicciolisce (0,5–3×); con la **rotazione a due dita**
+    o ⇧ (o ⌥) e la rotella **gira**. **Clic destro** (o ⌃ clic) → Togli. «Togli le decorazioni» le toglie tutte.
+  - Le **luci** hanno due estremità libere (il tappo scuro): trascinandone una si sposta solo quella, il centro pende da solo
+    (di più se il filo è lungo); trascinate dal filo si spostano intere. Non si girano: le girano le loro estremità.
+  - Al massimo 12 per schermo: la tredicesima toglie la più vecchia di quello schermo.
+  - **Restano al riavvio**, nello stesso salvataggio di alberi e pupazzi (`keptToys`, campo `desk`; un salvataggio vecchio si
+    apre lo stesso), sul loro schermo o dentro il principale se non c'è più.
+  - **La regola dell'anno**: le decorazioni restano tutto l'anno e con ogni effetto, finché non le togli. Le hai messe tu sulla
+    scrivania, non sono neve: alberi e pupazzi invece fuori dall'inverno si sciolgono, come prima.
+  - Fiamme di candela e falò e lampadine si muovono 8 volte al secondo (`Tuning.deskFlickerFPS`); stanno **ferme** con Riduci
+    movimento, a batteria e con «Metti in pausa i giochi». Se non ci sono decorazioni con una fiamma o lampadine, il timer non c'è.
+- **Più vestiti.** Nella scheda del pupazzo: cappello da cowboy, da festa, da elfo, da pirata, corona, corna di renna; occhi a
+  stella; sciarpa a righe; muffole, papillon, maglione, mantello. Sull'albero, al posto della stella, l'**angelo** (in cima c'è
+  sempre uno solo dei due). Anche l'elfo del trenino può portare l'angelo. I pupazzi salvati prima si aprono uguali.
+- **Pupazzi vivi.**
+  - Un pupazzo (o una palla, o un altro oggetto) in piedi su una finestra **viaggia con lei** quando la sposti piano, come la neve;
+    spostata veloce, cade come la neve.
+  - **Scuoti la finestra** e palle e pupazzi sopra **saltano**.
+  - Una palla o un pupazzo **lanciati forte** (oltre 1000 pt/s) **si rompono in neve** al primo urto, su un bordo o sul lato
+    dello schermo. Cadere da soli, anche da in alto, non li rompe.
+  - Ogni tanto (25–70 s) due pupazzi sullo stesso bordo, a 40–260 pt, **si tirano una palla**: vola in arco e si rompe all'arrivo,
+    così non restano palle sparse. Si spegne in Impostazioni → Visitatori, «I pupazzi si tirano palle di neve».
+  - Lo **Yeti colpito da una palla di neve** in volo cade all'indietro e sparisce (1,2 s), e lascia il pupazzo. Il clic che lo
+    scaccia resta.
+- **Scelta dei visitatori** (Impostazioni → Visitatori): chi passa da solo, Babbo Natale (dal 1° dicembre al 6 gennaio), Yeti,
+  trenino, **elfi** (accesi all'inizio), e **quanto spesso**: spesso (attese a metà), ogni tanto (come prima), di rado (il doppio).
+  Il giro di Babbo Natale chiamato dal menu tiene il suo ritmo. Dal menu passano sempre.
+- **Elfi** (nuovi; «Fai passare gli elfi», e da soli ogni 1½–3 ore). Un elfo esce dalla neve su uno schermo, rotola tre palle
+  una accanto all'altra (diventano un pupazzo, che resta) e se ne va di lato.
+- **Verifica: una palla lanciata oltre il bordo alto torna giù.** Sì: esce dallo schermo e ricade (test
+  `aBallThrownPastTheTopComesBackDown`). Lanciata forte col mouse, all'arrivo si rompe in neve.
+- Con **Riduci movimento**: niente salti, niente lanci (quindi niente rotture) né palle tra pupazzi; lo Yeti colpito svanisce senza
+  cadere; l'elfo compare piano e cammina a metà velocità; fiamme e lampadine ferme. **«Metti in pausa i giochi»** toglie anche
+  l'elfo e ferma fiamme e lampadine.
+
+Scartato, e perché: gli elfi che cacciano lo Yeti e la carota rubata (non erano in questo giro); il suono del falò che scoppietta
+(non c'è un file, e i suoni sono spenti all'inizio); smoking (il papillon basta). La CPU di «Decora» non è misurata sul Mac
+condiviso: sono pannellini fermi, ridisegnati 8 volte al secondo solo se c'è una fiamma o un filo di luci.
+
+Il codice: `Toys/Desk/` (`DeskItem` il modello, `DeskArt` i disegni, `DeskItemView` i gesti, `DeskPanel`, `Desk`),
+`Toys/Snowball/LivelySnowmen.swift` (palle tra pupazzi, Yeti colpito; il resto in `SeasonScene`: `riders`, `shatter`),
+`Toys/Visitors/Elf.swift`, `Elves.swift`, `VisitFrequency.swift`. I numeri in `Tuning.swift`, sezioni «Pupazzi vivi» e «Decora».
 
 ## Pioggia, temporale, nebbia, nuvole (2.0)
 
@@ -268,7 +318,7 @@ personaggi e la notte accesa 7,7%, sola neve 7,6% (+1%).
 
 ## Menu ❄︎
 
-In ordine: effetto, intensità, giochi, Natale, notte, sfondi, suoni, impostazioni (SBU-57). I testi valgono per tutte le stagioni.
+In ordine: effetto, intensità, giochi, Natale, Decora, notte, sfondi, suoni, impostazioni (SBU-57). I testi valgono per tutte le stagioni.
 
 - **Mostra l'effetto** (⌘S) · **Effetto** (le stagioni) · **Dietro le finestre** · **Togli quello che si è posato** (⌘R)
 - **Intensità**: Leggera/Media/Forte con le scorciatoie, e sotto un cursore continuo
@@ -276,7 +326,8 @@ In ordine: effetto, intensità, giochi, Natale, notte, sfondi, suoni, impostazio
   Monta/Togli la funivia · Pianta un albero di Natale · Togli alberi, neve e slitte · Metti in pausa i giochi ·
   Personaggi (Volpe, Cincia e mangiatoia, Baita, Lanterna, Renna)
 - **Natale**: Fai passare Babbo Natale · Scrivi a Babbo Natale… · Manda l'omino di pan di zenzero · Fai passare lo Yeti ·
-  Fai passare il trenino · Conto alla rovescia per Natale
+  Fai passare il trenino · Fai passare gli elfi · Conto alla rovescia per Natale
+- **Decora**: Luci da appendere · Ghirlanda · Calza · Candela · Falò · Pinguino · Palla di vetro · Togli le decorazioni (sempre accese)
 - **Notte**: Mai · Di sera · Sempre (l'ora di inizio è nelle Impostazioni)
 - **Sfondi…** · **Suoni** (acceso o spento; il volume è nelle Impostazioni)
 - **Impostazioni…** (⌘,) · **Tour di benvenuto…** · Informazioni · Esci (⌘Q)
@@ -303,7 +354,7 @@ una finestra SwiftUI chiusa quasi sempre, e "Dietro le finestre" è un confronto
 
 **Impostazioni**: effetto e dietro le finestre, quantità, dimensione e velocità delle particelle, vento, raggio e forza del cursore,
 accumulo sulle finestre e sul fondo, velocità di accumulo, altezza massima, suoni e volume (spenti all'inizio), notte (mai, di sera dalle…, sempre),
-visitatori (Yeti e trenino che passano da soli), apri al login, ripristino.
+visitatori (Babbo Natale, Yeti, trenino ed elfi che passano da soli, quanto spesso, palle tra pupazzi), apri al login, ripristino.
 Le modifiche si vedono subito (nevica anche sulla finestra Impostazioni, utile per provare) e vengono salvate.
 
 ## Struttura
