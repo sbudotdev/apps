@@ -2031,6 +2031,36 @@
           }
         }
       }
+    },
+    "Pallina": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bauble"
+          }
+        }
+      }
+    },
+    "Filo di luci": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "String of Lights"
+          }
+        }
+      }
+    },
+    "Bastoncino": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Candy Cane"
+          }
+        }
+      }
     }
   }
 }

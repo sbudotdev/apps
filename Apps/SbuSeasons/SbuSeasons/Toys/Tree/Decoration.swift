@@ -13,6 +13,16 @@ nonisolated enum DecorationKind: String, Codable, CaseIterable, Sendable {
         }
     }
 
+    /// Una sola, per il titolo della sua parte nella scheda.
+    var name: String {
+        switch self {
+        case .bauble: String(localized: "Pallina")
+        case .lights: String(localized: "Filo di luci")
+        case .candyCane: String(localized: "Bastoncino")
+        case .star: String(localized: "Stella")
+        }
+    }
+
     /// Il lato del disegno a grandezza 1 (pt): serve anche per capire se il cursore ci è sopra.
     var side: CGFloat {
         switch self {

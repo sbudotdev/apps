@@ -31,7 +31,7 @@ struct TreeCard: View {
                     .foregroundStyle(Quaderno.inkMuted.color)
             }
             if let focus, look.decorations.indices.contains(focus) {
-                Section(look.decorations[focus].kind.title) {
+                Section(look.decorations[focus].kind.name) {
                     LabeledContent("Dimensione") {
                         Slider(value: $look.decorations[focus].scale, in: Tuning.decorationScale)
                     }

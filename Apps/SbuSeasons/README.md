@@ -103,6 +103,7 @@ Il test `TwoScreensTests` lo prova con uno schermo virtuale a una frequenza dive
   e si lancia col mouse, rimbalza un po' e rotola lungo i bordi finché cade. Al massimo 12 sullo schermo: oltre
   sparisce la più vecchia. Solo d'inverno: cambiando stagione palle e pupazzi si sciolgono.
 - **Pupazzo.** Tre palle ferme a meno di 40 pt l'una dall'altra diventano un pupazzo di neve. Una palla in mano non conta.
+  Un clic sul pupazzo apre la sua scheda: taglia delle tre palle e vestiti (vedi «Albero, pupazzo e visitatori»).
 - **Neve che scivola via.** Se sposti piano una finestra la neve resta sopra e la segue; se la trascini veloce
   (più di 40 pt in un ottavo di secondo, circa 320 pt/s) o la ridimensioni, la neve scivola giù come polvere.
   La neve segue la finestra a scatti, 8 volte al secondo: tante sono le letture delle finestre.
@@ -120,8 +121,8 @@ Il test `TwoScreensTests` lo prova con uno schermo virtuale a una frequenza dive
 - **Funivia** («Monta la funivia»). Un palo sul fondo a sinistra e un gancio d'ottone col cavo: trascina il gancio sul
   bordo di una finestra (o sul Dock) e la cabina corre avanti e indietro sul cavo. Se la finestra si sposta il gancio cade
   e la cabina torna al palo. «Togli la funivia» la smonta. Una per schermo.
-- **Albero di Natale** («Pianta un albero di Natale»). Sul fondo, in un punto a caso; un clic su un ramo appende una
-  pallina proprio lì (colori a turno, al massimo 40), e si trascina come gli altri oggetti. Al massimo 5 alberi.
+- **Albero di Natale** («Pianta un albero di Natale»). Sul fondo, in un punto a caso, e da decorare: vedi
+  «Albero, pupazzo e visitatori». Al massimo 3 alberi.
 - «Togli alberi, neve e slitte»: alberi, montagnette, slittini e spazzaneve (palle e funivia hanno il loro comando).
   «Metti in pausa i giochi»: gli oggetti stanno fermi dove sono e non si prendono col mouse; la neve continua. La slitta in
   volo sparisce e non ripassa, le altre voci dei giochi si spengono finché non togli la pausa; la pausa resta anche quando
@@ -129,6 +130,58 @@ Il test `TwoScreensTests` lo prova con uno schermo virtuale a una frequenza dive
 - I giochi si fanno sullo schermo del cursore; lo spazzaneve con «Prima il Dock» su quello del Dock. Solo d'inverno:
   nelle altre stagioni le voci sono spente e cambiando stagione i giochi spariscono.
 - Suoni: vedi «Sfondi e suoni».
+
+## Albero, pupazzo e visitatori (SBU-178)
+
+Le funzioni di KoiArt che mancavano, rifatte: tutto subito (niente oggetti a pagamento o sbloccati uno al giorno),
+niente server, disegni nostri fatti a codice.
+
+- **Albero da decorare.** Fino a 3 alberi (il quarto toglie il più vecchio). Un clic sui rami appende la decorazione scelta:
+  palline (colori a turno), filo di luci (si accendono piano a turno), bastoncini di zucchero, la stella (sempre in cima,
+  una sola). Al massimo 40 decorazioni per albero.
+  - Una decorazione si **trascina** sui rami; lasciata fuori dall'albero si **toglie**. Col **pizzico** del trackpad o la
+    **rotella** sopra di lei si ingrandisce o rimpicciolisce (0,5–2,5×); con la **rotazione a due dita** o ⇧ (o ⌥) e la
+    rotella **gira**.
+  - Pizzico o rotella sull'albero (fuori dalle decorazioni) lo fanno **crescere** fino a 2,2 volte, decorazioni comprese.
+  - L'albero si **sposta** trascinandolo come gli altri oggetti. **Clic destro** (o ⌃ clic) apre la sua scheda: che cosa
+    appendere, l'altezza, «Taglia l'albero»; aperta su una decorazione, anche la sua dimensione, la rotazione e «Togli la decorazione».
+- **Pupazzo da vestire.** Un clic (o il clic destro) sul pupazzo apre la sua scheda: la taglia di pancia, petto e testa
+  (piccola, media, grande), il cappello (cilindro, berretto), la sciarpa (rossa, verde), il naso (carota, carbone) e i bottoni.
+  Ogni cambio si vede subito. La scheda è un pannellino "non attivante" sopra l'oggetto (`ToyCard`): prende i clic senza
+  portare l'app davanti e si chiude con la ✕, con Esc o facendo clic altrove.
+- **Tutto resta dov'è.** Alberi (con altezza e decorazioni) e pupazzi (con taglie e vestiti) si salvano in UserDefaults
+  (`keptToys`, `ToyKeeper`): ogni 5 s se qualcosa è cambiato, quando si ricreano le finestre degli schermi e all'uscita.
+  Al riavvio tornano uguali, sullo stesso schermo (riconosciuto dall'UUID del display, come gli sfondi); se quello schermo
+  non c'è più, su quello principale; su uno schermo più piccolo restano dentro. Le palle sciolte, gli slittini e il resto no.
+  Collegando o scollegando un monitor alberi e pupazzi ora restano (prima sparivano).
+  **Il salvataggio vale solo d'inverno**: la regola resta quella di prima, cambiando stagione alberi e pupazzi si sciolgono,
+  e il salvataggio si svuota con loro; aprendo l'app in un'altra stagione non torna niente.
+- **Yeti** («Fai passare lo Yeti», e da solo ogni 4–9 minuti se c'è almeno un pupazzo). Entra da un lato sul fondo, va dal
+  pupazzo più vicino (se sta su una finestra ci salta sopra), se lo mette in spalla e se ne va, anche nello schermo dopo.
+  **Un clic lo scaccia**: lascia cadere il pupazzo e scappa. Se gli togli il pupazzo trascinandolo, se ne va a mani vuote.
+  Non si trascina.
+- **Trenino con l'elfo** («Fai passare il trenino», e da solo ogni 5–10 minuti). Corre sul fondo e attraversa gli schermi;
+  su uno l'elfo lascia un regalo verde. Aperto con un clic, dentro c'è una sorpresa (`ElfPresent`): una decorazione che vola
+  sull'albero più vicino, o un vestito che il pupazzo non ha ancora; se sullo schermo non c'è né l'uno né l'altro, un albero.
+  Al posto del treno verso gli amici di KoiArt, che chiede la rete: qui niente esce dal Mac.
+- I visitatori passano uno alla volta per tipo, attraversando gli schermi come Babbo Natale (`ScreenRoute`), con gli intervalli
+  casuali di `Passages.delay` (SBU-114). Impostazioni → Visitatori: «Lo Yeti passa da solo», «Il trenino passa da solo»
+  (accesi all'inizio); dal menu passano sempre.
+- **Letterina a Babbo Natale** («Scrivi a Babbo Natale…»). Una finestra con un campo per il desiderio; «Spedisci» la chiude,
+  la busta sale in cielo e la slitta passa a prenderla. Il testo non si salva da nessuna parte e non arriva nemmeno alla scena:
+  sparisce con la finestra.
+- Con **Riduci movimento**: lo Yeti cammina a metà velocità e non salta (si trova sul bordo del pupazzo), il trenino non
+  attraversa lo schermo (il regalo arriva dritto), la busta compare in cielo e svanisce (la slitta non vola), le luci restano accese.
+- **«Metti in pausa i giochi»** toglie Yeti (il pupazzo che aveva in spalla resta), trenino e busta, ferma le decorazioni e non
+  fa partire nessun visitatore; le voci del menu si spengono. Solo d'inverno, come gli altri giochi. A batteria va a 30 fotogrammi
+  come il resto; i clic passano sotto tranne che sugli oggetti (il trenino e la busta non si prendono).
+- Suoni: lo Yeti usa `yeti` (il file non c'è ancora: per ora è muto); il regalo dell'elfo `regalo`, la slitta `babbo-natale`.
+
+Il codice: `Toys/Tree/` (albero, `TreeLook`, `Decoration`), `Toys/Snowball/Snowman.swift` e `SnowmanLook.swift`, `Toys/Cards/`
+(la scheda e i suoi contenuti), `Toys/Keeping/` (salvataggio), `Toys/Visitors/` (Yeti, trenino, `Visitors`, `ElfPresent`,
+la sezione delle Impostazioni), `Toys/Christmas/Letter.swift` e `LetterView.swift`. I numeri in `Tuning.swift`, sezione
+«Albero da decorare, pupazzo, visitatori». Le immagini per l'approvazione si rifanno fuori schermo con `ShotsTests`
+(istruzioni nel file).
 
 ## Pioggia, temporale, nebbia, nuvole (2.0)
 
@@ -222,7 +275,8 @@ In ordine: effetto, intensità, giochi, Natale, notte, sfondi, suoni, impostazio
 - **Giochi**: Togli le palle di neve · Scuoti la palla di vetro · Manda lo spazzaneve · Prima il Dock · Prepara la pista da slittino ·
   Monta/Togli la funivia · Pianta un albero di Natale · Togli alberi, neve e slitte · Metti in pausa i giochi ·
   Personaggi (Volpe, Cincia e mangiatoia, Baita, Lanterna, Renna)
-- **Natale**: Fai passare Babbo Natale · Manda l'omino di pan di zenzero · Conto alla rovescia per Natale
+- **Natale**: Fai passare Babbo Natale · Scrivi a Babbo Natale… · Manda l'omino di pan di zenzero · Fai passare lo Yeti ·
+  Fai passare il trenino · Conto alla rovescia per Natale
 - **Notte**: Mai · Di sera · Sempre (l'ora di inizio è nelle Impostazioni)
 - **Sfondi…** · **Suoni** (acceso o spento; il volume è nelle Impostazioni)
 - **Impostazioni…** (⌘,) · **Tour di benvenuto…** · Informazioni · Esci (⌘Q)
@@ -249,7 +303,7 @@ una finestra SwiftUI chiusa quasi sempre, e "Dietro le finestre" è un confronto
 
 **Impostazioni**: effetto e dietro le finestre, quantità, dimensione e velocità delle particelle, vento, raggio e forza del cursore,
 accumulo sulle finestre e sul fondo, velocità di accumulo, altezza massima, suoni e volume (spenti all'inizio), notte (mai, di sera dalle…, sempre),
-apri al login, ripristino.
+visitatori (Yeti e trenino che passano da soli), apri al login, ripristino.
 Le modifiche si vedono subito (nevica anche sulla finestra Impostazioni, utile per provare) e vengono salvate.
 
 ## Struttura
@@ -273,7 +327,11 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Toys/Christmas/` | Babbo Natale, il regalo, l'omino di pan di zenzero, il conto alla rovescia e le date di Natale |
 | `Toys/Figures/` | I personaggi: volpe, cincia con la mangiatoia, baita, lanterna, renna e i loro comandi (`FigureVisits.swift`) |
 | `Engine/Night.swift` | La notte: quando è notte (`NightClock`), lo schermo più scuro e la candela |
-| `Toys/WinterPlay/` | Spazzaneve, montagnetta, slittino, funivia, albero di Natale e i loro comandi (`WinterPlay.swift`) |
+| `Toys/WinterPlay/` | Spazzaneve, montagnetta, slittino, funivia e i loro comandi (`WinterPlay.swift`, anche quello dell'albero) |
+| `Toys/Tree/` | L'albero da decorare: `ChristmasTree` (disegno e gesti), `TreeLook` e `Decoration` (i dati, testati e salvati) |
+| `Toys/Cards/` | La scheda di un oggetto (`ToyCard`), con i contenuti del pupazzo (`SnowmanCard`) e dell'albero (`TreeCard`) |
+| `Toys/Keeping/` | Alberi e pupazzi salvati: `KeptToys` (i dati e a quale schermo vanno), `ToyKeeper` (UserDefaults) |
+| `Toys/Visitors/` | Yeti, trenino con l'elfo, `ElfPresent`, `Visitors` (quando passano e su quali schermi), Impostazioni → Visitatori |
 | `Engine/SoundBoard.swift` | Effetti brevi e sottofondo in loop (`AVAudioPlayer`) |
 | `Engine/Windows.swift` | Dove sono le finestre (`CGWindowListCopyWindowInfo`) e quali tratti dei bordi sono scoperti |
 | `Seasons/Seasons.swift` | L'elenco delle stagioni, una riga ciascuna |
@@ -325,6 +383,9 @@ arriva alla finestra sotto; il trascinamento e il lancio funzionano.
 1. Una sottoclasse di `Toy` nella cartella della sua funzione (per esempio `Toys/Snowball/`), con il suo `SKSpriteNode`
    (l'àncora è il centro in basso: `position` è dove poggiano i piedi).
 2. Sovrascrivi quello che serve: `clicked()` (clic), `clicked(at:)` (clic con il punto rispetto ai piedi, per l'albero), `shaken(_:)` (`.pointer` o `.window(id)` scossi), `bounce`.
+   Per una parte che si trascina da sola `pressPart`/`dragPart`/`releasePart`; per pizzico, rotella e rotazione `resized(at:by:)`
+   e `turned(at:by:)`; `isDraggable = false` per un oggetto che si clicca ma non si sposta, `staysOnScreen = false` per uno
+   che esce di lato (i visitatori). Una scheda col clic destro: un caso in `ToyCard.show(for:at:)`.
 3. Aggiungilo con `SeasonScene.add(_:)` (dall'app: `OverlayWindow.add(_:)`). Il motore lo fa cadere e lo posa sui
    tratti scoperti dei bordi delle finestre, sul Dock o sul fondo dello schermo; se la finestra si sposta o si chiude, cade.
    Dove coprirebbe la barra dei menu (un oggetto più alto della neve, su una finestra vicina alla barra) non si ferma e cade più giù.
