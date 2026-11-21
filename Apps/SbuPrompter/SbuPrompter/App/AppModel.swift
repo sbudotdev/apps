@@ -25,6 +25,11 @@ final class AppModel {
         applySettings()
         settings.onChange = { [weak self] in self?.applySettings() }
         speech.onWords = { [weak self] words in self?.controller.heard(words) }
+        // Play and pause also come from the panel button and the end of the text, not only from `perform`.
+        controller.onPlayingChange = { [weak self] in
+            self?.window?.updateTicking()
+            self?.syncSpeech()
+        }
         hotKeys.onAction = { [weak self] action in self?.perform(action.command) }
         hotKeys.register(settings.shortcuts)
 
