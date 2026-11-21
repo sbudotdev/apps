@@ -358,7 +358,7 @@ struct ShotsTests {
     // MARK: - Le tue immagini
 
     /// Tre immagini disegnate qui (un cuore, una stella, un sole) in una cartella temporanea.
-    private func sampleLibrary() throws -> ImageLibrary {
+    private func sampleLibrary() async throws -> ImageLibrary {
         let library = ImageLibrary(folder: FileManager.default.temporaryDirectory.appending(path: "sbu-230-shots-\(UUID().uuidString)"))
         let shapes: [(NSColor, (CGRect) -> CGPath)] = [
             (.systemRed, { r in
@@ -395,14 +395,14 @@ struct ShotsTests {
             let url = FileManager.default.temporaryDirectory.appending(path: "sbu-230-\(UUID().uuidString).png")
             let rep = try #require(image.tiffRepresentation.flatMap(NSBitmapImageRep.init(data:)))
             try #require(rep.representation(using: .png, properties: [:])).write(to: url)
-            try library.importFile(at: url)
+            try await library.importFile(at: url)
         }
         return library
     }
 
     /// Le tue immagini (SBU-230): l'invito senza immagini, poi le tre che cadono in ognuno dei tre moti.
     /// `immagini-invito.png`, `immagini-neve.png`, `immagini-foglie.png`, `immagini-pioggia.png`.
-    @Test func myImages() throws {
+    @Test func myImages() async throws {
         let before = Settings.shared.values
         defer { Settings.shared.values = before }
         let empty = ImageLibrary(folder: FileManager.default.temporaryDirectory.appending(path: "sbu-230-empty-\(UUID().uuidString)"))
@@ -410,7 +410,7 @@ struct ShotsTests {
         invite.setSeason(MyImages(library: empty))
         run(invite, seconds: 1)
         try save(invite, inviteView, as: "immagini-invito")
-        let library = try sampleLibrary()
+        let library = try await sampleLibrary()
         for (motion, name) in [(ImageMotion.snow, "neve"), (.leaves, "foglie"), (.rain, "pioggia")] {
             Settings.shared.values.imagesMotion = motion
             let (scene, view) = scene()
@@ -422,7 +422,7 @@ struct ShotsTests {
 
     // MARK: - Schede
 
-    @Test func cards() throws {
+    @Test func cards() async throws {
         let tree = ChristmasTree(at: .zero)
         tree.clicked(at: CGPoint(x: 0, y: 30))
         tree.cardFocus = 0
@@ -439,7 +439,7 @@ struct ShotsTests {
                     .formStyle(.grouped).frame(width: Quaderno.gridCell * 19).fixedSize(horizontal: false, vertical: true),
                  as: "11-impostazioni-schermi")
         // Le tue immagini (SBU-230): tre importate, la seconda tolta con la casella.
-        let library = try sampleLibrary()
+        let library = try await sampleLibrary()
         Settings.shared.values.imagesOff = [library.names[1]]
         Settings.shared.values.imagesMotion = .leaves
         try card(Form { ImagesSection(library: library) }.formStyle(.grouped).frame(width: Quaderno.gridCell * 19).fixedSize(horizontal: false, vertical: true),

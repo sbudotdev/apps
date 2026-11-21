@@ -72,7 +72,7 @@ struct ImagesSection: View {
 
     private func thumbnail(_ name: String) -> some View {
         Group {
-            if let image = library.smallImage(name) {
+            if let image = library.cachedSmallImage(name) {
                 Image(decorative: image, scale: 2)
                     .resizable()
                     .scaledToFit()
@@ -84,6 +84,8 @@ struct ImagesSection: View {
         }
         .frame(width: Quaderno.gridCell * 1.5, height: Quaderno.gridCell * 1.5)
         .accessibilityHidden(true)
+        // Dal disco fuori dal thread principale (QA SBU-231): intanto il simbolo.
+        .task(id: name) { await library.loadSmallImage(name) }
     }
 
     /// Il selettore dei file di sistema; ogni file scelto si controlla da solo, e i rifiutati si dicono insieme.
@@ -94,15 +96,18 @@ struct ImagesSection: View {
         panel.canChooseDirectories = false
         panel.prompt = String(localized: "Importa")
         guard panel.runModal() == .OK else { return }
-        var errors: [String] = []
-        for url in panel.urls {
-            do {
-                try library.importFile(at: url)
-            } catch {
-                errors.append("\(url.lastPathComponent): \(error.errorDescription ?? "")")
+        let urls = panel.urls
+        Task {
+            var errors: [String] = []
+            for url in urls {
+                do throws(ImageImportError) {
+                    try await library.importFile(at: url)
+                } catch {
+                    errors.append("\(url.lastPathComponent): \(error.errorDescription ?? "")")
+                }
             }
+            failure = errors.isEmpty ? nil : errors.joined(separator: "\n")
         }
-        failure = errors.isEmpty ? nil : errors.joined(separator: "\n")
     }
 }
 
