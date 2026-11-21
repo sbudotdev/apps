@@ -3,9 +3,13 @@ import SwiftUI
 
 /// La finestra Sfondi (menu ❄︎ → Sfondi…): le anteprime, lo schermo, "Imposta sfondo" e
 /// "Lascia il mio schermo com'è". Con l'effetto consigliato acceso, cambia anche la stagione.
+/// Con più schermi si sceglie uno schermo o tutti; le anteprime sono nel momento del giorno scelto.
 struct GalleryView: View {
+    /// Nel menu degli schermi: tutti insieme, con un clic.
+    private static let allScreens = "*"
     @State private var selection = Wallpaper.all[0].id
     @State private var screenKey = NSScreen.main?.wallpaperKey ?? ""
+    @Bindable private var prefs = WallpaperPrefs.shared
     @State private var failure = ""
     @State private var fails = false
     /// Quante volte si è tornati allo sfondo di prima: aggiorna "Lascia il mio schermo com'è".
@@ -15,6 +19,13 @@ struct GalleryView: View {
     private var screen: NSScreen? {
         NSScreen.screens.first { $0.wallpaperKey == screenKey } ?? NSScreen.main
     }
+
+    /// Gli schermi su cui va lo sfondo: quello scelto, o tutti.
+    private var targets: [NSScreen] {
+        screenKey == Self.allScreens ? NSScreen.screens : screen.map { [$0] } ?? []
+    }
+
+    private var moment: DayMoment { prefs.choice.moment(at: .now) }
 
     private var chosen: Wallpaper { Wallpaper.all.first { $0.id == selection } ?? Wallpaper.all[0] }
 
@@ -51,7 +62,7 @@ struct GalleryView: View {
             selection = wallpaper.id
         } label: {
             VStack(alignment: .leading, spacing: Quaderno.space1) {
-                Preview(url: wallpaper.url(for: screen?.frame.size ?? CGSize(width: 16, height: 10)))
+                Preview(url: wallpaper.url(for: screen?.frame.size ?? CGSize(width: 16, height: 10)), moment: moment)
                     .overlay {
                         RoundedRectangle(cornerRadius: 6)
                             .strokeBorder(Quaderno.ink.color, lineWidth: isChosen ? 3 : 0)
@@ -73,10 +84,16 @@ struct GalleryView: View {
         HStack(spacing: Quaderno.space4) {
             if NSScreen.screens.count > 1 {
                 Picker("Schermo", selection: $screenKey) {
+                    Text("Tutti gli schermi").tag(Self.allScreens)
+                    Divider()
                     ForEach(NSScreen.screens, id: \.wallpaperKey) { Text($0.localizedName).tag($0.wallpaperKey) }
                 }
                 .fixedSize()
             }
+            Picker("Ora del giorno", selection: $prefs.choice) {
+                ForEach(MomentChoice.all, id: \.self) { Text($0.title).tag($0) }
+            }
+            .fixedSize()
             Toggle("Anche l'effetto consigliato", isOn: $usesEffect)
                 .fixedSize()
                 .help(Text("Con lo sfondo cambia la stagione: \(Seasons.named(chosen.effect).title)."))
@@ -91,25 +108,28 @@ struct GalleryView: View {
 
     private var canRestore: Bool {
         _ = restores
-        return screen.flatMap { WallpaperMemory().original(screen: $0.wallpaperKey) } != nil
+        return targets.contains { WallpaperMemory().original(screen: $0.wallpaperKey) != nil }
     }
 
     private func apply() {
-        guard let screen else { return }
-        do {
-            try Wallpaper.set(chosen, on: screen)
-            if usesEffect { Settings.shared.seasonID = chosen.effect }
-            restores += 1   // ora c'è uno sfondo di prima da ripristinare
-        } catch {
-            failure = error.localizedDescription
-            fails = true
+        let wallpaper = chosen, screens = targets
+        Task {
+            do {
+                // Prima si segna lo sfondo, poi l'effetto: "segue l'effetto" vede già quello nuovo e lo lascia.
+                for screen in screens { prefs.chosen[screen.wallpaperKey] = wallpaper.id }
+                if usesEffect { Settings.shared.seasonID = wallpaper.effect }
+                try await WallpaperDirector.shared.set(wallpaper, on: screens)
+                restores += 1   // ora c'è uno sfondo di prima da ripristinare
+            } catch {
+                failure = error.localizedDescription
+                fails = true
+            }
         }
     }
 
     private func restore() {
-        guard let screen else { return }
         do {
-            try Wallpaper.restore(on: screen)
+            try WallpaperDirector.shared.restore(on: targets)
             restores += 1
         } catch {
             failure = error.localizedDescription
@@ -118,9 +138,10 @@ struct GalleryView: View {
     }
 }
 
-/// L'anteprima di uno sfondo, letta in sottofondo la prima volta che compare.
+/// L'anteprima di uno sfondo nel suo momento del giorno, fatta in sottofondo la prima volta che compare.
 private struct Preview: View {
     let url: URL?
+    let moment: DayMoment
     @State private var image: CGImage?
 
     var body: some View {
@@ -133,9 +154,9 @@ private struct Preview: View {
                 }
             }
             .clipShape(.rect(cornerRadius: 6))
-            .task(id: url) {
+            .task(id: "\(url?.path ?? "")-\(moment.rawValue)") {
                 guard let url else { return }
-                image = await Task.detached(priority: .userInitiated) { Thumbnail.make(url) }.value
+                image = await Task.detached(priority: .userInitiated) { [moment] in Thumbnail.make(url, moment: moment) }.value
             }
     }
 }

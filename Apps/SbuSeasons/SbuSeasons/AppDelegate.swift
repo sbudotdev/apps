@@ -11,6 +11,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private var windowShakes = WindowShakes()
     /// Babbo Natale su tutti gli schermi e la pausa dei giochi: restano anche quando le finestre si ricreano.
     private let passages = Passages()
+    /// «Novità» in cima al menu dopo un aggiornamento (SBU-179).
+    private let whatsNew = WhatsNewCard()
 
     // Salvato in UserDefaults, così l'app se lo ricorda al prossimo avvio.
     // (Le altre impostazioni sono in Settings.swift.)
@@ -134,6 +136,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
             name: NSApplication.didChangeScreenParametersNotification,
             object: nil
         )
+
+        // Sfondi che cambiano con l'ora e seguono l'effetto (SBU-179).
+        WallpaperDirector.shared.start()
+        whatsNew.launched(firstRun: TourProgress.shared.opensAtLaunch)
 
         // La prima volta il tour di benvenuto. Poi, aperta a mano (doppio clic, `open`), le Impostazioni.
         // All'avvio automatico al login no: lì vogliamo solo la neve.
@@ -414,6 +420,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     func menuNeedsUpdate(_ menu: NSMenu) {
         updateMenuState()
+        whatsNew.attach(to: menu)
+    }
+
+    /// Le novità si vedono una volta: chiuso il menu, la schedina non torna.
+    func menuDidClose(_ menu: NSMenu) {
+        whatsNew.dismiss()
     }
 
     @objc private func toggleSnow() {
