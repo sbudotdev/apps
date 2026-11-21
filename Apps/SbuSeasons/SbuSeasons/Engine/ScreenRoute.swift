@@ -24,6 +24,12 @@ nonisolated enum ScreenRoute {
         return columns.flatMap { $0.screens.sorted { frames[$0].maxY > frames[$1].maxY } }
     }
 
+    /// Come `order`, ma solo gli schermi con `live` vero: su uno fermo la scena non va avanti e chi ci entra resta lì.
+    static func order(_ frames: [CGRect], heading: CGFloat, live: [Bool]) -> [Int] {
+        let on = frames.indices.filter { live[$0] }
+        return order(on.map { frames[$0] }, heading: heading).map { on[$0] }
+    }
+
     /// La quota (locale allo schermo) a cui entra in `band` chi esce dal vicino alla quota globale `y`.
     /// `band` è la zona in cui si può volare, in coordinate globali; `margin` tiene la slitta tutta dentro.
     /// nil = lo schermo non copre quella quota.

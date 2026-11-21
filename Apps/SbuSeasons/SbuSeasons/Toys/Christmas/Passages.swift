@@ -60,13 +60,15 @@ final class Passages {
     /// Fa partire un passaggio (`manual`: dal menu, e accende il loop). false = in pausa, già in volo o non è inverno.
     @discardableResult
     func send(at now: TimeInterval, manual: Bool = true) -> Bool {
+        endStuckFlight()
         guard !paused, flight == nil, let lead = scenes.first, lead.season is Snow else { return false }
+        let heading: CGFloat = random() < 0.5 ? -1 : 1
+        let route = ScreenRoute.order(scenes.map(\.screenFrame), heading: heading, live: scenes.map(\.effectRuns))
+        guard !route.isEmpty else { return false }
         if manual {
             looping = true
             next = now + delay(Tuning.santaLoopInterval)
         }
-        let heading: CGFloat = random() < 0.5 ? -1 : 1
-        let route = ScreenRoute.order(scenes.map(\.screenFrame), heading: heading)
         let clock = lead.christmas
         let canGive = clock.diary.canGive(on: clock.now())
         let carries = manual ? canGive : SantaVisits.carriesGift(eve: clock.isEve, canGive: canGive, roll: random())
@@ -78,6 +80,7 @@ final class Passages {
 
     /// Ogni tanto (`AppDelegate`, mentre l'effetto è acceso): è ora di ripassare?
     func tick(at now: TimeInterval) {
+        endStuckFlight()
         guard !paused, flight == nil, let lead = scenes.first, lead.season is Snow else { return }
         guard looping || passesAlone() else { return }
         let frequency = frequency()
@@ -114,6 +117,14 @@ final class Passages {
             current.leg += 1
             flight = current
         }
+        flight = nil
+    }
+
+    /// La slitta è su uno schermo che si è fermato (pausa automatica, scelta degli schermi): lì non arriverebbe
+    /// mai in fondo, e Babbo Natale non ripasserebbe più (SBU-193).
+    private func endStuckFlight() {
+        guard let current = flight, scenes.indices.contains(current.route[current.leg]),
+              !scenes[current.route[current.leg]].effectRuns else { return }
         flight = nil
     }
 

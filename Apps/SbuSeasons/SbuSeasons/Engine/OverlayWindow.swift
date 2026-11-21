@@ -143,6 +143,7 @@ final class OverlayWindow: NSPanel {
     func setSnowing(_ snowing: Bool) {
         guard snowing != running else { return }
         running = snowing
+        scene.effectRuns = snowing
         skView.isPaused = !snowing
         displayLink?.isPaused = !snowing
         if !snowing {

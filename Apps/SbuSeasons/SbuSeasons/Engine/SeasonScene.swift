@@ -111,6 +111,9 @@ final class SeasonScene: SKScene {
 
     /// Lo schermo, in coordinate globali (come `NSScreen.frame`).
     var screenFrame: CGRect { CGRect(origin: screenOrigin, size: size) }
+    /// L'effetto gira su questo schermo (`OverlayWindow.setSnowing`). Spento dalla scelta degli schermi o fermo per la
+    /// pausa automatica, la scena non va avanti: visitatori e Babbo Natale lo saltano (SBU-193).
+    var effectRuns = true
     /// Dove può volare la slitta, in coordinate globali: lo schermo sotto la barra dei menu.
     var flightBand: CGRect { CGRect(x: screenOrigin.x, y: screenOrigin.y, width: size.width, height: ceiling ?? size.height) }
 

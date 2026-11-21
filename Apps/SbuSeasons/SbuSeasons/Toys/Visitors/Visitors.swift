@@ -47,11 +47,14 @@ final class Visitors {
         guard canVisit else { return false }
         if let trip = trips[kind] {
             // In pausa o cambiando stagione la scena l'ha tolto: il viaggio è finito.
-            guard !scenes.indices.contains(trip.route[trip.leg]) || !scenes[trip.route[trip.leg]].isVisiting(kind) else { return false }
+            // O lo schermo si è fermato con lui dentro (pausa automatica, scelta degli schermi): lì non va più avanti.
+            let stop = trip.route[trip.leg]
+            guard !scenes.indices.contains(stop) || !scenes[stop].isVisiting(kind) || !scenes[stop].effectRuns else { return false }
             trips[kind] = nil
         }
         let heading: CGFloat = random() < 0.5 ? -1 : 1
-        let order = ScreenRoute.order(scenes.map(\.screenFrame), heading: heading)
+        let order = ScreenRoute.order(scenes.map(\.screenFrame), heading: heading, live: scenes.map(\.effectRuns))
+        guard !order.isEmpty else { return false }
         // L'elfo fa il suo pupazzo su uno schermo solo.
         let route = kind == .elves ? Array(order.prefix(1)) : order
         trips[kind] = (route, 0, heading, nil, min(Int(random() * Double(route.count)), route.count - 1))
