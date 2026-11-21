@@ -67,6 +67,23 @@ Le quattro funzioni scelte da Matteo dopo l'analisi della SBU-223 (risposta nell
     della simulazione): pioggia 0,48 ms col cursore fermo fuori dallo schermo, 0,28 ms col cursore che asciuga;
     temporale 3,45 → 2,16 ms. Asciugando ci sono meno gocce da muovere, quindi costa meno. Non si è lanciata l'app sul
     Mac condiviso.
+- **Luci in alto** (SBU-229, menu ❄︎ → Decora → «Luci in alto», o Impostazioni → Luci in alto). Un filo di luci appena
+  sotto la barra dei menu, da un orlo all'altro dello schermo, con ogni effetto, tutto l'anno e anche a effetto spento.
+  Il filo pende tra un gancio e l'altro (campate di circa 180 pt, 12 pt di pendenza a metà) e le lampadine stanno a
+  passo regolare, almeno 32 pt (`TopLights.bulbXs`: su 1440 pt sono 45). Disegno nostro, lo stesso filo verde scuro e
+  l'alone delle «Luci da appendere» di Decora (`TopLightsArt`).
+  - **Si sceglie:** colori (Multicolore, Caldi, Freddi, Un colore solo: rosso, oro, bianco, blu, verde), lampadine
+    (Tonde, A goccia, A stella) e animazione (Fisse, A turno, Lampeggio lento, Onda). Di base spente; accese partono
+    multicolore, tonde, a turno. Tutto si salva con le altre impostazioni (`SnowSettings.topLights…`) e resta al riavvio;
+    una scelta che la versione non conosce torna al predefinito senza toccare le altre.
+  - **Sopra le finestre, attraverso i clic:** una `TopLightsPanel` per schermo, al livello degli effetti, alta 44 pt,
+    con `ignoresMouseEvents`: la barra dei menu e le finestre sotto restano usabili. Sopra un'app a schermo intero non c'è.
+  - **Schermi:** solo su quelli accesi in Impostazioni → Schermi (SBU-227), con la stessa regola di
+    `showsEffect(onScreen:connected:)`. Si aggiornano entro un giro di `refreshWindows` (8 volte al secondo).
+  - **Fisse** con Riduci movimento, a batteria, con i giochi in pausa o un videogioco davanti, come le luci di Decora
+    (`TopLights.animation(_:reduceMotion:)`). Fisse si disegnano una volta; animate si ridisegnano 15 volte al secondo.
+  - Il codice in `Toys/TopLights/`, i numeri in `Tuning.topLights…`, i test in `TopLightsTests`, gli scatti in
+    `ShotsTests.topLights` (`luci-in-alto-*.png`).
 
 ## Novità della 2.1
 
@@ -481,7 +498,7 @@ In ordine: effetto, intensità, giochi, Natale, Decora, notte, sfondi, suoni, im
   Personaggi (Volpe, Cincia e mangiatoia, Baita, Lanterna, Renna)
 - **Natale**: Fai passare Babbo Natale · Scrivi a Babbo Natale… · Manda l'omino di pan di zenzero · Fai passare lo Yeti ·
   Fai passare il trenino · Fai passare gli elfi · Conto alla rovescia per Natale
-- **Decora**: Luci da appendere · Ghirlanda · Calza · Candela · Falò · Pinguino · Palla di vetro · Togli le decorazioni (sempre accese)
+- **Decora**: Luci in alto (acceso o spento) · Luci da appendere · Ghirlanda · Calza · Candela · Falò · Pinguino · Palla di vetro · Togli le decorazioni (sempre accese)
 - **Notte**: Mai · Di sera · Sempre (l'ora di inizio è nelle Impostazioni)
 - **Sfondi…** · **Suoni** (acceso o spento; il volume è nelle Impostazioni)
 - **Impostazioni…** (⌘,) · **Tour di benvenuto…** · Informazioni · Esci (⌘Q)
@@ -537,6 +554,7 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Toys/WinterPlay/` | Spazzaneve, montagnetta, slittino, funivia e i loro comandi (`WinterPlay.swift`, anche quello dell'albero) |
 | `Toys/Tree/` | L'albero da decorare: `ChristmasTree` (disegno e gesti), `TreeLook` e `Decoration` (i dati, testati e salvati) |
 | `Toys/Cards/` | La scheda di un oggetto (`ToyCard`), con i contenuti del pupazzo (`SnowmanCard`) e dell'albero (`TreeCard`) |
+| `Toys/TopLights/` | Luci in alto (SBU-229): i conti (`TopLights`), il disegno, la finestra per schermo (`TopLightsPanel`), chi le accende (`TopLightsStrip`), Impostazioni → Luci in alto |
 | `Toys/Keeping/` | Alberi e pupazzi salvati: `KeptToys` (i dati e a quale schermo vanno), `ToyKeeper` (UserDefaults) |
 | `Toys/Visitors/` | Yeti, trenino con l'elfo, `ElfPresent`, `Visitors` (quando passano e su quali schermi), Impostazioni → Visitatori |
 | `Engine/SoundBoard.swift` | Effetti brevi e sottofondo in loop (`AVAudioPlayer`) |
