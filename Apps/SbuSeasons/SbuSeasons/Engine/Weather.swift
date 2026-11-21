@@ -111,6 +111,18 @@ nonisolated struct EffectGate {
     }
 }
 
+/// Se fiamme e lampadine di Decora e le Luci in alto si muovono: ferme a batteria, con Riduci movimento, con i giochi
+/// in pausa, con un videogioco davanti (SBU-193) e con gli schermi a riposo (QA SBU-231).
+nonisolated struct DecorGate {
+    var onBattery: Bool
+    var reduceMotion: Bool
+    var paused: Bool
+    var gameInFront: Bool
+    var displaysAsleep: Bool
+
+    var animates: Bool { !onBattery && !reduceMotion && !paused && !gameInFront && !displaysAsleep }
+}
+
 /// «Segui la stagione»: l'effetto dei mesi dell'anno (emisfero nord), solo dal calendario, senza rete.
 enum SeasonCalendar {
     static func effect(month: Int) -> String {
