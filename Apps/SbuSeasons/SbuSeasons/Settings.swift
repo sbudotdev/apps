@@ -48,6 +48,10 @@ nonisolated struct SnowSettings: Codable, Equatable {
     var topLightsColor = TopLights.SingleColor.red   // con «Un colore solo»
     var topLightsShape = TopLights.Shape.round
     var topLightsAnimation = TopLights.Animation.chase
+    // Le tue immagini (SBU-230): come cadono e quali non cadono (nome del file). Le immagini stanno in `ImageLibrary`:
+    // «Ripristina» non le tocca.
+    var imagesMotion = ImageMotion.snow
+    var imagesOff: [String] = []
 }
 
 extension SnowSettings {
@@ -197,6 +201,7 @@ struct SettingsView: View {
                     ScreensSection()
                 }
                 TopLightsSection()
+                ImagesSection()
                 Section("Caduta") {
                     slider("Quantità", $settings.values.flakeCount, Density.range, "%.0f")
                     slider("Dimensione", $settings.values.flakeSize, 0.5...2.5, "%.1f×")

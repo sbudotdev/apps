@@ -355,6 +355,71 @@ struct ShotsTests {
         }
     }
 
+    // MARK: - Le tue immagini
+
+    /// Tre immagini disegnate qui (un cuore, una stella, un sole) in una cartella temporanea.
+    private func sampleLibrary() throws -> ImageLibrary {
+        let library = ImageLibrary(folder: FileManager.default.temporaryDirectory.appending(path: "sbu-230-shots-\(UUID().uuidString)"))
+        let shapes: [(NSColor, (CGRect) -> CGPath)] = [
+            (.systemRed, { r in
+                let p = CGMutablePath()
+                p.move(to: CGPoint(x: r.midX, y: r.minY + 8))
+                p.addCurve(to: CGPoint(x: r.minX + 6, y: r.midY + 14), control1: CGPoint(x: r.midX - 30, y: r.minY + 30), control2: CGPoint(x: r.minX + 4, y: r.midY - 4))
+                p.addArc(center: CGPoint(x: r.midX - 15, y: r.midY + 16), radius: 15, startAngle: .pi, endAngle: 0, clockwise: true)
+                p.addArc(center: CGPoint(x: r.midX + 15, y: r.midY + 16), radius: 15, startAngle: .pi, endAngle: 0, clockwise: true)
+                p.addCurve(to: CGPoint(x: r.midX, y: r.minY + 8), control1: CGPoint(x: r.maxX - 4, y: r.midY - 4), control2: CGPoint(x: r.midX + 30, y: r.minY + 30))
+                return p
+            }),
+            (.systemYellow, { r in
+                let p = CGMutablePath()
+                for i in 0..<10 {
+                    let a = CGFloat(i) * .pi / 5 + .pi / 2, d: CGFloat = i % 2 == 0 ? 30 : 13
+                    let pt = CGPoint(x: r.midX + cos(a) * d, y: r.midY + sin(a) * d)
+                    if i == 0 { p.move(to: pt) } else { p.addLine(to: pt) }
+                }
+                p.closeSubpath()
+                return p
+            }),
+            (.systemOrange, { r in CGPath(ellipseIn: r.insetBy(dx: 12, dy: 12), transform: nil) }),
+        ]
+        for (color, shape) in shapes {
+            let image = NSImage(size: NSSize(width: 64, height: 64), flipped: false) { rect in
+                guard let ctx = NSGraphicsContext.current?.cgContext else { return false }
+                ctx.addPath(shape(rect))
+                ctx.setFillColor(color.cgColor)
+                ctx.setStrokeColor(NSColor.white.cgColor)
+                ctx.setLineWidth(3)
+                ctx.drawPath(using: .fillStroke)
+                return true
+            }
+            let url = FileManager.default.temporaryDirectory.appending(path: "sbu-230-\(UUID().uuidString).png")
+            let rep = try #require(image.tiffRepresentation.flatMap(NSBitmapImageRep.init(data:)))
+            try #require(rep.representation(using: .png, properties: [:])).write(to: url)
+            try library.importFile(at: url)
+        }
+        return library
+    }
+
+    /// Le tue immagini (SBU-230): l'invito senza immagini, poi le tre che cadono in ognuno dei tre moti.
+    /// `immagini-invito.png`, `immagini-neve.png`, `immagini-foglie.png`, `immagini-pioggia.png`.
+    @Test func myImages() throws {
+        let before = Settings.shared.values
+        defer { Settings.shared.values = before }
+        let empty = ImageLibrary(folder: FileManager.default.temporaryDirectory.appending(path: "sbu-230-empty-\(UUID().uuidString)"))
+        let (invite, inviteView) = scene()
+        invite.setSeason(MyImages(library: empty))
+        run(invite, seconds: 1)
+        try save(invite, inviteView, as: "immagini-invito")
+        let library = try sampleLibrary()
+        for (motion, name) in [(ImageMotion.snow, "neve"), (.leaves, "foglie"), (.rain, "pioggia")] {
+            Settings.shared.values.imagesMotion = motion
+            let (scene, view) = scene()
+            scene.setSeason(MyImages(library: library))
+            run(scene, seconds: 6)
+            try save(scene, view, as: "immagini-\(name)")
+        }
+    }
+
     // MARK: - Schede
 
     @Test func cards() throws {
@@ -373,6 +438,12 @@ struct ShotsTests {
         try card(Form { ScreensSection(screens: [("Display Retina integrato", "A"), ("Studio Display", "B"), ("DELL U2723QE", "C")]) }
                     .formStyle(.grouped).frame(width: Quaderno.gridCell * 19).fixedSize(horizontal: false, vertical: true),
                  as: "11-impostazioni-schermi")
+        // Le tue immagini (SBU-230): tre importate, la seconda tolta con la casella.
+        let library = try sampleLibrary()
+        Settings.shared.values.imagesOff = [library.names[1]]
+        Settings.shared.values.imagesMotion = .leaves
+        try card(Form { ImagesSection(library: library) }.formStyle(.grouped).frame(width: Quaderno.gridCell * 19).fixedSize(horizontal: false, vertical: true),
+                 as: "12-impostazioni-immagini")
     }
 
     /// La scheda in italiano, chiara e scura.

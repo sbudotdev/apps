@@ -13,6 +13,7 @@ enum Seasons {
         Fireflies(),
         Meteors(),
         Clear(),
+        MyImages(),
     ]
 
     static func named(_ id: String) -> any Season {

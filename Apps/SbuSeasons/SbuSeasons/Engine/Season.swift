@@ -43,6 +43,10 @@ protocol Season {
     var shatters: Bool { get }
     /// La pioggia schizza sul bordo scoperto di una finestra (SBU-185): le gocce del temporale e quelle sul vetro.
     var splashes: Bool { get }
+    /// Una frase al centro dello schermo al posto delle particelle (Le tue immagini senza immagini). nil = niente.
+    var invitation: String? { get }
+    /// Cambia quando cambia ciò che cade senza cambiare stagione (le immagini importate): la scena rifà le particelle.
+    var revision: Int { get }
 }
 
 extension Season {
@@ -58,6 +62,8 @@ extension Season {
     var gathers: Bool { false }
     var shatters: Bool { false }
     var splashes: Bool { false }
+    var invitation: String? { nil }
+    var revision: Int { 0 }
 }
 
 /// Un tipo di banco che attraversa lo schermo da sinistra a destra: strati di nebbia o nuvole.
@@ -126,4 +132,6 @@ nonisolated struct Particle {
     var length: CGFloat = 1
     /// Quanti punti sopra lo schermo rinasce in più: l'attesa prima di rivederla (una stella "ogni tanto").
     var gap: CGFloat = 0
+    /// La texture di questa particella al posto di quella della stagione, nelle sue proporzioni (Le tue immagini).
+    var texture: SKTexture? = nil
 }
