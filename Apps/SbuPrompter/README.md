@@ -13,9 +13,12 @@ xcodebuild test -project SbuPrompter.xcodeproj -scheme SbuPrompterRemote -destin
 Prova vera col Mac: avvia la build Debug del Mac, leggi il codice dal menu (o con `kill -USR1 <pid>`, campo `remoteCode`) e lancia il test UI con quel codice. Senza codice il test viene saltato.
 
 ```sh
-TEST_RUNNER_SBU_PROMPTER_CODE=1234 xcodebuild test -project SbuPrompter.xcodeproj -scheme SbuPrompterRemote \
+TEST_RUNNER_SBU_PROMPTER_CODE=1234 TEST_RUNNER_SBU_PROMPTER_SHOTS=/tmp/prompter-shots \
+  xcodebuild test -project SbuPrompter.xcodeproj -scheme SbuPrompterRemote \
   -destination 'platform=iOS Simulator,name=<iPhone>' -only-testing:SbuPrompterRemoteUITests
 ```
+
+Deve girare un solo Sbu Prompter sul Mac: due copie si annunciano con lo stesso nome e l'iPhone può collegarsi a quella sbagliata. Con Xcode 27 `xcodebuild` a volte resta appeso dopo "Test Suite 'All tests' passed": il risultato è già nel log, e gli screenshot sono nella cartella di `TEST_RUNNER_SBU_PROMPTER_SHOTS`.
 
 ## Dove sta cosa
 

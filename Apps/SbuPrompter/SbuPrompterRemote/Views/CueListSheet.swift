@@ -25,6 +25,7 @@ struct CueListSheet: View {
                         }
                     }
                 }
+                .accessibilityIdentifier("cue")
             }
             .listStyle(.insetGrouped)
             .navigationTitle("Sezioni")

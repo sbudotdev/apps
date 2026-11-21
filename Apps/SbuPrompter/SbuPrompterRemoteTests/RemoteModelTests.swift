@@ -174,6 +174,11 @@ struct RemoteModelTests {
         #expect(RemoteModel.command(forSwipe: CGSize(width: 10, height: 12)) == nil)
     }
 
+    @Test(arguments: [CGSize.zero, CGSize(width: 3, height: -4)])
+    func dragsThatBarelyMoveAreTaps(_ translation: CGSize) {
+        #expect(RemoteModel.command(forSwipe: translation) == .togglePlay)
+    }
+
     private func pair() {
         model.found(["Studio"])
         model.connected(to: "Studio")

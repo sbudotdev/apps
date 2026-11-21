@@ -25,8 +25,9 @@ struct GesturePad: View {
         .background(SbuTheme.surfaceRaised, in: .rect(cornerRadius: SbuTheme.radiusCard))
         .overlay(RoundedRectangle(cornerRadius: SbuTheme.radiusCard).strokeBorder(SbuTheme.line))
         .contentShape(.rect)
-        .onTapGesture { perform(.togglePlay) }
-        .gesture(DragGesture(minimumDistance: RemoteModel.swipeDistance).onEnded { drag in
+        // One drag from the first point, taps included: the pad sits in ControlView's ScrollView,
+        // whose pan starts after a few points and would cancel a drag that waits for a full swipe.
+        .gesture(DragGesture(minimumDistance: 0).onEnded { drag in
             if let command = RemoteModel.command(forSwipe: drag.translation) { perform(command) }
         })
         .accessibilityElement(children: .ignore)

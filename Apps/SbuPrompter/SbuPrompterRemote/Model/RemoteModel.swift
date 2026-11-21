@@ -18,6 +18,8 @@ final class RemoteModel {
 
     /// The shortest drag that counts as a swipe, in points.
     static let swipeDistance: CGFloat = 40
+    /// A drag shorter than this is a tap, in points.
+    static let tapSlop: CGFloat = 10
 
     private(set) var macs: [String] = []
     private(set) var phase: Phase = .searching
@@ -129,9 +131,12 @@ final class RemoteModel {
     }
 
     /// Up and down change the speed; left and right move between cues, like turning a page.
+    /// A drag that barely moves is a tap: start or pause.
     static func command(forSwipe translation: CGSize) -> PrompterCommand? {
         let (dx, dy) = (translation.width, translation.height)
-        guard max(abs(dx), abs(dy)) >= swipeDistance else { return nil }
+        let distance = max(abs(dx), abs(dy))
+        if distance < tapSlop { return .togglePlay }
+        guard distance >= swipeDistance else { return nil }
         if abs(dy) > abs(dx) { return dy < 0 ? .faster : .slower }
         return dx < 0 ? .nextCue : .previousCue
     }
