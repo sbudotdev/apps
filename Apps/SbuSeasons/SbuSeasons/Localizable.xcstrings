@@ -2841,6 +2841,26 @@
           }
         }
       }
+    },
+    "Meteo nuovo: foglie, petali, lucciole, arcobaleno, vento che gira, «Meteo a caso» e «Segui la stagione».": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New weather: leaves, petals, fireflies, a rainbow, shifting wind, “Random Weather” and “Follow the Season”."
+          }
+        }
+      }
+    },
+    "Un albero da decorare, pupazzi da vestire che si ricordano, visitatori e Decora sulla scrivania.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A tree to decorate, snowmen to dress that stay put, visitors and Decorate on the desktop."
+          }
+        }
+      }
     }
   }
 }

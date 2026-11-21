@@ -70,4 +70,21 @@ struct IntegrationTests {
         passages.tick(at: 1)
         #expect(!passages.isFlying)
     }
+
+    /// Il salvaschermo (SBU-179) usa la stessa `SeasonScene` della scrivania, che ora ha il meteo (SBU-177) e i giochi
+    /// (SBU-178): senza finestre, Dock né AppDelegate deve girare con l'effetto di ogni sfondo.
+    @Test func theSaverRunsEveryEffect() throws {
+        let effects = Set(Wallpaper.all.map(\.effect))
+        #expect(effects.count > 1)
+        for effect in effects {
+            let wallpaper = try #require(Wallpaper.all.first { $0.effect == effect })
+            let defaults = try #require(UserDefaults(suiteName: "saver-\(UUID().uuidString)"))
+            var options = SaverOptions(defaults: defaults)
+            options.wallpaperID = wallpaper.id
+            let view = SaverScene(frame: CGRect(x: 0, y: 0, width: 640, height: 400), options: options, moment: .night, bundle: .main)
+            let scene = try #require(view.scene)
+            #expect(scene.season.id == effect)
+            for i in 0...180 { view.step(at: TimeInterval(i) / 60) }
+        }
+    }
 }
