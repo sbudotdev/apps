@@ -32,22 +32,40 @@ final class WallpaperDirector {
         let moment = prefs.choice.moment(at: .now)
         guard !onlyIfChanged || moment != lastMoment else { return }
         lastMoment = moment
-        for screen in NSScreen.screens {
+        let plan = NSScreen.screens.compactMap { screen -> (Wallpaper, NSScreen)? in
             guard let id = prefs.chosen[screen.wallpaperKey], let wallpaper = Wallpaper.named(id),
                   Wallpaper.isOurs(NSWorkspace.shared.desktopImageURL(for: screen), folder: Wallpaper.installFolder)
-            else { continue }   // l'utente ha messo un suo sfondo: resta il suo
-            Task { try? await set(wallpaper, on: [screen]) }
+            else { return nil }   // l'utente ha messo un suo sfondo: resta il suo
+            return (wallpaper, screen)
         }
+        apply(plan, retryOnFailure: true)
     }
 
     /// "Lo sfondo segue l'effetto": su tutti gli schermi lo sfondo consigliato, se ce n'è uno.
     func followEffect() {
         guard prefs.followsEffect else { return }
         let season = Settings.shared.seasonID
-        for screen in NSScreen.screens {
+        let plan = NSScreen.screens.compactMap { screen -> (Wallpaper, NSScreen)? in
             let current = prefs.chosen[screen.wallpaperKey].flatMap(Wallpaper.named)
-            guard let wallpaper = Wallpaper.suggested(for: season, current: current), wallpaper.id != current?.id else { continue }
-            Task { try? await set(wallpaper, on: [screen]) }
+            guard let wallpaper = Wallpaper.suggested(for: season, current: current), wallpaper.id != current?.id else { return nil }
+            return (wallpaper, screen)
+        }
+        apply(plan)
+    }
+
+    /// Un solo `Task` e uno sfondo alla volta: due schermi con lo stesso sfondo non scrivono lo stesso JPEG insieme.
+    /// `retryOnFailure`: se un cambio fallisce, il timer ci riprova al giro dopo invece di aspettare il momento seguente.
+    private func apply(_ plan: [(Wallpaper, NSScreen)], retryOnFailure: Bool = false) {
+        guard !plan.isEmpty else { return }
+        let groups = Dictionary(grouping: plan, by: { $0.0.id })
+        Task {
+            for pairs in groups.values {
+                do {
+                    try await set(pairs[0].0, on: pairs.map(\.1))
+                } catch {
+                    if retryOnFailure { lastMoment = nil }
+                }
+            }
         }
     }
 

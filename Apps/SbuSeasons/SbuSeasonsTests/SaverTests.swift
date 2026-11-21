@@ -66,4 +66,21 @@ struct SaverTests {
         #expect(view.backdrop != nil)
         #expect(view.scene?.season.id == Snow.id)
     }
+
+    /// Da macOS 14 legacyScreenSaver spesso non chiama stopAnimation(): basta la notifica di fine per fermare tutto.
+    @Test func theSaverStopsWhenMacOSClosesIt() throws {
+        let defaults = try #require(UserDefaults(suiteName: "saver-\(UUID().uuidString)"))
+        var options = SaverOptions(defaults: defaults)
+        options.wallpaperID = "01-prima-neve"
+        let center = NotificationCenter()
+        let view = SaverScene(frame: CGRect(x: 0, y: 0, width: 320, height: 200), options: options, moment: .sunset,
+                              bundle: .main, center: center)
+        var stopped = false
+        view.onStop = { stopped = true }
+        #expect(view.scene != nil)
+        center.post(name: SaverScene.willStop, object: nil)
+        #expect(view.isStopped)
+        #expect(view.scene == nil)
+        #expect(stopped)
+    }
 }

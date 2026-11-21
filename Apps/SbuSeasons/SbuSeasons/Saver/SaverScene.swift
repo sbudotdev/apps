@@ -9,10 +9,20 @@ final class SaverScene: NSView {
     private(set) var backdrop: CGImage?
     private(set) var scene: SeasonScene?
     private var skView: SKView?
+    /// Fermato per sempre: niente più effetto finché non se ne crea un altro.
+    private(set) var isStopped = false
+    /// Dopo `stop()` per la notifica di fine: il salvaschermo vero chiude il processo.
+    var onStop: (() -> Void)?
 
-    init(frame: CGRect, options: SaverOptions, moment: DayMoment, bundle: Bundle = .seasons) {
+    /// macOS manda questa quando il salvaschermo finisce, anche quando non chiama `stopAnimation()`.
+    static let willStop = Notification.Name("com.apple.screensaver.willstop")
+
+    init(frame: CGRect, options: SaverOptions, moment: DayMoment, bundle: Bundle = .seasons,
+         center: NotificationCenter = DistributedNotificationCenter.default()) {
         wallpaper = SaverOptions.pick(chosen: options.wallpaperID, previous: options.previousID)
         super.init(frame: frame)
+        // Da macOS 14 legacyScreenSaver tiene vive le vecchie viste: senza questo l'effetto gira a schermo sbloccato.
+        center.addObserver(self, selector: #selector(screenSaverWillStop), name: Self.willStop, object: nil)
         wantsLayer = true
         layer?.contentsGravity = .resizeAspectFill
         layer?.backgroundColor = NSColor.black.cgColor
@@ -50,5 +60,20 @@ final class SaverScene: NSView {
 
     func setPaused(_ paused: Bool) {
         skView?.isPaused = paused
+    }
+
+    /// Ferma e butta l'effetto: nessun fotogramma in più, anche se la vista resta viva.
+    func stop() {
+        isStopped = true
+        skView?.isPaused = true
+        skView?.presentScene(nil)
+        skView?.removeFromSuperview()
+        skView = nil
+        scene = nil
+    }
+
+    @objc private func screenSaverWillStop(_ notification: Notification) {
+        stop()
+        onStop?()
     }
 }

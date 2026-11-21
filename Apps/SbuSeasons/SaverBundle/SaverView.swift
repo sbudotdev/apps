@@ -21,26 +21,40 @@ final class SaverView: ScreenSaverView {
 
     /// Ogni volta uno sfondo nuovo (se non ne è scelto uno), nel momento di adesso.
     private func build() {
+        content?.stop()
         content?.removeFromSuperview()
         guard let defaults else { return }
         var options = SaverOptions(defaults: defaults)
         let scene = SaverScene(frame: bounds, options: options, moment: DayMoment.at(.now))
         scene.autoresizingMask = [.width, .height]
-        let reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
-        let fps = Tuning.framesPerSecond(onBattery: isOnBattery(), reduceMotion: reduceMotion)
-        scene.setEnergy(onBattery: isOnBattery(), reduceMotion: reduceMotion)
-        animationTimeInterval = 1 / Double(fps)
+        // Il salvaschermo vero chiude il processo, come gli altri: legacyScreenSaver altrimenti resta acceso.
+        if !isPreview { scene.onStop = { exit(0) } }
         addSubview(scene)
         content = scene
+        applyEnergy()
         if !isPreview {
             options.previousID = scene.wallpaper.id
             options.save(to: defaults)
         }
     }
 
+    /// Batteria e Riduci movimento si rileggono a ogni avvio: l'alimentatore si può staccare a salvaschermo acceso.
+    private func applyEnergy() {
+        let onBattery = isOnBattery()
+        let reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+        content?.setEnergy(onBattery: onBattery, reduceMotion: reduceMotion)
+        animationTimeInterval = 1 / Double(Tuning.framesPerSecond(onBattery: onBattery, reduceMotion: reduceMotion))
+    }
+
     override func startAnimation() {
         super.startAnimation()
+        if content?.isStopped == true { build() } else { applyEnergy() }
         content?.setPaused(false)
+    }
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        if window == nil { content?.stop() }
     }
 
     override func stopAnimation() {
