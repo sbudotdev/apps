@@ -71,6 +71,13 @@ struct RemoteGateTests {
         #expect(gate.receive(.pair(code: "9012"), from: "iPhone") == [.send(.paired(token: "token")), .sendStatus])
     }
 
+    @Test func forgettingEndsThePause() {
+        var gate = gate()
+        failAll(&gate)
+        gate.forgetAll()
+        #expect(gate.receive(.pair(code: gate.code), from: "iPhone") == [.send(.paired(token: "token")), .sendStatus])
+    }
+
     @Test func savedTokensStillWorkDuringThePause() {
         var gate = gate(tokens: ["saved"])
         failAll(&gate)

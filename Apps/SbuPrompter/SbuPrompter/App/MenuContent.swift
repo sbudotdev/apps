@@ -42,9 +42,8 @@ struct MenuContent: View {
             // The iPhone asks for this code the first time; it changes after each pairing.
             Text("Codice per l'iPhone: \(model.remote.code)")
         }
-        if model.remote.hasPairedDevices {
-            Button("Dimentica gli iPhone abbinati") { model.remote.forgetAll() }
-        }
+        // Always there: it also gives a new code when someone nearby has been guessing it.
+        Button("Dimentica gli iPhone abbinati") { model.remote.forgetAll() }
 
         Divider()
         Button("Libreria…") {

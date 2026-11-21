@@ -72,10 +72,13 @@ nonisolated struct RemoteGate<Peer: Hashable> {
         trusted.remove(peer)
     }
 
-    /// "Dimentica gli iPhone": every iPhone needs the code again.
+    /// "Dimentica gli iPhone": every iPhone needs the code again, and a pause caused by
+    /// someone else guessing ends, so the person at the Mac can always pair.
     mutating func forgetAll() {
         tokens = []
         trusted = []
+        lockouts = 0
+        lockedUntil = nil
         newCode()
     }
 

@@ -39,7 +39,6 @@ final class RemoteServer: NSObject {
     }
 
     var code: String { gate.code }
-    var hasPairedDevices: Bool { !gate.tokens.isEmpty }
 
     func start() {
         advertiser.startAdvertisingPeer()
