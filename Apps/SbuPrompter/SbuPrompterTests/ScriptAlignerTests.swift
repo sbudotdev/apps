@@ -63,6 +63,22 @@ struct ScriptAlignerTests {
         #expect(aligner.update(spoken: transcript) == 7)
     }
 
+    /// Common pairs ("e il", "and the") are everywhere: two of them must not jump far ahead.
+    @Test(arguments: [
+        ("it", "Oggi vi parlo del progetto. Abbiamo lavorato tre mesi e il risultato è buono.", "allora vediamo e il"),
+        ("en", "Today I talk about the project. We worked for three long months and the result is good.", "so let us see and the"),
+    ])
+    func improvisedCommonPairDoesNotJumpFar(language: String, script: String, aside: String) {
+        let words = TextNormalizer.words(in: script)
+        var aligner = ScriptAligner(script: words)
+        var transcript = Array(words[0..<5])
+        #expect(aligner.update(spoken: transcript) == 5)
+        transcript += spoken(aside)
+        #expect(aligner.update(spoken: transcript) == 5)
+        transcript += Array(words[5..<7])
+        #expect(aligner.update(spoken: transcript) == 7)
+    }
+
     @Test(arguments: alignerCases)
     func ignoresWordsFarBeyondTheWindow(_ c: AlignerCase) {
         var aligner = ScriptAligner(script: c.words, window: 5)
