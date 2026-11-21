@@ -1,7 +1,7 @@
 # Sbu Seasons ❄︎
 
 App Mac nella barra dei menu, pensata per più stagioni e temi: neve, primavera, estate, autunno, pioggia sul vetro, temporale, nebbia, nuvole,
-lucciole, stelle cadenti e sereno.
+lucciole, stelle cadenti, sereno e le tue immagini.
 Nasce da un'idea di Simone Antoniciello (MGS-421).
 
 Neve che cade sopra tutte le finestre del Mac, **si accumula sul bordo superiore delle finestre**
@@ -84,6 +84,29 @@ Le quattro funzioni scelte da Matteo dopo l'analisi della SBU-223 (risposta nell
     (`TopLights.animation(_:reduceMotion:)`). Fisse si disegnano una volta; animate si ridisegnano 15 volte al secondo.
   - Il codice in `Toys/TopLights/`, i numeri in `Tuning.topLights…`, i test in `TopLightsTests`, gli scatti in
     `ShotsTests.topLights` (`luci-in-alto-*.png`).
+- **Le tue immagini** (SBU-230, menu ❄︎ → Effetto → «Le tue immagini», si importano in Impostazioni → Le tue immagini).
+  Fino a 10 immagini (`Tuning.imagesMax`) cadono al posto dei fiocchi. Si importano PNG, JPEG, HEIC e SVG col selettore
+  dei file di sistema (`NSOpenPanel`, più file insieme).
+  - **Restano sul Mac:** ogni file è **copiato** in `~/Library/Application Support/Sbu Seasons/Images/`, con un nome
+    che comincia con l'ora dell'importazione (così l'ordine resta). La cartella è l'elenco: niente altro da salvare,
+    e **«Ripristina» non le cancella**. Si tolgono una a una col cestino; l'originale non si tocca mai.
+  - **Una casella per immagine:** se ne usa una sola o se ne mischiano diverse (`SnowSettings.imagesOff`, i nomi tolti).
+  - **Il moto** (`SnowSettings.imagesMotion`): come la neve, come le foglie (girano, si ribaltano e planano, con i numeri
+    di `AutumnTuning`), come la pioggia (dritte e veloci, 500–800 pt/s). Dimensione, velocità, vento, cursore e
+    intensità valgono come per gli altri effetti; ne cade la metà dei fiocchi (`Tuning.imagesAbundance`), perché sono
+    più grandi (16–36 pt di lato lungo, × «Dimensione»). Ogni immagine tiene le sue proporzioni. Non si posano.
+  - **Controlli:** un file oltre i 20 MB (`Tuning.imageMaxBytes`) o che non si apre come immagine non entra e un avviso
+    dice perché, per ogni file rifiutato (`ImageImportError`). Ogni immagine è ridotta una volta a una texture con il
+    lato lungo di 128 pt (`Tuning.imageSide`, 256 pixel): PNG, JPEG e HEIC con la miniatura di ImageIO, senza
+    decodificare la foto intera; SVG con `NSImage`.
+  - **Senza immagini** (o con tutte le caselle spente) l'effetto non fa cadere niente e al centro dello schermo dice
+    «Importa le tue immagini in Impostazioni → Le tue immagini.» (`Engine/Invitation.swift`, `Season.invitation`).
+  - **Motore:** una particella può avere la sua texture (`Particle.texture`); quando cambiano le immagini, le caselle o
+    il moto cambia `Season.revision` e la scena rifà le particelle al fotogramma dopo. Le altre stagioni non cambiano.
+  - Il codice in `Seasons/Images/` (`ImageLibrary`, `MyImages`, `ImageMotion`, `ImagesSection`), i test in
+    `MyImagesTests`, gli scatti in `ShotsTests.myImages` (`immagini-invito.png`, `immagini-neve.png`,
+    `immagini-foglie.png`, `immagini-pioggia.png`) e `ShotsTests.cards` (`12-impostazioni-immagini-*.png`).
+    Il tour di benvenuto non cambia.
 
 ## Novità della 2.1
 
@@ -525,7 +548,7 @@ una finestra SwiftUI chiusa quasi sempre, e "Dietro le finestre" è un confronto
 
 **Impostazioni**: effetto e dietro le finestre, meteo (meteo a caso, arcobaleno, mucchi più alti, 120 fps), quantità, dimensione e velocità delle particelle, vento, raggio e forza del cursore,
 accumulo sulle finestre e sul fondo, velocità di accumulo, altezza massima, suoni e volume (spenti all'inizio), notte (mai, di sera dalle…, sempre),
-visitatori (Babbo Natale, Yeti, trenino ed elfi che passano da soli, quanto spesso, palle tra pupazzi), apri al login, ripristino.
+visitatori (Babbo Natale, Yeti, trenino ed elfi che passano da soli, quanto spesso, palle tra pupazzi), le tue immagini (importa, scegli, come cadono), apri al login, ripristino.
 Le modifiche si vedono subito (nevica anche sulla finestra Impostazioni, utile per provare) e vengono salvate.
 
 ## Struttura
@@ -568,6 +591,7 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Seasons/Rain/Rain.swift`, `Seasons/Storm/Storm.swift` | Pioggia sul vetro; temporale: pioggia obliqua, nuvole scure, lampi |
 | `Seasons/Mist/Mist.swift`, `Seasons/Clouds/Clouds.swift` | Nebbia in strati bassi; nuvole in alto |
 | `Seasons/Clear/Clear.swift` | Il sereno: non cade niente (per chi vuole solo gli oggetti o lo sfondo) |
+| `Seasons/Images/` | Le tue immagini (SBU-230): le copie importate (`ImageLibrary`), l'effetto (`MyImages`), Impostazioni → Le tue immagini (`ImagesSection`) |
 | `PowerSource.swift` | Batteria o corrente (per i fotogrammi al secondo) |
 | `Settings.swift` | Le impostazioni e la stagione (salvate in UserDefaults) e la finestra SwiftUI per regolarle |
 | `ScreensSection.swift` | Impostazioni → Schermi: un interruttore per schermo, l'ultimo acceso non si spegne (SBU-227) |
