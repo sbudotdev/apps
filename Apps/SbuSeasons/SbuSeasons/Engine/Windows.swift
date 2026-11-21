@@ -179,6 +179,24 @@ func currentDockFrame() -> CGRect? {
     return CGRect(x: frame.minX, y: primary.frame.height - frame.maxY, width: frame.width, height: frame.height)
 }
 
+/// Il rettangolo dell'icona di un'app nel Dock (coordinate Cocoa globali), cercata per nome con l'Accessibilità
+/// (SBU-185, il fulmine sull'app che chiudi). nil senza permesso, o se l'icona non c'è.
+func dockIconFrame(named name: String) -> CGRect? {
+    guard AXIsProcessTrusted(),
+          let primary = NSScreen.screens.first,
+          let dock = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first
+    else { return nil }
+    let app = AXUIElementCreateApplication(dock.processIdentifier)
+    AXUIElementSetMessagingTimeout(app, 0.05)
+    guard let list = (attribute(app, kAXChildrenAttribute) as? [AXUIElement])?
+              .first(where: { attribute($0, kAXRoleAttribute) as? String == kAXListRole }),
+          let icon = (attribute(list, kAXChildrenAttribute) as? [AXUIElement])?
+              .first(where: { attribute($0, kAXTitleAttribute) as? String == name }),
+          let frame = frame(of: icon), frame.width > 0
+    else { return nil }
+    return CGRect(x: frame.minX, y: primary.frame.height - frame.maxY, width: frame.width, height: frame.height)
+}
+
 /// Posizione e dimensione di un elemento (coordinate di Accessibilità, origine in alto a sinistra).
 /// nil se l'app non le dà, o le dà di un tipo inatteso.
 private func frame(of element: AXUIElement) -> CGRect? {

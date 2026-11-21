@@ -33,6 +33,26 @@ nonisolated struct SnowSettings: Codable, Equatable {
     var rainbow = true          // arcobaleno quando la pioggia lascia il posto a un altro effetto
     var tallSnow = false        // mucchi più alti sui bordi (× `Tuning.tallSnowFactor`)
     var highFrameRate = false   // 120 fps sugli schermi ProMotion, solo a corrente
+    // Secondo giro meteo (SBU-185)
+    var variableWind = false        // il vento si alza, si calma e gira da solo (`Wind`)
+    var pauseForVideoGames = true   // un videogioco in primo piano ferma meteo e visitatori (`VideoGame`)
+    var stopOnBattery = false       // a batteria l'effetto si ferma del tutto
+    var screensOff: [String] = []   // schermi senza effetto, per `NSScreen.wallpaperKey`
+    var cleanWindows = false        // la neve su finestre e Dock si scioglie fino a uno strato sottile
+    var followSeason = false        // l'effetto segue il calendario (`SeasonCalendar`)
+}
+
+extension SnowSettings {
+    /// Il vento: a sinistra (meno) o a destra (più), in pt/s. Prima della SBU-185 andava da 0 a 80.
+    static let windRange: ClosedRange<Double> = -80...80
+
+    /// L'effetto è acceso su quello schermo (`NSScreen.wallpaperKey`)? Di base sì, su tutti.
+    func showsEffect(onScreen key: String) -> Bool { !screensOff.contains(key) }
+
+    mutating func setEffect(_ on: Bool, onScreen key: String) {
+        screensOff.removeAll { $0 == key }
+        if !on { screensOff.append(key) }
+    }
 }
 
 extension SnowSettings {
@@ -127,21 +147,47 @@ struct SettingsView: View {
                 }
                 // Meteo (SBU-177): una sezione a sé, per non toccare le righe degli altri filoni di SBU-175.
                 Section {
+                    Toggle("Segui la stagione", isOn: $settings.values.followSeason)
                     Toggle("Meteo a caso", isOn: $settings.values.randomWeather)
+                    Toggle("Vento variabile", isOn: $settings.values.variableWind)
                     Toggle("Arcobaleno dopo la pioggia", isOn: $settings.values.rainbow)
                     Toggle("Mucchi più alti", isOn: $settings.values.tallSnow)
+                    Toggle("Finestre pulite", isOn: $settings.values.cleanWindows)
                     Toggle("120 fps sugli schermi ProMotion", isOn: $settings.values.highFrameRate)
                 } header: {
                     Text("Meteo")
                 } footer: {
-                    Text("Meteo a caso cambia effetto da solo ogni 10–25 minuti, tra quelli della stagione dell'anno. I 120 fps valgono solo a corrente e senza Riduci movimento.")
+                    Text("Segui la stagione sceglie l'effetto dal calendario: neve d'inverno, fiori in primavera, estate, foglie in autunno. Meteo a caso cambia effetto da solo ogni 10–25 minuti, tra quelli della stagione dell'anno. Vento variabile si alza, si calma e gira ogni pochi minuti. Con Finestre pulite la neve su finestre e Dock si scioglie piano e resta uno strato sottile. I 120 fps valgono solo a corrente e senza Riduci movimento.")
                         .foregroundStyle(Quaderno.inkMuted.color)
+                }
+                // Le due scelte dell'effetto da sole si escludono: una cambierebbe quello dell'altra.
+                .onChange(of: settings.values.followSeason) { _, on in if on { settings.values.randomWeather = false } }
+                .onChange(of: settings.values.randomWeather) { _, on in if on { settings.values.followSeason = false } }
+                Section {
+                    Toggle("Pausa quando giochi a un videogioco", isOn: $settings.values.pauseForVideoGames)
+                    Toggle("Ferma a batteria", isOn: $settings.values.stopOnBattery)
+                } header: {
+                    Text("Energia")
+                } footer: {
+                    Text("Con un videogioco davanti si fermano meteo e visitatori: lo riconosce dalla categoria dell'app o da Steam, sul Mac, senza mandare niente. Con Risparmio energetico, o quando il Mac si scalda, l'effetto si dimezza da solo.")
+                        .foregroundStyle(Quaderno.inkMuted.color)
+                }
+                if NSScreen.screens.count > 1 {
+                    Section("Schermi") {
+                        ForEach(NSScreen.screens, id: \.wallpaperKey) { screen in
+                            Toggle(screen.localizedName, isOn: Binding {
+                                settings.values.showsEffect(onScreen: screen.wallpaperKey)
+                            } set: { on in
+                                settings.values.setEffect(on, onScreen: screen.wallpaperKey)
+                            })
+                        }
+                    }
                 }
                 Section("Caduta") {
                     slider("Quantità", $settings.values.flakeCount, Density.range, "%.0f")
                     slider("Dimensione", $settings.values.flakeSize, 0.5...2.5, "%.1f×")
                     slider("Velocità di caduta", $settings.values.fallSpeed, 0.3...2.5, "%.1f×")
-                    slider("Vento", $settings.values.wind, 0...80, "%.0f")
+                    slider("Vento", $settings.values.wind, SnowSettings.windRange, "%.0f", text: Self.windText, spoken: Self.windSpoken)
                 }
                 Section("Cursore") {
                     slider("Raggio", $settings.values.cursorRadius, 20...250, "%.0f pt")
@@ -258,11 +304,26 @@ struct SettingsView: View {
         return "Sbu · \(name) · \(day)".uppercased(with: locale)
     }
 
-    private func slider(_ title: LocalizedStringKey, _ value: Binding<Double>, _ range: ClosedRange<Double>, _ format: String) -> some View {
+    /// Il vento con il suo verso: «← 30» verso sinistra, «30 →» verso destra.
+    static func windText(_ wind: Double) -> String {
+        let speed = String(format: "%.0f", abs(wind))
+        return wind.rounded() == 0 ? speed : wind < 0 ? "← \(speed)" : "\(speed) →"
+    }
+
+    /// Per VoiceOver il verso a parole: le frecce non si leggono bene.
+    static func windSpoken(_ wind: Double) -> String {
+        let speed = Int(abs(wind).rounded())
+        return speed == 0 ? String(localized: "Nessun vento")
+            : wind < 0 ? String(localized: "\(speed) verso sinistra") : String(localized: "\(speed) verso destra")
+    }
+
+    private func slider(_ title: LocalizedStringKey, _ value: Binding<Double>, _ range: ClosedRange<Double>, _ format: String,
+                        text: ((Double) -> String)? = nil, spoken: ((Double) -> String)? = nil) -> some View {
         LabeledContent(title) {
             HStack {
                 Slider(value: value, in: range)
-                Text(String(format: format, value.wrappedValue))
+                    .accessibilityValue(spoken?(value.wrappedValue) ?? String(format: format, value.wrappedValue))
+                Text(text?(value.wrappedValue) ?? String(format: format, value.wrappedValue))
                     .monospacedDigit()
                     .frame(width: Quaderno.gridCell * 3, alignment: .trailing)
             }

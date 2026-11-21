@@ -218,4 +218,33 @@ nonisolated enum Tuning {
 
     /// «Mucchi più alti»: l'altezza massima dei mucchi (Impostazioni → Dove si posa) moltiplicata per tanto.
     static let tallSnowFactor: Double = 2.5
+
+    // MARK: Secondo giro meteo (SBU-185)
+
+    /// Vento fisso: le raffiche scendono al massimo a questa parte della forza scelta, senza cambiare lato.
+    static let windGustDip: CGFloat = 0.6
+    /// «Vento variabile»: gira ogni mezzo periodo (3 minuti), con almeno questa forza anche col cursore a zero (pt/s).
+    static let variableWindPeriod: CGFloat = 360
+    static let variableWindFloor: CGFloat = 30
+
+    /// Con Risparmio energetico, o con il Mac caldo (`thermalState` da `.serious` in su), metà effetto.
+    static func energyShare(lowPower: Bool, thermal: ProcessInfo.ThermalState) -> CGFloat {
+        lowPower || thermal == .serious || thermal == .critical ? 0.5 : 1
+    }
+
+    /// «Finestre pulite»: la neve su finestre e Dock si scioglie di `cleanMeltRate` pt al secondo
+    /// fino a uno strato di `cleanLayer` pt.
+    static let cleanLayer: CGFloat = 3
+    static let cleanMeltRate: CGFloat = 2
+
+    /// Gli schizzi della pioggia sul bordo di una finestra: poche goccioline basse che durano un attimo.
+    /// Solo una goccia del temporale su `1/splashShare` si rompe sul bordo: le altre cadono davanti.
+    static let splashDrops = 5
+    static let splashShare = 0.35
+    static let splashSpeed: ClosedRange<CGFloat> = 40...110
+    static let splashLife: ClosedRange<CGFloat> = 0.2...0.45
+
+    /// Il fulmine sull'icona del Dock di un'app che chiudi mentre piove: quanti tratti e quanto resta (s).
+    static let boltSegments = 10
+    static let boltLife: CGFloat = 0.45
 }

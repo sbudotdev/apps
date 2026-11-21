@@ -31,6 +31,7 @@ final class OverlayWindow: NSPanel {
         let frame = screen.frame
         maxFPS = screen.maximumFramesPerSecond
         screenID = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID
+        screenKey = screen.wallpaperKey
 
         skView = OverlaySKView(frame: NSRect(origin: .zero, size: frame.size))
         scene = SeasonScene(size: frame.size, screenOrigin: frame.origin, season: Settings.shared.season)
@@ -112,6 +113,10 @@ final class OverlayWindow: NSPanel {
     func shakeGlobe() { scene.shakeGlobe() }
     /// Lo schermo di questa finestra, per la pausa automatica.
     let screenID: CGDirectDisplayID?
+    /// Lo schermo, per la scelta degli schermi (SBU-185): lo stesso UUID con cui la galleria ricorda gli sfondi.
+    let screenKey: String
+    /// L'effetto gira su questo schermo adesso.
+    var isRunning: Bool { running ?? false }
     /// Il tempo simulato della neve su questo schermo.
     var elapsed: CGFloat { scene.elapsed }
     func setSeason(_ season: any Season) { scene.setSeason(season) }

@@ -1,4 +1,4 @@
-import CoreGraphics
+import AppKit
 import Foundation
 
 /// «Meteo a caso» (SBU-177): quale effetto viene dopo. La regola segue la stagione dell'anno (emisfero nord):
@@ -62,4 +62,63 @@ nonisolated func ledgeHit(from: CGPoint, to: CGPoint, ledges: [Ledge]) -> Ledge?
 /// Una finestra copre tutto lo schermo (un'app a schermo intero, non solo ingrandita: quella lascia la barra dei menu).
 nonisolated func coversScreen(_ windows: [CGRect], screen: CGRect) -> Bool {
     windows.contains { $0.insetBy(dx: -1, dy: -1).contains(screen) }
+}
+
+// MARK: - Secondo giro (SBU-185)
+
+/// Il vento orizzontale in pt/s (più = verso destra). Fisso: soffia sempre dalla stessa parte, con raffiche che
+/// scendono al massimo a `Tuning.windGustDip` della forza scelta. Variabile: si alza, si calma e gira ogni
+/// mezzo `Tuning.variableWindPeriod`, con la forza scelta (almeno `Tuning.variableWindFloor`).
+nonisolated enum Wind {
+    static func speed(at t: CGFloat, base: CGFloat, variable: Bool) -> CGFloat {
+        if variable {
+            let strength = max(abs(base), Tuning.variableWindFloor)
+            let turn = sin(t * 2 * .pi / Tuning.variableWindPeriod)
+            let gust = 0.75 + 0.25 * sin(t * 0.9)
+            return strength * turn * gust
+        }
+        return base * (Tuning.windGustDip + (1 - Tuning.windGustDip) * (0.5 + 0.5 * sin(t * 0.37)))
+    }
+}
+
+/// «Pausa quando giochi a un videogioco»: un'app è un gioco se la sua categoria è un tipo di gioco
+/// (`public.app-category.games`, `…action-games`…) o se sta tra i giochi di Steam. Tutto in locale.
+nonisolated enum VideoGame {
+    static func isGame(category: String?, path: String) -> Bool {
+        if let category, category.hasPrefix("public.app-category."), category.hasSuffix("games") { return true }
+        return path.contains("/steamapps/")
+    }
+
+    static func isGame(_ app: NSRunningApplication?) -> Bool {
+        guard let url = app?.bundleURL else { return false }
+        let category = Bundle(url: url)?.object(forInfoDictionaryKey: "LSApplicationCategoryType") as? String
+        return isGame(category: category, path: url.path)
+    }
+}
+
+/// Se l'effetto gira su uno schermo: tutto quello che lo può fermare, in un posto solo.
+nonisolated struct EffectGate {
+    var snowing: Bool
+    var displaysAsleep: Bool
+    var screenCovered: Bool
+    var gameInFront: Bool
+    var screenOff: Bool
+    var stopOnBattery: Bool
+    var onBattery: Bool
+
+    var runs: Bool {
+        snowing && !displaysAsleep && !screenCovered && !gameInFront && !screenOff && !(stopOnBattery && onBattery)
+    }
+}
+
+/// «Segui la stagione»: l'effetto dei mesi dell'anno (emisfero nord), solo dal calendario, senza rete.
+enum SeasonCalendar {
+    static func effect(month: Int) -> String {
+        switch month {
+        case 3...5: Spring.id
+        case 6...8: Summer.id
+        case 9...11: Autumn.id
+        default: Snow.id
+        }
+    }
 }

@@ -14,6 +14,7 @@ struct Rain: Season {
     var abundance: Double { 0 }
     var glass: GlassRain? { RainTuning.glass }
     var lightning: Lightning? { RainTuning.lightning }
+    var splashes: Bool { true }
 
     func makeTexture() -> SKTexture { SKTexture() }
     func particle(depth: CGFloat) -> Particle {

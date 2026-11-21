@@ -167,6 +167,14 @@ final class Pile {
         return spots
     }
 
+    /// «Finestre pulite» (SBU-185): ogni colonna più alta di `floor` scende di `amount`, senza andare sotto `floor`.
+    func melt(downTo floor: CGFloat, by amount: CGFloat) {
+        for i in heights.indices where heights[i] > floor {
+            heights[i] = max(floor, heights[i] - amount)
+            dirty = true
+        }
+    }
+
     func clear() {
         dropResting { _ in true }
         guard !isEmpty else { return }

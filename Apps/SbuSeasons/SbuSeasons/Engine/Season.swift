@@ -41,6 +41,8 @@ protocol Season {
     var gathers: Bool { get }
     /// Una particella che tocca il bordo scoperto di una finestra si rompe in scintille (le stelle cadenti).
     var shatters: Bool { get }
+    /// La pioggia schizza sul bordo scoperto di una finestra (SBU-185): le gocce del temporale e quelle sul vetro.
+    var splashes: Bool { get }
 }
 
 extension Season {
@@ -55,6 +57,7 @@ extension Season {
     var linger: ClosedRange<CGFloat>? { nil }
     var gathers: Bool { false }
     var shatters: Bool { false }
+    var splashes: Bool { false }
 }
 
 /// Un tipo di banco che attraversa lo schermo da sinistra a destra: strati di nebbia o nuvole.

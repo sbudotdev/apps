@@ -124,6 +124,17 @@ final class SeasonScene: SKScene {
         }
     }
 
+    /// Risparmio energetico o Mac caldo (SBU-185): la parte di particelle, banchi e gocce che resta (1 = tutto).
+    var energyShare: CGFloat = 1 {
+        didSet {
+            guard energyShare != oldValue else { return }
+            if flakes.isEmpty { sky.set(season, size: size, amount: skyAmount) } else { rebuildFlakes(keeping: true) }
+        }
+    }
+
+    /// I fulmini sul Dock ancora accesi.
+    private var bolts: [Bolt] = []
+
     /// Quantità e dimensione con cui sono stati creati i fiocchi attuali:
     /// se nelle impostazioni cambiano, li ricreiamo.
     private var builtWith: (count: Double, size: Double)?
@@ -205,7 +216,7 @@ final class SeasonScene: SKScene {
             flakes = []
             return
         }
-        let calm = reduceMotion ? Tuning.reducedMotionFlakes : 1
+        let calm = (reduceMotion ? Tuning.reducedMotionFlakes : 1) * energyShare
         let exact = settings.flakeCount * season.abundance * Double(size.width * size.height / Tuning.referenceScreenArea * calm)
         let count = season.abundance > 0 ? max(Int(exact), 1) : 0
         if flakes.count > count {
@@ -224,7 +235,7 @@ final class SeasonScene: SKScene {
     private var intensity: CGFloat { CGFloat(Settings.shared.values.flakeCount / SnowSettings().flakeCount) }
 
     /// Quanti banchi rispetto a "Media": seguono l'intensità, e con Riduci movimento sono la metà.
-    private var skyAmount: CGFloat { intensity * (reduceMotion ? Tuning.reducedMotionFlakes : 1) }
+    private var skyAmount: CGFloat { intensity * (reduceMotion ? Tuning.reducedMotionFlakes : 1) * energyShare }
 
     /// Crea un fiocco nel punto indicato.
     private func makeFlake(at position: CGPoint) -> Flake {
@@ -312,6 +323,17 @@ final class SeasonScene: SKScene {
 
     /// L'arcobaleno dopo la pioggia (lo chiede `AppDelegate` quando l'effetto cambia, se è acceso).
     func showRainbow() { rainbow.show(size: size) }
+
+    /// Il fulmine sull'icona del Dock in `point` (coordinate globali): dalla cima dello schermo all'icona, con un lampo
+    /// e il tuono (SBU-185). Chi chiama controlla `Bolt.strikes`.
+    func strike(at point: CGPoint) {
+        let target = CGPoint(x: point.x - screenOrigin.x, y: point.y - screenOrigin.y)
+        let bolt = Bolt(from: size.height, to: target)
+        addChild(bolt)
+        bolts.append(bolt)
+        sky.strikeNow()
+    }
+    var boltCount: Int { bolts.count }
 
     /// I pezzi staccati da un mucchio sono foglie o petali interi (non polvere): volano e cadono piano.
     private var piecesAreWhole: Bool { season.pieceSize.upperBound > 4 }
@@ -602,9 +624,8 @@ final class SeasonScene: SKScene {
         let cursorRepel = CGFloat(settings.cursorRepel)
         let fallSpeed = CGFloat(settings.fallSpeed)
 
-        // Vento globale che cambia lentamente.
-        let maxWind = reduceMotion ? 0 : CGFloat(settings.wind)
-        let wind = sin(elapsed * 0.11) * maxWind + sin(elapsed * 0.37) * maxWind * 0.3
+        // Il vento: a sinistra o a destra con le raffiche, o variabile (SBU-185). Con Riduci movimento niente.
+        let wind = reduceMotion ? 0 : Wind.speed(at: elapsed, base: CGFloat(settings.wind), variable: settings.variableWind)
 
         // Posizione e velocità del cursore in coordinate della scena.
         let global = pointerLocation()
@@ -625,6 +646,7 @@ final class SeasonScene: SKScene {
         gathering = gather > 0
         // Letti una volta per fotogramma, non per particella: `season` è un protocollo e ogni lettura costa.
         let shatters = season.shatters
+        let splashes = season.splashes
         let linger = season.linger
         let settles = season.settles
 
@@ -687,15 +709,21 @@ final class SeasonScene: SKScene {
                 p.x += (mouse.x + cos(angle) * ring - p.x) * pull
                 p.y += (mouse.y + sin(angle) * ring - p.y) * pull
             }
-            if shatters, !waiting, flake.drift != 0 {
+            if shatters || splashes, !waiting, flake.drift != 0 {
                 // La testa della stella (davanti al centro della scia) tocca un bordo scoperto: si rompe in scintille.
                 let length = hypot(flake.drift, flake.fallSpeed)
                 let lead = CGVector(dx: flake.drift / length * flake.extent, dy: -flake.fallSpeed / length * flake.extent)
                 let from = CGPoint(x: flake.node.position.x + lead.dx, y: previousY + lead.dy)
                 let to = CGPoint(x: p.x + lead.dx, y: p.y + lead.dy)
                 if let edge = ledgeHit(from: from, to: to, ledges: ledges) {
-                    sparks.burst(at: CGPoint(x: to.x, y: edge.y), color: season.pileColor, calm: reduceMotion)
-                    p.y = -flake.extent - 1   // finita: rinasce in cima (il chiamante la vede sotto lo schermo)
+                    if shatters {
+                        sparks.burst(at: CGPoint(x: to.x, y: edge.y), color: season.pileColor, calm: reduceMotion)
+                        p.y = -flake.extent - 1   // finita: rinasce in cima (il chiamante la vede sotto lo schermo)
+                    } else if Double.random(in: 0..<1) < Tuning.splashShare {
+                        // Una goccia del temporale su tre schizza sul bordo; le altre cadono davanti alla finestra.
+                        sparks.splash(at: CGPoint(x: to.x, y: edge.y), color: season.pileColor, calm: reduceMotion)
+                        p.y = -flake.extent - 1
+                    }
                 }
             }
 
@@ -746,7 +774,15 @@ final class SeasonScene: SKScene {
 
         // --- Nebbia, nuvole, lampi e gocce sul vetro ---
         sky.step(dt: dt, width: size.width, calm: reduceMotion)
-        glass.step(dt: dt, size: size, ledges: ledges, amount: intensity, calm: reduceMotion)
+        glass.step(dt: dt, size: size, ledges: ledges, amount: intensity * energyShare, calm: reduceMotion)
+        for point in glass.splashes { sparks.splash(at: point, color: season.pileColor, calm: reduceMotion) }
+        if !bolts.isEmpty {
+            bolts.removeAll { bolt in
+                guard !bolt.step(dt: dt) else { return false }
+                bolt.removeFromParent()
+                return true
+            }
+        }
         nightClock += dt
         if nightClock >= 1 {
             nightClock = 0
@@ -841,6 +877,8 @@ final class SeasonScene: SKScene {
                 pile.maxHeight = pile === dock?.pile ? maxPile * Tuning.dockPileFactor : maxPile
                 // Accumulo disattivato dalle impostazioni: la neve sparisce.
                 if !allPiles.contains(where: { $0 === pile }) { pile.clear() }
+                // «Finestre pulite»: si scioglie piano e resta uno strato sottile.
+                if settings.cleanWindows { pile.melt(downTo: Tuning.cleanLayer, by: Tuning.cleanMeltRate * Tuning.pileSettleInterval) }
                 pile.age(by: Tuning.pileSettleInterval)
                 pile.settle()
                 pile.redrawIfNeeded()

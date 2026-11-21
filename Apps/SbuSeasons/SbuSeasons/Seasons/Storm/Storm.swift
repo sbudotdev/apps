@@ -15,6 +15,7 @@ struct Storm: Season {
     var banks: [Bank] { [StormTuning.clouds] }
     var lightning: Lightning? { StormTuning.lightning }
     var glass: GlassRain? { StormTuning.glass }
+    var splashes: Bool { true }
 
     func particle(depth: CGFloat) -> Particle {
         let fall = CGFloat.random(in: StormTuning.fallSpeed) * (0.7 + depth * 0.3)
