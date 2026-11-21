@@ -136,4 +136,9 @@ final class OverlayWindow: NSPanel {
 /// il clic su un oggetto servirebbe solo ad "attivarla" e andrebbe perso.
 private final class OverlaySKView: SKView {
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+    // Clic destro, pizzico, rotazione e rotella vanno alla scena (decorazioni, albero, schede: SBU-178).
+    override func rightMouseDown(with event: NSEvent) { scene?.rightMouseDown(with: event) }
+    override func magnify(with event: NSEvent) { scene?.magnify(with: event) }
+    override func rotate(with event: NSEvent) { scene?.rotate(with: event) }
+    override func scrollWheel(with event: NSEvent) { scene?.scrollWheel(with: event) }
 }

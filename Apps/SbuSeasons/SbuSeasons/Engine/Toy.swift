@@ -11,6 +11,10 @@ class Toy {
     var bounce: CGFloat = 0
     /// Quanto in fretta si ferma quando poggia su un bordo (più basso = scivola o rotola più lontano).
     var friction: CGFloat = Tuning.toyFriction
+    /// false: un clic arriva, ma trascinandolo non si sposta (lo Yeti).
+    var isDraggable = true
+    /// false: può uscire di lato dallo schermo, e fuori dai bordi cammina sul prolungamento del fondo (i visitatori).
+    var staysOnScreen = true
 
     init(node: SKSpriteNode, at position: CGPoint) {
         self.node = node
@@ -38,4 +42,17 @@ class Toy {
 
     /// Il cursore o una finestra sono stati scossi.
     func shaken(_ shake: Shake) {}
+
+    // MARK: Parti che si muovono da sole (le decorazioni dell'albero)
+
+    /// Pressione nel punto `point` rispetto ai piedi. true = l'oggetto trascina una sua parte e il motore non lo sposta:
+    /// poi arrivano `dragPart(to:)` e `releasePart(at:)`.
+    func pressPart(at point: CGPoint) -> Bool { false }
+    func dragPart(to point: CGPoint) {}
+    func releasePart(at point: CGPoint) {}
+
+    /// Pizzico sul trackpad o rotella sopra l'oggetto (`factor` > 1 = più grande), nel punto rispetto ai piedi.
+    func resized(at point: CGPoint, by factor: CGFloat) {}
+    /// Rotazione a due dita sul trackpad, o rotella con ⇧ o ⌥ (radianti, antiorario).
+    func turned(at point: CGPoint, by radians: CGFloat) {}
 }

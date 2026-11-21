@@ -101,9 +101,8 @@ nonisolated enum Tuning {
     static let cablePylonHeight: CGFloat = 60
     /// La velocità della cabina sul cavo (pt/s).
     static let cableSpeed: CGFloat = 70
-    static let maxTrees = 5
-    /// Le palline su un albero, al massimo.
-    static let maxBaubles = 40
+    /// Fino a 3 alberi, come in KoiArt (SBU-178): oltre sparisce il più vecchio.
+    static let maxTrees = 3
 
     // MARK: Natale
 
@@ -163,4 +162,29 @@ nonisolated enum Tuning {
     static let globeLift: ClosedRange<CGFloat> = 250...650
     /// Dopo una scossa la palla di vetro riposa per qualche secondo: chi continua a scuotere non la rifà subito.
     static let globeRest: CGFloat = 3
+
+    // MARK: Albero da decorare, pupazzo, visitatori (SBU-178)
+
+    /// Le decorazioni su un albero, al massimo (la stella non conta: ce n'è una sola e sostituisce la vecchia).
+    static let maxDecorations = 40
+    /// Quanto può crescere un albero (1 = come lo pianti) e quanto si ingrandisce o rimpicciolisce una decorazione.
+    static let treeGrowth: ClosedRange<CGFloat> = 1...2.2
+    static let decorationScale: ClosedRange<CGFloat> = 0.5...2.5
+    /// La rotella: un punto di scorrimento ingrandisce dell'1% (con ⇧ o ⌥ gira di un grado).
+    static let scrollResize: CGFloat = 0.01
+
+    /// Ogni quanto si salvano alberi e pupazzi (s), se sono cambiati; poi all'uscita e quando si ricreano gli schermi.
+    static let keepInterval: TimeInterval = 5
+
+    /// Lo Yeti passa da solo ogni 4–9 minuti, solo se c'è almeno un pupazzo da portare via.
+    static let yetiInterval: ClosedRange<CGFloat> = 240...540
+    /// Cammina a `yetiWalk` pt/s, scappa a `yetiDash` quando lo scacci; con il pupazzo in spalla va a `yetiCarry`.
+    static let yetiWalk: CGFloat = 70
+    static let yetiCarry: CGFloat = 55
+    static let yetiDash: CGFloat = 320
+    /// Il trenino con l'elfo passa da solo ogni 5–10 minuti, a `trainSpeed` pt/s, e lascia un regalo.
+    static let trainInterval: ClosedRange<CGFloat> = 300...600
+    static let trainSpeed: CGFloat = 130
+    /// La lettera sale fino alla slitta a `letterRise` pt/s.
+    static let letterRise: CGFloat = 160
 }

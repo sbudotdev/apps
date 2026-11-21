@@ -65,7 +65,9 @@ final class SeasonScene: SKScene {
     /// Dove comincia la barra dei menu (coordinate della scena): un oggetto non sta in piedi dove la coprirebbe.
     private(set) var ceiling: CGFloat?
     /// L'oggetto in mano al cursore: dove l'ha preso, dov'è partito, l'ultima posizione e la velocità del lancio.
-    private var held: (toy: Toy, grip: CGVector, start: CGPoint, last: CGPoint, time: TimeInterval, velocity: CGVector)?
+    /// `part`: si trascina una parte dell'oggetto (una decorazione), non l'oggetto.
+    private var held: (toy: Toy, grip: CGVector, start: CGPoint, last: CGPoint, time: TimeInterval, velocity: CGVector,
+                       part: Bool)?
     private var pointerShake = ShakeDetector()
     /// Granelli di neve raccolti con ⌥ per la prossima palla.
     private var gathered = 0
@@ -333,8 +335,10 @@ final class SeasonScene: SKScene {
     func grab(at point: CGPoint, time: TimeInterval) -> Bool {
         guard !toysPaused, let toy = toy(at: point) else { return false }
         let feet = toy.body.position
-        held = (toy, CGVector(dx: point.x - feet.x, dy: point.y - feet.y), point, point, time, .zero)
-        toy.body.hold(at: feet)
+        let grip = CGVector(dx: point.x - feet.x, dy: point.y - feet.y)
+        let part = toy.pressPart(at: CGPoint(x: grip.dx, y: grip.dy))
+        held = (toy, grip, point, point, time, .zero, part)
+        if !part && toy.isDraggable { toy.body.hold(at: feet) }
         // Davanti agli altri oggetti.
         toys.removeAll { $0 === toy }
         toys.append(toy)
@@ -352,9 +356,14 @@ final class SeasonScene: SKScene {
         }
         held.last = point
         held.time = time
-        held.toy.body.hold(at: CGPoint(x: point.x - held.grip.dx, y: point.y - held.grip.dy))
-        held.toy.node.position = held.toy.body.position
         self.held = held
+        let feet = held.toy.body.position
+        if held.part {
+            held.toy.dragPart(to: CGPoint(x: point.x - feet.x, y: point.y - feet.y))
+        } else if held.toy.isDraggable {
+            held.toy.body.hold(at: CGPoint(x: point.x - held.grip.dx, y: point.y - held.grip.dy))
+            held.toy.node.position = held.toy.body.position
+        }
     }
 
     /// Rilascio: un clic se il mouse non si è quasi mosso, se no un lancio (con Riduci movimento cade dritto).
@@ -365,6 +374,15 @@ final class SeasonScene: SKScene {
         guard let held else { return }
         self.held = nil
         let isClick = hypot(point.x - held.start.x, point.y - held.start.y) < Tuning.clickSlop
+        if held.part {
+            let feet = held.toy.body.position
+            held.toy.releasePart(at: CGPoint(x: point.x - feet.x, y: point.y - feet.y))
+            return
+        }
+        guard held.toy.isDraggable else {
+            if isClick { held.toy.clicked(at: CGPoint(x: point.x - held.toy.body.position.x, y: point.y - held.toy.body.position.y)) }
+            return
+        }
         held.toy.body.release(velocity: isClick || stale || reduceMotion ? .zero : held.velocity)
         if held.toy is Snowball, held.toy.body.velocity != .zero { SoundBoard.shared.play("palla-di-neve-lancio") }
         if isClick {
@@ -376,8 +394,39 @@ final class SeasonScene: SKScene {
     /// Il cursore si è mosso su questo schermo: se è stato scosso, lo sanno tutti gli oggetti.
     /// La neve si ferma mentre trascini: l'oggetto cade lì, e la finestra non resta col mouse preso.
     func dropHeld() {
-        held?.toy.body.release(velocity: .zero)
+        if let held, !held.part, held.toy.isDraggable { held.toy.body.release(velocity: .zero) }
+        if let held, held.part { held.toy.releasePart(at: CGPoint(x: held.grip.dx, y: held.grip.dy)) }
         held = nil
+    }
+
+    // MARK: - Schede, pizzico, rotella (SBU-178)
+
+    /// La scheda di un oggetto (pupazzo, albero) da aprire nel punto dato, in coordinate globali.
+    /// La apre `OverlayWindow` (`ToyCard`); i test la intercettano.
+    var onCard: ((Toy, CGPoint) -> Void)?
+
+    /// Chiede la scheda di `toy`, aperta sopra il punto `point` della scena (di norma il cursore).
+    func openCard(for toy: Toy, at point: CGPoint) {
+        guard !toysPaused else { return }
+        onCard?(toy, CGPoint(x: point.x + screenOrigin.x, y: point.y + screenOrigin.y))
+    }
+
+    /// Clic destro (o ⌃ clic) su un oggetto: la sua scheda, se ne ha una.
+    func secondaryClick(at point: CGPoint) {
+        guard !toysPaused, let toy = toy(at: point) else { return }
+        openCard(for: toy, at: point)
+    }
+
+    /// Pizzico o rotella sopra un oggetto: lo ingrandisce o rimpicciolisce (o una sua parte).
+    func resize(at point: CGPoint, by factor: CGFloat) {
+        guard !toysPaused, factor > 0, let toy = toy(at: point) else { return }
+        toy.resized(at: CGPoint(x: point.x - toy.body.position.x, y: point.y - toy.body.position.y), by: factor)
+    }
+
+    /// Rotazione a due dita (o ⇧ e la rotella) sopra un oggetto.
+    func turn(at point: CGPoint, by radians: CGFloat) {
+        guard !toysPaused, let toy = toy(at: point) else { return }
+        toy.turned(at: CGPoint(x: point.x - toy.body.position.x, y: point.y - toy.body.position.y), by: radians)
     }
 
     /// `rolling`: ⌥ premuto d'inverno, si sta facendo una palla. Passare avanti e indietro sulla neve
@@ -459,7 +508,22 @@ final class SeasonScene: SKScene {
         SoundBoard.shared.play("palla-di-vetro")
     }
 
-    override func mouseDown(with event: NSEvent) { grab(at: event.location(in: self), time: event.timestamp) }
+    override func mouseDown(with event: NSEvent) {
+        if event.modifierFlags.contains(.control) { return secondaryClick(at: event.location(in: self)) }
+        grab(at: event.location(in: self), time: event.timestamp)
+    }
+    override func rightMouseDown(with event: NSEvent) { secondaryClick(at: event.location(in: self)) }
+    override func magnify(with event: NSEvent) { resize(at: event.location(in: self), by: 1 + event.magnification) }
+    override func rotate(with event: NSEvent) { turn(at: event.location(in: self), by: CGFloat(event.rotation) * .pi / 180) }
+    override func scrollWheel(with event: NSEvent) {
+        let point = event.location(in: self)
+        let delta = event.scrollingDeltaY * (event.hasPreciseScrollingDeltas ? 1 : 10)
+        if event.modifierFlags.contains(.shift) || event.modifierFlags.contains(.option) {
+            turn(at: point, by: delta * .pi / 180)
+        } else {
+            resize(at: point, by: exp(delta * Tuning.scrollResize))
+        }
+    }
     override func mouseDragged(with event: NSEvent) { drag(to: event.location(in: self), time: event.timestamp) }
     override func mouseUp(with event: NSEvent) { letGo(at: event.location(in: self), time: event.timestamp) }
 
@@ -682,13 +746,16 @@ final class SeasonScene: SKScene {
         // --- Oggetti: gravità, appoggio sui bordi scoperti, sul Dock o sul fondo dello schermo ---
         if !toys.isEmpty, !toysPaused {
             let toyLedges = ledges + [Ledge(y: 0, span: 0...size.width)]
+            // I visitatori entrano e escono di lato: per loro il fondo continua fuori dallo schermo.
+            let wideLedges = ledges + [Ledge(y: 0, span: -size.width...size.width * 2)]
             for toy in toys {
                 // Sulle finestre attaccate alla barra dei menu un oggetto alto la coprirebbe: lì non si ferma.
                 let room = (ceiling ?? size.height) - toy.node.size.height
-                let fit = toyLedges.contains { $0.y > room } ? toyLedges.filter { $0.y <= room } : toyLedges
+                let all = toy.staysOnScreen ? toyLedges : wideLedges
+                let fit = all.contains { $0.y > room } ? all.filter { $0.y <= room } : all
                 let falling = toy.body.velocity.dy
-                toy.body.step(dt: dt, ledges: fit, width: size.width, bounce: reduceMotion ? 0 : toy.bounce,
-                              friction: toy.friction)
+                toy.body.step(dt: dt, ledges: fit, width: toy.staysOnScreen ? size.width : nil,
+                              bounce: reduceMotion ? 0 : toy.bounce, friction: toy.friction)
                 // Una palla che arriva forte su un bordo fa "puf"; quelle che rotolano o rimbalzano piano no.
                 if toy is Snowball, falling < -Tuning.toyMinBounce * 2, toy.body.velocity.dy >= 0 {
                     SoundBoard.shared.play("palla-di-neve-colpo")
