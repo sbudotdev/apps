@@ -169,15 +169,22 @@ nonisolated struct GlassDrops {
     /// La pioggia ricopre la scia: a poco a poco fino a `life`; con Riduci movimento tutta insieme, alla fine.
     private mutating func refill(density: CGFloat, calm: Bool) {
         guard !trail.isEmpty else { return }
+        let shares = trail.map { spot in
+            let age = clock - spot.born
+            return calm ? (age >= spot.life ? 1 : 0) : min(1, age / spot.life)
+        }
         for i in trail.indices {
             let spot = trail[i]
-            let age = clock - spot.born
-            let share = calm ? (age >= spot.life ? 1 : 0) : min(1, age / spot.life)
-            let target = Int(density * .pi * spot.radius * spot.radius * share)
+            let target = Int(density * .pi * spot.radius * spot.radius * shares[i])
             for _ in spot.filled..<max(spot.filled, target) {
                 let angle = CGFloat.random(in: 0..<2 * .pi), r = spot.radius * sqrt(.random(in: 0...1))
-                bead(at: CGPoint(x: spot.center.x + cos(angle) * r, y: spot.center.y + sin(angle) * r),
-                     radius: .random(in: rain.size))
+                let point = CGPoint(x: spot.center.x + cos(angle) * r, y: spot.center.y + sin(angle) * r)
+                // Dove i tratti si sovrappongono riempie solo il meno avanti: se no lì l'acqua si somma.
+                let behind = trail.indices.contains { j in
+                    j != i && shares[j] < shares[i]
+                        && hypot(trail[j].center.x - point.x, trail[j].center.y - point.y) < trail[j].radius
+                }
+                if !behind { bead(at: point, radius: .random(in: rain.size)) }
             }
             trail[i].filled = max(spot.filled, target)
         }

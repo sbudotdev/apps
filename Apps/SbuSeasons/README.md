@@ -50,6 +50,23 @@ Le quattro funzioni scelte da Matteo dopo l'analisi della SBU-223 (risposta nell
     riaccendi tornano al loro posto. Alberi e pupazzi si salvano come sempre (`KeptToys`). Babbo Natale, Yeti,
     trenino ed elfi saltano gli schermi spenti (`ScreenRoute`, `effectRuns`). Le decorazioni di **Decora** sono finestre
     a parte sulla scrivania: restano visibili anche lì.
+- **Il cursore asciuga la pioggia sul vetro** (SBU-228, solo «Pioggia sul vetro» e «Temporale»). Passando, il cursore
+  toglie le gocce ferme o che scorrono dentro il suo raggio (lo stesso «Raggio» delle Impostazioni → Cursore); quelle che
+  cadono da un bordo vanno per la loro strada. Le gocce asciugate svaniscono in 0,15 s (`RainTuning.wipeFade`). Resta
+  una scia, fatta di tratti tondi (`Wiped`, uno ogni mezzo raggio di strada) dove la pioggia non si posa: ognuno torna
+  coperto a poco a poco, fitto come il vetro intorno, in 3–6 s a caso (`RainTuning.wipeClose`). Ripassando su un tratto
+  lo si riasciuga. Dove i tratti si sovrappongono li riempie solo il meno avanti, se no lì l'acqua si sommerebbe.
+  - Il cursore deve muoversi: fermo non scava un buco nel vetro.
+  - **Riduci movimento:** le gocce spariscono subito e ogni tratto resta asciutto finché non si richiude tutto insieme.
+  - **Dietro le finestre:** asciuga solo se il cursore è sulla scrivania, non sopra una finestra o il Dock
+    (`SeasonScene.wipesGlass`). Si guarda il punto del cursore: vicino al bordo di una finestra il raggio può
+    asciugare anche un po' di vetro sotto la finestra, che tanto non si vede.
+  - Il codice: `GlassDrops.step(…, wipe:)` in `Engine/Glass.swift`, i test in `GlassWipeTests`, gli scatti in
+    `ShotsTests.rainWipe` (`pioggia-scia-*.png`, `pioggia-scia-ridotto-*.png`).
+  - **CPU** (Debug, schermo 1920×1080, intensità Media, 18 giri alternati da 10 s, mediana del tempo di un passo
+    della simulazione): pioggia 0,48 ms col cursore fermo fuori dallo schermo, 0,28 ms col cursore che asciuga;
+    temporale 3,45 → 2,16 ms. Asciugando ci sono meno gocce da muovere, quindi costa meno. Non si è lanciata l'app sul
+    Mac condiviso.
 
 ## Novità della 2.1
 

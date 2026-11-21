@@ -295,6 +295,27 @@ struct ShotsTests {
         try write(try #require(rep.cgImage), as: "14-decora")
     }
 
+    // MARK: - Pioggia sul vetro
+
+    /// Il cursore passa da sinistra a destra sul vetro bagnato (SBU-228): una foto della scia appena fatta, una a metà
+    /// richiusura, e il filmato. In fondo, `pioggia-scia-ridotto`: con Riduci movimento, a metà la scia è ancora asciutta.
+    @Test func rainWipe() throws {
+        for calm in [false, true] {
+            let (scene, view) = scene()
+            scene.setSeason(Rain())
+            scene.reduceMotion = calm
+            var pointer = CGPoint(x: -100, y: -100)
+            scene.pointerLocation = { pointer }
+            run(scene, seconds: 12)   // il vetro si bagna
+            let name = calm ? "pioggia-scia-ridotto" : "pioggia-scia"
+            try film(scene, view, as: name, seconds: 5, from: 12) { frame in
+                pointer = frame < 30 ? CGPoint(x: 40 + CGFloat(frame) * 13, y: 215 + sin(CGFloat(frame) / 5) * 10)
+                                     : CGPoint(x: -100, y: -100)
+            }
+            try save(scene, view, as: name)
+        }
+    }
+
     // MARK: - Schede
 
     @Test func cards() throws {
