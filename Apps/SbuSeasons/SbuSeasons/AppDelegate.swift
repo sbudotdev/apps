@@ -13,6 +13,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private let passages = Passages()
     /// Yeti e trenino con l'elfo su tutti gli schermi (SBU-178).
     private let visitors = Visitors()
+    /// Le decorazioni della scrivania, «Decora» (SBU-187): restano anche quando le finestre si ricreano.
+    private let desk = Desk()
     /// Alberi, decorazioni e pupazzi salvati (SBU-178). nil nei test: l'app ospite non tocca quelli veri.
     private let keeper = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil ? ToyKeeper() : nil
     private var lastKeep: TimeInterval = 0
@@ -168,11 +170,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         let onBattery = isOnBattery()
         let reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
         overlays.forEach { $0.setEnergy(onBattery: onBattery, reduceMotion: reduceMotion) }
+        desk.animates = !onBattery && !reduceMotion && !passages.paused
     }
 
     private func rebuildOverlays() {
         // Alberi e pupazzi passano dalle finestre vecchie alle nuove (prima, collegando un monitor, sparivano).
-        let kept = overlays.isEmpty ? keeper?.load() : keptToys
+        let first = overlays.isEmpty
+        let kept = first ? keeper?.load() : keptToys
         overlays.forEach { $0.close() }
         overlays = NSScreen.screens.map { OverlayWindow(screen: $0) }
         for overlay in overlays { overlay.scene.onGlobeShaken = { TourProgress.shared.complete(.shakeGlobe) } }
@@ -182,12 +186,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         overlays.forEach { $0.setSnowing(isSnowing) }
         // Prima di leggere le finestre: se no il primo salvataggio scriverebbe una scrivania vuota.
         kept?.restore(into: overlays.map { ($0.screenKey, $0.scene) })
+        desk.use(screens: NSScreen.screens.map { ($0.wallpaperKey, $0.frame) })
+        if first, let saved = kept?.desk { desk.restore(saved) }
         refreshWindows()
     }
 
     /// Alberi e pupazzi di tutti gli schermi, da salvare.
     private var keptToys: KeptToys {
-        overlays.map { $0.scene.keptToys(screen: $0.screenKey) }.reduce(KeptToys(), +)
+        overlays.map { $0.scene.keptToys(screen: $0.screenKey) }.reduce(KeptToys(desk: desk.items), +)
     }
 
     func applicationWillTerminate(_ notification: Notification) {
@@ -289,6 +295,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         menu.addItem(.separator())
         menu.addItem(submenu(String(localized: "Giochi"), toysMenu()))
         menu.addItem(submenu(String(localized: "Natale"), christmasMenu()))
+        menu.addItem(submenu(String(localized: "Decora"), deskMenu()))
         menu.addItem(submenu(String(localized: "Notte"), nightMenu()))
 
         let galleryItem = NSMenuItem(title: String(localized: "Sfondi…"), action: #selector(openGallery), keyEquivalent: "")
@@ -402,6 +409,31 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         countdownItem = countdown
         return menu
     }
+
+    /// Decora (SBU-187): una decorazione nuova dove c'è il cursore, sempre, con ogni effetto. Si toglie col clic destro.
+    private func deskMenu() -> NSMenu {
+        let menu = NSMenu()
+        for kind in DeskItem.Kind.allCases {
+            let mi = NSMenuItem(title: kind.title, action: #selector(addDeskItem(_:)), keyEquivalent: "")
+            mi.target = self
+            mi.representedObject = kind.rawValue
+            menu.addItem(mi)
+        }
+        menu.items.first?.toolTip = String(localized: "Trascina le due estremità per appenderle dove vuoi.")
+        menu.addItem(.separator())
+        let clear = NSMenuItem(title: String(localized: "Togli le decorazioni"), action: #selector(clearDesk), keyEquivalent: "")
+        clear.target = self
+        clear.toolTip = String(localized: "Per toglierne una sola, fai clic destro sulla decorazione.")
+        menu.addItem(clear)
+        return menu
+    }
+
+    @objc private func addDeskItem(_ sender: NSMenuItem) {
+        guard let raw = sender.representedObject as? String, let kind = DeskItem.Kind(rawValue: raw) else { return }
+        desk.add(kind, at: NSEvent.mouseLocation)
+    }
+
+    @objc private func clearDesk() { desk.removeAll() }
 
     /// Notte: le stesse tre scelte delle Impostazioni. L'ora di inizio resta nelle Impostazioni.
     private func nightMenu() -> NSMenu {
@@ -603,6 +635,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
 
     @objc private func togglePause() {
         passages.paused.toggle()
+        powerSourceDidChange()   // fiamme e lampadine della scrivania si fermano con i giochi
         updateMenuState()
     }
 
@@ -617,6 +650,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         overlays.forEach { $0.setSeason(season) }
         passages.seasonChanged()
         visitors.seasonChanged()
+        powerSourceDidChange()   // cambiando stagione la pausa finisce: le fiamme ripartono
         updateAmbience()
         updateMenuState()
     }

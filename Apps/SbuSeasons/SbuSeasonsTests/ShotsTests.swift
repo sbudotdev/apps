@@ -197,6 +197,91 @@ struct ShotsTests {
         }
     }
 
+    // MARK: - Secondo giro (SBU-187)
+
+    @Test func wardrobe() throws {
+        let (scene, view) = scene()
+        var looks: [SnowmanLook] = []
+        var a = SnowmanLook(); a.hat = .cowboy; a.scarf = .striped; a.mittens = true; looks.append(a)
+        var b = SnowmanLook(); b.hat = .party; b.eyes = .stars; b.bowTie = true; looks.append(b)
+        var c = SnowmanLook(); c.hat = .elf; c.sweater = true; c.mittens = true; looks.append(c)
+        var d = SnowmanLook(); d.hat = .pirate; d.cape = true; d.nose = .coal; looks.append(d)
+        var e = SnowmanLook(); e.hat = .crown; e.cape = true; e.bowTie = true; e.balls = [.large, .medium, .small]; looks.append(e)
+        var f = SnowmanLook(); f.hat = .antlers; f.scarf = .red; f.eyes = .stars; looks.append(f)
+        for (i, look) in looks.enumerated() {
+            scene.add(Snowman(at: CGPoint(x: 40 + CGFloat(i) * 62, y: 0), look: look))
+        }
+        let tree = ChristmasTree(at: CGPoint(x: 438, y: 0))
+        tree.look.hanging = .angel
+        tree.look.hang(at: CGPoint(x: 0, y: 40))
+        tree.look.hanging = .bauble
+        for (x, y) in [(-12.0, 20.0), (10, 28), (-4, 44), (6, 56)] { tree.look.hang(at: CGPoint(x: x, y: y)) }
+        scene.add(tree)
+        run(scene, seconds: 1)
+        try save(scene, view, as: "11-vestiti-e-angelo")
+    }
+
+    @Test func livelySnowmen() throws {
+        let window = WindowEdge(id: 1, rect: CGRect(x: 40, y: 60, width: 160, height: 80), visible: [40...200])
+        let (scene, view) = scene(windows: [window])
+        let rider = Snowman(at: CGPoint(x: 120, y: 140))
+        scene.add(rider)
+        scene.add(Snowman(at: CGPoint(x: 280, y: 0)))
+        scene.add(Snowman(at: CGPoint(x: 400, y: 0)))
+        try film(scene, view, as: "12-pupazzi-vivi", seconds: 9) { frame in
+            // Scuoti la finestra: il pupazzo sopra salta. Poi due pupazzi si tirano una palla; uno lanciato forte si rompe;
+            // lo Yeti arriva e una palla lo abbatte.
+            if frame == 15 { scene.windowsShaken([window.id]) }
+            if frame == 45 { scene.snowballFight() }
+            if frame == 95 {
+                rider.body.release(velocity: CGVector(dx: 600, dy: 900))
+                rider.thrownHard = true
+            }
+            if frame == 140 { scene.sendYeti(heading: 1) }
+            if frame == 185 {
+                let ball = scene.makeSnowball(at: CGPoint(x: 460, y: 40))
+                ball.body.release(velocity: CGVector(dx: -700, dy: 260))
+            }
+        }
+    }
+
+    @Test func elves() throws {
+        let (scene, view) = scene()
+        scene.sendElf(heading: 1, at: 180)
+        try film(scene, view, as: "13-elfi", seconds: 9)
+    }
+
+    @Test func desk() throws {
+        let size = CGSize(width: 520, height: 300)
+        let board = NSView(frame: CGRect(origin: .zero, size: size))
+        board.wantsLayer = true
+        if let url = Bundle.main.url(forResource: "01-prima-neve-16x10", withExtension: "jpg"), let image = NSImage(contentsOf: url) {
+            let wallpaper = NSImageView(frame: board.bounds)
+            wallpaper.image = image
+            wallpaper.imageScaling = .scaleAxesIndependently
+            board.addSubview(wallpaper)
+        }
+        let items = [
+            DeskItem(kind: .lights, screen: "A", start: CGPoint(x: 20, y: 280), end: CGPoint(x: 330, y: 270)),
+            DeskItem(kind: .garland, screen: "A", center: CGPoint(x: 430, y: 262)),
+            DeskItem(kind: .stocking, screen: "A", center: CGPoint(x: 60, y: 150), rotation: 0.15),
+            DeskItem(kind: .candle, screen: "A", center: CGPoint(x: 140, y: 60)),
+            DeskItem(kind: .bonfire, screen: "A", center: CGPoint(x: 240, y: 60), scale: 1.3),
+            DeskItem(kind: .penguin, screen: "A", center: CGPoint(x: 350, y: 60), rotation: -0.2),
+            DeskItem(kind: .snowGlobe, screen: "A", center: CGPoint(x: 450, y: 80), scale: 1.4),
+            DeskItem(kind: .lights, screen: "A", start: CGPoint(x: 150, y: 200), end: CGPoint(x: 290, y: 150)),
+        ]
+        for item in items {
+            let view = DeskItemView(item: item)
+            view.frame = item.frame
+            view.phase = 0.7
+            board.addSubview(view)
+        }
+        let rep = try #require(board.bitmapImageRepForCachingDisplay(in: board.bounds))
+        board.cacheDisplay(in: board.bounds, to: rep)
+        try write(try #require(rep.cgImage), as: "14-decora")
+    }
+
     // MARK: - Schede
 
     @Test func cards() throws {

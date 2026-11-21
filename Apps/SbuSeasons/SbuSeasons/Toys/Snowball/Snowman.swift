@@ -48,8 +48,9 @@ final class Snowman: Toy {
             let cape = NSBezierPath()
             cape.move(to: CGPoint(x: balls[2].midX - balls[2].width * 0.45, y: neck))
             cape.line(to: CGPoint(x: balls[2].midX + balls[2].width * 0.45, y: neck))
-            cape.line(to: CGPoint(x: balls[0].maxX + 1, y: 1))
-            cape.line(to: CGPoint(x: balls[0].minX - 1, y: 1))
+            // Esce ai lati della pancia, se no non si vedrebbe.
+            cape.line(to: CGPoint(x: balls[0].maxX + 3, y: 1))
+            cape.line(to: CGPoint(x: balls[0].minX - 3, y: 1))
             cape.close()
             NSColor(calibratedRed: 0.55, green: 0.1, blue: 0.14, alpha: 1).setFill()
             cape.fill()
