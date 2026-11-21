@@ -168,6 +168,7 @@ struct SettingsView: View {
                     Text("Lo schermo si scurisce un po' e in basso a destra si accende una candela. Di sera vuol dire dall'ora scelta fino alle 6.")
                         .foregroundStyle(Quaderno.inkMuted.color)
                 }
+                VisitorsSection()
                 Section {
                     Toggle("Apri al login", isOn: $openAtLogin)
                         .onChange(of: openAtLogin) { _, on in setOpenAtLogin(on) }

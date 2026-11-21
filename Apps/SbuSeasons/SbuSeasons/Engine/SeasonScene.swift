@@ -90,6 +90,12 @@ final class SeasonScene: SKScene {
     var santaVisits = 0
     /// La slitta è uscita di lato, alla quota (della scena) data: `Passages` la fa entrare nello schermo dopo.
     var onSantaLeft: ((CGFloat) -> Void)?
+    /// Il trenino con l'elfo in corsa (`Toys/Visitors/`); lo Yeti invece è un oggetto, sta in `toys`.
+    var train: Train?
+    /// La busta della letterina a Babbo Natale, finché la slitta non la prende (`Toys/Christmas/Letter.swift`).
+    var letter: SKSpriteNode?
+    /// Yeti o trenino usciti di lato: `Visitors` li fa entrare nello schermo dopo.
+    var onVisitorLeft: ((VisitorKind, VisitorExit) -> Void)?
 
     /// Lo schermo, in coordinate globali (come `NSScreen.frame`).
     var screenFrame: CGRect { CGRect(origin: screenOrigin, size: size) }
@@ -104,6 +110,9 @@ final class SeasonScene: SKScene {
             dropHeld()
             santa?.node.removeFromParent()
             santa = nil
+            letter?.removeFromParent()
+            letter = nil
+            removeVisitors()
         }
     }
 
@@ -169,6 +178,7 @@ final class SeasonScene: SKScene {
             removeWinterPlay(includingCableCar: true)
             removeChristmas()
             removeFigures()
+            removeVisitors()
         }
         if !season.settles { everyPile.forEach { $0.clear() } }
         // La pausa è una voce dei giochi d'inverno: fuori dall'inverno non si potrebbe togliere (QA SBU-63).
@@ -327,6 +337,8 @@ final class SeasonScene: SKScene {
     func wantsMouse(at point: CGPoint) -> Bool {
         !toysPaused && (held != nil || toy(at: point) != nil)
     }
+    /// L'oggetto in mano al cursore, se c'è.
+    var heldToy: Toy? { held?.toy }
     /// `wantsMouse` nel punto del cursore, ricalcolato a ogni passo.
     private(set) var wantsMouse = false
 
@@ -771,6 +783,9 @@ final class SeasonScene: SKScene {
             buildSnowman()
             stepWinterPlay()
             stepFigures(mouse: mouse)
+            stepVisitors(dt: dt)
+        } else if !toysPaused {
+            stepVisitors(dt: dt)   // il trenino corre anche senza oggetti sulla scena
         }
         if !toysPaused { stepChristmas(dt: dt, mouse: mouse) }
         wantsMouse = wantsMouse(at: mouse)

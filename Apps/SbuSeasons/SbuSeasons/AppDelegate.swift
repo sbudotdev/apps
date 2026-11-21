@@ -12,6 +12,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     /// Babbo Natale su tutti gli schermi e la pausa dei giochi: restano anche quando le finestre si ricreano.
     private let passages = Passages()
     /// Alberi, decorazioni e pupazzi salvati (SBU-178). nil nei test: l'app ospite non tocca quelli veri.
+    /// Yeti e trenino con l'elfo su tutti gli schermi (SBU-178).
+    private let visitors = Visitors()
     private let keeper = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil ? ToyKeeper() : nil
     private var lastKeep: TimeInterval = 0
 
@@ -53,6 +55,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     private var countdownItem: NSMenuItem?
     /// Il conto alla rovescia per Natale: creato la prima volta che si accende.
     private var countdownPanel: CountdownPanel?
+    /// La letterina a Babbo Natale aperta: una finestra nuova ogni volta, così il testo non resta.
+    private var letterWindow: NSWindow?
 
     /// "Conto alla rovescia per Natale" acceso: si ricorda al prossimo avvio.
     private var showsCountdown: Bool {
@@ -173,6 +177,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         overlays = NSScreen.screens.map { OverlayWindow(screen: $0) }
         for overlay in overlays { overlay.scene.onGlobeShaken = { TourProgress.shared.complete(.shakeGlobe) } }
         passages.scenes = overlays.map(\.scene)
+        visitors.scenes = overlays.map(\.scene)
         powerSourceDidChange()
         overlays.forEach { $0.setSnowing(isSnowing) }
         // Prima di leggere le finestre: se no il primo salvataggio scriverebbe una scrivania vuota.
@@ -197,6 +202,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         overlays.forEach { $0.updateWindows(edges, dock: dock) }
         passages.tick(at: ProcessInfo.processInfo.systemUptime)
         let now = ProcessInfo.processInfo.systemUptime
+        visitors.tick(at: now)
         if now - lastKeep >= Tuning.keepInterval {
             lastKeep = now
             keeper?.save(keptToys)
@@ -379,11 +385,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         man.toolTip = String(localized: "Corre lungo il Dock: prova a prenderlo col cursore.")
         let countdown = NSMenuItem(title: String(localized: "Conto alla rovescia per Natale"), action: #selector(toggleCountdown), keyEquivalent: "")
         countdown.toolTip = String(localized: "Un pannellino sulla scrivania con giorni, ore e minuti. Trascinalo dove vuoi.")
-        for mi in [santa, man, countdown] {
+        // SBU-178: la letterina, lo Yeti e il trenino con l'elfo.
+        let letter = NSMenuItem(title: String(localized: "Scrivi a Babbo Natale…"), action: #selector(openLetter), keyEquivalent: "")
+        letter.toolTip = String(localized: "Scrivi un desiderio: la slitta passa e se lo porta via. Il testo non si salva.")
+        let yeti = NSMenuItem(title: String(localized: "Fai passare lo Yeti"), action: #selector(sendYeti), keyEquivalent: "")
+        yeti.toolTip = String(localized: "Prova a portarsi via un pupazzo: fai clic sullo Yeti per scacciarlo.")
+        let train = NSMenuItem(title: String(localized: "Fai passare il trenino"), action: #selector(sendTrain), keyEquivalent: "")
+        train.toolTip = String(localized: "L'elfo lascia un regalo: dentro c'è qualcosa per l'albero o il pupazzo.")
+        for mi in [santa, letter, man, yeti, train, countdown] {
             mi.target = self
             menu.addItem(mi)
         }
-        winterItems += [santa, man]
+        winterItems += [santa, letter, man, yeti, train]
         countdownItem = countdown
         return menu
     }
@@ -525,6 +538,43 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         passages.send(at: ProcessInfo.processInfo.systemUptime)
     }
 
+    @objc private func sendYeti() {
+        guard isSnowing else { return }
+        visitors.send(.yeti)
+    }
+
+    @objc private func sendTrain() {
+        guard isSnowing else { return }
+        visitors.send(.train)
+    }
+
+    /// La letterina: una finestra per scrivere il desiderio. "Spedisci" la chiude e la busta vola dalla slitta
+    /// sullo schermo della finestra. Il testo sparisce con la finestra.
+    @objc private func openLetter() {
+        letterWindow?.close()
+        let window = NSWindow(contentRect: .zero, styleMask: [.titled, .closable], backing: .buffered, defer: false)
+        window.title = String(localized: "Letterina a Babbo Natale")
+        window.isReleasedWhenClosed = false
+        window.delegate = self
+        window.contentViewController = NSHostingController(rootView: LetterView(
+            send: { [weak self, weak window] in
+                guard let self, let window else { return }
+                let center = CGPoint(x: window.frame.midX, y: window.frame.midY)
+                let overlay = self.overlays.first { $0.frame.contains(center) } ?? self.currentOverlay
+                if let overlay, self.isSnowing {
+                    overlay.scene.mailLetter(from: CGPoint(x: center.x - overlay.frame.minX, y: center.y - overlay.frame.minY))
+                }
+                window.close()
+            },
+            cancel: { [weak window] in window?.close() }))
+        window.center()
+        letterWindow = window
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate()
+        window.makeKeyAndOrderFront(nil)
+        window.orderFrontRegardless()
+    }
+
     @objc private func sendGingerbreadMan() {
         (overlays.first(where: \.hasDock) ?? currentOverlay)?.scene.sendGingerbreadMan()
     }
@@ -559,6 +609,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
         let season = Settings.shared.season
         overlays.forEach { $0.setSeason(season) }
         passages.seasonChanged()
+        visitors.seasonChanged()
         updateAmbience()
         updateMenuState()
     }
@@ -622,6 +673,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSWind
     func windowWillClose(_ notification: Notification) {
         // Via dal Dock quando si chiude l'ultima delle nostre finestre: resta solo la neve.
         let closing = notification.object as? NSWindow
+        if closing === letterWindow { letterWindow = nil }   // la letterina se ne va con la sua finestra
         // NSApp.windows e non le lazy var: leggerle creerebbe una finestra mai aperta.
         guard !NSApp.windows.contains(where: { $0 !== closing && $0.isVisible && $0.delegate === self }) else { return }
         NSApp.setActivationPolicy(.accessory)
