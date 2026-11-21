@@ -373,4 +373,6 @@ nonisolated enum Tuning {
     static let toyFileMaxLightsSpan: CGFloat = 1600
     /// Una decorazione ricevuta compare piano, in tanti secondi (solo opacità: va bene anche con Riduci movimento).
     static let receivedFadeIn: TimeInterval = 0.8
+    /// Per quanti secondi la decorazione ricevuta resta sopra le finestre prima di tornare sulla scrivania (SBU-205).
+    static let receivedOnTop: TimeInterval = 4
 }

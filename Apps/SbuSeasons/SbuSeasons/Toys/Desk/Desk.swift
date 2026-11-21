@@ -57,10 +57,17 @@ final class Desk {
         items = DeskItem.adding(arrived, to: items)
         rebuildPanels()
         if let panel = panels[arrived.id] {
+            // Sulla scrivania sta dietro le finestre: per qualche secondo sta sopra, se no chi la riceve non la vede.
+            let desktop = panel.level
+            panel.level = .floating
             panel.alphaValue = 0
             NSAnimationContext.runAnimationGroup { context in
                 context.duration = Tuning.receivedFadeIn
                 panel.animator().alphaValue = 1
+            }
+            Task {
+                try? await Task.sleep(for: .seconds(Tuning.receivedFadeIn + Tuning.receivedOnTop))
+                panel.level = desktop
             }
         }
         onChange?()
