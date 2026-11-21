@@ -18,7 +18,7 @@ nonisolated enum ShortcutAction: String, CaseIterable, Codable, Sendable {
     var defaultCombo: KeyCombo {
         let both: KeyCombo.Modifiers = [.control, .option]
         return switch self {
-        case .togglePlay: KeyCombo(keyCode: 49, modifiers: both, key: "Spazio")
+        case .togglePlay: KeyCombo(keyCode: 49, modifiers: both, key: "␣")
         case .faster: KeyCombo(keyCode: 126, modifiers: both, key: "↑")
         case .slower: KeyCombo(keyCode: 125, modifiers: both, key: "↓")
         case .previousCue: KeyCombo(keyCode: 123, modifiers: both, key: "←")
