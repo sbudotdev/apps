@@ -246,5 +246,13 @@
       "it": "Fiocco di neve",
       "en": "Snowflake"
     }
+  },
+  "prompter": {
+    "accent": "accent-prompter",
+    "subject": "an old theatre prompter's box: the small curved wooden hood at the front edge of a stage floor, with an open script on a ledge inside, three-quarter view",
+    "name": {
+      "it": "Buca del suggeritore",
+      "en": "Prompter's box"
+    }
   }
 }
