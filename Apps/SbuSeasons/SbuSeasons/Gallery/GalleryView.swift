@@ -80,29 +80,34 @@ struct GalleryView: View {
         .accessibilityAddTraits(isChosen ? .isSelected : [])
     }
 
+    /// Due righe: dove e come (schermo, ora del giorno, effetto), poi le azioni.
     private var controls: some View {
-        HStack(spacing: Quaderno.space4) {
-            if NSScreen.screens.count > 1 {
-                Picker("Schermo", selection: $screenKey) {
-                    Text("Tutti gli schermi").tag(Self.allScreens)
-                    Divider()
-                    ForEach(NSScreen.screens, id: \.wallpaperKey) { Text($0.localizedName).tag($0.wallpaperKey) }
+        VStack(alignment: .leading, spacing: Quaderno.space4) {
+            HStack(spacing: Quaderno.space4) {
+                if NSScreen.screens.count > 1 {
+                    Picker("Schermo", selection: $screenKey) {
+                        Text("Tutti gli schermi").tag(Self.allScreens)
+                        Divider()
+                        ForEach(NSScreen.screens, id: \.wallpaperKey) { Text($0.localizedName).tag($0.wallpaperKey) }
+                    }
+                    .fixedSize()
+                }
+                Picker("Ora del giorno", selection: $prefs.choice) {
+                    ForEach(MomentChoice.all, id: \.self) { Text($0.title).tag($0) }
                 }
                 .fixedSize()
+                Toggle("Anche l'effetto consigliato", isOn: $usesEffect)
+                    .fixedSize()
+                    .help(Text("Con lo sfondo cambia la stagione: \(Seasons.named(chosen.effect).title)."))
             }
-            Picker("Ora del giorno", selection: $prefs.choice) {
-                ForEach(MomentChoice.all, id: \.self) { Text($0.title).tag($0) }
+            HStack(spacing: Quaderno.space4) {
+                Spacer()
+                Button("Lascia il mio schermo com'è", action: restore)
+                    .disabled(!canRestore)
+                    .help(Text("Torna lo sfondo che avevi prima della galleria."))
+                Button("Imposta sfondo", action: apply)
+                    .keyboardShortcut(.defaultAction)
             }
-            .fixedSize()
-            Toggle("Anche l'effetto consigliato", isOn: $usesEffect)
-                .fixedSize()
-                .help(Text("Con lo sfondo cambia la stagione: \(Seasons.named(chosen.effect).title)."))
-            Spacer()
-            Button("Lascia il mio schermo com'è", action: restore)
-                .disabled(!canRestore)
-                .help(Text("Torna lo sfondo che avevi prima della galleria."))
-            Button("Imposta sfondo", action: apply)
-                .keyboardShortcut(.defaultAction)
         }
     }
 

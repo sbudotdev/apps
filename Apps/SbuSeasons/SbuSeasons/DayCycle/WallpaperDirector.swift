@@ -7,6 +7,8 @@ final class WallpaperDirector {
     static let shared = WallpaperDirector()
     let prefs: WallpaperPrefs
     private var timer: Timer?
+    /// Il momento dell'ultimo giro: il timer agisce solo quando ne comincia un altro.
+    private var lastMoment: DayMoment?
 
     init(prefs: WallpaperPrefs = .shared) {
         self.prefs = prefs
@@ -14,7 +16,7 @@ final class WallpaperDirector {
 
     func start() {
         timer = Timer.scheduledTimer(withTimeInterval: Tuning.momentCheckInterval, repeats: true) { [weak self] _ in
-            MainActor.assumeIsolated { self?.refresh() }
+            MainActor.assumeIsolated { self?.refresh(onlyIfChanged: true) }
         }
         // Dopo lo stop il timer è rimasto indietro: si guarda subito che ora è.
         NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.didWakeNotification, object: nil, queue: .main) { [weak self] _ in
@@ -25,7 +27,11 @@ final class WallpaperDirector {
     }
 
     /// Ora del giorno: rimette su ogni schermo il nostro sfondo nel momento giusto.
-    func refresh() {
+    /// `onlyIfChanged`: dal timer, che passa ogni minuto; non rilegge niente finché il momento è lo stesso.
+    func refresh(onlyIfChanged: Bool = false) {
+        let moment = prefs.choice.moment(at: .now)
+        guard !onlyIfChanged || moment != lastMoment else { return }
+        lastMoment = moment
         for screen in NSScreen.screens {
             guard let id = prefs.chosen[screen.wallpaperKey], let wallpaper = Wallpaper.named(id),
                   Wallpaper.isOurs(NSWorkspace.shared.desktopImageURL(for: screen), folder: Wallpaper.installFolder)

@@ -28,6 +28,16 @@ L'impostazione si segue anche mentre l'app è aperta.
 
 Requisiti: macOS 14+, Xcode 26+, XcodeGen (`brew install xcodegen`).
 
+## Novità della 2.1
+
+- **Sfondi per ora del giorno:** ogni sfondo del borgo in otto momenti (alba, aurora, mattina, mezzogiorno, ora d'oro,
+  tramonto, crepuscolo, notte), segue l'ora del Mac o resta fisso su un momento.
+- **Lo sfondo segue l'effetto:** cambiando effetto arriva lo sfondo consigliato, su tutti gli schermi.
+- **Salvaschermo** con gli sfondi del borgo e l'effetto sopra, da installare dalle Impostazioni.
+- **Novità:** dopo un aggiornamento, la prima volta che apri il menu ❄︎, una schedina con le cose nuove.
+
+I dettagli sono in «Sfondi per ora del giorno e salvaschermo (2.1)».
+
 ## Novità della 2.0
 
 - **Stagioni nuove:** pioggia sul vetro, temporale, nebbia, nuvole, lucciole, stelle cadenti e sereno; l'intensità ora ha anche un cursore continuo.
@@ -289,8 +299,13 @@ Il **motore** (`Engine/`) è comune a tutte le stagioni; ogni **stagione** (`Sea
 | `Settings.swift` | Le impostazioni e la stagione (salvate in UserDefaults) e la finestra SwiftUI per regolarle |
 | `Localizable.xcstrings`, `InfoPlist.xcstrings` | Le stringhe in italiano e inglese; il nome "Sbu Seasons" nel menu dell'app in alto |
 | `Density.swift` | Le scorciatoie Leggera / Media / Forte del menu |
-| `Tuning.swift` | I parametri fissi del motore (fisica, cursore, mucchi, lettura delle finestre) |
-| `project.yml` | Progetto XcodeGen: target app (LSUIElement) e test |
+| `Tuning.swift` | I parametri fissi del motore (fisica, cursore, mucchi, lettura delle finestre) e i momenti del giorno |
+| `Gallery/` | La finestra Sfondi, i dieci sfondi (`Wallpaper`), lo sfondo di prima (`WallpaperMemory`), le anteprime |
+| `DayCycle/` | Momenti del giorno (`DayMoment`, `MomentLook`, `DayTint`), la scelta (`MomentChoice`, `WallpaperPrefs`), chi cambia gli sfondi (`WallpaperDirector`) |
+| `Saver/` | Il salvaschermo, parte comune ad app e `.saver`: opzioni, scena, installazione |
+| `../SaverBundle/` | Solo nel `.saver`: la `ScreenSaverView`, le opzioni in Impostazioni di Sistema |
+| `WhatsNew/` | «Novità»: le righe di ogni versione (`WhatsNew`) e la schedina nel menu (`WhatsNewCard`) |
+| `project.yml` | Progetto XcodeGen: target app (LSUIElement), salvaschermo (`SbuSeasonsSaver`) e test |
 
 I valori predefiniti sono in `SnowSettings` (`Settings.swift`); i parametri fissi in `Tuning.swift`.
 
@@ -371,8 +386,7 @@ si cambia `Season` e `SeasonScene` in un lavoro a parte, prima, perché tocca tu
 
 ## Prossimi passi possibili
 
-- Sfondo natalizio automatico (`NSWorkspace.shared.setDesktopImageURL`)
-- Icona dell'app
+- Alba e tramonto veri dalla stagione (oggi le ore dei momenti sono fisse, `Tuning.momentStarts`)
 
 ## Sfondi e suoni (2.0)
 
@@ -400,3 +414,32 @@ si cambia `Season` e `SeasonScene` in un lavoro a parte, prima, perché tocca tu
 
   Senza file restano muti l'omino preso, la volpe, la cincia e la renna.
 - Il codice: `Gallery/` (galleria) ed `Engine/SoundBoard.swift`; il sottofondo di una stagione è `Season.ambience`.
+
+## Sfondi per ora del giorno e salvaschermo (2.1)
+
+Come Koi Art, ma tutto sul Mac: nessuno sfondo scaricato, nessun controllo aggiornamenti, nessun dato che esce (SBU-179).
+
+- **Ora del giorno** (Impostazioni → Sfondi, o nella finestra Sfondi). Otto momenti fatti a codice con Core Image dal disegno
+  che c'è, senza immagini nuove (`DayTint`: luce, temperatura, colore e un velo di cielo che sfuma dall'alto; i valori sono
+  in `Tuning.momentLooks`). Uno sfondo già scuro (la sera di luglio) si scurisce meno, se no di notte diventa nero.
+  Mezzogiorno è il disegno com'è. I momenti cominciano a ore fisse dell'ora del Mac (`Tuning.momentStarts`: alba alle 5,
+  aurora 6:30, mattina 8, mezzogiorno 11, ora d'oro 16, tramonto 18, crepuscolo 19:30, notte 21): niente posizione, niente rete.
+  «Segue l'ora del Mac» cambia lo sfondo da solo (si controlla una volta al minuto e al risveglio dallo stop), oppure si
+  sceglie un momento fisso. Ogni momento si fa una volta sola e resta in `Application Support/Sbu Seasons/Wallpapers`
+  (`01-prima-neve-16x10-night.jpg`); il lavoro pesante è fuori dal main thread.
+- Lo sfondo cambia solo sugli schermi dove c'è ancora uno dei nostri: se metti una tua foto, resta la tua.
+  «Lascia il mio schermo com'è» rimette la tua e smette di cambiarlo.
+- **Tutti gli schermi** con un clic: nella finestra Sfondi, con più monitor, «Schermo» → «Tutti gli schermi».
+- **Lo sfondo segue l'effetto** (Impostazioni → Sfondi): cambiando effetto, dal menu, dalle Impostazioni o dal meteo a caso,
+  su tutti gli schermi arriva lo sfondo consigliato (`Wallpaper.suggested`). Se lo sfondo di adesso va già bene con l'effetto
+  (le due scene con la neve) resta quello; se nessuno sfondo consiglia l'effetto (estate, sereno) non cambia niente.
+- **Salvaschermo** (`SbuSeasonsSaver`, `Sbu Seasons.saver` dentro l'app in `Contents/Resources`). Uno sfondo del borgo nel
+  momento del giorno e sopra il suo effetto (la stessa `SeasonScene` della scrivania, che cade fino in fondo). Opzioni in
+  Impostazioni di Sistema: lo sfondo scelto oppure uno diverso ogni volta, l'effetto sopra sì o no. A batteria va a 30
+  fotogrammi; con Riduci movimento anche con metà particelle e senza vento. Impostazioni → Sfondi → «Installa…» lo copia in
+  `~/Library/Screen Savers` e apre Impostazioni di Sistema (da macOS 15 in Sfondo → «Salvaschermo…»): lo scegli tu, l'app
+  non lo attiva e non lo avvia mai. Il salvaschermo gira dentro un processo di macOS e non legge le impostazioni dell'app:
+  le sue opzioni sono a parte (`ScreenSaverDefaults`). Pesa 28 MB perché porta con sé i suoi sfondi.
+- **Novità** (`WhatsNew/`): dopo un aggiornamento, la prima volta che apri il menu ❄︎, una schedina in cima con le righe
+  della versione (`WhatsNew.notes`). Si chiude con la ✕ o chiudendo il menu e non torna. Alla prima installazione no:
+  c'è il tour. Le correzioni (2.1.1) non hanno una schedina loro. Per una versione nuova si aggiunge una voce a `notes`.

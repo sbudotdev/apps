@@ -1,7 +1,7 @@
 import AppKit
 
 /// "Installa il salvaschermo": copia `Sbu Seasons.saver` dalle risorse dell'app in ~/Library/Screen Savers
-/// e apre Impostazioni di Sistema → Salvaschermo, dove lo scegli tu. L'app non lo attiva mai da sola.
+/// e apre Impostazioni di Sistema dove si sceglie il salvaschermo: lo scegli tu. L'app non lo attiva mai da sola.
 enum SaverInstaller {
     static var bundled: URL? { Bundle.main.url(forResource: "Sbu Seasons", withExtension: "saver") }
 
@@ -20,6 +20,12 @@ enum SaverInstaller {
     static func installAndOpenSettings() throws {
         guard let bundled else { throw CocoaError(.fileNoSuchFile) }
         _ = try install(bundled)
-        NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.ScreenSaver-Settings.extension")!)
+        NSWorkspace.shared.open(settingsURL)
+    }
+
+    /// Da macOS 15 il salvaschermo è in Sfondo (pulsante «Salvaschermo…»); su macOS 14 ha un pannello suo.
+    static var settingsURL: URL {
+        let pane = if #available(macOS 15, *) { "com.apple.Wallpaper-Settings.extension" } else { "com.apple.ScreenSaver-Settings.extension" }
+        return URL(string: "x-apple.systempreferences:\(pane)")!
     }
 }

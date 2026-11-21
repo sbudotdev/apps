@@ -17,6 +17,7 @@ struct SaverOptionsView: View {
             Text(String(localized: "Lo sfondo segue l'ora del Mac: alba, giorno, tramonto, notte.", bundle: .seasons))
                 .font(.callout)
                 .foregroundStyle(Quaderno.inkMuted.color)
+                .fixedSize(horizontal: false, vertical: true)
             HStack {
                 Spacer()
                 Button(String(localized: "Fine", bundle: .seasons)) { done(wallpaperID, showsEffect) }

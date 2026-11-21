@@ -3,7 +3,7 @@ import Foundation
 /// Le scelte sugli sfondi (Impostazioni → Sfondi), salvate a parte da `SnowSettings`: "Ripristina…" non tocca gli sfondi.
 @Observable
 final class WallpaperPrefs {
-    static let shared = WallpaperPrefs()
+    static let shared = WallpaperPrefs(defaults: Settings.defaults)
     @ObservationIgnored private let defaults: UserDefaults
 
     /// Ora del giorno: automatica o fissa su un momento.
