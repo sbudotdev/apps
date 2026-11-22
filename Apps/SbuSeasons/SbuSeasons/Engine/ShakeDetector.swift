@@ -5,9 +5,17 @@ import Foundation
 /// Si guarda in orizzontale e in verticale, ognuno per conto suo.
 nonisolated struct ShakeDetector {
     /// Quanti cambi di verso servono, entro quanti secondi, e quanto deve essere lungo ogni tratto.
-    var reversals = 4
-    var window: TimeInterval = 1
-    var minTravel: CGFloat = 40
+    var reversals: Int
+    var window: TimeInterval
+    var minTravel: CGFloat
+
+    // Init scritto a mano: con le proprietà `private` qui sotto, lo Swift di Xcode 26 rende privato
+    // quello automatico e da un altro file resta solo `init()` (SBU-206).
+    init(reversals: Int = 4, window: TimeInterval = 1, minTravel: CGFloat = 40) {
+        self.reversals = reversals
+        self.window = window
+        self.minTravel = minTravel
+    }
 
     private var axes = [Axis(), Axis()]
     private var times: [TimeInterval] = []
