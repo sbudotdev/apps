@@ -21,15 +21,26 @@ nonisolated struct SimilarityGrouper: Sendable {
     /// Same-size buckets bigger than this are ordinary sizes, not copies, and are skipped.
     var maxSameSizeBucket = 50
 
-    /// Duplicate groups first, then similar groups, each newest first, best shot first.
+    /// Duplicate photo groups first, then similar photo groups, then video groups; each newest
+    /// first, best shot first.
     ///
     /// Photos join when they are duplicates, or similar shots close in time; a group made only
     /// of duplicates is a duplicate group, any other is similar, so a burst with a blurred shot
     /// stays one group. A photo is in one group at most. Screenshots join only as duplicates:
-    /// two screens of the same app look alike without being retakes.
+    /// two screens of the same app look alike without being retakes. Videos are compared by a
+    /// frame, the same way, only with other videos, and every video group is one kind.
     func groups(of items: [MediaItem], analyses: [String: ImageAnalysis]) -> [PhotoGroup] {
+        let photos = clusters(of: items.filter { $0.kind == .photo }, analyses: analyses)
+        let videos = clusters(of: items.filter { $0.kind == .video && !$0.isScreenRecording }, analyses: analyses)
+        return photos.duplicates.map { group(.duplicate, $0, analyses: analyses) }
+            + photos.similar.map { group(.similar, $0, analyses: analyses) }
+            + (videos.duplicates + videos.similar).map { group(.videos, $0, analyses: analyses) }
+    }
+
+    /// Groups of items, newest first: those made only of duplicates, and the others.
+    private func clusters(of items: [MediaItem], analyses: [String: ImageAnalysis]) -> (duplicates: [[MediaItem]], similar: [[MediaItem]]) {
         let scanned = items
-            .filter { $0.kind == .photo && !(analyses[$0.id]?.featurePrint.isEmpty ?? true) }
+            .filter { !(analyses[$0.id]?.featurePrint.isEmpty ?? true) }
             .sorted { ($0.creationDate ?? .distantPast) < ($1.creationDate ?? .distantPast) }
         let prints = scanned.map { analyses[$0.id]?.featurePrint ?? [] }
         let dates = scanned.map { $0.creationDate ?? .distantPast }
@@ -68,35 +79,35 @@ nonisolated struct SimilarityGrouper: Sendable {
             }
         }
 
-        var duplicateGroups: [[Int]] = []
-        var similarGroups: [[Int]] = []
-        for group in all.groups() {
-            let root = duplicates.root(of: group[0])
-            if group.allSatisfy({ duplicates.root(of: $0) == root }) {
-                duplicateGroups.append(group)
-            } else {
-                similarGroups.append(group)
-            }
-        }
-
-        let make = { (kind: GroupKind, indices: [Int]) -> PhotoGroup in
-            let candidates = indices.map { index in
-                let item = scanned[index]
-                let analysis = analyses[item.id]
-                return ShotCandidate(
-                    id: item.id,
-                    isFavorite: item.isFavorite,
-                    hasAdjustments: item.hasAdjustments,
-                    faceQuality: analysis?.faceQuality,
-                    sharpness: analysis?.sharpness ?? 0,
-                    pixelCount: item.pixelCount,
-                    date: item.creationDate
-                )
-            }
-            return PhotoGroup(kind: kind, members: BestShot.ordered(candidates))
-        }
+        var duplicateGroups: [[MediaItem]] = []
+        var similarGroups: [[MediaItem]] = []
         // Union-find lists groups by their oldest member; the screen shows the newest first.
-        return duplicateGroups.reversed().map { make(.duplicate, $0) }
-            + similarGroups.reversed().map { make(.similar, $0) }
+        for group in all.groups().reversed() {
+            let root = duplicates.root(of: group[0])
+            let members = group.map { scanned[$0] }
+            if group.allSatisfy({ duplicates.root(of: $0) == root }) {
+                duplicateGroups.append(members)
+            } else {
+                similarGroups.append(members)
+            }
+        }
+        return (duplicateGroups, similarGroups)
+    }
+
+    /// The group with its best shot first.
+    private func group(_ kind: GroupKind, _ members: [MediaItem], analyses: [String: ImageAnalysis]) -> PhotoGroup {
+        let candidates = members.map { item in
+            let analysis = analyses[item.id]
+            return ShotCandidate(
+                id: item.id,
+                isFavorite: item.isFavorite,
+                hasAdjustments: item.hasAdjustments,
+                faceQuality: analysis?.faceQuality,
+                sharpness: analysis?.sharpness ?? 0,
+                pixelCount: item.pixelCount,
+                date: item.creationDate
+            )
+        }
+        return PhotoGroup(kind: kind, members: BestShot.ordered(candidates))
     }
 }

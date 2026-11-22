@@ -178,4 +178,42 @@ struct SimilarityGrouperTests {
         #expect(groups[1].members.contains("new-a"))
         #expect(groups[2].members.contains("old-a"))
     }
+
+    @Test func retakesOfAVideoMakeAVideoGroup() {
+        let items = [
+            Fixture.video("take-1", on: Fixture.date(3, 1, hour: 10)),
+            Fixture.video("take-2", on: Fixture.date(3, 1, hour: 10, minute: 4)),
+            Fixture.video("recording", on: Fixture.date(3, 1, hour: 10, minute: 5), recording: true),
+            Fixture.photo("photo", on: Fixture.date(3, 1, hour: 10, minute: 1)),
+        ]
+        let analyses = [
+            "take-1": ImageAnalysis(featurePrint: Fixture.print(axis: 0)),
+            "take-2": ImageAnalysis(featurePrint: Fixture.print(axis: 0, offset: 0.2)),
+            "recording": ImageAnalysis(featurePrint: Fixture.print(axis: 0)),
+            "photo": ImageAnalysis(featurePrint: Fixture.print(axis: 0)),
+        ]
+
+        let groups = grouper.groups(of: items, analyses: analyses)
+
+        // A video never joins a photo, and screen recordings stay out.
+        #expect(groups.map(\.kind) == [.videos])
+        #expect(Set(groups.first?.members ?? []) == ["take-1", "take-2"])
+    }
+
+    @Test func videoGroupsComeAfterPhotoGroups() {
+        let items = [
+            Fixture.video("film-a", on: Fixture.date(5, 1)),
+            Fixture.video("film-b", on: Fixture.date(5, 1, minute: 1)),
+            Fixture.photo("copy-a", on: Fixture.date(4, 1)),
+            Fixture.photo("copy-b", on: Fixture.date(4, 1, minute: 1)),
+        ]
+        let analyses = [
+            "film-a": ImageAnalysis(featurePrint: Fixture.print(axis: 2)),
+            "film-b": ImageAnalysis(featurePrint: Fixture.print(axis: 2)),
+            "copy-a": ImageAnalysis(featurePrint: Fixture.print(axis: 1)),
+            "copy-b": ImageAnalysis(featurePrint: Fixture.print(axis: 1)),
+        ]
+
+        #expect(grouper.groups(of: items, analyses: analyses).map(\.kind) == [.duplicate, .videos])
+    }
 }

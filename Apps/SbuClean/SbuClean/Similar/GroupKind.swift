@@ -4,4 +4,6 @@ nonisolated enum GroupKind: String, CaseIterable, Hashable, Sendable {
     case duplicate
     /// Shots taken close in time that look alike: bursts, retakes.
     case similar
+    /// Videos that are copies of each other, or retakes close in time.
+    case videos
 }
