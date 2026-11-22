@@ -1,6 +1,6 @@
 # Lancio di Sbu Moon: kit
 
-Stato il 22/11/2026: **1.0 (2) in vendita**, approvata da Apple il 22/11 (app 6822656846). La 1.1 (4), con icona e screenshot nuovi, è in revisione dal 22/11: stesse funzioni. Pagina: sbu.dev/apps/moon. Pagina alternativa online: sbu.dev/alternatives/my-moon-phase-pro (EN: sbu.dev/en/alternatives/my-moon-phase-pro). Date nel calendario: `marketing/calendario-lanci.md`.
+Stato il 22/11/2026: **1.0 (2) in vendita**, approvata da Apple il 22/11 (app 6822656846). La 1.1 (4), con icona e screenshot nuovi, è in vendita dal 22/11: stesse funzioni. Il post di lancio usa l'immagine nuova. Pagina: sbu.dev/apps/moon. Pagina alternativa online: sbu.dev/alternatives/my-moon-phase-pro (EN: sbu.dev/en/alternatives/my-moon-phase-pro). Date nel calendario: `marketing/calendario-lanci.md`.
 
 Tutto qui è bozza: Matteo approva e pubblica. Modello: `marketing/find/`.
 
@@ -150,7 +150,7 @@ Descrizione lunga:
 
 ## Aggiornamento 1.1 (4)
 
-Stato: inviata il 22/11, in revisione. Il 22/11 alle 22:48 il lookup pubblico dello Store (IT e US) dà ancora la **1.0**. Lo stato ASC lo scrive [SBU-324](/SBU/issues/SBU-324). **Si pubblica solo quando la 1.1 è `READY_FOR_SALE`** e il lookup `https://itunes.apple.com/lookup?id=6822656846&country=it` risponde `"version":"1.1"`.
+Stato: **1.1 in vendita dal 22/11** (`READY_FOR_SALE` nella fotografia ASC di [SBU-324](/SBU/issues/SBU-324) alle 22:50; lookup pubblico `https://itunes.apple.com/lookup?id=6822656846&country=it` alle 23:07: `"version":"1.1"`). È uscita prima del post di lancio (martedì 24/11), quindi **questo post si salta**: il post di lancio esce con l'immagine nuova qui sotto (regola in `calendario-lanci.md`). I testi restano qui se servono più avanti.
 
 Novità (release notes inviate, branch `paperclip/SBU-267`): icona nuova, con l'alternativa Inversa nelle impostazioni, e schermate rifatte sul quaderno. Funzioni uguali alla 1.0. Non è un lancio: un post social, niente Show HN né Reddit. Se lo Show HN di Moon (2/12) esce con la 1.1 in vendita, il testo resta quello sopra.
 
