@@ -25,6 +25,13 @@ final class HabitsFlowTests: XCTestCase {
             app.launchEnvironment["SBU_HABITS_ICLOUD"] = "available"
         }
         app.launch()
+        // On iOS 26.2 (CI), in the test right after testSegnaFattaEndsTheTimerAndMarksTheHabit, the
+        // app came up without these arguments and environment, in English on its own file, in
+        // every run (SBU-279). Only such a launch is done again.
+        if app.buttons["Impostazioni"].waitForExistence(timeout: 5) == false, app.buttons["Settings"].exists {
+            app.terminate()
+            app.launch()
+        }
         return app
     }
 
@@ -153,6 +160,9 @@ final class HabitsFlowTests: XCTestCase {
 
         let share = app.buttons["Condividi la cifra"]
         XCTAssertTrue(share.waitForExistence(timeout: 5), app.debugDescription)
+        // Mid-fade the Closure's text is drawn but not yet an element: the audit would read it as
+        // text hidden from VoiceOver.
+        XCTAssertTrue(app.descendants(matching: .any)["Fatto"].waitForNonExistence(timeout: 5))
         try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
                 return true
@@ -306,8 +316,15 @@ final class HabitsFlowTests: XCTestCase {
         XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
         field.typeText("Venti pagine")
         expectValue(app.staticTexts["Caratteri"], "12 di 500")
+        let suggestions = app.otherElements["SystemInputAssistantView"]
         try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
+                return true
+            }
+            // The keyboard's suggestions bar is iOS's, not the app's: on iOS 26.2 (CI) its empty
+            // cells, a third of the bar wide, have no name.
+            if issue.auditType == .sufficientElementDescription, let frame = issue.element?.frame,
+               suggestions.exists, suggestions.frame.contains(frame) {
                 return true
             }
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? issue.detailedDescription)")
@@ -737,7 +754,8 @@ final class HabitsFlowTests: XCTestCase {
         // misreads the iOS 26 glass bar as text contrast.
         // The handler names the element in the failure, which the default message does not.
         try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
-            if issue.isCartiglio || issue.isHeroFigure {
+            // Aggiungi, after the last habit, runs half under the bar with the gear and Statistiche.
+            if issue.isCartiglio || issue.isHeroFigure || issue.isRowCutByTheScreenEdge {
                 return true
             }
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? issue.detailedDescription)")
@@ -750,7 +768,8 @@ final class HabitsFlowTests: XCTestCase {
         let large = launch(textSize: "UICTContentSizeCategoryAccessibilityXXXL")
         XCTAssertTrue(habit("Leggere", in: large).exists)
         try large.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
-            if issue.isCartiglio || issue.isHeroFigure {
+            // Aggiungi, after the last habit, runs half under the bar with the gear and Statistiche.
+            if issue.isCartiglio || issue.isHeroFigure || issue.isRowCutByTheScreenEdge {
                 return true
             }
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? issue.detailedDescription)")
@@ -767,7 +786,8 @@ final class HabitsFlowTests: XCTestCase {
             add(title, in: app)
         }
         let sette = habit("Sette", in: app)
-        for _ in 0..<6 where sette.isHittable == false {
+        for _ in 0..<6 {
+            guard sette.isHittable == false else { break }
             app.scrollViews.firstMatch.swipeUp()
         }
         XCTAssertTrue(sette.isHittable)

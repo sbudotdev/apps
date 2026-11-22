@@ -22,7 +22,8 @@ final class SymbolPickerFlowTests: XCTestCase {
     private func scrollToSymbolRow(in app: XCUIApplication) -> XCUIElement {
         let row = app.buttons["Cambia simbolo"]
         XCTAssertTrue(row.waitForExistence(timeout: 5))
-        for _ in 0..<3 where row.isHittable == false {
+        for _ in 0..<3 {
+            guard row.isHittable == false else { break }
             app.collectionViews.firstMatch.swipeDown()
         }
         XCTAssertTrue(row.isHittable, app.debugDescription)

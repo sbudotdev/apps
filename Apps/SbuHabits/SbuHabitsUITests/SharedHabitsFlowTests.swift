@@ -143,7 +143,8 @@ final class SharedHabitsFlowTests: XCTestCase {
         cell("Correre", in: app).tap()
         let remove = app.buttons["Rimuovi"].firstMatch
         XCTAssertTrue(remove.waitForExistence(timeout: 5))
-        for _ in 0..<6 where remove.isHittable == false {
+        for _ in 0..<6 {
+            guard remove.isHittable == false else { break }
             app.scrollViews.firstMatch.swipeUp()
         }
 
