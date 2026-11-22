@@ -1,6 +1,6 @@
 # Lancio di Sbu Noise: kit
 
-Stato il 22/11/2026: **1.0 (3) in vendita**, approvata da Apple il 22/11 (app 6822655015). La 1.1 (5), con icona e screenshot nuovi, è in revisione dal 22/11: stesse funzioni. Pagina: sbu.dev/apps/noise. **Nessuna pagina alternativa** sul sito: nei testi non si fa il nome di nessuna app a pagamento. Date nel calendario: `marketing/calendario-lanci.md`.
+Stato il 22/11/2026: **1.0 (3) in vendita**, approvata da Apple il 22/11 (app 6822655015). La 1.1 (5), con icona e screenshot nuovi, è in vendita dal 22/11: stesse funzioni. Il post di lancio usa l'immagine nuova. Pagina: sbu.dev/apps/noise. **Nessuna pagina alternativa** sul sito: nei testi non si fa il nome di nessuna app a pagamento. Date nel calendario: `marketing/calendario-lanci.md`.
 
 Tutto qui è bozza: Matteo approva e pubblica. Modello: `marketing/find/`.
 
@@ -133,3 +133,37 @@ Descrizione lunga:
 > Sbu Noise plays a sound to sleep to and keeps going with the screen locked. It has 34 looping sounds: white, pink and brown noise plus CC0 recordings of rain, water, nature, home and travel. You can mix up to five sounds with separate volumes, set timers that fade out and repeat on chosen days, and wake up to an alarm that fades in with the sound you pick. There is a dim bedside clock, a widget, Control Center, Shortcuts and Siri.
 >
 > It works without a network. There is no in-app purchase, no account, no ads and no analytics, and the source code is public under MIT.
+
+## Aggiornamento 1.1 (5)
+
+Stato: **1.1 in vendita dal 22/11** (`READY_FOR_SALE` nella fotografia ASC di [SBU-324](/SBU/issues/SBU-324) alle 22:50; lookup pubblico `https://itunes.apple.com/lookup?id=6822655015&country=it` alle 23:07: `"version":"1.1"`). È uscita prima del post di lancio (giovedì 26/11), quindi **questo post si salta**: il post di lancio esce con l'immagine nuova qui sotto (regola in `calendario-lanci.md`). I testi restano qui se servono più avanti.
+
+Novità (release notes inviate, branch `paperclip/SBU-267`): icona nuova, con l'alternativa Inversa nelle impostazioni, schermate rifatte sul quaderno, orari di timer e sveglia più leggibili. Non è un lancio: un post social, niente Show HN né Reddit.
+
+Immagine: `/Users/matteo/dev/sbudotdev/apps-sbu-267/Apps/SbuNoise/fastlane/screenshots/it/iPhone 17 Pro Max-01-main_framed.png` (EN: stessa cartella con `en-US`; per gli orari `04-alarm` o `05-clock`). Generata il 22/11, worktree di [SBU-267](/SBU/issues/SBU-267), fuori dal repo: se manca, la si prende dallo Store dopo l'uscita.
+
+Instagram IT:
+> Sbu Noise ha un'icona nuova e le schermate rifatte. Gli orari del timer e della sveglia ora si leggono meglio, anche al buio con gli occhi mezzi chiusi.
+>
+> I suoni sono sempre 34, tutti gratis. Nelle impostazioni c'è anche l'icona Inversa.
+>
+> Niente abbonamento, niente account, niente pubblicità, niente tracking.
+>
+> Link in bio: sbu.dev/apps/noise
+
+Instagram EN:
+> Sbu Noise has a new icon and redrawn screens. Timer and alarm times are easier to read now, even in the dark with your eyes half shut.
+>
+> Still 34 sounds, all free. There's an Inversa icon in Settings too.
+>
+> No subscription, no account, no ads, no tracking.
+>
+> Link in bio: sbu.dev/en/apps/noise
+
+Bluesky IT (≤300):
+> Sbu Noise 1.1 è sull'App Store: icona nuova, schermate rifatte, orari di timer e sveglia più leggibili. 34 suoni, tutti gratis, senza rete.
+> sbu.dev/apps/noise
+
+Bluesky EN (≤300):
+> Sbu Noise 1.1 is on the App Store: a new icon, redrawn screens, easier to read timer and alarm times. 34 sounds, all free, no network.
+> sbu.dev/en/apps/noise
