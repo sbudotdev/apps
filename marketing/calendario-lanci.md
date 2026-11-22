@@ -9,7 +9,7 @@ Proposta del 22/11, da approvare. Niente di questo è pubblicato: ogni post, Sho
 - Show HN martedì, mercoledì o giovedì, tra le 15 e le 17 ora italiana (mattina negli Stati Uniti). Niente giovedì 26/11 (Thanksgiving, HN vuoto) e niente venerdì 27/11.
 - Reddit da uno a tre giorni dopo lo Show HN della stessa app, mai lo stesso giorno.
 - Una sola PR a `open-source-ios-apps` aperta alla volta: la successiva dopo il merge. L'ordine è lo stesso degli Show HN.
-- Post Instagram e Bluesky: non contano come lancio, possono uscire qualsiasi giorno. Le quattro app escono sui social nella prima settimana, perché sono già sullo Store.
+- Post Instagram e Bluesky: non contano come lancio, possono uscire qualsiasi giorno. Clean, Moon e Noise escono sui social nella prima settimana, perché sono già sullo Store; Level dopo la 1.2 (vedi sotto).
 - Ogni pezzo pubblicato va in `marketing/log.md` lo stesso giorno.
 
 ## Settimana 1 · 23–29 novembre
@@ -18,12 +18,11 @@ Proposta del 22/11, da approvare. Niente di questo è pubblicato: ogni post, Sho
 |---|---|---|
 | Lun 23/11 | Invio di Chats ad Apple: **niente Show HN** | — |
 | Lun 23/11 | Post Clean su Instagram e Bluesky | `clean/lancio.md` |
-| Lun 23/11 | PR `Add Sbu Clean` a open-source-ios-apps; voce Clean su AlternativeTo | `clean/lancio.md` |
-| Mar 24/11 | **Show HN: Sbu Clean**, 15-17 | `clean/lancio.md` |
+| Lun 23/11 | Voce Clean su AlternativeTo. La PR `Add Sbu Clean` a open-source-ios-apps solo dopo che `app/clean-1.1` è in main (il codice della 1.1 in vendita è lì) | `clean/lancio.md` |
+| Mar 24/11 | **Show HN: Sbu Clean**, 15-17. Il link al codice punta al branch `app/clean-1.1` e il testo lo dice; se Matteo lo fonde in main prima, si torna a `tree/main` | `clean/lancio.md` |
 | Mar 24/11, sera | Post Moon su Instagram e Bluesky: è luna piena, ora letta in Sbu Moon il giorno prima | `moon/lancio.md` |
 | Mer 25/11 | Reddit r/iosapps: post di Clean | `clean/lancio.md` |
 | Gio 26/11, sera | Post Noise su Instagram e Bluesky | `noise/lancio.md` |
-| Sab 28/11 | Post Level su Instagram e Bluesky (fine settimana, lavori in casa) | `level/lancio.md` |
 
 ## Settimana 2 · 30 novembre – 6 dicembre
 
@@ -58,7 +57,7 @@ Le settimane libere per uno Show HN sono quattro e la quarta è della collezione
 
 - Se la collezione esce il 15/12: **Show HN di Level martedì 5/1/2027** (21/12–3/1 niente lanci, `plan.md` §9), con la 1.2 in vendita.
 - Se la collezione slitta al 12/1 (meno di 8 app il 10/12): la settimana del 14/12 si libera e lo Show HN di Level va **martedì 15/12**, se la 1.2 è in vendita. Altrimenti resta il 5/1.
-- Il post social di Level esce comunque il 28/11, con le sole funzioni della 1.0.
+- Il post social di Level esce dopo l'approvazione della 1.2: il listing della 1.1 promette già le funzioni nuove, e chi arriva dal post non le troverebbe. Il primo sabato dopo l'approvazione.
 
 ## La collezione: si arriva a 8 app il 15/12?
 
@@ -70,6 +69,6 @@ Habits e Speed non entrano nel conto: sono ancora respinte.
 
 ## Fuori calendario, da tenere presente
 
-- **Find**: lo Show HN di Find non è registrato in `marketing/log.md` (vuoto al 22/11) e la PR a open-source-ios-apps per Find non risulta aperta. Se non è stato fatto, la prima settimana libera è quella del 4/1 insieme a Level, oppure del 11/1: due Show HN non possono stare nella stessa settimana, quindi uno dei due va spostato.
+- **Find**: lo Show HN di Find non è registrato in `marketing/log.md` (vuoto al 22/11) e la PR a open-source-ios-apps per Find non risulta aperta. Se non è stato fatto, va nella settimana del 4/1 al posto di Level, oppure in quella dell'11/1: mai due Show HN nella stessa settimana.
 - **Natale** (21/12–3/1): niente lanci, solo il ritmo fisso e l'articolo di fine anno (`plan.md` §9).
 - **Luna piena del 24/12**: secondo post Moon possibile, la sera della vigilia, se il primo ha funzionato.

@@ -12,7 +12,7 @@ v3.3 · 22 novembre 2026: stato e punteggi al 22/11 (7 app sullo Store, calendar
 
 Al 18/10 era così: 2 app live (Subscriptions 2.0, Scanner 2.0), Find 1.0 in revisione, 4 app respinte il 14/10 (4.3) in attesa della risposta di Apple, 3 pronte su ASC e mai inviate (Chats, Fuel, Inventory), 7 scritte e mai su ASC, Squares (primo gioco) su main. Software: ADR-0016 e pagine `/software` online, il repo `sbu-commerce` non esiste ancora. E nessuno conosce ancora sbu.dev: zero lanci usciti, 1 recensione, 1 stella GitHub, zero backlink. Punteggio di partenza 51/85.
 
-**Il collo di bottiglia non è il marketing, è lo Store**: la risposta di Apple al 4.3 (finché tace, un invio a settimana), il test insieme sul tuo iPhone e TestFlight che non installa. La base marketing è pronta: ogni lancio parte il giorno in cui Apple approva.
+**Il collo di bottiglia non è il marketing, è lo Store.** Al 22/11: Apple ha sbloccato quattro app, restano fuori Habits (telefonata con App Review accettata) e Speed; ogni app nuova del calendario aspetta la prova insieme via cavo e l'App Privacy. Al 18/10 erano la risposta al 4.3, il test insieme e TestFlight che non installava. La base marketing è pronta: ogni lancio parte il giorno in cui Apple approva.
 
 ### Tre scommesse (una per ramo, più un tetto comune)
 1. **App: rispondere a ricerche che esistono già.** Una pagina "alternativa gratis a <app a pagamento>" per ogni app, IT e EN; Matteo in video ("Questa app costa 40 € l'anno. L'ho rifatta gratis."); SbuKit che chiede recensioni e fa condividere. Lancio della collezione (Show HN + Product Hunt) a metà dicembre.
@@ -117,7 +117,7 @@ Matteo è π-shaped su **prodotto + design system** e T-shaped sulla distribuzio
 - **Design system Quaderno** v5: le app si riconoscono come famiglia.
 - **Sito bilingue** con SEO tecnico completo: sitemap, hreflang, canonical, JSON-LD, `sameAs`, `llms.txt`, Smart App Banner, RSS per lingua, PageSpeed mobile ≥ 99 su ogni pagina.
 - **Home**: frase-categoria ("rifà da zero un'app a pagamento"), "Dov'è la fregatura?", le app che si scaricano per prime (ordine per stato dal 18/10, il numero di catalogo resta).
-- **Pagine alternativa**: 7 scritte IT/EN (Orbit, QR Reader, Find Air, Cleanup, My Moon Phase Pro, Streaks, Speedometer 55) e hub `/alternatives`. Al 22/11 sono online quelle delle app in vendita, compresi Cleanup e My Moon Phase Pro; Noise e Level non hanno una pagina alternativa (la pagina di Level indica comunque l'app che sostituisce).
+- **Pagine alternativa**: 8 scritte IT/EN (Orbit, QR Reader, Find Air, Cleanup, My Moon Phase Pro, Streaks, Speedometer 55, Moody Teleprompter) e hub `/alternatives`. Al 22/11 sono online quelle delle app in vendita, compresi Cleanup e My Moon Phase Pro; Noise e Level non hanno una pagina alternativa (la pagina di Level indica comunque l'app che sostituisce).
 - **Strumenti e contenuti**: generatore QR `/qr-code`, calcolatore abbonamenti, guida "Come disdire un abbonamento su iPhone", articoli IT (3) e EN (2).
 - **Stampa**: pagina Stampa con testi liberi e ritratto.
 - **Profili**: Instagram @sbudevapp, Bluesky @sbu.dev, bio IT/EN; link campagna App Store (`pt=128487151`, `ct=` per sorgente).
@@ -150,7 +150,7 @@ Matteo è π-shaped su **prodotto + design system** e T-shaped sulla distribuzio
 | 3 | Homepage | 4 | 4 | 4 | "Dov'è la fregatura?" e ordine per stato; manca la prova sociale. |
 | 4 | Pagine prodotto | 3 | 3 | 3 | Strutturate, FAQ e schema; sottili. |
 | 5 | Pagine di conversione | 3 | 4 | 4 | Smart App Banner, QR per il download, codici campagna. |
-| 6 | Confronto concorrenti | 1 | 3 | 4 | 6 pagine scritte e hub; online solo quelle delle app live. Al 22/11 online le pagine di 5 app in vendita (Orbit, QR Reader, Find Air, Cleanup, My Moon Phase Pro); mancano Noise e Level. |
+| 6 | Confronto concorrenti | 1 | 3 | 4 | Al 18/10: 6 pagine scritte e hub, online solo quelle delle app live. Al 22/11: 8 scritte; online le pagine di 5 app in vendita (Orbit, QR Reader, Find Air, Cleanup, My Moon Phase Pro); mancano Noise e Level. |
 | 7 | Contenuti | 1 | 2 | 2 | 5 articoli, guida, generatore QR, calcolatore, RSS. |
 | 8 | Onboarding | 4 | 4 | 4 | `SbuEmpty`, niente permessi anticipati. |
 | 9 | Email | 0 | 1 | 1 | Per scelta nessuna lista; RSS al suo posto. |

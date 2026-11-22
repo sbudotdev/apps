@@ -78,7 +78,7 @@ Alternativa: `Show HN: A free moon phase app that never goes online` (53)
 Primo commento:
 > Hi HN, I'm Matteo, a computer security student in Milan.
 >
-> Moon phase apps on the App Store are often paid (the best known lists at 3,99 € in Italy) or free with ads, and many fetch data from a server. None of that is needed: the moon's position is a solved problem. Jean Meeus's "Astronomical Algorithms" gives you phases, illumination, distance and rise/set times with formulas a phone runs instantly.
+> Moon phase apps on the App Store are often paid (the best known lists at €3.99 in Italy) or free with ads, and many fetch data from a server. None of that is needed: the moon's position is a solved problem. Jean Meeus's "Astronomical Algorithms" gives you phases, illumination, distance and rise/set times with formulas a phone runs instantly.
 >
 > Sbu Moon does exactly that, on the device: percent lit and the moon drawn as it looks, date and time of the next four phases, moonrise and moonset where you are (location read once at km precision, or a city from a bundled list), the moon's age and its distance from Earth, any day from 1900 to 2100. Phase alerts are local notifications. Phases come out within a few minutes of the published tables, distance within a few km. Times use the phone's time zone.
 >
@@ -88,7 +88,7 @@ Primo commento:
 >
 > Privacy: no account, no analytics, no ads, no server.
 >
-> It's one of seven free iPhone apps I have on the store at sbu.dev, each doing one thing with no subscription.
+> It's one of [N, ricontare il giorno stesso: 7 al 22/11] free iPhone apps I have on the store at sbu.dev, each doing one thing with no subscription.
 >
 > Repo: https://github.com/sbudotdev/apps/tree/main/Apps/SbuMoon
 > Page: https://sbu.dev/en/apps/moon
@@ -121,7 +121,7 @@ Una PR per app, una aperta alla volta (si apre dopo il merge della precedente). 
   "category-ids": ["misc"],
   "tags": ["swift", "swiftui"],
   "screenshots": [
-    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/18/46/88/184688f3-46fe-3cbd-e205-08f26cf5672c/iPhone_17_Pro_Max-01-main_framed.png/320x480bb.jpg"
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/a5/7b/16/a57b16d9-f2d5-d56f-69fa-5cea2b5cb15e/iPhone_17_Pro_Max-01-main_framed.png/320x480bb.jpg"
   ],
   "source": "https://github.com/sbudotdev/apps/tree/main/Apps/SbuMoon",
   "itunes": "https://apps.apple.com/app/id6822656846",

@@ -76,7 +76,7 @@ Primo commento:
 >
 > Privacy: no account, no analytics, no ads, no server. The app has no network code; all sounds ship in the bundle.
 >
-> It's one of seven free iPhone apps I have on the store at sbu.dev, each doing one thing with no subscription.
+> It's one of [N, ricontare il giorno stesso: 7 al 22/11] free iPhone apps I have on the store at sbu.dev, each doing one thing with no subscription.
 >
 > Repo: https://github.com/sbudotdev/apps/tree/main/Apps/SbuNoise
 > Page: https://sbu.dev/en/apps/noise
@@ -109,7 +109,7 @@ Una PR per app, una aperta alla volta (si apre dopo il merge della precedente). 
   "category-ids": ["audio"],
   "tags": ["swift", "swiftui"],
   "screenshots": [
-    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/6d/2f/3a/6d2f3af6-c341-7e0d-874c-45310d49dc68/iPhone_17_Pro_Max-01-main_framed.png/320x480bb.jpg"
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/3f/66/ba/3f66ba46-0601-d6c5-3623-21a6e119e895/iPhone_17_Pro_Max-01-main_framed.png/320x480bb.jpg"
   ],
   "source": "https://github.com/sbudotdev/apps/tree/main/Apps/SbuNoise",
   "itunes": "https://apps.apple.com/app/id6822655015",

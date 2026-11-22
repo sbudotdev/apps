@@ -12,6 +12,8 @@ Quando la 1.2 è in vendita: aggiungere al post e allo Show HN il mirino ("guard
 
 ## Instagram @sbudevapp
 
+**Quando:** dopo l'approvazione della 1.2. La descrizione dello Store della 1.1 in vendita promette già il mirino e le unità nuove, ma il binario è la 1.0: chi arriva dal post troverebbe nel listing funzioni che non ci sono. Con la 1.2 in vendita, aggiungere al post il mirino.
+
 Immagine: primo screenshot dello Store. Testo sull'immagine: "È dritto? Chiedilo all'iPhone."
 
 IT:
@@ -66,7 +68,7 @@ Alternativa (se la 1.2 non è ancora in vendita): `Show HN: Bubble level and cli
 Primo commento:
 > Hi HN, I'm Matteo, a computer security student in Milan.
 >
-> The well-known clinometer and bubble level apps on the App Store are cheap, around 1,99 €, or free with ads. It's a small job done well by a few, so I wanted one that's free, has no ads and shows its code.
+> The well-known clinometer and bubble level apps on the App Store are cheap, around €1.99, or free with ads. It's a small job done well by a few, so I wanted one that's free, has no ads and shows its code.
 >
 > Sbu Level is a bubble level when the phone lies flat and a 0-90° clinometer when it stands on any of its four edges, to a tenth of a degree. Calibration is two-step per side: measure, rotate 180° on the same spot, measure again. That cancels the sensor offset even on a surface that isn't level. You can lock the reading, the screen stays on, and it buzzes when you're exactly level.
 >
@@ -76,7 +78,7 @@ Primo commento:
 >
 > Privacy: no account, no analytics, no ads, no server. The camera picture stays on screen.
 >
-> It's one of seven free iPhone apps I have on the store at sbu.dev, each doing one thing with no subscription.
+> It's one of [N, ricontare il giorno stesso: 7 al 22/11] free iPhone apps I have on the store at sbu.dev, each doing one thing with no subscription.
 >
 > Repo: https://github.com/sbudotdev/apps/tree/main/Apps/SbuLevel
 > Page: https://sbu.dev/en/apps/level
@@ -108,7 +110,7 @@ Una PR per app, una aperta alla volta (si apre dopo il merge della precedente). 
   "category-ids": ["misc"],
   "tags": ["swift", "swiftui"],
   "screenshots": [
-    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/9b/f3/fd/9bf3fd3e-ccd5-a334-f544-99b091d84aa1/iPhone_17_Pro_Max-01-main_framed.png/320x480bb.jpg"
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/b7/ae/a7/b7aea7a9-b2ac-39b9-d757-0ac190edd24d/iPhone_17_Pro_Max-01-main_framed.png/320x480bb.jpg"
   ],
   "source": "https://github.com/sbudotdev/apps/tree/main/Apps/SbuLevel",
   "itunes": "https://apps.apple.com/app/id6822656774",
