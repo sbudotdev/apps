@@ -15285,6 +15285,190 @@
           }
         }
       }
+    },
+    "Scegli su quali schermi far vedere la stagione, in Impostazioni → Schermi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose which displays show the season, in Settings → Displays."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle, auf welchen Bildschirmen die Jahreszeit erscheint, unter Einstellungen → Bildschirme."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisis sur quels écrans afficher la saison, dans Réglages → Écrans."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige en qué pantallas se ve la estación, en Ajustes → Pantallas."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "季節を表示するディスプレイを選べます。設定 → ディスプレイ。"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha em quais telas a estação aparece, em Ajustes → Telas."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies op welke schermen het seizoen verschijnt, in Instellingen → Schermen."
+          }
+        }
+      }
+    },
+    "Con «Pioggia sul vetro» e «Temporale» il cursore asciuga le gocce.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With “Rain on the Glass” and “Thunderstorm”, the pointer wipes the drops away."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bei „Regen auf der Scheibe“ und „Gewitter“ wischt der Zeiger die Tropfen weg."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avec « Pluie sur la vitre » et « Orage », le pointeur essuie les gouttes."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Con «Lluvia en el cristal» y «Tormenta», el puntero seca las gotas."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「窓に雨」と「雷雨」では、ポインタで水滴をふき取れます。"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Com “Chuva no vidro” e “Tempestade”, o cursor seca as gotas."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bij ‘Regen op het raam’ en ‘Onweer’ veegt de aanwijzer de druppels weg."
+          }
+        }
+      }
+    },
+    "Luci in alto: un filo di luci sotto la barra dei menu, tutto l'anno.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top Lights: a string of lights under the menu bar, all year round."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lichter oben: eine Lichterkette unter der Menüleiste, das ganze Jahr."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guirlande en haut : une guirlande lumineuse sous la barre des menus, toute l’année."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Luces arriba: una tira de luces bajo la barra de menús, todo el año."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上のライト：メニューバーの下にライトの飾りを一年中。"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Luzes no topo: um fio de luzes sob a barra de menus, o ano todo."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lichtjes bovenaan: een lichtsnoer onder de menubalk, het hele jaar."
+          }
+        }
+      }
+    },
+    "Le tue immagini: fino a 10 immagini tue cadono al posto dei fiocchi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Images: up to 10 of your own images fall instead of snowflakes."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Bilder: bis zu 10 eigene Bilder fallen statt der Flocken."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes images : jusqu’à 10 de tes images tombent à la place des flocons."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tus imágenes: hasta 10 imágenes tuyas caen en lugar de los copos."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたの画像：雪の代わりに自分の画像を最大10枚降らせられます。"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suas imagens: até 10 imagens suas caem no lugar dos flocos."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je eigen afbeeldingen: tot 10 eigen afbeeldingen vallen in plaats van vlokken."
+          }
+        }
+      }
     }
   }
 }
