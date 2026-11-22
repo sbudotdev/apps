@@ -1,1 +1,3 @@
+A new look: a new icon, with the Inversa alternate in Settings, and screens redrawn on the notebook.
+
 Camera sight: measure the angle to a distant point, a roof or a tree. Units in degrees, %, x:12 and 1V:H. Zero here for relative angles. Lock when steady, a voice that reads the figure, a sound on measure, the volume button in the sight. A dial that turns, full screen with a tap, and a How to use page.

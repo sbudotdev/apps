@@ -1,1 +1,1 @@
-First release.
+A new look: a new icon, with the Inversa alternate in Settings, and screens redrawn on the notebook. Easier to read timer and alarm times.

@@ -8,4 +8,4 @@ The app opens on today's moon: the illuminated percentage, the phase's name, the
 
 How it differs from the other Sbu apps: Sbu Moon is the only one that computes astronomy, the moon's phase, illumination, rise and set offline; the others do unrelated things (habits, photo cleanup, sound, angles, speed). Each Sbu app has its own code for its own task; they share only a small design package.
 
-Since 1.0 (rejected 14 Oct 2026): new icon and alternate icon, new screenshots, description rewritten to open with what the app does.
+Since 1.0, the version on the App Store: the v5 design, a new icon and alternate icon, new screenshots.

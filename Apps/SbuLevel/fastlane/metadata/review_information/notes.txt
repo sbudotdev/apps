@@ -2,7 +2,7 @@ No account. Sbu Level has no server and sends nothing: no analytics, ads or trac
 
 The app opens on the tool screen. Lay the iPhone flat: it shows the bubble level with the tilt on both axes. Stand it on an edge: it becomes a clinometer and shows the tilt to a tenth of a degree on a dial.
 
-New in 1.1:
+New in 1.2:
 - "Sight": the rear camera inside the dial, with a crosshair and a level horizon; the figure is the elevation of the line of sight. While it runs, the volume button locks the reading.
 - "Zero here": the angle relative to the current surface.
 - Units in Settings: degrees, whole degrees, %, x:12, 1V:H.
@@ -13,4 +13,4 @@ New in 1.1:
 
 How it differs from the other Sbu apps: Sbu Level is the only one that reads the motion sensors and the camera to measure angles; the others do unrelated things (speed from GPS, sound level, habits, moon phases, photo cleanup). Each Sbu app has its own code for its own instrument; they share only the design system.
 
-Since 1.0 (rejected 14 Oct 2026): five units, Zero here, the camera Sight, steady lock, spoken readings, the volume button, a rotatable dial and a How to use page; a new icon and alternate icon, new screenshots, description rewritten to open with what the app does.
+Since 1.1, the version on the App Store (which shipped the 1.0 build): five units, Zero here, the camera Sight, steady lock, spoken readings, the volume button, a rotatable dial and a How to use page; a new icon and alternate icon, new screenshots, description rewritten to open with what the app does.
