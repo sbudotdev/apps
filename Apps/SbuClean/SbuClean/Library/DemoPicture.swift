@@ -1,6 +1,8 @@
+import CoreImage
 import UIKit
 
-/// Landscapes drawn in code for the demo library: sky, sun, hills, a few shapes.
+/// Pictures for the demo library: real photos from `DemoPhotos`, and landscapes and screens
+/// drawn in code.
 ///
 /// The same seed always draws the same picture, so duplicates are real duplicates for Vision.
 nonisolated enum DemoPicture {
@@ -46,6 +48,32 @@ nonisolated enum DemoPicture {
                 let y = size.height * CGFloat.random(in: 0.5...0.9, using: &generator)
                 cg.fill(CGRect(x: x, y: y - side * 2, width: side, height: size.height))
             }
+        }
+    }
+
+    /// A photo from `DemoPhotos`, filling `size`; `nil` when the build leaves it out.
+    /// - Parameters:
+    ///   - name: The file name without extension, such as `demo-64`.
+    ///   - shift: Moves the picture sideways, as in a burst or a retake.
+    ///   - blurred: Takes the focus out, as in a shaken shot.
+    static func photo(named name: String, shift: CGFloat = 0, blurred: Bool = false, size: CGSize) -> UIImage? {
+        guard let url = Bundle.main.url(forResource: name, withExtension: "jpg"), var image = UIImage(contentsOfFile: url.path) else { return nil }
+
+        if blurred, let cgImage = image.cgImage {
+            let input = CIImage(cgImage: cgImage)
+            let output = input.clampedToExtent().applyingGaussianBlur(sigma: 14).cropped(to: input.extent)
+            if let blurredImage = CIContext().createCGImage(output, from: input.extent) {
+                image = UIImage(cgImage: blurredImage)
+            }
+        }
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        return UIGraphicsImageRenderer(size: size, format: format).image { _ in
+            // A little larger than the frame, so a shifted picture still fills it.
+            let zoom: CGFloat = shift == 0 ? 1 : 1.06
+            let width = size.width * zoom
+            let height = size.height * zoom
+            image.draw(in: CGRect(x: (size.width - width) / 2 + shift, y: (size.height - height) / 2, width: width, height: height))
         }
     }
 

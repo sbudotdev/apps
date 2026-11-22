@@ -27,6 +27,9 @@ struct HomeEntryRow: View {
                             .font(SbuTheme.subheadline)
                             .foregroundStyle(SbuTheme.inkMuted)
                     }
+                    // The texts take the row's width: the audit read a short subtitle, laid out to
+                    // a fraction of a point, as clipped.
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 if let bytes = entry.bytes, bytes > 0 {

@@ -274,7 +274,6 @@ final class ChatsFlowTests: XCTestCase {
 }
 
 private extension XCUIElement {
-    /// Replaces the field's text.
     func clearAndType(_ text: String) {
         tap()
         if let current = value as? String, !current.isEmpty {

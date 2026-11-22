@@ -13,6 +13,8 @@ struct BoardView: View {
     let canPlaceByTap: Bool
     let tap: (Cell) -> Void
 
+    @Environment(\.sbuSeason) private var season
+
     var body: some View {
         let covered = Set(preview?.covered ?? [])
         let completing = preview?.cleared ?? []
@@ -48,9 +50,9 @@ struct BoardView: View {
     }
 
     private func look(of cell: Cell, covered: Set<Cell>, completing: Set<Cell>) -> CellLook {
-        if completing.contains(cell) { return .completing(PieceTone.color(previewTone)) }
-        if covered.contains(cell) { return .shadow(PieceTone.color(previewTone)) }
-        return board.tone(at: cell).map { .filled(PieceTone.color($0)) } ?? .empty
+        if completing.contains(cell) { return .completing(PieceTone.color(previewTone, in: season)) }
+        if covered.contains(cell) { return .shadow(PieceTone.color(previewTone, in: season)) }
+        return board.tone(at: cell).map { .filled(PieceTone.color($0, in: season)) } ?? .empty
     }
 }
 
@@ -61,6 +63,13 @@ struct BoardView: View {
 #Preview("Dark") {
     BoardPreview()
         .preferredColorScheme(.dark)
+}
+
+#Preview("Natale") {
+    BoardView(board: ChristmasGame.tree, preview: nil, previewTone: 0, clearDelays: [:], canPlaceByTap: false) { _ in }
+        .padding(SbuTheme.space4)
+        .sbuPaper()
+        .environment(\.sbuSeason, .christmas)
 }
 
 private struct BoardPreview: View {

@@ -18,7 +18,7 @@ struct SwipeDoneView: View {
         return switch source {
         case .recent: "Hai già visto tutte le foto degli ultimi 30 giorni."
         case .random: "Hai già visto tutta la libreria."
-        case .onThisDay: "Nessuna foto da vedere scattata in questo giorno negli anni passati."
+        case .onThisDay, .onDay: "Nessuna foto da vedere scattata in questo giorno negli anni passati."
         case .later: "Non hai messo da parte niente. Mentre scorri, tocca Dopo per decidere più tardi."
         case .month: "Hai già visto tutto questo mese."
         case .album: "Hai già visto tutto questo album."

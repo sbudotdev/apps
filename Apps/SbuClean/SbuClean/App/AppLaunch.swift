@@ -17,7 +17,7 @@ enum AppLaunch {
         let directory = URL.temporaryDirectory.appending(path: "demo-\(UUID().uuidString)", directoryHint: .isDirectory)
         return CleanModel(library: DemoLibrary(access: demoAccess), directory: directory, readStorage: {
             DeviceStorage(totalBytes: 128_000_000_000, availableBytes: 21_400_000_000)
-        })
+        }, contacts: ContactsModel(store: DemoContactStore(), backupDirectory: directory))
     }
 
     private static var demoAccess: LibraryAccess {

@@ -73,14 +73,12 @@ extension XCUIApplication {
         return windows.firstMatch.frame.contains(CGPoint(x: frame.midX, y: frame.midY))
     }
 
-    /// Taps a button once it is on screen.
     @MainActor
     func tapButton(_ button: XCUIElement) {
         reveal(button)
         button.tap()
     }
 
-    /// Flips a named switch once it is on screen.
     @MainActor
     func toggleSwitch(_ name: String) {
         let toggle = switches[name]
@@ -113,7 +111,6 @@ extension XCUIApplication {
         row.tap()
     }
 
-    /// Back from a row's screen to the form.
     @MainActor
     func backToForm() {
         // The last bar is the pushed screen's: the grid's own sits behind the sheet.
@@ -130,7 +127,6 @@ extension XCUIApplication {
         buttons["Aggiungi abitudine"].firstMatch
     }
 
-    /// Types the title, then adds the habit.
     @MainActor
     func typeTitleAndAdd(_ title: String) {
         let field = textFields["Titolo"]

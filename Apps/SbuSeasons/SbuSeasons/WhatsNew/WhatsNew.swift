@@ -12,6 +12,12 @@ nonisolated enum WhatsNew {
             String(localized: "Lo sfondo può seguire l'effetto, su tutti gli schermi.", bundle: .seasons),
             String(localized: "Il salvaschermo con gli sfondi del borgo: lo installi dalle Impostazioni.", bundle: .seasons),
         ],
+        "2.3": [
+            String(localized: "Scegli su quali schermi far vedere la stagione, in Impostazioni → Schermi.", bundle: .seasons),
+            String(localized: "Con «Pioggia sul vetro» e «Temporale» il cursore asciuga le gocce.", bundle: .seasons),
+            String(localized: "Luci in alto: un filo di luci sotto la barra dei menu, tutto l'anno.", bundle: .seasons),
+            String(localized: "Le tue immagini: fino a 10 immagini tue cadono al posto dei fiocchi.", bundle: .seasons),
+        ],
     ]
 
     /// `2.1.3` → `2.1`.

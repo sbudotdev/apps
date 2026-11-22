@@ -1,7 +1,6 @@
 import AVFoundation
 import UniformTypeIdentifiers
 
-/// The container of the compressed copy.
 nonisolated enum OutputFormat: String, Codable, Sendable {
     case mov
     case mp4

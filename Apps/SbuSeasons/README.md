@@ -34,7 +34,7 @@ Lingue: italiano, inglese, tedesco, francese, spagnolo, giapponese, portoghese (
 
 Requisiti: macOS 14+, Xcode 26+, XcodeGen (`brew install xcodegen`).
 
-## Novità della 2.2
+## Novità della 2.3
 
 Le quattro funzioni scelte da Matteo dopo l'analisi della SBU-223 (risposta nella SBU-225).
 
@@ -177,7 +177,7 @@ con il download da sbu.dev (ADR-0022, `docs/adr/0022-app-mac.md`).
 Build Release universale (arm64 + x86_64), firma Developer ID, `.dmg` con il collegamento ad Applicazioni,
 notarizzazione e `stapler staple`; alla fine `spctl` deve dire `Notarized Developer ID`.
 Usa `SBU_TEAM_ID` e la chiave API di App Store Connect di fastlane (`ASC_KEY_PATH`, `ASC_KEY_ID`, `ASC_ISSUER_ID`).
-Le versioni sono nelle [release della repo](https://github.com/sbudotdev/SbuSeasons/releases); l'ultima è la [2.0.3](https://github.com/sbudotdev/SbuSeasons/releases/tag/v2.0.3).
+Le versioni sono nelle [release della repo](https://github.com/sbudotdev/SbuSeasons/releases); l'ultima è la [2.3.0](https://github.com/sbudotdev/SbuSeasons/releases/tag/v2.3.0).
 
 **2.0.1 (9).** Uguale alla 2.0, con il credito nuovo: "Nata da un'idea di Simone Antoniciello" (SBU-93).
 
@@ -200,6 +200,13 @@ Il test `TwoScreensTests` lo prova con uno schermo virtuale a una frequenza dive
 
 **2.0 (8).** Oggetti con cui giocare sopra le finestre, stagioni nuove, Natale, personaggi, sfondi, suoni e menu nuovo
 (SBU-49…SBU-57, vedi «Novità della 2.0»). Rilasciata da `main` (SBU-72).
+
+**2.2.0 (12).** Sei lingue nuove oltre a italiano e inglese: tedesco, francese, spagnolo, giapponese, portoghese (Brasile)
+e olandese (SBU-199). «Manda…»: un pupazzo, un albero o una decorazione diventano un file `.sbuseasons` da mandare
+con AirDrop, Messaggi o Mail (SBU-200).
+
+**2.3.0 (13).** Su quali schermi, il cursore che asciuga la pioggia sul vetro, Luci in alto e Le tue immagini
+(SBU-227…SBU-230, vedi «Novità della 2.3»). Rilasciata da `main` (SBU-246).
 
 ## Giocare con la neve (2.0)
 
@@ -305,7 +312,7 @@ che serve già per la neve sul Dock.
   gocce sul vetro si dimezzano da soli (`Tuning.energyShare`), e tornano pieni quando passa.
 - **Schermi** (Impostazioni → Schermi, solo con più di uno schermo). Un interruttore per schermo; la scelta si salva
   per schermo (lo stesso UUID con cui la galleria ricorda gli sfondi), quindi resta anche staccando e riattaccando il monitor.
-  Dalla 2.2 l'ultimo schermo acceso non si spegne (vedi «Novità della 2.2»).
+  Dalla 2.3 l'ultimo schermo acceso non si spegne (vedi «Novità della 2.3»).
 - **Finestre pulite** (Impostazioni → Meteo, spento di base). La neve su finestre e Dock si scioglie piano, 2 pt al secondo
   (`Tuning.cleanMeltRate`), e resta uno strato sottile di 3 pt (`Tuning.cleanLayer`). «Sulle finestre» spento la toglie
   tutta, come prima.

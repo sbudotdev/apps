@@ -7,9 +7,11 @@ struct FloatingPiece: View {
     let boardCell: CGFloat
     let trayScale: CGFloat
 
+    @Environment(\.sbuSeason) private var season
+
     var body: some View {
         let frame = DropTarget.pieceFrame(width: drag.piece.width, height: drag.piece.height, at: drag.location, cell: boardCell)
-        PieceShape(piece: drag.piece, cell: boardCell, color: PieceTone.color(drag.tone))
+        PieceShape(piece: drag.piece, cell: boardCell, color: PieceTone.color(drag.tone, in: season))
             .scaleEffect(drag.isLifted ? 1 : trayScale)
             .position(drag.isLifted ? CGPoint(x: frame.midX, y: frame.midY) : drag.location)
             .allowsHitTesting(false)

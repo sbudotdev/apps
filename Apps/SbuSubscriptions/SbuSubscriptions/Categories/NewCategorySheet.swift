@@ -1,7 +1,6 @@
 import SwiftData
 import SwiftUI
 
-/// A sheet to make a category of your own.
 struct NewCategorySheet: View {
     let order: Int
 

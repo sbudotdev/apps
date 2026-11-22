@@ -2,11 +2,13 @@
 
 Free iOS apps and games from [sbu.dev](https://sbu.dev). Each app remakes a single paid utility from the top of the App Store, each game one of the most played free games without its ads: no subscription, no in-app purchases, no account, no ads, no tracking, data only on the device. sbu.dev's third branch, [Software](https://sbu.dev/software), remakes enterprise software as open source; its first project, Sbu Commerce, lives in its own repo.
 
-**On the App Store:** [Sbu Subscriptions](https://apps.apple.com/app/id6780154928), a free alternative to Orbit, and [Sbu Scanner](https://apps.apple.com/app/id6772572337), QR codes and barcodes without ads. One new app a week; the rest are below.
+**On the App Store:** [Sbu Subscriptions](https://apps.apple.com/app/id6780154928), a free alternative to Orbit; [Sbu Scanner](https://apps.apple.com/app/id6772572337), QR codes and barcodes without ads; [Sbu Find](https://apps.apple.com/app/id6823934135), a free alternative to Find Air; [Sbu Moon](https://apps.apple.com/app/id6822656846), moon phases and the next full moon; [Sbu Clean](https://apps.apple.com/app/id6822655310), space back in Photos, one decision at a time; [Sbu Level](https://apps.apple.com/app/id6822656774), a bubble level and clinometer; and [Sbu Noise](https://apps.apple.com/app/id6822655015), noise to sleep to, offline. **For the Mac:** [Sbu Seasons](https://sbu.dev/en/seasons) 2.3.0: snow falls over your Mac's windows and settles on their edges and on the Dock. One new app a week; the rest are below.
 
 <p>
   <a href="https://sbu.dev/en/apps/subscriptions"><img src="https://sbu.dev/og/subscriptions.png" width="49%" alt="Sbu Subscriptions: what your subscriptions cost, and no renewal surprises you"></a>
   <a href="https://sbu.dev/en/apps/scanner"><img src="https://sbu.dev/og/scanner.png" width="49%" alt="Sbu Scanner: reads any code and shows where it goes before you open it"></a>
+  <a href="https://sbu.dev/en/apps/moon"><img src="https://sbu.dev/og/moon.png" width="49%" alt="Sbu Moon: moon phase and full moon"></a>
+  <a href="https://sbu.dev/en/apps/clean"><img src="https://sbu.dev/og/clean.png" width="49%" alt="Sbu Clean: clear space in your photos"></a>
 </p>
 
 Native SwiftUI, one shared design system (`Packages/SbuKit`), Italian and English, iOS 17+. The apps depend only on Apple frameworks: no third-party code, no analytics, no network. MIT licence.
@@ -64,15 +66,16 @@ Specs come only from public App Store data. Nothing here decompiles or extracts 
 |---|---|---|---|
 | [Sbu Subscriptions](Apps/SbuSubscriptions) | `accent-subscriptions` | Orbit | [App Store](https://apps.apple.com/app/id6780154928) |
 | [Sbu Scanner](Apps/SbuScanner) | `accent-scanner` | QR Reader for iPhone | [App Store](https://apps.apple.com/app/id6772572337) |
-| [Sbu Find](Apps/SbuFind) | `accent-find` | Find Air | In App Review |
-| [Sbu Habits](Apps/SbuHabits) | `accent-habits` | Streaks | In App Review |
-| [Sbu Noise](Apps/SbuNoise) | `accent-noise` | White Noise | In App Review |
-| [Sbu Speed](Apps/SbuSpeed) | `accent-speed` | Speedometer 55 Pro. GPS kit. | TestFlight |
-| [Sbu Moon](Apps/SbuMoon) | `accent-moon` | My Moon Phase Pro | In App Review |
-| [Sbu Clean](Apps/SbuClean) | `accent-clean` | Cleanup | In App Review |
-| [Sbu Chats](Apps/SbuChats) | `accent-chats` | The Cringe: Chat Wrapped | TestFlight |
-| [Sbu Fuel](Apps/SbuFuel) | `accent-fuel` | Fuelly: MPG & Service Tracker | TestFlight |
-| [Sbu Inventory](Apps/SbuInventory) | `accent-inventory` | Sortly | TestFlight |
+| [Sbu Find](Apps/SbuFind) | `accent-find` | Find Air | [App Store](https://apps.apple.com/app/id6823934135) |
+| [Sbu Moon](Apps/SbuMoon) | `accent-moon` | My Moon Phase Pro | [App Store](https://apps.apple.com/app/id6822656846) |
+| [Sbu Clean](Apps/SbuClean) | `accent-clean` | Cleanup | [App Store](https://apps.apple.com/app/id6822655310) |
+| [Sbu Level](Apps/SbuLevel) | `accent-level` | Clinometer + bubble level | [App Store](https://apps.apple.com/app/id6822656774) |
+| [Sbu Noise](Apps/SbuNoise) | `accent-noise` | White Noise | [App Store](https://apps.apple.com/app/id6822655015) |
+| [Sbu Habits](Apps/SbuHabits) | `accent-habits` | Streaks | Rejected (4.3), talking to App Review |
+| [Sbu Speed](Apps/SbuSpeed) | `accent-speed` | Speedometer 55 Pro. GPS kit. | Rejected |
+| [Sbu Chats](Apps/SbuChats) | `accent-chats` | The Cringe: Chat Wrapped | Ready for review, week of 23 Nov |
+| [Sbu Fuel](Apps/SbuFuel) | `accent-fuel` | Fuelly: MPG & Service Tracker | Ready for review, week of 30 Nov |
+| [Sbu Inventory](Apps/SbuInventory) | `accent-inventory` | Sortly | Ready for review |
 | [Sbu Shrink](Apps/SbuShrink) | `accent-shrink` | Compress Videos & Resize Video | In development |
 | [Sbu Grid](Apps/SbuGrid) | `accent-grid` | DrawinGrid | In development |
 | [Sbu Tidy](Apps/SbuTidy) | `accent-tidy` | Tody | In development |
@@ -80,7 +83,8 @@ Specs come only from public App Store data. Nothing here decompiles or extracts 
 | [Sbu Squares](Apps/SbuSquares) | `accent-squares` | Block Blast! (game, without its ads) | In development |
 | [Sbu Meds](Apps/SbuMeds) | `accent-meds` | Medisafe | In development |
 | [Sbu Remote](Apps/SbuRemote) | `accent-remote` | TV Remote - Universal Control | In development |
-| [Sbu Level](Apps/SbuLevel) | `accent-level` | Clinometer + bubble level | In development |
+| [Sbu Prompter](Apps/SbuPrompter) | `accent-prompter` | Moody Teleprompter (Mac + iPhone remote) | [GitHub release](https://github.com/sbudotdev/apps/releases/tag/prompter-1.0.0) |
+| [Sbu Seasons](Apps/SbuSeasons) | — | — (Mac menu-bar app) | 2.3.0, [Download](https://sbu.dev/en/seasons) |
 
 Live, in review and coming apps, with their pages: [sbu.dev](https://sbu.dev).
 

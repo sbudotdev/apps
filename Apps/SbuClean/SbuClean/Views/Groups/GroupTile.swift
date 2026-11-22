@@ -1,13 +1,16 @@
 import SbuKit
 import SwiftUI
 
-/// A photo in a group: the best one carries "Migliore", a selected one the bin mark.
+/// A photo or video in a group: the best one carries "Migliore", a selected one the bin mark.
+/// A video has a play button, to watch it before deciding.
 struct GroupTile: View {
     let id: String
     let position: Int
     let count: Int
     let isBest: Bool
     let isSelected: Bool
+    var isVideo = false
+    var play: () -> Void = {}
     let toggle: () -> Void
 
     var body: some View {
@@ -24,10 +27,35 @@ struct GroupTile: View {
                 .clipShape(.rect(cornerRadius: SbuTheme.radiusMd))
         }
         .buttonStyle(.plain)
+        .overlay {
+            if isVideo {
+                Button("Guarda", systemImage: "play.fill", action: play)
+                    .labelStyle(.iconOnly)
+                    .fontWeight(.medium)
+                    .foregroundStyle(SbuTheme.paper)
+                    .frame(width: 44, height: 44)
+                    .background(SbuTheme.ink.opacity(0.6), in: .circle)
+                    .accessibilityHidden(true)
+            }
+        }
         .sbuAffectsFigure(isSelected)
-        .accessibilityLabel(isBest ? Text("Foto \(position) di \(count), la migliore") : Text("Foto \(position) di \(count)"))
+        .accessibilityLabel(label)
         .accessibilityValue(isSelected ? Text("Da eliminare") : Text("Da tenere"))
         .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityAction(named: Text("Guarda")) {
+            if isVideo {
+                play()
+            }
+        }
+    }
+
+    private var label: Text {
+        switch (isVideo, isBest) {
+        case (true, true): Text("Video \(position) di \(count), il migliore")
+        case (true, false): Text("Video \(position) di \(count)")
+        case (false, true): Text("Foto \(position) di \(count), la migliore")
+        case (false, false): Text("Foto \(position) di \(count)")
+        }
     }
 }
 

@@ -3,10 +3,8 @@ nonisolated struct Piece: Hashable, Sendable {
     /// The cells of the shape; the smallest row and column are both 0.
     let cells: [Cell]
 
-    /// Rows the shape spans.
     var height: Int { (cells.map(\.row).max() ?? 0) + 1 }
 
-    /// Columns the shape spans.
     var width: Int { (cells.map(\.column).max() ?? 0) + 1 }
 
     /// How many tones the pieces come in: the accents of eight sbu.dev apps.

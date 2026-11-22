@@ -17,6 +17,10 @@ nonisolated struct LibrarySummary: Equatable, Sendable {
     var videos = Category()
     /// The Live Photos, with the bytes of their video parts.
     var livePhotos = Category()
+    /// Photos saved from chat apps.
+    var chats = Category()
+    /// Photos out of focus or shaken.
+    var blurry = Category()
     /// Months newest first, with how many items are decided.
     var months: [MonthProgress] = []
     var recentCount = 0
@@ -69,6 +73,16 @@ nonisolated struct LibrarySummary: Equatable, Sendable {
                 if item.isLivePhoto {
                     livePhotos.count += 1
                     livePhotos.bytes += item.size?.pairedVideoBytes ?? 0
+                }
+                // Not in the space you can free: a chat photo or a blurry one may be the only
+                // copy of a moment, so the user looks first.
+                if item.isFromChat {
+                    chats.count += 1
+                    chats.bytes += item.bytes
+                }
+                if item.isBlurry {
+                    blurry.count += 1
+                    blurry.bytes += item.bytes
                 }
             }
 

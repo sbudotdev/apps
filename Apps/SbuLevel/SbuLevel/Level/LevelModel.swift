@@ -241,7 +241,6 @@ final class LevelModel {
         calibrationSession = CalibrationSession()
     }
 
-    /// Measures the current step of the calibration.
     func captureCalibrationStep() {
         calibrationSession?.startCapture()
     }

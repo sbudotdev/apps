@@ -4,7 +4,6 @@ import Foundation
 nonisolated enum AngleUnit: String, CaseIterable, Codable, Identifiable, Sendable {
     /// Degrees to the tenth: the default.
     case degrees
-    /// Whole degrees.
     case wholeDegrees
     /// Slope as a percentage: rise over run, times 100.
     case percent

@@ -27,6 +27,7 @@ struct CleanModelTests {
             "burst-0": ImageAnalysis(featurePrint: Fixture.print(axis: 0), sharpness: 600),
             "burst-1": ImageAnalysis(featurePrint: Fixture.print(axis: 0, offset: 0.2), sharpness: 100),
             "screen": ImageAnalysis(featurePrint: Fixture.print(axis: 4)),
+            "film": ImageAnalysis(featurePrint: Fixture.print(axis: 5)),
         ]
         return FakeLibrary(items: items, sizes: sizes, analyses: analyses)
     }

@@ -1,7 +1,6 @@
 import os
 import Photos
 
-/// The real photo library through PhotoKit.
 nonisolated struct PhotoKitLibrary: VideoLibrary {
     /// Where the album's identifier is kept, so a renamed album or a new language still finds it.
     private static let albumKey = "albumIdentifier"

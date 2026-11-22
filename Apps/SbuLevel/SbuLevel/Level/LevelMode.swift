@@ -1,4 +1,3 @@
-/// How the iPhone is being used.
 nonisolated enum LevelMode: Equatable, Sendable {
     /// Lying on its back: a bubble level for surfaces.
     case flat

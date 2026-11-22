@@ -1,4 +1,3 @@
-/// A picture size in whole pixels.
 nonisolated struct PixelSize: Equatable, Hashable, Sendable {
     /// Encoders want even sides; this is the smallest they take.
     static let minimumSide = 16

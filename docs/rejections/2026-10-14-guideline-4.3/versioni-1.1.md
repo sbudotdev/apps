@@ -20,7 +20,7 @@ Codice dell'app, senza SbuKit (che a sua volta è cresciuto di circa 5.400 righe
 | Level | 15 | +2.352 / −394 | unità, Azzera qui, Mirino con la fotocamera, blocco, voce, suono, tasto volume, quadrante, Come si usa |
 | Speed | 10 | +1.994 / −365 | limiti in un tocco, altitudine e rotta, registro viaggi con CSV, Parabrezza |
 | Habits | 5 | +1.130 / −1.292 | passaggio al v5, immagine della cifra da condividere |
-| Clean | 5 | +702 / −580 | passaggio al v5 |
+| Clean | 10 | (23/10) | passaggio al v5; poi foto sfocate, foto dalle chat, video simili, calendario di Accadde oggi, contatti doppi |
 | Moon | 4 | +330 / −127 | passaggio al v5, una correzione per il compilatore attuale |
 | Noise | 6 | +199 / −219 | passaggio al v5 |
 
@@ -31,7 +31,7 @@ Codice dell'app, senza SbuKit (che a sua volta è cresciuto di circa 5.400 righe
 | Level | unica nel catalogo (sensori, fotocamera) | 1.1 con funzioni nuove vere | slide nuove, testo riscritto | distinta |
 | Speed | unica (GPS) | 1.1 con funzioni nuove vere | slide nuove, testo riscritto | distinta |
 | Habits | unica (Salute, Watch, Live Activity) | 14.600 righe sue | slide nuove | distinta, la strada è l'appello |
-| Clean | unica nel catalogo, nicchia affollatissima sullo Store | binario cambiato solo nell'aspetto | slide nuove | al limite |
+| Clean | unica nel catalogo, nicchia affollatissima sullo Store | dal 23/10 cinque funzioni nuove vere | slide nuove, 02 sulle funzioni nuove | distinta |
 | Noise | unica nel catalogo, nicchia affollata | binario cambiato solo nell'aspetto | slide nuove | al limite |
 | Moon | unica nel catalogo, nicchia affollata, app piccola | binario cambiato solo nell'aspetto | slide nuove | al limite |
 
@@ -48,7 +48,22 @@ Il rischio che resta per tutte e sei è quello che Apple ha nominato il 22/10: "
 - **Test di Habits e Moon non compilavano su `main`** con il compilatore attuale: corretti nei branch 1.1 (argomenti del test del timer; `MoonLitShape` `nonisolated`).
 - **Speed, audit del Parabrezza**: falliva anche su `main`, perché legge come tagliata l'unità specchiata. Escluso il controllo del ritaglio solo lì, con il motivo nel test.
 - **Habits, audit del foglio Aggiungi**: un nodo senza nome "Dynamic Type partially unsupported" che l'audit di iOS non attribuisce a nessun elemento. Il foglio non è stato toccato; da guardare a mano ai testi grandi.
-- **Schermate strumento che scorrono** (Moon, e probabilmente le altre su SbuKit): il contenuto passa sotto l'ora senza una fascia di carta, e la cifra si vede tagliata sotto la barra di stato. Correzione nello shell, non in una app sola.
+- **Schermate strumento che scorrono**: corretto il 23/10 nello shell (SbuKit, `SbuNavigationBarAppearance`): la barra è sempre una fascia di `paper`. Vale per tutte le app; provato su Clean e con i test di SbuKit, le altre app da guardare alla prossima build.
 - **Orologio da comodino di Noise**: è scuro, e CLAUDE.md ammette superfici scure solo per la Closure e il Parabrezza. Serve un'ADR (come l'ADR-0011) o un orologio chiaro.
 - **Mirino di Level**: lo screenshot si fa solo da un iPhone vero, nel test insieme.
 - **Clessidra**: è l'icona di Habits e anche l'incisione della slide "prova gratuita" di Subscriptions (già pubblicata).
+
+## Clean, 23/10
+
+Su richiesta di Matteo la 1.1 di Clean ha cinque funzioni nuove (branch `app/clean-1.1`, non unito): Foto sfocate, Foto dalle chat (gli album di WhatsApp, Telegram…), Video simili, il calendario di Accadde oggi e Contatti doppi (unione con copia .vcf in File). Libreria demo su foto vere (Unsplash, solo nelle build Debug), slide rifatte: la 02 delle promesse diventa la 02 delle funzioni nuove, le promesse passano nei sottotitoli di 03 e 05. Trovati e corretti: il sottotitolo "1 elemento" letto come tagliato dall'audit (la CI rossa), il titolo della griglia tagliato dal pulsante nella barra, e la parte nascosta delle miniature degli screenshot che riceveva i tocchi (il tocco su "Seleziona tutto" selezionava uno screenshot). Da provare insieme sull'iPhone: `docs/testbook/clean.md`, punto 10.
+
+### Originality-check di Clean 1.1 (23/10, prima dell'invio)
+
+| Dimensione | Giudizio |
+|---|---|
+| Funzione | distinta: l'unica app Sbu che legge la libreria Foto e i contatti; rispetto al 1.0 del 14/10 cinque funzioni nuove (sfocate, chat, video simili, calendario, contatti doppi) |
+| Contenuto | distinto: analisi Vision sull'iPhone, nessun contenuto preso da altri |
+| Metadati | distinti: descrizione che apre con cosa fa, slide nuove su foto vere, la slide delle promesse uguale per tutte tolta |
+| Esperienza | resta lo shell SbuKit comune (il fattore "overall design" della risposta del 22/10): rischio non azzerato |
+
+Verdetto: **distinta**, si può inviare. Sovrapposizione interna trovata: **Sbu Shrink** (comprimere video per liberare spazio) fa una cosa che Clean già fa (Comprimi). Shrink non è mai stato su ASC: prima di inviarla, valutare se unirla a Clean invece di pubblicarla da sola, è un 4.3 annunciato.

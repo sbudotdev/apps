@@ -1,6 +1,5 @@
 import XCTest
 
-/// Launch and audit helpers shared by the flow tests.
 class LibrettoUITestCase: XCTestCase {
     override func setUp() {
         continueAfterFailure = false

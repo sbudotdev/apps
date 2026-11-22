@@ -2,7 +2,6 @@ import CoreTransferable
 import Foundation
 import UniformTypeIdentifiers
 
-/// A code as a PNG image, named after it.
 struct PNGFile: Transferable {
     let name: String
     let data: Data
