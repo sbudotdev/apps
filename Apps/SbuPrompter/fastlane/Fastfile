@@ -31,6 +31,27 @@ lane :metadata do
   end
 end
 
+# Build numbers come from TestFlight, one train per platform.
+desc "Build the Mac app and the iPhone remote and upload both to App Store Connect, without submitting"
+lane :upload do
+  api_key
+  Dir.chdir("..") { sh("xcodegen", "generate") }
+  [["osx", "SbuPrompter"], ["ios", "SbuPrompterRemote"]].each do |platform, scheme|
+    build = latest_testflight_build_number(platform: platform, version: "1.0", initial_build_number: 0) + 1
+    # The Mac target signs ad hoc for local builds ("-"): the store archive needs a real identity,
+    # and SbuKit's resource bundle needs the team on macOS.
+    identity = platform == "osx" ? " CODE_SIGN_IDENTITY='Apple Development' DEVELOPMENT_TEAM=#{ENV.fetch("SBU_TEAM_ID")}" : ""
+    build_app(scheme: scheme, export_method: "app-store", xcargs: "#{signing_args}#{identity} CURRENT_PROJECT_VERSION=#{build}", output_directory: "build/#{platform}")
+    upload_to_testflight(app_platform: platform, skip_waiting_for_build_processing: true)
+  end
+end
+
+# Automatic signing creates the App Store profiles itself.
+def signing_args
+  "-allowProvisioningUpdates -authenticationKeyPath #{ENV.fetch("ASC_KEY_PATH")} " \
+    "-authenticationKeyID #{ENV.fetch("ASC_KEY_ID")} -authenticationKeyIssuerID #{ENV.fetch("ASC_ISSUER_ID")}"
+end
+
 private_lane :api_key do
   app_store_connect_api_key(
     key_id: ENV.fetch("ASC_KEY_ID"),

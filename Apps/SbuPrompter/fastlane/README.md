@@ -29,6 +29,14 @@ Register the bundle ID and create the App Store Connect record for macOS and iOS
 
 Upload only the metadata (no build, no screenshots) to the macOS and iOS listings, without submitting
 
+### upload
+
+```sh
+[bundle exec] fastlane upload
+```
+
+Build the Mac app and the iPhone remote and upload both to App Store Connect, without submitting
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
