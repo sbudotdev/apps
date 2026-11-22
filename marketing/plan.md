@@ -10,7 +10,7 @@ v3.4 · 22 novembre 2026, sera (corretta dopo la revisione di SBU-346): coda App
 
 **Oggi (22/11, verificato su App Store Connect e con il lookup pubblico dell'App Store):** 7 app in vendita (Subscriptions 2.1.0, Scanner 2.0.1, Find 1.0, e dal 22/11 Moon, Clean, Level e Noise). Moon 1.1 e Noise 1.1 sono già in vendita, Level 1.2 è in revisione; Habits e Speed ancora respinte. Coda delle app nuove, una a settimana: Chats 23/11; il 30/11 Prompter se [SBU-333](/SBU/issues/SBU-333) è pronto e approvato dal QA entro il 29/11, altrimenti Fuel il 30/11 e Prompter il 7/12 (lo decide il Lead il 30/11); poi Squares e Inventory, le date le fissa il Lead dopo il 30/11; Speed e Habits ferme sulla telefonata con Apple. Nessun lancio registrato in `marketing/log.md`. Punteggio 53/85 (§3).
 
-Al 18/10 era così: 2 app live (Subscriptions 2.0, Scanner 2.0), Find 1.0 in revisione, 4 app respinte il 14/10 (4.3) in attesa della risposta di Apple, 3 pronte su ASC e mai inviate (Chats, Fuel, Inventory), 7 scritte e mai su ASC, Squares (primo gioco) su main. Software: ADR-0016 e pagine `/software` online, il repo `sbu-commerce` non esiste ancora. E nessuno conosce ancora sbu.dev: zero lanci usciti, 1 recensione, 1 stella GitHub, zero backlink. Punteggio di partenza 51/85.
+Al 18/10 era così: 2 app live (Subscriptions 2.0, Scanner 2.0), Find 1.0 in revisione, 4 app respinte il 14/10 (4.3) in attesa della risposta di Apple, 3 pronte su ASC e mai inviate (Chats, Fuel, Inventory), 7 scritte e mai su ASC, Squares (primo gioco) su main. Software: ADR-0016 e pagine `/software` online, il repo `commerce-dev` non esiste ancora. E nessuno conosce ancora sbu.dev: zero lanci usciti, 1 recensione, 1 stella GitHub, zero backlink. Punteggio di partenza 51/85.
 
 **Il collo di bottiglia non è il marketing, è lo Store.** Al 22/11: Apple ha sbloccato quattro app, restano fuori Habits (telefonata con App Review accettata) e Speed; ogni app nuova del calendario aspetta la prova insieme via cavo e l'App Privacy. Al 18/10 erano la risposta al 4.3, il test insieme e TestFlight che non installava. La base marketing è pronta: ogni lancio parte il giorno in cui Apple approva.
 
@@ -23,7 +23,7 @@ Al 18/10 era così: 2 app live (Subscriptions 2.0, Scanner 2.0), Find 1.0 in rev
 ### 90 giorni (19 ott – 10 gen)
 - **App**, sett. 1–12: la base è fatta (Search Console, Smart Banner, review request in SbuKit, 6 pagine alternativa, strumenti, RSS). Ora: lancio di Find il giorno dell'approvazione, un Show HN per app, il primo video, poi Show HN e Product Hunt della collezione a metà dicembre (§9).
 - **Giochi**: prova completa di Squares, screenshot, TestFlight, invio a inizio dicembre; `/games` online all'approvazione.
-- **Software / Sbu Commerce**: ADR-0016 e `/software/commerce` già fatti; restano repo `sbu-commerce`, primo spike (catalogo, prodotto, carrello), primo articolo tecnico. Niente lancio pubblico prima di una demo che gira.
+- **Software / Sbu Commerce**: ADR-0016 e `/software/commerce` già fatti; restano repo `commerce-dev`, primo spike (catalogo, prodotto, carrello), primo articolo tecnico. Niente lancio pubblico prima di una demo che gira.
 
 ### Obiettivo a 12 mesi
 - **App**: 30 pagine alternativa indicizzate, 500+ recensioni, download raddoppiati ogni trimestre.
