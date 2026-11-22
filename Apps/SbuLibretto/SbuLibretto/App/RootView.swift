@@ -1,7 +1,6 @@
 import SbuKit
 import SwiftUI
 
-/// The app inside the standard Sbu shell.
 struct RootView: View {
     let settings: CourseSettings
 

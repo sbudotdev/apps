@@ -25,12 +25,10 @@ nonisolated enum SampleChat {
         language == .italian ? "Chat di esempio.txt" : "Sample chat.txt"
     }
 
-    /// The language of the app's interface.
     static var appLanguage: Language {
         Bundle.main.preferredLocalizations.first == "it" ? .italian : .english
     }
 
-    /// The export's text.
     static func text(_ language: Language, endingBefore end: Date, calendar: Calendar = .current) -> String {
         var random = SplitMix64(seed: 2026)
         let lastDay = calendar.date(byAdding: .day, value: -1, to: calendar.startOfDay(for: end)) ?? end

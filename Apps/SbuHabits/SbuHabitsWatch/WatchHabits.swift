@@ -41,7 +41,6 @@ final class WatchHabits {
         send(habit, .mark, at: date)
     }
 
-    /// Takes today's last mark back.
     func undo(_ habit: Habit, at date: Date = .now) {
         send(habit, .undo, at: date)
     }

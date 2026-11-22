@@ -1,6 +1,5 @@
 import AppIntents
 
-/// Opens the app on the add sheet.
 struct AddSubscriptionIntent: AppIntent {
     static let title: LocalizedStringResource = "Aggiungi un abbonamento"
     static let openAppWhenRun = true

@@ -4,12 +4,10 @@ nonisolated struct Board: Codable, Hashable, Sendable {
 
     private var tones: [Int?]
 
-    /// An empty board.
     init() {
         tones = Array(repeating: nil, count: Self.size * Self.size)
     }
 
-    /// Whether `cell` is filled.
     subscript(cell: Cell) -> Bool {
         tone(at: cell) != nil
     }
@@ -19,7 +17,6 @@ nonisolated struct Board: Codable, Hashable, Sendable {
         tones[Self.index(of: cell)]
     }
 
-    /// The number of filled cells.
     var filledCount: Int { tones.count { $0 != nil } }
 
     /// Whether `piece` fits with its top-left corner on `origin`: inside the board, on empty cells.
@@ -30,7 +27,6 @@ nonisolated struct Board: Codable, Hashable, Sendable {
         }
     }
 
-    /// Whether `piece` fits anywhere.
     func hasRoom(for piece: Piece) -> Bool {
         Self.allCells.contains { canPlace(piece, at: $0) }
     }

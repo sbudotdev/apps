@@ -3,7 +3,6 @@ import Foundation
 /// What the screen shows for one instant: how lit the moon is, its phase, the next four principal
 /// phases, the moon's age and its distance.
 nonisolated struct MoonReading: Equatable, Sendable {
-    /// The instant this reading is for.
     var date: Date
     /// Fraction of the disc that is lit, 0...1.
     var illumination: Double

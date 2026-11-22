@@ -1,6 +1,5 @@
 import UserNotifications
 
-/// The iPhone's notification center.
 struct SystemReminderCenter: ReminderCenter {
     func requestAuthorization() async -> Bool {
         (try? await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound])) ?? false

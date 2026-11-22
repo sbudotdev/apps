@@ -1,6 +1,5 @@
 import Foundation
 
-/// The fuel a vehicle takes.
 nonisolated enum FuelType: String, CaseIterable, Identifiable, Sendable {
     case petrol
     case diesel

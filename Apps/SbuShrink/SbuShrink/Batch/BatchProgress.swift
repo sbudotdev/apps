@@ -5,7 +5,6 @@ nonisolated struct BatchProgress: Equatable, Sendable {
     let fraction: Double
     /// The video being compressed, from 1; the last one when the run is over.
     let current: Int
-    /// The videos in the run.
     let total: Int
 
     init(jobs: [VideoJob]) {

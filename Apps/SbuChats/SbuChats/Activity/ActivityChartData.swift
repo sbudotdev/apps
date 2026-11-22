@@ -2,7 +2,6 @@ import Foundation
 
 /// The bars of one activity chart: every slot in order, empty ones included, split by series.
 nonisolated struct ActivityChartData: Equatable, Sendable {
-    /// A slot on the x axis.
     struct Slot: Identifiable, Equatable, Sendable {
         /// The slot value from `ActivityPoint`.
         let id: Int
@@ -10,7 +9,6 @@ nonisolated struct ActivityChartData: Equatable, Sendable {
         let label: String
     }
 
-    /// One bar segment.
     struct Bar: Identifiable, Equatable, Sendable {
         var id: String { "\(slot.id)-\(series.rawValue)" }
         let slot: Slot

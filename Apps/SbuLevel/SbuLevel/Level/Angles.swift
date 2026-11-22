@@ -1,6 +1,5 @@
 import Foundation
 
-/// Helpers for angles in degrees.
 nonisolated enum Angles {
     /// Folds any angle into -180..<180.
     static func normalized(_ degrees: Double) -> Double {

@@ -1,7 +1,6 @@
 import SbuKit
 import SwiftUI
 
-/// Settings section for how the measuring screen behaves.
 struct MeasureSection: View {
     @Bindable var model: LevelModel
 

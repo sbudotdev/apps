@@ -1,7 +1,6 @@
 import AVFoundation
 import UIKit
 
-/// A view whose layer is a camera preview.
 final class CameraPreviewView: UIView {
     override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
 
