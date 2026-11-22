@@ -94,7 +94,7 @@ Sezioni 6, 7, 9 e 10: non riverificate il 22/11, ferme al 18/10.
 
 ## 7. Marketing
 
-Fatto: sito live con i tre rami, Search Console e Bing, Smart App Banner, `sameAs` e `llms.txt`, pagine alternativa, generatore QR e calcolatore abbonamenti, badge con link campagna, RSS, Instagram @sbudevapp, foto stampa, listing AlternativeTo (in moderazione), open-source-ios-apps: Subscriptions in lista (#2443), Scanner in PR #2446 (una PR per app). In SbuKit (su main, arrivano con la prossima versione di ogni app): richiesta di recensione dopo la Chiusura, Condividi l'app, `SbuFigureCard`. Piano 12 mesi v3.2 in `marketing/plan.md` (copia pubblica), punteggio 51/85.
+Fatto: sito live con i tre rami, Search Console e Bing, Smart App Banner, `sameAs` e `llms.txt`, pagine alternativa, generatore QR e calcolatore abbonamenti, badge con link campagna, RSS, Instagram @sbudevapp, foto stampa, listing AlternativeTo (in moderazione), open-source-ios-apps: Subscriptions in lista (#2443), Scanner in lista (#2446) (una PR per app). In SbuKit (su main, arrivano con la prossima versione di ogni app): richiesta di recensione dopo la Chiusura, Condividi l'app, `SbuFigureCard`. Piano 12 mesi v3.3 in `marketing/plan.md` (copia pubblica), punteggio 53/85.
 
 Deciso e chiuso: niente newsletter (solo RSS), niente GitHub Sponsors, un Show HN per app.
 
