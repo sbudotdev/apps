@@ -1,0 +1,40 @@
+# Lanes for Sbu Prompter: one App Store record for the Mac app and the iPhone remote
+# (universal purchase, same bundle id). Run from Apps/SbuPrompter.
+# metadata needs an App Store Connect API key in the environment:
+#   ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_PATH (path to the .p8), SBU_TEAM_ID
+
+# The App Store Connect API can't create apps, so this lane logs in with the Apple ID in
+# FASTLANE_USER: 2FA the first time, then the session cached in ~/.fastlane/spaceship.
+desc "Register the bundle ID and create the App Store Connect record for macOS and iOS, Italian primary language"
+lane :create_app do
+  produce(
+    username: ENV.fetch("FASTLANE_USER"),
+    app_name: "Sbu Prompter",
+    language: "Italian",
+    sku: "dev.sbu.prompter",
+    platforms: ["ios", "osx"]
+  )
+end
+
+desc "Upload only the metadata (no build, no screenshots) to the macOS and iOS listings, without submitting"
+lane :metadata do
+  api_key
+  ["osx", "ios"].each do |platform|
+    upload_to_app_store(
+      platform: platform,
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      submit_for_review: false,
+      force: true,
+      precheck_include_in_app_purchases: false
+    )
+  end
+end
+
+private_lane :api_key do
+  app_store_connect_api_key(
+    key_id: ENV.fetch("ASC_KEY_ID"),
+    issuer_id: ENV.fetch("ASC_ISSUER_ID"),
+    key_filepath: ENV.fetch("ASC_KEY_PATH")
+  )
+end
