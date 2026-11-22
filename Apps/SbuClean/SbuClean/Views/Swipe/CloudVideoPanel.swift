@@ -22,11 +22,21 @@ struct CloudVideoPanel: View {
                 Button("Annulla", action: cancel)
                     .buttonStyle(SbuFieldPillStyle())
             } else {
-                Label(failed ? "Non è stato possibile scaricare il video. Controlla la connessione." : "Questo video è solo in iCloud.", systemImage: "icloud")
-                    .font(SbuTheme.footnote)
-                    .foregroundStyle(SbuTheme.ink)
+                HStack(alignment: .firstTextBaseline, spacing: SbuTheme.space2) {
+                    Image(systemName: "icloud")
+                        .fontWeight(.medium)
+                        .accessibilityHidden(true)
+                    Text(failed ? "Non è stato possibile scaricare il video. Controlla la connessione." : "Questo video è solo in iCloud.")
+                        // The panel's width: the audit read the line, laid out to a fraction of
+                        // a point, as clipped.
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .font(SbuTheme.footnote)
+                .foregroundStyle(SbuTheme.ink)
                 Button(failed ? "Riprova" : "Scarica da iCloud", action: download)
                     .buttonStyle(SbuFieldPillStyle())
+                    // At its own width: squeezed by a fraction of a point, the audit read it as clipped.
+                    .fixedSize(horizontal: true, vertical: false)
             }
         }
         .padding(SbuTheme.space3)

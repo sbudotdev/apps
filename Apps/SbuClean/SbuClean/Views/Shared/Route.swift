@@ -2,6 +2,8 @@
 enum Route: Hashable {
     case swipe(SwipeSource)
     case months
+    /// The calendar of Accadde oggi.
+    case onThisDay
     case albums
     case duplicates
     case groups(GroupKind)
@@ -12,4 +14,5 @@ enum Route: Hashable {
     case bin
     case keepForever
     case stats
+    case contacts
 }

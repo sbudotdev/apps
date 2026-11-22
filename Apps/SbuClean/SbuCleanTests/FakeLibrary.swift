@@ -10,6 +10,7 @@ nonisolated final class FakeLibrary: PhotoLibrary {
         var items: [MediaItem] = []
         var sizes: [String: ItemSize] = [:]
         var analyses: [String: ImageAnalysis] = [:]
+        var chats: Set<String> = []
         var analyzed: [String] = []
         var measured: [String] = []
         var deleted: [String] = []
@@ -64,6 +65,10 @@ nonisolated final class FakeLibrary: PhotoLibrary {
 
     func albums() async -> [Album] {
         []
+    }
+
+    func chatItemIDs() async -> Set<String> {
+        contents.withLock { $0.chats }
     }
 
     func itemIDs(inAlbum albumID: String) async -> [String] {

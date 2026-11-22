@@ -11,15 +11,11 @@ struct GroupKindCard: View {
 
     private let heroSide: CGFloat = 140
 
-    private var title: LocalizedStringKey {
-        kind == .duplicate ? "Duplicati" : "Simili"
-    }
-
     var body: some View {
         let groups = model.groups(of: kind)
         let selected = model.selectedGroupMembers(of: kind)
         VStack(alignment: .leading, spacing: SbuTheme.space2) {
-            Text(title)
+            Text(kind.title)
                 .font(SbuTheme.title2)
                 .foregroundStyle(SbuTheme.ink)
                 .accessibilityAddTraits(.isHeader)
@@ -38,10 +34,14 @@ struct GroupKindCard: View {
                             .clipShape(.rect(cornerRadius: SbuTheme.radiusMd))
 
                         VStack(alignment: .leading, spacing: SbuTheme.space1) {
-                            Text("\(groups.reduce(0) { $0 + $1.members.count }) foto in \(groups.count) gruppi")
+                            Text(kind == .videos
+                                 ? "\(groups.reduce(0) { $0 + $1.members.count }) video in \(groups.count) gruppi"
+                                 : "\(groups.reduce(0) { $0 + $1.members.count }) foto in \(groups.count) gruppi")
                                 .font(SbuTheme.headline)
                                 .foregroundStyle(SbuTheme.ink)
-                            Text("\(selected.count) selezionate, \(model.bytes(of: selected).sizeText)")
+                            Text(kind == .videos
+                                 ? "\(selected.count) selezionati, \(model.bytes(of: selected).sizeText)"
+                                 : "\(selected.count) selezionate, \(model.bytes(of: selected).sizeText)")
                                 .font(SbuTheme.subheadline)
                                 .foregroundStyle(SbuTheme.inkMuted)
                         }
