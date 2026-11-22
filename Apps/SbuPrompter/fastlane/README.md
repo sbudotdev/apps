@@ -37,6 +37,8 @@ Upload only the metadata (no build, no screenshots) to the macOS and iOS listing
 
 Build the Mac app and the iPhone remote and upload both to App Store Connect, without submitting
 
+Only one: fastlane upload platform:osx (or ios)
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

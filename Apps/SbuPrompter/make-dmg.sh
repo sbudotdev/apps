@@ -1,7 +1,7 @@
 #!/bin/zsh
-# Builds SbuPrompter-<version>.zip: universal Release Mac app, Developer ID signature, notarised and stapled (ADR-0022).
+# Builds SbuPrompter-<version>.dmg: universal Release Mac app, Developer ID signature, app and dmg notarised and stapled (ADR-0022).
 # Needs SBU_TEAM_ID and the App Store Connect API key used by fastlane: ASC_KEY_PATH, ASC_KEY_ID, ASC_ISSUER_ID.
-# Usage: ./make-zip.sh [version]   (default 1.0). Output in build/dist/.
+# Usage: ./make-dmg.sh [version]   (default 1.0). Output in build/dist/.
 set -euo pipefail
 cd "${0:A:h}"
 
@@ -9,7 +9,7 @@ VERSION=${1:-1.0}
 : ${SBU_TEAM_ID:?} ${ASC_KEY_PATH:?} ${ASC_KEY_ID:?} ${ASC_ISSUER_ID:?}
 IDENTITY="Developer ID Application"
 OUT=build/dist
-ZIP=$OUT/SbuPrompter-$VERSION.zip
+DMG=$OUT/SbuPrompter-$VERSION.dmg
 rm -rf build/SbuPrompter.xcarchive $OUT && mkdir -p $OUT
 
 xcodegen
@@ -33,11 +33,22 @@ xcodebuild -exportArchive -archivePath build/SbuPrompter.xcarchive -exportOption
 APP=$OUT/app/SbuPrompter.app
 lipo -archs $APP/Contents/MacOS/SbuPrompter | grep -q 'x86_64 arm64\|arm64 x86_64' || { echo "not universal"; exit 1; }
 
-# Notarise a zip of the app, staple the ticket to the app, then zip the stapled app for the download.
+# Notarise a zip of the app and staple it, so the copy dragged to Applications works offline too.
 ditto -c -k --keepParent $APP $OUT/notarize.zip
 xcrun notarytool submit $OUT/notarize.zip --key $ASC_KEY_PATH --key-id $ASC_KEY_ID --issuer $ASC_ISSUER_ID --wait
 xcrun stapler staple $APP
 rm $OUT/notarize.zip
-ditto -c -k --keepParent $APP $ZIP
+
+# Disk image with the app and a link to Applications, signed, notarised and stapled too.
+mkdir $OUT/dmg && ditto $APP $OUT/dmg/SbuPrompter.app && ln -s /Applications $OUT/dmg/Applications
+hdiutil create -volname "Sbu Prompter" -srcfolder $OUT/dmg -fs HFS+ -format UDZO -ov $DMG
+rm -rf $OUT/dmg
+codesign --force --sign "$IDENTITY" --timestamp $DMG
+xcrun notarytool submit $DMG --key $ASC_KEY_PATH --key-id $ASC_KEY_ID --issuer $ASC_ISSUER_ID --wait
+xcrun stapler staple $DMG
+
 spctl -a -vvv -t exec $APP
-echo "Ready: $ZIP"
+spctl -a -vv -t open --context context:primary-signature $DMG
+xcrun stapler validate $DMG
+shasum -a 256 $DMG
+echo "Ready: $DMG"

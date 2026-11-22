@@ -42,3 +42,8 @@ Deve girare un solo Sbu Prompter sul Mac: due copie si annunciano con lo stesso 
 | `kill -USR1 <pid>` | salva il prompter dal vivo (`live-N.png`) e scrive lo stato su stderr, con il codice del telecomando e l'iPhone collegato |
 
 Le impostazioni si possono forzare all'avvio con le loro chiavi, per esempio `-layout floating`, `-countdown 0`, `-mode voice`, `-isMirrored YES`.
+
+## Distribuzione
+
+- **Fuori dallo Store:** `./make-dmg.sh 1.0.1` crea `build/dist/SbuPrompter-1.0.1.dmg`, universale, firmato Developer ID; app e dmg sono notarizzati e graffati. Il `.dmg` va nella release GitHub `prompter-<versione>`.
+- **App Store e TestFlight:** `fastlane upload` (oppure `platform:osx` / `platform:ios`) carica le build Mac e iPhone sulla versione 1.0; `fastlane metadata` carica i testi. Servono `SBU_TEAM_ID` e la chiave API di App Store Connect (`ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_PATH`).
