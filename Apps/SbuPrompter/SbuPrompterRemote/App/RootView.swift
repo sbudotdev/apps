@@ -9,7 +9,7 @@ struct RootView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
-        SbuAppShell("Sbu Prompter", slug: "prompter", accent: .prompter, appIcon: Image(systemName: "text.aligncenter")) {
+        SbuAppShell("Sbu Prompter", slug: "prompter", accent: .prompter, appIcon: Image(.appIconArtwork)) {
             switch model.phase {
             case .searching, .connecting, .outdated:
                 NoMacView(model: model)
