@@ -72,7 +72,7 @@ schemes:
       targets:
         - SbuMoonTests
         - name: SbuMoonUITests
-          skippedTests: [SnapshotTests]
+          skippedTests: [SnapshotTests, VideoTests]
   SbuMoonSnapshots:
     build:
       targets:

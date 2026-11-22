@@ -133,7 +133,7 @@ schemes:
       targets:
         - SbuNoiseTests
         - name: SbuNoiseUITests
-          skippedTests: [SnapshotTests, ScreenTourTests]
+          skippedTests: [SnapshotTests, ScreenTourTests, VideoTests]
   SbuNoiseSnapshots:
     build:
       targets:

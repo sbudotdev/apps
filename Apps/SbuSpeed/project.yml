@@ -72,7 +72,7 @@ schemes:
       targets:
         - SbuSpeedTests
         - name: SbuSpeedUITests
-          skippedTests: [SnapshotTests, SimulatedDriveTests, QAScreenshotTests]
+          skippedTests: [SnapshotTests, SimulatedDriveTests, QAScreenshotTests, VideoTests]
   SbuSpeedSnapshots:
     build:
       targets:
