@@ -1,5 +1,3 @@
-DRAFT (SBU-172), to be reviewed by Matteo before any submission.
-
 No account. Sbu Prompter has no server: no analytics, ads or tracking. Mac and iPhone are one app (universal purchase, same bundle id dev.sbu.prompter).
 
 The Mac app is the teleprompter: the script scrolls in the notch, under the camera, at a fixed speed or following the voice (recognized on the Mac only), and it stays hidden from screen sharing and recordings.
