@@ -5,6 +5,12 @@ on:
     branches: [main]
   pull_request:
 
+# Una sola run per branch o PR: un push nuovo cancella quella vecchia,
+# così i pochi runner macOS del piano free non smaltiscono run superate.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   kit:
     runs-on: macos-26
