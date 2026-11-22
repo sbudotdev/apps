@@ -6,7 +6,7 @@ Tutto qui è bozza: Matteo approva e pubblica. Materiale già scritto e ancora v
 
 Prima di pubblicare qualsiasi testo con un prezzo: riaprire Cleanup su apps.apple.com (IT e US), aggiornare data e cifre qui e in `hooks.md`. I prezzi sotto sono di listino, letti il 15/10 e il 17/10. Sempre "fino a".
 
-Cosa fa la 1.1 in vendita. Fonte: descrizione dello Store, che viene dal branch `app/clean-1.1` (da qui è uscito il binario 7), **non da main**: su main mancano le funzioni dalla sesta voce in poi.
+Cosa fa la 1.1 in vendita. Fonte: descrizione dello Store, che viene dal branch `app/clean-1.1` (da qui è uscito il binario 7). Il branch è fuso in main dal 22/11 (PR #80, SBU-291).
 - scorri a sinistra per il cestino e a destra per tenere: mese per mese, Recenti, Casuale, un album alla volta;
 - metti da parte le foto incerte e decidi dopo, oppure tienile sempre;
 - doppioni e foto simili trovati con Vision sull'iPhone, la migliore già scelta;
@@ -19,9 +19,9 @@ Cosa fa la 1.1 in vendita. Fonte: descrizione dello Store, che viene dal branch 
 - contatti doppi: stesso numero, email o nome, uniti in uno, con una copia in File prima di unirli.
 Non fa: email, "pulizia" di iCloud, ritocchi con l'AI.
 
-**Codice da linkare.** Il codice della 1.1 è sul branch `app/clean-1.1`, non ancora fuso in main. Finché resta così, i link al codice puntano al branch (`github.com/sbudotdev/apps/tree/app/clean-1.1/Apps/SbuClean`) e lo Show HN lo dice. Se Matteo fonde `app/clean-1.1` in main prima del 24/11, si torna al link `tree/main` e si toglie la frase sul branch.
+**Codice da linkare.** Il codice della 1.1 è in main dal 22/11 (PR #80, SBU-291): i link puntano a `github.com/sbudotdev/apps/tree/main/Apps/SbuClean`.
 
-**Store, da sistemare alla prossima versione (fuori da questo kit).** La descrizione live di Clean e le note per App Review su `app/clean-1.1` nominano un'app di messaggi in chiaro, contro la regola di `apps/CLAUDE.md`. Va tolto alla prossima versione di Clean.
+**Store, da sistemare alla prossima versione (fuori da questo kit).** La descrizione live di Clean e le note per App Review nominano un'app di messaggi in chiaro, contro la regola di `apps/CLAUDE.md`. I metadati in main sono già corretti (PR #79, SBU-288): arrivano sullo Store con la prossima versione di Clean.
 
 ## Instagram @sbudevapp
 
@@ -72,7 +72,7 @@ Testo:
 >
 > What it does: swipe left/right month by month (or Recent, Random, one album, On this day with a calendar), set unsure photos aside for later, duplicates, similar photos and similar videos found with Vision on the phone, blurry shots, photos saved from chat apps, screenshots in a grid, videos sorted by size with optional compression, Live Photos to stills, and duplicate contacts merged (a copy goes to Files first). You review a bin at the end and iOS asks for confirmation again. It also tells you that deleted photos stay 30 days in Recently Deleted, which is why the space often doesn't come back right away.
 >
-> No IAP, no account, no ads, no analytics, no server. Code is on GitHub: github.com/sbudotdev/apps/tree/app/clean-1.1/Apps/SbuClean (the 1.1 branch, not merged into main yet)
+> No IAP, no account, no ads, no analytics, no server. Code is on GitHub: github.com/sbudotdev/apps/tree/main/Apps/SbuClean
 >
 > sbu.dev/apps/clean
 >
@@ -101,7 +101,7 @@ Primo commento:
 >
 > It's one of [N, ricontare il giorno stesso: 7 al 22/11] free iPhone apps I have on the store at sbu.dev, each doing one thing with no subscription.
 >
-> Code: https://github.com/sbudotdev/apps/tree/app/clean-1.1/Apps/SbuClean. That's the branch the 1.1 on the store was built from; it isn't merged into main yet.
+> Code: https://github.com/sbudotdev/apps/tree/main/Apps/SbuClean
 > Page: https://sbu.dev/en/apps/clean
 
 Risposte pronte: le 5 di `showhn.md` valgono ancora (nella numero 2 togliere la parentesi sulla repo: è pubblica).
@@ -121,7 +121,7 @@ Voce da aggiungere in fondo a `contents.json`:
   "screenshots": [
     "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/2f/ae/e3/2faee386-ba11-46e1-0939-d2a0758d69df/iPhone_17_Pro_Max-01-main_framed.png/320x480bb.jpg"
   ],
-  "source": "https://github.com/sbudotdev/apps/tree/app/clean-1.1/Apps/SbuClean",
+  "source": "https://github.com/sbudotdev/apps/tree/main/Apps/SbuClean",
   "itunes": "https://apps.apple.com/app/id6822655310",
   "license": "mit",
   "date_added": "[data del giorno]",
@@ -129,7 +129,7 @@ Voce da aggiungere in fondo a `contents.json`:
 }
 ```
 
-La PR a open-source-ios-apps si apre solo dopo che `app/clean-1.1` è in main: la lista vuole un link stabile al codice.
+La PR a open-source-ios-apps punta a main, dove la 1.1 è fusa dal 22/11: la lista vuole un link stabile al codice.
 
 Corpo della PR:
 > Sbu Clean: free up space in the Photos library, free and open source SwiftUI (MIT). One entry in contents.json, follow-up to #2446.
