@@ -1,0 +1,7 @@
+{
+  "01-chat": {"layout": "hero", "engraving": "icon", "mark": {"shape": "circle", "box": [20, 540, 1180, 980]}},
+  "02-activity": {"layout": "detail", "subject": "an antique brass carriage clock with a white enamel dial, three-quarter view", "zoom": [0, 740, 1320, 1780]},
+  "03-words": {"layout": "left", "subject": "an old leather-bound dictionary lying open, three-quarter view", "mark": {"shape": "underline", "box": [100, 1010, 1230, 1100]}},
+  "04-chats": {"layout": "right", "subject": "a bundle of old handwritten letters tied with a ribbon, three-quarter view", "mark": {"shape": "underline", "box": [100, 900, 1160, 1000]}},
+  "05-privacy": {"layout": "flat", "subject": "an antique wooden writing box with a small brass lock, closed, three-quarter view", "mark": {"shape": "underline", "box": [140, 2600, 1040, 2850]}}
+}

@@ -1,7 +1,7 @@
 Esporta una chat dall'app di messaggi e Sbu Chats ne fa i numeri, sull'iPhone: quanti messaggi vi siete scritti, chi risponde prima, a che ora parlate.
 
 - Importa le chat esportate in .zip, con o senza media, o in .txt, dal foglio di condivisione o da File
-- Legge gli export di iPhone e di Android, in italiano, inglese e altre lingue, con orario a 12 o 24 ore
+- Legge gli export della chat, in italiano, inglese e altre lingue, con orario a 12 o 24 ore
 - Il totale dei messaggi, poi per ognuno: messaggi, parole, foto e video, conversazioni iniziate e chiuse, giorni di fila
 - Tempo di risposta tipico e medio di ogni persona
 - Grafici per ora, giorno della settimana, mese e anno, i tuoi messaggi separati da quelli degli altri
