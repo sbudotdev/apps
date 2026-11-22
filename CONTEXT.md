@@ -79,6 +79,10 @@ _Avoid_: toast, celebrazione, conferma
 Il rettangolo `ink` (raggio 14) della **Chiusura**, l'unica superficie scura oltre al Parabrezza di Sbu Speed.
 _Avoid_: card scura, banner
 
+**Stagione** (_Season_):
+Un periodo dell'anno in cui le **App Sbu** possono cambiare qualcosa, scritto nella build e acceso solo dalla data del telefono. Per ora solo Natale, dal 1/12 al 6/1 compresi (ADR-0023).
+_Avoid_: tema, evento, campagna
+
 **Promesse** (_Promises_):
 Le sei garanzie di ogni **App Sbu**: nessun abbonamento, nessun acquisto in-app, nessun account, nessuna pubblicità, nessun tracking, dati solo sul dispositivo.
 _Avoid_: "tracking invasivo", privacy policy, feature
