@@ -5,14 +5,21 @@ import SwiftUI
 struct SwipeCardContent: View {
     let item: MediaItem
     var playsVideo = false
+    /// The picture loaded ahead by the deck; without it the card loads its own.
+    var image: UIImage?
 
-    /// Cards load a large picture: the screen's width at full resolution.
-    private static let pictureSide: CGFloat = 1200
+    /// Without a picture loaded ahead, the card's width in points (at the screen's scale).
+    static let pictureSide: CGFloat = 440
 
     var body: some View {
         Group {
             if item.kind == .video && playsVideo {
-                VideoCardPlayer(item: item)
+                VideoCardPlayer(item: item, poster: image)
+            } else if let image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .accessibilityHidden(true)
             } else {
                 MediaThumbnail(id: item.id, side: Self.pictureSide, contentMode: .fit)
             }

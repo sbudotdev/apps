@@ -31,6 +31,16 @@
         }
       }
     },
+    "%@, %lld da vedere": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$lld to see"
+          }
+        }
+      }
+    },
     "%lld Live Photo": {
       "localizations": {
         "it": {
@@ -111,12 +121,62 @@
         }
       }
     },
+    "%lld da eliminare, il migliore di ogni gruppo resta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld to delete, the best of each group stays"
+          }
+        }
+      }
+    },
     "%lld da vedere": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld to see"
+          }
+        }
+      }
+    },
+    "%lld da vedere oggi": {
+      "localizations": {
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld da vedere oggi"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld da vedere oggi"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld to see today"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld to see today"
+                }
+              }
+            }
           }
         }
       }
@@ -735,6 +795,162 @@
         }
       }
     },
+    "%lld selezionati, %@": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%#@selected@, %2$@"
+          },
+          "substitutions": {
+            "selected": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg selezionato"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg selezionati"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld selected, %2$@"
+          }
+        }
+      }
+    },
+    "%lld video in %lld gruppi": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld video in %#@groups@"
+          },
+          "substitutions": {
+            "groups": {
+              "argNum": 2,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg gruppo"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg gruppi"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%#@videos@ in %#@groups@"
+          },
+          "substitutions": {
+            "videos": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg video"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg videos"
+                    }
+                  }
+                }
+              }
+            },
+            "groups": {
+              "argNum": 2,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg group"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg groups"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld video · %@": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld video · %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%#@videos@ · %2$@"
+          },
+          "substitutions": {
+            "videos": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg video"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg videos"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld visti": {
       "localizations": {
         "it": {
@@ -1025,6 +1241,46 @@
         }
       }
     },
+    "Consenti l'accesso ai contatti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow access to contacts"
+          }
+        }
+      }
+    },
+    "Contatti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contacts"
+          }
+        }
+      }
+    },
+    "Contatti doppi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duplicate contacts"
+          }
+        }
+      }
+    },
+    "Contatto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact"
+          }
+        }
+      }
+    },
     "Continua": {
       "localizations": {
         "en": {
@@ -1091,6 +1347,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Compressed copy saved"
+          }
+        }
+      }
+    },
+    "Copie dei contatti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact backups"
           }
         }
       }
@@ -1445,6 +1711,26 @@
         }
       }
     },
+    "Foto dalle chat": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chat photos"
+          }
+        }
+      }
+    },
+    "Foto sfocate": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blurry photos"
+          }
+        }
+      }
+    },
     "Foto, %@, %@": {
       "localizations": {
         "en": {
@@ -1461,6 +1747,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Camera"
+          }
+        }
+      }
+    },
+    "Guarda": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch"
           }
         }
       }
@@ -1655,6 +1951,16 @@
         }
       }
     },
+    "Le trovo con l'analisi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Found by the scan"
+          }
+        }
+      }
+    },
     "Leggo la libreria": {
       "localizations": {
         "en": {
@@ -1735,12 +2041,32 @@
         }
       }
     },
+    "Mese dopo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next month"
+          }
+        }
+      }
+    },
     "Mese per mese": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Month by month"
+          }
+        }
+      }
+    },
+    "Mese prima": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous month"
           }
         }
       }
@@ -1825,6 +2151,16 @@
         }
       }
     },
+    "Nessun contatto doppio. Ogni persona è salvata una volta sola.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No duplicate contacts. Everyone is saved once."
+          }
+        }
+      }
+    },
     "Nessun gruppo trovato.": {
       "localizations": {
         "en": {
@@ -1845,6 +2181,16 @@
         }
       }
     },
+    "Nessuna Live Photo nella libreria.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Live Photos in the library."
+          }
+        }
+      }
+    },
     "Nessuna foto da vedere": {
       "localizations": {
         "en": {
@@ -1861,6 +2207,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nothing left to see from this day in past years."
+          }
+        }
+      }
+    },
+    "Nessuna foto salvata dalle chat. Le trovi qui se WhatsApp, Telegram o un'altra app le salva nel suo album.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No photos saved from chats. They show here when WhatsApp, Telegram or another app saves them to its album."
+          }
+        }
+      }
+    },
+    "Nessuna foto sfocata trovata.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No blurry photos found."
           }
         }
       }
@@ -2105,6 +2471,32 @@
         }
       }
     },
+    "Resta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stays"
+          }
+        }
+      }
+    },
+    "Resta %@, con tutti i numeri e gli indirizzi. Prima salvo una copia dei %lld contatti in File, nella cartella Sbu Clean.": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resta %1$@, con tutti i numeri e gli indirizzi. Prima salvo una copia dei %2$lld contatti in File, nella cartella Sbu Clean."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ stays, with every number and address. First a copy of the %2$lld contacts goes to Files, in the Sbu Clean folder."
+          }
+        }
+      }
+    },
     "Ricomincia da capo": {
       "localizations": {
         "en": {
@@ -2185,6 +2577,16 @@
         }
       }
     },
+    "Sbu Clean non può vedere i tuoi contatti. Puoi consentirlo in Impostazioni.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Clean can't see your contacts. You can allow it in Settings."
+          }
+        }
+      }
+    },
     "Sbu Clean non può vedere le tue foto. Consenti l'accesso in Impostazioni, alla voce Foto.": {
       "localizations": {
         "en": {
@@ -2201,6 +2603,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sbu Clean saves a still photo with the same date, place and favourite, and puts the Live Photo in the bin. You lose only the motion."
+          }
+        }
+      }
+    },
+    "Sbu Clean trova le persone salvate due volte e le unisce in un solo contatto. I contatti restano su questo iPhone.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Clean finds people saved twice and merges them into one contact. Your contacts stay on this iPhone."
           }
         }
       }
@@ -2275,6 +2687,16 @@
         }
       }
     },
+    "Scorri quelle di oggi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swipe today's"
+          }
+        }
+      }
+    },
     "Scorri un elemento verso sinistra e tocca Proponi di nuovo perché torni nelle code.": {
       "localizations": {
         "en": {
@@ -2331,6 +2753,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Selected"
+          }
+        }
+      }
+    },
+    "Senza nome": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No name"
           }
         }
       }
@@ -2465,6 +2897,16 @@
         }
       }
     },
+    "Tieni solo il migliore": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep only the best"
+          }
+        }
+      }
+    },
     "Tieni solo la migliore": {
       "localizations": {
         "en": {
@@ -2476,6 +2918,16 @@
       }
     },
     "Tieni tutte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep all"
+          }
+        }
+      }
+    },
+    "Tieni tutti": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -2565,6 +3017,56 @@
         }
       }
     },
+    "Unire questi contatti?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merge these contacts?"
+          }
+        }
+      }
+    },
+    "Unisci": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merge"
+          }
+        }
+      }
+    },
+    "Unisci %lld contatti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merge %lld contacts"
+          }
+        }
+      }
+    },
+    "Unisci chi è salvato due volte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merge people saved twice"
+          }
+        }
+      }
+    },
+    "Uniti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merged"
+          }
+        }
+      }
+    },
     "Uno alla volta": {
       "localizations": {
         "en": {
@@ -2605,6 +3107,36 @@
         }
       }
     },
+    "Video %lld di %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Video %1$lld of %2$lld"
+          }
+        }
+      }
+    },
+    "Video %lld di %lld, il migliore": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Video %1$lld of %2$lld, the best"
+          }
+        }
+      }
+    },
+    "Video simili": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Similar videos"
+          }
+        }
+      }
+    },
     "Video, %@, %@": {
       "localizations": {
         "en": {
@@ -2621,6 +3153,76 @@
           "stringUnit": {
             "state": "translated",
             "value": "Put the original video in the bin? You review it before it is deleted."
+          }
+        }
+      }
+    },
+    "contatti doppi in %lld persone": {
+      "localizations": {
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "contatti doppi in %#@people@"
+          },
+          "substitutions": {
+            "people": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg persona"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg persone"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "duplicate contacts of %#@people@"
+          },
+          "substitutions": {
+            "people": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg person"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg people"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "da vedere oggi, %@, negli anni passati": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "to see today, %@, from past years"
           }
         }
       }

@@ -1,14 +1,23 @@
 import UIKit
 import os
 
-/// A made-up library for previews, UI tests and App Store screenshots: about sixty items with
-/// duplicates, a burst, screenshots, videos and Live Photos, all drawn in code.
+/// A made-up library for previews, UI tests and App Store screenshots: about a hundred items
+/// with duplicates, a burst, similar videos, blurry shots, chat photos, screenshots, videos and
+/// Live Photos.
+///
+/// Photos are real pictures from `DemoPhotos` (Unsplash, credits in
+/// `Fixtures/demo-photos-credits.md`), left out of Release builds: there, and for screens, the
+/// pictures are drawn in code.
 nonisolated final class DemoLibrary: PhotoLibrary {
     private struct Entry: Sendable {
         var item: MediaItem
-        /// Draws the landscape with this seed and shift, or a screen when `isScreen`.
+        /// The picture in `DemoPhotos`, such as `demo-64`.
+        var photo: String?
+        /// Draws the landscape with this seed when the photo is missing, or a screen when `isScreen`.
         var seed: Int
+        /// Moves the picture sideways, as in a burst or a retake.
         var shift: CGFloat = 0
+        var isBlurred = false
         var isScreen = false
     }
 
@@ -17,7 +26,7 @@ nonisolated final class DemoLibrary: PhotoLibrary {
         var entries: [Entry]
     }
 
-    private static let pictureSize = CGSize(width: 1200, height: 900)
+    private static let pictureSize = CGSize(width: 1000, height: 750)
     private static let screenSize = CGSize(width: 590, height: 1278)
 
     private let contents: OSAllocatedUnfairLock<Contents>
@@ -60,11 +69,16 @@ nonisolated final class DemoLibrary: PhotoLibrary {
     }
 
     func albums() async -> [Album] {
-        [Album(id: "demo-album", title: String(localized: "Vacanze"), count: 6)]
+        [Album(id: "demo-album", title: String(localized: "Vacanze"), count: 6), Album(id: "demo-whatsapp", title: "WhatsApp", count: 4)]
+    }
+
+    func chatItemIDs() async -> Set<String> {
+        contents.withLock { Set($0.entries.map(\.item.id).filter { $0.hasPrefix("chat") }) }
     }
 
     func itemIDs(inAlbum albumID: String) async -> [String] {
-        contents.withLock { Array($0.entries.map(\.item.id).filter { $0.hasPrefix("photo") }.prefix(6)) }
+        let prefix = albumID == "demo-whatsapp" ? "chat" : "photo"
+        return contents.withLock { Array($0.entries.map(\.item.id).filter { $0.hasPrefix(prefix) }.prefix(6)) }
     }
 
     @concurrent
@@ -75,7 +89,7 @@ nonisolated final class DemoLibrary: PhotoLibrary {
     }
 
     func analyze(_ id: String) async -> ImageAnalysis? {
-        guard let entry = entry(id), entry.item.kind == .photo else { return nil }
+        guard let entry = entry(id), !entry.item.isScreenRecording else { return nil }
 
         return await Self.analyze(entry)
     }
@@ -148,62 +162,96 @@ nonisolated final class DemoLibrary: PhotoLibrary {
     }
 
     private static func draw(_ entry: Entry) -> UIImage {
-        entry.isScreen
-            ? DemoPicture.screen(seed: entry.seed, size: screenSize)
-            : DemoPicture.landscape(seed: entry.seed, shift: entry.shift, size: pictureSize)
+        if entry.isScreen {
+            return DemoPicture.screen(seed: entry.seed, size: screenSize)
+        }
+        if let name = entry.photo, let photo = DemoPicture.photo(named: name, shift: entry.shift, blurred: entry.isBlurred, size: pictureSize) {
+            return photo
+        }
+        return DemoPicture.landscape(seed: entry.seed, shift: entry.shift, size: pictureSize)
     }
 
     // MARK: - Contents
 
     private static func makeEntries(now: Date) -> [Entry] {
         let day: TimeInterval = 86_400
+        let minute: TimeInterval = 60
         var entries: [Entry] = []
 
-        func photo(_ id: String, seed: Int, ago: TimeInterval, shift: CGFloat = 0, megabytes: Double = 3.2, live: Bool = false, favorite: Bool = false) {
+        func photo(_ id: String, _ picture: Int, ago: TimeInterval, shift: CGFloat = 0, megabytes: Double = 3.2, live: Bool = false,
+                   favorite: Bool = false, blurred: Bool = false) {
             let paired: Int64 = live ? 2_400_000 : 0
             let bytes = Int64(megabytes * 1_000_000) + paired
             let item = MediaItem(id: id, creationDate: now.addingTimeInterval(-ago), kind: .photo, isLivePhoto: live, isFavorite: favorite,
                                  pixelWidth: 4032, pixelHeight: 3024, size: ItemSize(bytes: bytes, pairedVideoBytes: paired))
-            entries.append(Entry(item: item, seed: seed, shift: shift))
+            entries.append(Entry(item: item, photo: "demo-\(picture)", seed: picture, shift: shift, isBlurred: blurred))
         }
 
-        // The last days: a burst, everyday photos, two Live Photos.
+        func video(_ id: String, _ picture: Int, ago: TimeInterval, seconds: Double, megabytes: Double, shift: CGFloat = 0) {
+            let item = MediaItem(id: id, creationDate: now.addingTimeInterval(-ago), kind: .video, pixelWidth: 3840, pixelHeight: 2160,
+                                 duration: seconds, size: ItemSize(bytes: Int64(megabytes * 1_000_000)))
+            entries.append(Entry(item: item, photo: "demo-\(picture)", seed: picture, shift: shift))
+        }
+
+        // The newest: a long concert video, then a burst at sunset.
+        video("video-concert", 158, ago: day * 0.6, seconds: 252, megabytes: 1_140)
         for shot in 0..<3 {
-            photo("burst-\(shot)", seed: 50, ago: day * 1 + Double(shot) * 2, shift: CGFloat(shot) * 8, megabytes: 3.6 + Double(shot) * 0.1)
+            photo("burst-\(shot)", 65, ago: day * 1 + Double(shot) * 2, shift: CGFloat(shot) * 6, megabytes: 3.6 + Double(shot) * 0.1)
         }
-        for index in 0..<8 {
-            photo("photo-\(index)", seed: index + 1, ago: day * Double(index * 3 + 2), megabytes: 2.4 + Double(index % 4) * 0.6, favorite: index == 2)
-        }
-        photo("live-0", seed: 70, ago: day * 4, live: true)
-        photo("live-1", seed: 71, ago: day * 12, live: true)
 
-        for index in 0..<5 {
-            let item = MediaItem(id: "screenshot-\(index)", creationDate: now.addingTimeInterval(-day * Double(index * 5 + 1)), kind: .photo,
-                                 isScreenshot: true, pixelWidth: 1179, pixelHeight: 2556, size: ItemSize(bytes: Int64(900_000 + index * 150_000)))
+        // Everyday photos of the last weeks, two Live Photos.
+        for (index, picture) in [64, 75, 76, 102, 152, 163, 129, 146, 177, 116, 57, 22].enumerated() {
+            photo("photo-\(index)", picture, ago: day * Double(index * 2 + 3), megabytes: 2.4 + Double(index % 4) * 0.6, favorite: index == 0)
+        }
+        photo("live-0", 40, ago: day * 4, live: true)
+        photo("live-1", 169, ago: day * 12, live: true)
+
+        // Shots out of focus or shaken.
+        photo("blurry-0", 142, ago: day * 9, megabytes: 2.1, blurred: true)
+        photo("blurry-1", 193, ago: day * 16, megabytes: 1.9, blurred: true)
+
+        // Saved from WhatsApp.
+        for (index, picture) in [200, 133, 183, 195].enumerated() {
+            photo("chat-\(index)", picture, ago: day * Double(index * 4 + 2) + 3_600, megabytes: 0.3 + Double(index) * 0.08)
+        }
+
+        for index in 0..<12 {
+            let item = MediaItem(id: "screenshot-\(index)", creationDate: now.addingTimeInterval(-day * Double(index * 3 + 1) - 7_200), kind: .photo,
+                                 isScreenshot: true, pixelWidth: 1179, pixelHeight: 2556, size: ItemSize(bytes: Int64(1_200_000 + index * 110_000)))
             entries.append(Entry(item: item, seed: 80 + index, isScreen: true))
         }
 
-        // Videos, one of them a screen recording.
-        for (index, (seconds, megabytes)) in [(95.0, 420.0), (48.0, 140.0), (12.0, 31.0)].enumerated() {
-            let item = MediaItem(id: "video-\(index)", creationDate: now.addingTimeInterval(-day * Double(index * 20 + 6)), kind: .video,
-                                 pixelWidth: 1920, pixelHeight: 1080, duration: seconds, size: ItemSize(bytes: Int64(megabytes * 1_000_000)))
-            entries.append(Entry(item: item, seed: 90 + index))
+        // Videos: two retakes of the same view, and two screen recordings.
+        video("video-beach", 199, ago: day * 6, seconds: 95, megabytes: 420)
+        video("video-balloon", 174, ago: day * 26, seconds: 48, megabytes: 140)
+        video("video-city-0", 43, ago: day * 40, seconds: 61, megabytes: 380)
+        video("video-city-1", 43, ago: day * 40 + minute * 3, seconds: 52, megabytes: 310)
+        for (index, (ago, megabytes)) in [(9.0, 640.0), (23.0, 210.0)].enumerated() {
+            let recording = MediaItem(id: "recording-\(index)", creationDate: now.addingTimeInterval(-day * ago), kind: .video, isScreenRecording: true,
+                                      pixelWidth: 1178, pixelHeight: 2556, duration: megabytes / 4, size: ItemSize(bytes: Int64(megabytes * 1_000_000)))
+            entries.append(Entry(item: recording, seed: 95 + index, isScreen: true))
         }
-        let recording = MediaItem(id: "recording-0", creationDate: now.addingTimeInterval(-day * 9), kind: .video, isScreenRecording: true,
-                                  pixelWidth: 1178, pixelHeight: 2556, duration: 22, size: ItemSize(bytes: 38_000_000))
-        entries.append(Entry(item: recording, seed: 95, isScreen: true))
 
         // Duplicates: one picture saved twice, another three times, far apart.
-        photo("duplicate-a0", seed: 60, ago: day * 15)
-        photo("duplicate-a1", seed: 60, ago: day * 75)
-        photo("duplicate-b0", seed: 61, ago: day * 33, megabytes: 4.1)
-        photo("duplicate-b1", seed: 61, ago: day * 120, megabytes: 4.1)
-        photo("duplicate-b2", seed: 61, ago: day * 200, megabytes: 4.1)
+        photo("duplicate-a0", 49, ago: day * 15 + 600)
+        photo("duplicate-a1", 49, ago: day * 75)
+        photo("duplicate-b0", 164, ago: day * 33, megabytes: 4.1)
+        photo("duplicate-b1", 164, ago: day * 120, megabytes: 4.1)
+        photo("duplicate-b2", 164, ago: day * 200, megabytes: 4.1)
+
+        // Accadde oggi: this day one and two years ago.
+        for (years, pictures) in [(1, [186, 196]), (2, [197])] {
+            let date = Calendar.current.date(byAdding: .year, value: -years, to: now) ?? now
+            for (index, picture) in pictures.enumerated() {
+                photo("photo-year-\(years)-\(index)", picture, ago: now.timeIntervalSince(date) + Double(index) * 3_600, megabytes: 2.9)
+            }
+        }
 
         // Older months, two photos each.
+        let older = [10, 13, 17, 28, 37, 42, 54, 58, 62, 70, 85, 92, 99, 107, 110, 112, 118, 124, 128, 136, 154, 162, 165, 176, 179, 182]
         for month in 1..<14 {
-            photo("old-\(month)-a", seed: 200 + month * 2, ago: day * Double(month * 30 + 3))
-            photo("old-\(month)-b", seed: 201 + month * 2, ago: day * Double(month * 30 + 11), megabytes: 2.8)
+            photo("old-\(month)-a", older[(month - 1) * 2], ago: day * Double(month * 30 + 3))
+            photo("old-\(month)-b", older[(month - 1) * 2 + 1], ago: day * Double(month * 30 + 11), megabytes: 2.8)
         }
 
         return entries.sorted { ($0.item.creationDate ?? .distantPast) > ($1.item.creationDate ?? .distantPast) }

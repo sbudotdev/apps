@@ -20,6 +20,9 @@ nonisolated protocol PhotoLibrary: Sendable {
     /// The user's own albums.
     func albums() async -> [Album]
 
+    /// The items saved by chat apps, found by the albums those apps keep (WhatsApp, Telegram…).
+    func chatItemIDs() async -> Set<String>
+
     /// The items of one album, newest first.
     func itemIDs(inAlbum albumID: String) async -> [String]
 

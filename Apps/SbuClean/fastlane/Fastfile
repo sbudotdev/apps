@@ -71,6 +71,35 @@ platform :ios do
     )
   end
 
+  desc "Wait for a TestFlight build to process, attach it to the App Store version with the metadata and framed screenshots, without submitting"
+  lane :prepare_submission do |options|
+    api_key
+    version = options.fetch(:version)
+    build = options.fetch(:build).to_s
+    app = Spaceship::ConnectAPI::App.find(CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier))
+    # deliver picks only a processed build.
+    60.times do
+      found = Spaceship::ConnectAPI::Build.all(app_id: app.id, version: version, build_number: build).first
+      break if found&.processing_state == "VALID"
+
+      UI.message("Build #{version} (#{build}): #{found&.processing_state || "not visible yet"}")
+      sleep(30)
+    end
+    ensure_review_detail
+    # deliver attaches the build only when it submits: attach it here.
+    processed = Spaceship::ConnectAPI::Build.all(app_id: app.id, version: version, build_number: build).first
+    app.get_edit_app_store_version.select_build(build_id: processed.id) if processed
+    upload_to_app_store(
+      app_version: version,
+      build_number: build,
+      skip_binary_upload: true,
+      submit_for_review: false,
+      force: true,
+      overwrite_screenshots: true,
+      precheck_include_in_app_purchases: false
+    )
+  end
+
   # Automatic signing creates the App Store profiles (app and widget, with the App Group) itself.
   def signing_args
     "-allowProvisioningUpdates -authenticationKeyPath #{ENV.fetch("ASC_KEY_PATH")} " \

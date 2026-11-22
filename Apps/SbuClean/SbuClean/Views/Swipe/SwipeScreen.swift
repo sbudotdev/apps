@@ -15,6 +15,7 @@ struct SwipeScreen: View {
     @State private var exitEdge = Edge.leading
     @State private var detailsItem: MediaItem?
     @State private var showsBin = false
+    @State private var images = CardImages()
 
     private var currentItem: MediaItem? {
         deck?.current.flatMap { model.itemsByID[$0] }
@@ -39,20 +40,23 @@ struct SwipeScreen: View {
             SpaceStat(label: "Nel cestino", bytes: model.trashBytes, context: context, isCounting: deck?.isDone != true)
                 // The photo is the point of this screen: the line under the figure stops growing before it.
                 .dynamicTypeSize(...DynamicTypeSize.accessibility1)
+                // Changes at once: animated with the card, the line under it faded between two
+                // places and jumped.
+                .transaction { $0.animation = nil }
 
             ZStack {
                 if let deck, deck.isDone {
                     SwipeDoneView(source: source, isEmptyQueue: deck.ids.isEmpty, binCount: model.state.trash.count, reviewBin: reviewBin)
-                } else if let item = currentItem {
-                    if let next = deck?.next.flatMap({ model.itemsByID[$0] }) {
-                        SwipeCardContent(item: next)
-                            .scaleEffect(0.94)
-                            .opacity(0.6)
-                            .accessibilityHidden(true)
+                } else if let deck, currentItem != nil {
+                    // The next card first, under; the same view comes on top after the swipe.
+                    ForEach([deck.next, deck.current].compactMap { $0 }, id: \.self) { id in
+                        if let item = model.itemsByID[id] {
+                            let isOnTop = id == deck.current
+                            SwipeCard(item: item, isOnTop: isOnTop, image: images.image(for: id), decide: decide, showDetails: { detailsItem = item })
+                                .zIndex(isOnTop ? 1 : 0)
+                                .transition(.asymmetric(insertion: .opacity, removal: SbuMotion.transition(from: exitEdge, reduceMotion: reduceMotion)))
+                        }
                     }
-                    SwipeCard(item: item, decide: decide, showDetails: { detailsItem = item })
-                        .id(item.id)
-                        .transition(.asymmetric(insertion: .opacity, removal: SbuMotion.transition(from: exitEdge, reduceMotion: reduceMotion)))
                 } else {
                     ProgressView()
                 }
@@ -85,6 +89,16 @@ struct SwipeScreen: View {
             guard deck == nil else { return }
 
             await loadDeck()
+        }
+        // The pictures around the top card, ready before they are needed.
+        .task(id: deck?.number) {
+            guard let deck else { return }
+
+            let start = max(deck.number - 2, 0)
+            let end = min(deck.number + 3, deck.ids.count)
+            guard start < end else { return }
+
+            await images.keep(Array(deck.ids[start..<end]), from: library)
         }
     }
 

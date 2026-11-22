@@ -40,6 +40,12 @@ nonisolated final class PhotoKitLibrary: PhotoLibrary {
 
     // Off the main actor: callers are views and the main-actor model.
     @concurrent
+    func chatItemIDs() async -> Set<String> {
+        await Self.chatIDs()
+    }
+
+    // Off the main actor: callers are views and the main-actor model.
+    @concurrent
     func itemIDs(inAlbum albumID: String) async -> [String] {
         await Self.ids(inAlbum: albumID)
     }
@@ -234,6 +240,19 @@ nonisolated final class PhotoKitLibrary: PhotoLibrary {
             }
         }
         return albums
+    }
+
+    @concurrent
+    private static func chatIDs() async -> Set<String> {
+        var ids: Set<String> = []
+        PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: nil).enumerateObjects { collection, _, _ in
+            guard ChatAlbums.isChatAlbum(collection.localizedTitle ?? "") else { return }
+
+            PHAsset.fetchAssets(in: collection, options: nil).enumerateObjects { asset, _, _ in
+                ids.insert(asset.localIdentifier)
+            }
+        }
+        return ids
     }
 
     @concurrent

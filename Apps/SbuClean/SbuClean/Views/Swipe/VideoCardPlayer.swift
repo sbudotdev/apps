@@ -16,6 +16,8 @@ struct VideoCardPlayer: View {
     }
 
     let item: MediaItem
+    /// The frame loaded ahead by the deck, shown until the video is ready.
+    var poster: UIImage?
 
     @Environment(\.photoLibrary) private var library
     @State private var phase = Phase.loading
@@ -28,7 +30,14 @@ struct VideoCardPlayer: View {
             if let player {
                 VideoPlayer(player: player)
             } else {
-                MediaThumbnail(id: item.id, side: 1200, contentMode: .fit)
+                if let poster {
+                    Image(uiImage: poster)
+                        .resizable()
+                        .scaledToFit()
+                        .accessibilityHidden(true)
+                } else {
+                    MediaThumbnail(id: item.id, side: SwipeCardContent.pictureSide, contentMode: .fit)
+                }
                 if phase != .loading {
                     CloudVideoPanel(
                         isDownloading: phase == .downloading,

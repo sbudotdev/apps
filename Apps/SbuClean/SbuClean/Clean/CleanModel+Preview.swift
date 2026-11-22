@@ -10,6 +10,6 @@ extension CleanModel {
         let directory = URL.temporaryDirectory.appending(path: "preview-\(UUID().uuidString)", directoryHint: .isDirectory)
         return CleanModel(library: DemoLibrary(access: access), directory: directory, readStorage: {
             DeviceStorage(totalBytes: 128_000_000_000, availableBytes: 21_400_000_000)
-        })
+        }, contacts: ContactsModel(store: DemoContactStore(), backupDirectory: directory))
     }
 }

@@ -12,7 +12,7 @@ nonisolated enum ImageAnalyzer {
         #if targetEnvironment(simulator)
         // The simulator cannot run Vision's networks (no Neural Engine, no Metal context): every
         // print comes out the same. A tiny grey copy stands in, so grouping can be tried there.
-        return ImageAnalysis(featurePrint: TinyImageDescriptor.describe(image), sharpness: sharpness(of: image))
+        return ImageAnalysis(featurePrint: TinyImageDescriptor.describe(image), sharpness: sharpness(of: image), side: max(image.width, image.height))
         #else
         return visionAnalysis(of: image)
         #endif
@@ -35,7 +35,7 @@ nonisolated enum ImageAnalyzer {
 
         let featurePrint: [Float] = observation.data.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
         let faceQuality = faceRequest.results?.compactMap(\.faceCaptureQuality).max()
-        return ImageAnalysis(featurePrint: featurePrint, faceQuality: faceQuality, sharpness: sharpness(of: image))
+        return ImageAnalysis(featurePrint: featurePrint, faceQuality: faceQuality, sharpness: sharpness(of: image), side: max(image.width, image.height))
     }
 
     /// The sharpness of a picture scaled to `sharpnessSide` on its longer side, in grey.

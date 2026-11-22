@@ -4,4 +4,8 @@ nonisolated enum MediaCategory: String, CaseIterable, Hashable, Codable, Sendabl
     case screenRecordings
     case videos
     case livePhotos
+    /// Photos saved from chat apps.
+    case chats
+    /// Photos out of focus or shaken.
+    case blurry
 }
