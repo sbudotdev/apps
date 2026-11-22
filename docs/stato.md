@@ -32,7 +32,7 @@ Inviate il 22/11 con l'ok di Matteo ([SBU-270](/SBU/issues/SBU-270)). Sono aggio
 
 ## 3. Tutte le altre app, una riga ciascuna
 
-Ogni app è su `main`. "Prossimo passo" è l'unica cosa che sblocca l'app.
+Ogni app è su `main`, tranne ZTL. "Prossimo passo" è l'unica cosa che sblocca l'app.
 
 ### Ancora respinte
 
@@ -58,7 +58,7 @@ Ogni app è su `main`. "Prossimo passo" è l'unica cosa che sblocca l'app.
 | Shrink, Grid, Tidy, Libretto | test sul device, record ASC, TestFlight |
 | Meds | test del task in background sul device, record ASC, TestFlight |
 | Remote | prova su una TV vera, richiesta entitlement multicast (Matteo, `docs/remote-multicast-entitlement.md`), conferma delle scelte provvisorie, record ASC |
-| Squares (primo Gioco) | prova completa, screenshot Store, record ASC; invio previsto il 7/12 |
+| Squares (primo Gioco) | prova completa, screenshot Store, record ASC; invio previsto il 7/12 ([SBU-275](/SBU/issues/SBU-275)) |
 
 ### Pianificate, non iniziate
 
@@ -80,7 +80,7 @@ Metà dicembre: lancio della collezione (Show HN + Product Hunt), dal piano del 
 
 ## 5. Bloccanti, in ordine di peso
 
-1. **Il test insieme via cavo** manca a Chats e Fuel, ed è il prossimo passo per tutte le app del calendario. Nessuna va inviata senza.
+1. **Il test insieme via cavo** manca a Chats e Fuel, ed è il prossimo passo per tutte le app del calendario. Nessuna va inviata senza ([SBU-275](/SBU/issues/SBU-275), [SBU-276](/SBU/issues/SBU-276)).
 2. **Habits** aspetta la telefonata con Apple ([SBU-263](/SBU/issues/SBU-263)). **Speed** è ancora REJECTED su ASC.
 3. **App Privacy** di Chats e Fuel: la compila Matteo sul web ([SBU-276](/SBU/issues/SBU-276)).
 4. **TestFlight sul tuo iPhone** e **CI rossa** (test UI di Clean e Noise sui runner GitHub): non riverificati dal 18/10.
@@ -98,7 +98,7 @@ Fatto: sito live con i tre rami, Search Console e Bing, Smart App Banner, `sameA
 
 Deciso e chiuso: niente newsletter (solo RSS), niente GitHub Sponsors, un Show HN per app.
 
-Aperto: indicizzazione delle pagine nuove (#575), handle su X/TikTok/YouTube/LinkedIn, video di Find e "costa 40 € l'anno, l'ho rifatta gratis", articolo "sei app rifiutate" (bozza IT), lancio di Find all'approvazione.
+Aperto: indicizzazione delle pagine nuove (#575), handle su X/TikTok/YouTube/LinkedIn, video di Find e "costa 40 € l'anno, l'ho rifatta gratis", articolo "sei app rifiutate" (bozza IT).
 
 ## 8. Cosa serve da te (Matteo)
 
