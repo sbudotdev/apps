@@ -43,10 +43,12 @@ final class CleanFlowTests: XCTestCase {
             if issue.auditType == .textClipped, let label = issue.element?.label, label == label.uppercased() {
                 return true
             }
-            // On iPhone 16e the audit flags these two as clipped though they are whole on screen:
-            // the home's "1 elemento" and the system title "Screenshot" (SBU-85). Only these
-            // labels: iOS 27 gives a truly clipped text the same "larger Dynamic Type" reason (SBU-87).
-            if issue.auditType == .textClipped, let label = issue.element?.label, ["1 elemento", "Screenshot"].contains(label) {
+            // The audit flags these as clipped though they are whole on screen: the counts under the
+            // home's rows ("1 elemento", "12 elementi") and the system title "Screenshot" (SBU-85,
+            // SBU-291). Only these labels: iOS 27 gives a truly clipped text the same "larger Dynamic
+            // Type" reason (SBU-87).
+            if issue.auditType == .textClipped, let label = issue.element?.label,
+               label == "Screenshot" || label.wholeMatch(of: /\d+ element[oi]/) != nil {
                 return true
             }
             // At the largest text size the audit also flags a text it cannot name (no element, so
