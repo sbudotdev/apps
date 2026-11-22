@@ -13,6 +13,8 @@ concurrency:
 
 jobs:
   kit:
+    needs: list
+    if: needs.list.outputs.kit == 'true'
     runs-on: macos-26
     timeout-minutes: 45
     steps:
@@ -43,18 +45,36 @@ jobs:
         working-directory: Packages/SbuKit
         run: xcodebuild test -scheme SbuKit -destination platform=macOS
 
-  # Every Apps/Sbu* folder, so a new app is tested without touching this file.
+  # On main every Apps/Sbu* folder, so a new app is tested without touching this file.
+  # In a PR only the apps it changes, plus SbuKit when Packages/, Design/, Tools/ or CI change:
+  # the org has 5 macOS runners, and main still tests every app against the new SbuKit.
   list:
     runs-on: ubuntu-latest
     outputs:
       apps: ${{ steps.apps.outputs.apps }}
+      kit: ${{ steps.apps.outputs.kit }}
     steps:
-      - *checkout
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - id: apps
-        run: echo "apps=$(ls -d Apps/Sbu* | xargs -n1 basename | jq -R . | jq -sc .)" >> "$GITHUB_OUTPUT"
+        run: |
+          if [ "${{ github.event_name }}" = pull_request ]; then
+            # HEAD is the merge commit: its first parent is the base branch.
+            changed=$(git diff --name-only HEAD^1 HEAD)
+            apps=$(echo "$changed" | sed -n 's|^Apps/\(Sbu[^/]*\)/.*|\1|p' | sort -u | while read -r a; do if [ -d "Apps/$a" ]; then echo "$a"; fi; done)
+            grep -qE '^(Packages|Design|Tools|\.github)/' <<< "$changed" && kit=true || kit=false
+          else
+            apps=$(ls -d Apps/Sbu* | xargs -n1 basename)
+            kit=true
+          fi
+          echo "apps=$(echo "$apps" | jq -R . | jq -sc 'map(select(. != ""))')" >> "$GITHUB_OUTPUT"
+          echo "kit=$kit" >> "$GITHUB_OUTPUT"
+          echo "apps: $apps / kit: $kit"
 
   app:
     needs: list
+    if: needs.list.outputs.apps != '[]'
     runs-on: macos-26
     timeout-minutes: 45
     strategy:
