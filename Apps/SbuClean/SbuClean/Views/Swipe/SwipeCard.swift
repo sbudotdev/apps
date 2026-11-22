@@ -1,10 +1,13 @@
 import SbuKit
 import SwiftUI
 
-/// The card on top of the stack: drag right to keep, left to put in the bin; while dragging the
-/// word Tieni or Elimina appears. A long press shows the details.
+/// A card of the stack. On top: drag right to keep, left to put in the bin; while dragging the
+/// word Tieni or Elimina appears, and a long press shows the details. Under it: smaller and
+/// faded, out of reach. The same view moves from under to on top, so its picture stays.
 struct SwipeCard: View {
     let item: MediaItem
+    var isOnTop = true
+    var image: UIImage?
     let decide: (SwipeDecision) -> Void
     let showDetails: () -> Void
 
@@ -17,19 +20,27 @@ struct SwipeCard: View {
     private static let labelDistance: CGFloat = 80
 
     var body: some View {
-        SwipeCardContent(item: item, playsVideo: true)
+        SwipeCardContent(item: item, playsVideo: isOnTop, image: image)
+            // Only while dragged: invisible words still reached the accessibility audit.
             .overlay(alignment: .topLeading) {
-                DecisionLabel(decision: .keep)
-                    .opacity(max(0, min(1, offset.width / Self.labelDistance)))
+                if offset.width > 0 {
+                    DecisionLabel(decision: .keep)
+                        .opacity(min(1, offset.width / Self.labelDistance))
+                }
             }
             .overlay(alignment: .topTrailing) {
-                DecisionLabel(decision: .trash)
-                    .opacity(max(0, min(1, -offset.width / Self.labelDistance)))
+                if offset.width < 0 {
+                    DecisionLabel(decision: .trash)
+                        .opacity(min(1, -offset.width / Self.labelDistance))
+                }
             }
             .offset(x: offset.width, y: offset.height / 5)
             .rotationEffect(reduceMotion ? .zero : .degrees(offset.width / 25))
             .gesture(drag)
             .onLongPressGesture(minimumDuration: 0.5, perform: showDetails)
+            .scaleEffect(isOnTop ? 1 : 0.94)
+            .opacity(isOnTop ? 1 : 0.6)
+            .allowsHitTesting(isOnTop)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(item.spokenDescription)
             .accessibilityHint("Scorri a destra per tenere, a sinistra per il cestino")
@@ -39,6 +50,8 @@ struct SwipeCard: View {
             .accessibilityAction(named: "Tieni sempre") { decide(.keepForever) }
             .accessibilityAction(named: "Dettagli", showDetails)
             .accessibilityIdentifier("swipe.card")
+            // Last, so the card under the top one is out of VoiceOver's reach entirely.
+            .accessibilityHidden(!isOnTop)
     }
 
     private var drag: some Gesture {

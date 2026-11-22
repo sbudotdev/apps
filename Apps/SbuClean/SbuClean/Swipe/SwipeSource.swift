@@ -6,6 +6,8 @@ nonisolated enum SwipeSource: Hashable, Sendable {
     case random
     /// Taken on this day in past years.
     case onThisDay
+    /// Taken on another day of the year, in past years: a day picked on the calendar.
+    case onDay(DayOfYear)
     /// The items set aside to decide later.
     case later
     /// One month, oldest first.

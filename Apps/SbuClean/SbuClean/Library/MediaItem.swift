@@ -15,6 +15,10 @@ nonisolated struct MediaItem: Identifiable, Hashable, Sendable {
     var isLivePhoto = false
     var isFavorite = false
     var hasAdjustments = false
+    /// Saved from a chat app, such as WhatsApp or Telegram: found by the app's album.
+    var isFromChat = false
+    /// Out of focus or shaken, by the sharpness of its analysis.
+    var isBlurry = false
     var pixelWidth = 0
     var pixelHeight = 0
     /// Seconds, for videos.
@@ -38,6 +42,8 @@ nonisolated struct MediaItem: Identifiable, Hashable, Sendable {
         case .screenRecordings: isScreenRecording
         case .videos: kind == .video
         case .livePhotos: isLivePhoto
+        case .chats: isFromChat
+        case .blurry: isBlurry
         }
     }
 }

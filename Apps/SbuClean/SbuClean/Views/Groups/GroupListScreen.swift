@@ -15,7 +15,9 @@ struct GroupListScreen: View {
         let bytes = model.bytes(of: selected)
         ScrollView {
             LazyVStack(alignment: .leading, spacing: SbuTheme.space6) {
-                SpaceStat(label: "Selezionati", bytes: bytes, context: "\(selected.count) foto in \(groups.count) gruppi")
+                SpaceStat(label: "Selezionati", bytes: bytes, context: kind == .videos
+                         ? "\(selected.count) video in \(groups.count) gruppi"
+                         : "\(selected.count) foto in \(groups.count) gruppi")
 
                 ForEach(groups) { group in
                     GroupSection(model: model, group: group)
@@ -24,7 +26,7 @@ struct GroupListScreen: View {
             .padding(SbuTheme.space4)
         }
         .background(SbuTheme.paper)
-        .navigationTitle(kind == .duplicate ? "Duplicati" : "Simili")
+        .navigationTitle(kind.title)
         .navigationBarTitleDisplayMode(.inline)
         .bottomAction {
             SbuButton(DeleteTitle.forBytes(bytes)) {

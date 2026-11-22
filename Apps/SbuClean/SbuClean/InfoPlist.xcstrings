@@ -5,8 +5,18 @@
       "comment": "The app name under the icon.",
       "extractionState": "manual",
       "localizations": {
-        "en": { "stringUnit": { "state": "translated", "value": "Sbu Clean" } },
-        "it": { "stringUnit": { "state": "translated", "value": "Sbu Clean" } }
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Clean"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Clean"
+          }
+        }
       }
     },
     "NSPhotoLibraryUsageDescription": {
@@ -23,6 +33,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sbu Clean guarda le tue foto e i tuoi video per trovare duplicati, screenshot e file pesanti. Tutto resta su questo iPhone: niente lascia il dispositivo."
+          }
+        }
+      }
+    },
+    "NSContactsUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Clean reads your contacts to find people saved twice and merge them when you ask. Everything stays on this iPhone."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Clean legge i tuoi contatti per trovare le persone salvate due volte e unirle quando lo chiedi tu. Tutto resta su questo iPhone."
           }
         }
       }

@@ -1,6 +1,6 @@
 # Sbu Clean: libro dei test su iPhone
 
-Branch `app/clean-1.0`. Prova su un iPhone vero con una libreria Foto reale (meglio se con doppioni, raffiche, screenshot, video lunghi e Live Photo). Spunta ogni casella; se qualcosa non va, annota il numero del passo.
+Branch `app/clean-1.1` (le funzioni nuove della 1.1 sono al punto 10). Prova su un iPhone vero con una libreria Foto reale (meglio se con doppioni, raffiche, screenshot, video lunghi e Live Photo). Spunta ogni casella; se qualcosa non va, annota il numero del passo.
 
 Prima di iniziare: **fai un backup della libreria o usa un iPhone di prova**. L'app elimina davvero (dopo due conferme), e le foto finiscono in Eliminati di recente per 30 giorni.
 
@@ -105,3 +105,18 @@ Prima di iniziare: **fai un backup della libreria o usa un iPhone di prova**. L'
 - [ ] Video e foto solo in iCloud con "Ottimizza spazio iPhone": niente download, messaggi chiari.
 - [ ] Compressione e conversione Live Photo su file veri.
 - [ ] Widget sulla schermata Home.
+
+## 10. Novità della 1.1
+
+Prima di iniziare, sul telefono: un paio di foto mosse apposta (muovi l'iPhone mentre scatti), una foto scattata in tasca, due video della stessa scena girati a pochi minuti di distanza, WhatsApp con "Salva nel Rullino" attivo e qualche foto ricevuta, un contatto salvato due volte (stesso numero scritto in due modi, per esempio "+39 333…" e "333…").
+
+1. [ ] Home: sotto Live Photo ci sono "Foto dalle chat" e "Foto sfocate"; durante l'analisi "Foto sfocate" dice "Le trovo con l'analisi", poi il numero. Nessuna delle due entra nella cifra "Spazio liberabile".
+2. [ ] Foto sfocate: compaiono le foto mosse e quella in tasca; **nessuna foto nitida** (guarda bene quelle con lo sfondo sfocato, i ritratti e i tramonti: non devono esserci). Le preferite e gli screenshot non compaiono mai.
+3. [ ] Foto dalle chat: le foto dell'album WhatsApp (e Telegram, se lo usi). Se WhatsApp non ha l'album, la schermata vuota lo spiega.
+4. [ ] In entrambe le griglie: "Scorri uno per uno", "Seleziona tutto", Elimina porta al cestino. Il titolo in alto non è tagliato.
+5. [ ] Duplicati e simili: c'è la scheda "Video simili" con i due video della stessa scena; il migliore ha "Migliore"; il tasto play sulla miniatura apre il video; "Tieni tutti" e "Tieni solo il migliore" funzionano.
+6. [ ] Accadde oggi (dalla home): la cifra conta le foto di oggi negli anni passati; "Scorri quelle di oggi" apre la coda; il calendario segna con il quadratino i giorni con foto e quante; le frecce cambiano mese; un giorno segnato apre le sue foto. Febbraio mostra il 29.
+7. [ ] Contatti doppi: la prima volta vedi la frase e "Consenti l'accesso ai contatti"; il dialogo di iOS compare **solo** dopo il tocco. Con accesso negato: "Apri Impostazioni".
+8. [ ] Il contatto salvato due volte compare come una persona con le due copie, la più completa marcata "Resta". Unisci → conferma → la parola "Uniti", e in Contatti resta un solo contatto con tutti i numeri e le email.
+9. [ ] App File → Sul mio iPhone → Sbu Clean → Copie dei contatti: c'è il file .vcf dell'unione; aprilo e controlla che contenga i contatti di prima.
+10. [ ] Scorrendo le schermate lunghe (home, Duplicati, Accadde oggi) il contenuto non passa più sotto l'ora: la barra in alto resta carta.

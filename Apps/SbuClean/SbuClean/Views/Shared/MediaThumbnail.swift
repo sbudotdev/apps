@@ -23,9 +23,14 @@ struct MediaThumbnail: View {
                     Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: contentMode)
+                        // A tall picture filling a square overflows it, and clipping hides the
+                        // overflow without stopping its touches: the pill above a grid of
+                        // screenshots selected the screenshot under it.
+                        .allowsHitTesting(false)
                 }
             }
             .clipped()
+            .contentShape(.rect)
             .accessibilityHidden(true)
             .task(id: id) {
                 image = await library.image(for: id, pixelSide: side * displayScale)
