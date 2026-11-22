@@ -9,7 +9,7 @@ Free up space in your Photos library without paying to delete. No daily limits, 
 - The best shot by face, sharpness, favourites and edited photos
 - Similar videos: copies and retakes of the same scene, to watch before choosing
 - Blurry and shaken photos, found on your iPhone, to review together
-- Photos saved from WhatsApp, Telegram and other chats, in one grid
+- Photos saved from chat apps, in one grid
 - Screenshots and screen recordings in a grid, to select all at once
 - Videos sorted from the heaviest, to watch before deciding
 - Compress a video in low, medium or high quality: the original stays until you decide
