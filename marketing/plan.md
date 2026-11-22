@@ -2,13 +2,13 @@
 
 # sbu.dev — Piano marketing 12 mesi
 
-v3.3 · 22 novembre 2026: stato e punteggi al 22/11 (7 app sullo Store, calendario dei lanci 23/11–15/12 in `marketing/calendario-lanci.md`); il resto è la v3.2 del 18 ottobre 2026, sera (allineata a `docs/stato.md`: coda dello Store, voci fatte, decisioni chiuse; tre rami: App, Giochi, Software) · Matteo Giuditta + Claude
+v3.4 · 22 novembre 2026, sera: coda Apple con le date (23/11–21/12), kit per Chats e per gli aggiornamenti Moon 1.1, Level 1.2 e Noise 1.1, cosa manca a ogni app del calendario (§3, «Coda Apple e kit di lancio»). v3.3 · 22 novembre 2026: stato e punteggi al 22/11 (7 app sullo Store, calendario dei lanci 23/11–15/12 in `marketing/calendario-lanci.md`); il resto è la v3.2 del 18 ottobre 2026, sera (allineata a `docs/stato.md`: coda dello Store, voci fatte, decisioni chiuse; tre rami: App, Giochi, Software) · Matteo Giuditta + Claude
 
 ## 1. Executive summary
 
 **sbu.dev rifà gratis il software che oggi si paga, in tre rami.** **App**: le app iPhone più vendute, rifatte gratis, una a settimana. **Giochi**: i giochi più giocati, rifatti senza pubblicità, uno al mese. **Software**: il software che le aziende pagano centinaia di migliaia di euro l'anno, rifatto open source; il primo progetto è **Sbu Commerce**, un backend e-commerce B2B open source e self-hosted. Stesse regole per tutti: niente abbonamenti, niente pubblicità, niente tracking, i dati restano a chi li possiede.
 
-**Oggi (22/11, verificato su App Store Connect e con il lookup pubblico dell'App Store):** 7 app in vendita (Subscriptions 2.1.0, Scanner 2.0.1, Find 1.0, e dal 22/11 Moon, Clean, Level e Noise), aggiornamenti di Moon, Level e Noise in revisione, Habits e Speed ancora respinte, Chats e Fuel pronte su ASC con invio il 23/11 e il 30/11. Nessun lancio registrato in `marketing/log.md`. Punteggio 53/85 (§3).
+**Oggi (22/11, verificato su App Store Connect e con il lookup pubblico dell'App Store):** 7 app in vendita (Subscriptions 2.1.0, Scanner 2.0.1, Find 1.0, e dal 22/11 Moon, Clean, Level e Noise), aggiornamenti di Moon, Level e Noise in revisione, Habits e Speed ancora respinte. Coda delle app nuove, una a settimana: Chats 23/11, Fuel 30/11, Squares 7/12, Prompter 14/12, Inventory 21/12; Speed e Habits ferme sulla telefonata con Apple. Nessun lancio registrato in `marketing/log.md`. Punteggio 53/85 (§3).
 
 Al 18/10 era così: 2 app live (Subscriptions 2.0, Scanner 2.0), Find 1.0 in revisione, 4 app respinte il 14/10 (4.3) in attesa della risposta di Apple, 3 pronte su ASC e mai inviate (Chats, Fuel, Inventory), 7 scritte e mai su ASC, Squares (primo gioco) su main. Software: ADR-0016 e pagine `/software` online, il repo `sbu-commerce` non esiste ancora. E nessuno conosce ancora sbu.dev: zero lanci usciti, 1 recensione, 1 stella GitHub, zero backlink. Punteggio di partenza 51/85.
 
@@ -133,6 +133,8 @@ Matteo è π-shaped su **prodotto + design system** e T-shaped sulla distribuzio
 - Calendario degli invii approvato il 22/11 (`docs/stato.md` §4): Chats settimana del 23/11, Fuel del 30/11, Squares del 7/12, Prompter del 14/12. Ogni invio va approvato a parte.
 - Habits respinta (4.3): Apple ha offerto una telefonata con App Review, accettata. Speed ancora respinta, nessuna notizia.
 - Lanci: Show HN di Clean (24/11), Moon (2/12), Noise (9/12), collezione (15/12, se ≥ 8 app), Level dopo la 1.2 (`marketing/calendario-lanci.md`). Da approvare.
+- Sito: le anteprime OG di squares e social sono online (`sbu.dev/og/squares.png` e `/og/social.png` rispondono 200 il 22/11, site PR #6 fusa). Gli accenti os e ztl (site PR #9) aspettano il merge ([SBU-320](/SBU/issues/SBU-320)).
+- Video di lancio di **Sbu Seasons** ([SBU-157](/SBU/issues/SBU-157)): fermo, manca il video di Matteo. Data: **quando arriva il video**. Il piano di pubblicazione è già deciso (Reel Instagram e LinkedIn alle 18:30).
 
 ### Bloccato o mancante (22/11)
 1. **Nessun lancio registrato**: 7 app in vendita, `marketing/log.md` vuoto. Il kit c'è, manca l'ok e la pubblicazione.
@@ -140,7 +142,34 @@ Matteo è π-shaped su **prodotto + design system** e T-shaped sulla distribuzio
 3. **Autorità zero**: 0 stelle su `sbudotdev/apps` (GitHub, 22/11), nessun backlink noto, nessuna menzione.
 4. **Nessun dato di traffico** nel piano: GSC attivo, nessun export.
 5. **Video** di Find e "costa 40 € l'anno, l'ho rifatta gratis" ancora da girare.
-6. **Il percorso verso lo Store**: la prova insieme via cavo manca a Chats e Fuel, e l'App Privacy la compila Matteo. Da qui dipende se il 15/12 le app sono 8.
+6. **Il percorso verso lo Store**: la prova insieme via cavo non blocca più gli invii (Matteo in [SBU-309](/SBU/issues/SBU-309)); l'App Privacy la compila Matteo sul web. Da qui dipende se il 15/12 le app sono 8.
+
+### Coda Apple e kit di lancio (22/11 sera)
+
+Fonte della coda: [SBU-324](/SBU/issues/SBU-324), che legge gli stati su App Store Connect. Il 22/11 alle 22:50 SBU-324 non ha ancora scritto la sua tabella: qui gli stati ASC sono quelli di `docs/stato.md` (API, 22/11 alle 17:00) e del lookup pubblico dello Store (22:48). Ogni kit si pubblica **solo dopo `READY_FOR_SALE`**.
+
+**Aggiornamenti in revisione** (non occupano lo slot settimanale). Il lookup pubblico del 22/11 alle 22:48 dà ancora Moon 1.0, Level 1.1 e Noise 1.0: nessuno dei tre è uscito.
+
+| App | Versione in revisione | Kit | Immagine | Manca |
+|---|---|---|---|---|
+| Moon | 1.1 (4), icona e schermate nuove | post IT/EN Instagram e Bluesky in `moon/lancio.md` § Aggiornamento 1.1 | `01-main_framed.png` (worktree SBU-267) | l'uscita |
+| Level | 1.2 (7), mirino e unità nuove | post IT/EN in `level/lancio.md` § Aggiornamento 1.2, sostituisce il post in attesa; sblocca lo Show HN di Level | `01-main_framed.png` (worktree SBU-267); nessuno screenshot del mirino | l'uscita; uno screenshot del mirino dal telefono, se lo si vuole nel post |
+| Noise | 1.1 (5), icona e schermate nuove, orari più leggibili | post IT/EN in `noise/lancio.md` § Aggiornamento 1.1 | `01-main_framed.png` (worktree SBU-267) | l'uscita |
+
+**App nuove, una a settimana** (date di [SBU-324](/SBU/issues/SBU-324)):
+
+| Invio | App | ASC (descrizioni di SBU-324 e SBU-304, 22/11) | Testi | Screenshot | Video | Manca per il lancio |
+|---|---|---|---|---|---|---|
+| 23/11 | Chats 1.0 (5) | build 5 agganciata (SBU-324), invio il 23/11 | kit completo in `chats/lancio.md`: Instagram, Bluesky, Reddit, Show HN (a gennaio), PR open-source-ios-apps, AlternativeTo | 5 framed IT/EN, worktree SBU-304 | demo da simulatore del 18/11 (`~/Desktop/sbu-video/SbuChats.mp4`, 25 s), da ricontrollare sull'interfaccia di oggi | approvazione di Apple; settimana dello Show HN a gennaio |
+| 30/11 | Fuel 1.0 (5) | build 5 agganciata | nessuno: solo la descrizione dello Store | 5 framed IT/EN, worktree SBU-304 | nessuno | kit `fuel/lancio.md` |
+| 7/12 | Squares (primo gioco) | nessun record ASC | nessuno | nessuno | demo da simulatore del 18/11 (`SbuSquares.mp4`, 17 s) | record ASC, screenshot, kit |
+| 14/12 | Prompter (Mac + iPhone) | 1.0 macOS e iOS, nessuna build | solo `prompter/hooks.md` | nessuno | nessuno | build, screenshot, kit |
+| 21/12 | Inventory 1.0 (4) | build 4 (QA SBU-305) | nessuno | 5 framed IT/EN, worktree SBU-304 | nessuno | kit; cade nella pausa di Natale, il lancio va a gennaio |
+| dopo la telefonata | Speed 1.1, Habits | REJECTED | nessuno | — | Speed: demo del 18/11 | la telefonata con Apple ([SBU-263](/SBU/issues/SBU-263)) |
+
+Le demo di Moon e Noise in `~/Desktop/sbu-video/` sono del 18/11, prima delle schermate rifatte: per la 1.1 vanno rigirate. Gli screenshot framed sono tutti fuori dal repo (`.gitignore`), nei worktree dei ticket che li hanno generati: se un worktree viene cancellato, si rigenerano con `fastlane screenshots` o si prendono dallo Store dopo l'uscita.
+
+Il kit di Fuel si scrive la settimana del 30/11, quando l'invio parte: un kit per settimana, sul modello di `chats/lancio.md`.
 
 ### Punteggi (17 voci, 0–5)
 | # | Voce | 17/10 | 18/10 | 22/11 | Perché |
