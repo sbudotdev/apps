@@ -116,6 +116,14 @@ final class Settings {
         return suite
     }()
 
+    /// Dove si salvano. Sotto test una suite a parte, vuota a ogni avvio: i test non leggono né toccano le preferenze vere.
+    static let defaults: UserDefaults = {
+        guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil else { return .standard }
+        let suite = "dev.sbu.SbuSeasons.tests"
+        UserDefaults().removePersistentDomain(forName: suite)
+        return UserDefaults(suiteName: suite)!
+    }()
+
     var values: SnowSettings {
         didSet { Self.defaults.set(try? JSONEncoder().encode(values), forKey: Self.key) }
     }

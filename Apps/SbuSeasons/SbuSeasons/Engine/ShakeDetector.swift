@@ -14,6 +14,13 @@ nonisolated struct ShakeDetector {
     /// Dopo una scossa si aspetta `window` secondi: chi continua a scuotere fa una scossa sola.
     private var quietUntil: TimeInterval = -.infinity
 
+    // Esplicito: con le proprietà private, lo Swift della CI rende privato l'init membro a membro (SBU-160).
+    init(reversals: Int = 4, window: TimeInterval = 1, minTravel: CGFloat = 40) {
+        self.reversals = reversals
+        self.window = window
+        self.minTravel = minTravel
+    }
+
     /// Un punto nuovo. true = scosso (poi si ricomincia a contare).
     mutating func add(_ point: CGPoint, at time: TimeInterval) -> Bool {
         let reversedX = axes[0].reverses(at: point.x, minTravel: minTravel)
