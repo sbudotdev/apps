@@ -1,6 +1,6 @@
 # Profili social di sbu.dev
 
-Nome visualizzato: **sbu.dev** (mai "Sbu" da solo). Handle: `sbudevapp` ovunque, Bluesky `@sbu.dev` col dominio.
+Nome visualizzato: **sbu.dev** (mai "Sbu" da solo). Handle: `sbudevapp` ovunque, tranne Instagram `@sbu_dev` e Bluesky `@sbu.dev` col dominio.
 Foto: `Design/logos/sbu-mark.svg` esportato 1024 × 1024. Link: `https://sbu.dev`.
 Email: un alias `@sbu.dev` per servizio (catch-all di Cloudflare Email Routing).
 
@@ -30,16 +30,16 @@ EN:
 
 ## Instagram (EN)
 
-Deciso il 23/11/2026 (SBU-385): il profilo Instagram è in inglese. Foto, copertine e post di apertura in `instagram/` (vedi il suo README).
+Deciso il 23/11/2026 (SBU-385): il profilo Instagram è in inglese e presenta tutto sbu.dev (app iPhone e Mac, giochi, strumenti per sviluppatori), non solo le app iPhone. Foto, copertine e post di apertura in `instagram/`; la lista per pubblicare è nel suo README.
 
-- Name (26/30): `sbu.dev · free iPhone apps`
-- Username: `sbudevapp`
-- Category: `App Page`
-- Bio (124/150, contati anche i due a capo):
+- Name (23/30): `sbu.dev · free software`
+- Username: `sbu_dev` (eccezione: gli altri profili sono `sbudevapp`)
+- Category: `Software`
+- Bio (125/150, contati anche i due a capo):
   ```
-  Free iPhone apps that do one thing.
-  No subscriptions, accounts, ads or tracking.
-  Your data stays on your phone. Open source.
+  Free software that replaces paid apps.
+  iPhone and Mac apps, games, dev tools.
+  No subscriptions, ads or tracking. Open source.
   ```
 - Links: `https://sbu.dev` (primo), `https://github.com/sbudotdev/apps` (secondo: la repo è pubblica, verificato il 23/11/2026).
 - Foto: `instagram/profile-1080.png`.

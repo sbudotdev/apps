@@ -18,13 +18,13 @@ CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 FRAMES = {
     "profile-1080": (1080, 1080),
     "highlight-apps": (1080, 1920),
-    "highlight-free": (1080, 1920),
-    "highlight-privacy": (1080, 1920),
-    "highlight-behind-the-scenes": (1080, 1920),
+    "highlight-games": (1080, 1920),
+    "highlight-dev-tools": (1080, 1920),
+    "highlight-open-source": (1080, 1920),
     "highlight-faq": (1080, 1920),
     "post-1-intro": (1080, 1350),
     "post-2-promises": (1080, 1350),
-    "post-3-apps": (1080, 1350),
+    "post-3-projects": (1080, 1350),
 }
 
 

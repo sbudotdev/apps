@@ -20,7 +20,7 @@ Gli screenshot framed della 1.0 (5) non sono nel repo (`.gitignore`: `**/fastlan
 
 Se quel worktree è stato cancellato, si rigenerano con `fastlane screenshots` in `Apps/SbuChats` sul branch di SBU-304, oppure si prendono dallo Store dopo l'uscita (lookup `https://itunes.apple.com/lookup?id=6823369633&country=it`, campo `screenshotUrls`).
 
-## Instagram @sbudevapp
+## Instagram @sbu_dev
 
 Immagine: `01-chat_framed.png` IT. Carosello facoltativo con `02-activity` e `03-words`.
 

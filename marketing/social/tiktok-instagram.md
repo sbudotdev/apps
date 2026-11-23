@@ -65,7 +65,7 @@ Hashtag, massimo 4 per post, sempre questi tre più uno dell'app:
 
 Profilo TikTok: bio corta da `bio.md` ("App iPhone gratis. Una cosa sola. Niente abbonamenti né account."), foto `sbu-mark.svg` a 1024 px, link `https://sbu.dev`, la playlist "Il prezzo" e la playlist "Dov'è la fregatura".
 
-Profilo Instagram (@sbudevapp), in inglese dal 23/11/2026: nome, categoria, bio e link nella sezione «Instagram (EN)» di `bio.md`. Foto profilo, copertine delle Storie in evidenza (Apps, Free, Privacy, Behind the scenes, FAQ) e i tre post di apertura della griglia sono in `instagram/`, con didascalie in `instagram/captions.md` e l'ordine di pubblicazione nel README. Hashtag in inglese: `#iphone #freeapps #nosubscription` più uno. Quando escono, fissare in alto i video 7, 1 e 3.
+Profilo Instagram (@sbu_dev), in inglese dal 23/11/2026, presenta tutto sbu.dev: nome, categoria, bio e link nella sezione «Instagram (EN)» di `bio.md`. Foto profilo, copertine delle Storie in evidenza (Apps, Games, Dev tools, Open source, FAQ) e i tre post di apertura della griglia sono in `instagram/`; il README ha la lista per pubblicare con ordine, file e didascalie. Hashtag in inglese: `#iphone #freeapps #nosubscription` più uno. Quando escono, fissare in alto i video 7, 1 e 3.
 
 Instagram in più: ogni Reel va anche nelle Storie con lo sticker link alla pagina app, e il carosello settimanale a 5 slide (prezzo dell'originale, cosa fa, la Cifra, le sei promesse, link) ricavato dagli screenshot fastlane già pronti. Il feed è il quaderno: carta, reticolo, una cifra per post.
 

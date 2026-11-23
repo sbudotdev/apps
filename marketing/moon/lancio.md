@@ -8,7 +8,7 @@ Fatti (descrizione dello Store e pagina del sito): percentuale illuminata, la lu
 
 Aggancio di calendario: **luna piena il 24/11 e il 24/12**. L'ora esatta si legge in Sbu Moon il giorno prima e si mette nel post: è la prova che l'app serve.
 
-## Instagram @sbudevapp
+## Instagram @sbu_dev
 
 Immagine: primo screenshot dello Store, oppure uno screenshot dell'app con la luna piena del giorno. Testo sull'immagine: "Stasera luna piena. Te lo dice l'iPhone, senza rete."
 

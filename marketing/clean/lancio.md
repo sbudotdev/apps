@@ -23,7 +23,7 @@ Non fa: email, "pulizia" di iCloud, ritocchi con l'AI.
 
 **Store, da sistemare alla prossima versione (fuori da questo kit).** La descrizione live di Clean e le note per App Review nominano un'app di messaggi in chiaro, contro la regola di `apps/CLAUDE.md`. I metadati in main sono già corretti (PR #79, SBU-288): arrivano sullo Store con la prossima versione di Clean.
 
-## Instagram @sbudevapp
+## Instagram @sbu_dev
 
 Immagine: primo screenshot dello Store (`iPhone_17_Pro_Max-01-main_framed`). Testo sull'immagine: "Elimina quante foto vuoi. Gratis."
 
