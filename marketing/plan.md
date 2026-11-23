@@ -1,4 +1,4 @@
-<!-- Piano marketing di sbu.dev, copia pubblica. La fonte di lavoro resta fuori dal repo; i dettagli di Sbu Commerce restano privati finché il progetto non è annunciato. -->
+<!-- Piano marketing di sbu.dev, copia pubblica. La fonte di lavoro resta fuori dal repo; Sbu Commerce è pubblico dal 23/11 (v0.1.0). -->
 
 # sbu.dev — Piano marketing 12 mesi
 
@@ -23,7 +23,7 @@ Al 18/10 era così: 2 app live (Subscriptions 2.0, Scanner 2.0), Find 1.0 in rev
 ### 90 giorni (19 ott – 10 gen)
 - **App**, sett. 1–12: la base è fatta (Search Console, Smart Banner, review request in SbuKit, 6 pagine alternativa, strumenti, RSS). Ora: lancio di Find il giorno dell'approvazione, un Show HN per app, il primo video, poi Show HN e Product Hunt della collezione a metà dicembre (§9).
 - **Giochi**: prova completa di Squares, screenshot, TestFlight, invio a inizio dicembre; `/games` online all'approvazione.
-- **Software / Sbu Commerce**: ADR-0016 e `/software/commerce` già fatti; restano repo `commerce-dev`, primo spike (catalogo, prodotto, carrello), primo articolo tecnico. Niente lancio pubblico prima di una demo che gira.
+- **Software / Sbu Commerce**: ADR-0016 e `/software/commerce` già fatti; restano repo `commerce-dev`, primo spike (catalogo, prodotto, carrello), primo articolo tecnico. Niente lancio pubblico prima di una demo che gira. Aggiornamento del 23/11: `commerce-dev` e M1 (catalogo, ricerca, carrello anonimo) fatti, v0.1.0 pubblica su github.com/sbudotdev/commerce; resta l'articolo tecnico. Lancio in §9.
 
 ### Obiettivo a 12 mesi
 - **App**: 30 pagine alternativa indicizzate, 500+ recensioni, download raddoppiati ogni trimestre.
@@ -206,7 +206,11 @@ Mancano: un motore di gioco (non serve: SwiftUI `Canvas` + `TimelineView` bastan
 Punteggio: invariato (51/85) finché Squares non esce. I giochi aprono la voce 14 (Lanci) e 4 (ASO) su un pubblico nuovo, ma per ora non c'è niente da misurare.
 
 ### Software / Sbu Commerce
-I dettagli del progetto restano nella copia privata del piano finché il progetto non è annunciato.
+**v0.1.0 pubblica dal 23/11** ([SBU-362](/SBU/issues/SBU-362)): repo https://github.com/sbudotdev/commerce (MIT, un solo commit con il tag), release https://github.com/sbudotdev/commerce/releases/tag/v0.1.0, CI verde sul commit pubblico (run 45165376540). La repo di lavoro resta privata, `commerce-dev`.
+- **Cos'è**: un backend e-commerce B2B open source e self-hosted (Docker), compatibile con gli storefront esistenti: parla la REST API che già usano, e lo storefront di riferimento open source, cambiando solo l'URL base, naviga il catalogo demo e riempie un carrello anonimo. Nessuna edizione a pagamento, nessun server di sbu.dev.
+- **Cosa fa la v0.1.0**: catalogo, ricerca con suggerimenti, pagina prodotto, carrello anonimo, catalogo demo inventato (50 prodotti, IT/EN, EUR).
+- **Cosa non fa**: login, checkout, ordini, pagamento, tasse, promozioni, account B2B. Prossimo traguardo M2, login (proposta, non iniziato).
+- **Numeri al 23/11**: 0 stelle, nessun post uscito. Sito: `/software/commerce` dice ancora «In costruzione».
 
 ---
 
@@ -338,7 +342,13 @@ Skill: `asc-apple-ads`, `ads`.
 **Cosa non facciamo sui giochi:** pubblicità a pagamento su Meta/TikTok (il genere vive di UA a pagamento, noi no), influencer pagati, ASA sul marchio di un altro gioco, classifiche online che richiedono un account.
 
 ### Software / Sbu Commerce
-I dettagli del progetto restano nella copia privata del piano finché il progetto non è annunciato.
+**A chi parla**: sviluppatori e agenzie che costruiscono e-commerce B2B su piattaforme enterprise a licenza (pubblico E, §2), poi chi in azienda decide il budget. È il mestiere di Matteo: il volto è lui.
+**Canali, in ordine** (testi in `marketing/commerce/lancio.md`):
+1. **README e release su GitHub**: sono la pagina di atterraggio. Già fatti: cosa risponde oggi, cosa no, come si avvia.
+2. **sbu.dev**: `/software` e `/software/commerce` passano da «In costruzione» a «v0.1.0» con il link alla repo (ticket del sito a parte).
+3. **Post di Matteo**: LinkedIn (IT e EN, con la GIF del flusso), Bluesky e X. Li pubblica Matteo: approvati da Matteo il 23/11 ([SBU-394](/SBU/issues/SBU-394)), escono il 25/11. Niente Instagram: parla a chi usa le app.
+4. **Community di sviluppatori**: Show HN, r/selfhosted, r/opensource, articolo tecnico. Non con la v0.1.0: quando c'è un ordine completo o con M2 (§12).
+**Regola dei testi**: mai il nome della piattaforma commerciale o dello storefront di riferimento (§2 vincolo 8); sempre cosa fa e cosa non fa ancora.
 
 ---
 
@@ -403,7 +413,7 @@ Analytics sul **sito**: oggi niente. Opzioni: solo GSC (zero cookie, zero script
 - **Da un gioco alle app**: in Impostazioni, "Altre app di sbu.dev" (§5 M4) mostra prima gli altri giochi, poi le app. Mai durante la partita.
 
 ### Software / Sbu Commerce
-I dettagli del progetto restano nella copia privata del piano finché il progetto non è annunciato.
+L'attivazione è il primo `docker compose up --build` che risponde: il README lo mette in cima, con la porta (9002) e il catalogo demo già caricato. La prova che convince è lo storefront che risponde cambiando solo l'URL: screenshot e richieste in `docs/m1` della repo, linkati dal README.
 
 ---
 
@@ -462,7 +472,7 @@ Un gioco sbu.dev si chiude quando vuoi tu (vincolo 7). La retention deve venire 
 **Cosa non facciamo:** notifiche push, streak che si perdono, Game Center al lancio (§13 decisione G3), monete o sblocchi.
 
 ### Software / Sbu Commerce
-I dettagli del progetto restano nella copia privata del piano finché il progetto non è annunciato.
+Chi prova torna per le versioni nuove: ogni versione è una release GitHub con la voce del CHANGELOG, e la roadmap pubblica (`docs/ROADMAP.md`) dice qual è il prossimo traguardo. Il pulsante «Watch → Releases» di GitHub è l'unico canale di notifica: niente newsletter.
 
 ---
 
@@ -513,7 +523,7 @@ Per il pubblico C il passaparola è **partecipare**.
 - **Mossa G3 — I giochi portano alle app.** Il pubblico D è il più grande; "Altre app di sbu.dev" in Impostazioni è il ponte (§5).
 
 ### Software / Sbu Commerce
-I dettagli del progetto restano nella copia privata del piano finché il progetto non è annunciato.
+Il referral di un progetto open source sono stelle, fork e contributi: `CONTRIBUTING.md` e `SECURITY.md` sono nella repo dalla v0.1.0. Ogni richiesta arrivata da un post diventa una issue pubblica su `sbudotdev/commerce`.
 
 ---
 
@@ -553,7 +563,7 @@ GitHub Sponsors: no, per ora (#589, 18/10).
 Invariata: **zero ricavi**, anche sui giochi. Niente pubblicità, niente acquisti, niente "rimuovi le pubblicità" a 0,99 $ come fanno i concorrenti ad-free. Nessun canale di donazione (#589). Il costo in più è solo il tempo di Matteo (§10).
 
 ### Software / Sbu Commerce
-I dettagli del progetto restano nella copia privata del piano finché il progetto non è annunciato.
+Nessun ricavo: MIT, nessuna edizione a pagamento con funzioni chiuse, nessun hosting venduto. Costi: zero oltre alla CI gratuita di GitHub per le repo pubbliche.
 
 ---
 
@@ -642,7 +652,19 @@ Settimane 10–11 cadono a Natale: niente lanci, solo ritmo fisso e articolo di 
 Natale (sett. 10–11) è il periodo più giocato dell'anno: se l'approvazione arriva prima del 20 dic, il video di gameplay esce comunque.
 
 ### Software / Sbu Commerce
-I dettagli del progetto restano nella copia privata del piano finché il progetto non è annunciato.
+Lancio della v0.1.0 (proposta del 23/11, la approva Matteo; testi in `marketing/commerce/lancio.md`):
+
+| Quando | Cosa | Chi |
+|---|---|---|
+| 23/11 | Release v0.1.0 su GitHub, README e CHANGELOG | fatto ([SBU-362](/SBU/issues/SBU-362)) |
+| 23/11 | Kit e voce in [SBU-307](/SBU/issues/SBU-307) per l'ok ai post | fatto ([SBU-363](/SBU/issues/SBU-363)); post approvati da Matteo il 23/11 ([SBU-394](/SBU/issues/SBU-394)) |
+| dopo il merge del sito | `/software/commerce`: «In costruzione» → «v0.1.0», link alla repo | Frontend |
+| Mer 25/11, 9:00 | Post LinkedIn di Matteo (IT, GIF del flusso); EN lo stesso giorno o il giorno dopo | Matteo (approvato) |
+| Mer 25/11 | Post Bluesky @sbu.dev e X | Matteo (approvato) |
+| 25/11, dopo i post | una riga per post in `marketing/log.md`, con le stelle | Frontend |
+| gennaio, con M2 o con il primo ordine completo | Show HN, poi r/selfhosted e r/opensource, articolo tecnico | Lead propone la settimana |
+
+I post su LinkedIn non contano come lancio nella regola di uno Show HN a settimana (`calendario-lanci.md`).
 
 ---
 
@@ -701,7 +723,7 @@ Un gioco al mese da dicembre: **10 giochi a ottobre 2027**. Ordine proposto, dai
 **Cancelli:** se Squares fa più download delle app entro 60 giorni, i giochi passano a 2 al mese e le app restano a 1 a settimana solo finché c'è tempo; se un gioco riceve un 4.3, ci si ferma, si fa appello e si rivede l'ADR prima del gioco successivo. Q1 1 gioco, Q2 4, Q3 7, Q4 10.
 
 ### Software / Sbu Commerce
-I dettagli del progetto restano nella copia privata del piano finché il progetto non è annunciato.
+A 12 mesi l'obiettivo resta quello del §1: una 1.0 con catalogo, ricerca, carrello, checkout e account B2B, 1.000+ stelle, 3 aziende in staging. La v0.1.0 copre catalogo, ricerca e carrello anonimo; mancano login (M2), checkout e ordini, account B2B (roadmap della repo). Uno Show HN per ogni traguardo che si può provare dall'inizio alla fine.
 
 ---
 
@@ -761,7 +783,7 @@ Una persona + Claude + skill + qualche integrazione fanno il lavoro di un piccol
 | Ref | Testo da condividere | `writing-for-interfaces` | `ShareLink` |
 
 ### Software / Sbu Commerce
-I dettagli del progetto restano nella copia privata del piano finché il progetto non è annunciato.
+Strumenti: GitHub (repo pubblica, release, issue, CI), `CHANGELOG.md` e `docs/ROADMAP.md` della repo, `marketing/log.md` con le stelle (`gh api repos/sbudotdev/commerce --jq .stargazers_count`), LinkedIn e Bluesky di Matteo. La pubblicazione della repo pubblica passa da uno script che controlla i nomi di terzi prima del push.
 
 ---
 
@@ -935,7 +957,10 @@ Il gran numero di Skip è voluto: niente ads tranne ASA, niente email in app, ni
 Riepilogo con i giochi: Ora 33 · Q2 21 · Q3+ 10 · Q4+ 3 · Skip 72 (#117 passa da Skip a Q2).
 
 ### Software / Sbu Commerce
-I dettagli del progetto restano nella copia privata del piano finché il progetto non è annunciato.
+- Show HN «an open source commerce backend that speaks existing storefronts' REST API», al primo ordine completo o con M2.
+- Articolo tecnico: «Cambiare backend a uno storefront cambiando solo l'URL», con i numeri della prova M1.
+- Video di 30 secondi: lo stesso storefront, prima sull'URL di un backend, poi su Sbu Commerce (senza marchi di terzi in schermata).
+- Demo pubblica in sola lettura: solo se non serve un server di sbu.dev che tiene dati (oggi no: carrelli anonimi, ma resta un server da pagare e curare).
 
 ---
 
@@ -1042,7 +1067,9 @@ R = fa · A = decide · C = consultato · I = informato
 - **Tempo di Matteo**: un gioco al mese in aggiunta a un'app a settimana. Se non regge, i giochi scendono a uno ogni sei settimane prima che le app rallentino.
 
 ### Software / Sbu Commerce
-I dettagli del progetto restano nella copia privata del piano finché il progetto non è annunciato.
+- **Marchi e materiale di terzi**: un nome della piattaforma o dello storefront in un post o in un'immagine. Mitigazione: regola dei testi (§4), script di pubblicazione con il controllo dei nomi, revisione del QA sui materiali.
+- **Aspettative**: chi legge «backend e-commerce» cerca checkout e ordini. Mitigazione: ogni testo dice cosa non fa ancora; Show HN solo a ordine completo.
+- **Sicurezza di chi lo installa**: il `compose.yaml` è una demo con password di prova. Mitigazione: il README lo dice; segnalazione privata delle vulnerabilità attiva.
 
 ---
 
