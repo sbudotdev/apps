@@ -22,7 +22,7 @@ Proposta del 22/11, da approvare. Niente di questo è pubblicato: ogni post, Sho
 | Mar 24/11 | **Show HN: Sbu Clean**, 15-17. Il link al codice punta al branch `app/clean-1.1` e il testo lo dice; se Matteo lo fonde in main prima, si torna a `tree/main` | `clean/lancio.md` |
 | Mar 24/11, sera | Post Moon su Instagram e Bluesky: è luna piena, ora letta in Sbu Moon il giorno prima | `moon/lancio.md` |
 | Mer 25/11 | Reddit r/iosapps: post di Clean | `clean/lancio.md` |
-| Mer 25/11, 9:00 | Sbu Commerce v0.1.0: post LinkedIn di Matteo (IT, poi EN) e post Bluesky/X. Non è uno Show HN; se l'ok arriva dopo, martedì 1/12 alle 9:00 | `commerce/lancio.md` |
+| Mer 25/11, 9:00 | Sbu Commerce v0.1.0: post LinkedIn di Matteo (IT, poi EN) e post Bluesky/X. Non è uno Show HN. **Approvati da Matteo il 23/11** ([SBU-394](/SBU/issues/SBU-394)), testi così come sono | `commerce/lancio.md` |
 | Gio 26/11, sera | Post Noise su Instagram e Bluesky | `noise/lancio.md` |
 
 Aggiornamenti (Moon 1.1, Level 1.2, Noise 1.1): Moon 1.1 e Noise 1.1 sono in vendita dal 22/11, prima dei loro post di lancio. Quindi il 24/11 e il 26/11 escono i post di lancio con l'immagine nuova e i post degli aggiornamenti di Moon e Noise si saltano. Level 1.2 è ancora in revisione: il suo post esce il giorno dopo `READY_FOR_SALE`, mai nello stesso giorno di un altro post della stessa app. Se Moon 1.1 o Noise 1.1 escono prima del post di lancio di questa settimana, si pubblica solo il post di lancio, con l'immagine nuova, e il post dell'aggiornamento si salta. Testi nella sezione «Aggiornamento» di ogni `lancio.md`.

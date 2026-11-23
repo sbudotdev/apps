@@ -346,7 +346,7 @@ Skill: `asc-apple-ads`, `ads`.
 **Canali, in ordine** (testi in `marketing/commerce/lancio.md`):
 1. **README e release su GitHub**: sono la pagina di atterraggio. Già fatti: cosa risponde oggi, cosa no, come si avvia.
 2. **sbu.dev**: `/software` e `/software/commerce` passano da «In costruzione» a «v0.1.0» con il link alla repo (ticket del sito a parte).
-3. **Post di Matteo**: LinkedIn (IT e EN, con la GIF del flusso), Bluesky e X. Li approva e pubblica Matteo ([SBU-307](/SBU/issues/SBU-307)). Niente Instagram: parla a chi usa le app.
+3. **Post di Matteo**: LinkedIn (IT e EN, con la GIF del flusso), Bluesky e X. Li pubblica Matteo: approvati da Matteo il 23/11 ([SBU-394](/SBU/issues/SBU-394)), escono il 25/11. Niente Instagram: parla a chi usa le app.
 4. **Community di sviluppatori**: Show HN, r/selfhosted, r/opensource, articolo tecnico. Non con la v0.1.0: quando c'è un ordine completo o con M2 (§12).
 **Regola dei testi**: mai il nome della piattaforma commerciale o dello storefront di riferimento (§2 vincolo 8); sempre cosa fa e cosa non fa ancora.
 
@@ -657,11 +657,11 @@ Lancio della v0.1.0 (proposta del 23/11, la approva Matteo; testi in `marketing/
 | Quando | Cosa | Chi |
 |---|---|---|
 | 23/11 | Release v0.1.0 su GitHub, README e CHANGELOG | fatto ([SBU-362](/SBU/issues/SBU-362)) |
-| entro 24/11 | Kit e voce in [SBU-307](/SBU/issues/SBU-307) per l'ok ai post | fatto ([SBU-363](/SBU/issues/SBU-363)) |
+| 23/11 | Kit e voce in [SBU-307](/SBU/issues/SBU-307) per l'ok ai post | fatto ([SBU-363](/SBU/issues/SBU-363)); post approvati da Matteo il 23/11 ([SBU-394](/SBU/issues/SBU-394)) |
 | dopo il merge del sito | `/software/commerce`: «In costruzione» → «v0.1.0», link alla repo | Frontend |
-| Mer 25/11, 9:00 | Post LinkedIn di Matteo (IT, GIF del flusso); EN lo stesso giorno o il giorno dopo | Matteo, dopo l'ok |
-| Mer 25/11 | Post Bluesky @sbu.dev e X | Matteo, dopo l'ok |
-| se l'ok arriva dopo il 25/11 | i tre post slittano al martedì successivo, 9:00 | Matteo |
+| Mer 25/11, 9:00 | Post LinkedIn di Matteo (IT, GIF del flusso); EN lo stesso giorno o il giorno dopo | Matteo (approvato) |
+| Mer 25/11 | Post Bluesky @sbu.dev e X | Matteo (approvato) |
+| 25/11, dopo i post | una riga per post in `marketing/log.md`, con le stelle | Frontend |
 | gennaio, con M2 o con il primo ordine completo | Show HN, poi r/selfhosted e r/opensource, articolo tecnico | Lead propone la settimana |
 
 I post su LinkedIn non contano come lancio nella regola di uno Show HN a settimana (`calendario-lanci.md`).

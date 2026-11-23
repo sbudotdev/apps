@@ -2,7 +2,7 @@
 
 Stato il 23/11/2026: **v0.1.0 pubblicata**. Repo https://github.com/sbudotdev/commerce (pubblica, MIT, 0 stelle il 23/11). Release https://github.com/sbudotdev/commerce/releases/tag/v0.1.0 (pubblicata il 23/11 alle 11:27 UTC, non prerelease). CI della repo pubblica verde sul commit `cd09b1b` (run 45165376540, job `test` e `compose`). Fonte: [SBU-362](/SBU/issues/SBU-362). Pagina del sito: sbu.dev/software/commerce (200), oggi dice ancora «In costruzione». Date nel calendario: `marketing/calendario-lanci.md`.
 
-Tutto qui è bozza: **Matteo approva e pubblica**. Niente è uscito.
+**Post approvati da Matteo il 23/11** ([SBU-394](/SBU/issues/SBU-394), opzione A): LinkedIn, Bluesky e X così come sono qui, escono **mercoledì 25/11 alle 9:00**. Li pubblica Matteo. Al 23/11 niente è uscito. Show HN e Reddit restano rimandati (sotto).
 
 ## Fatti (README e CHANGELOG della v0.1.0)
 
