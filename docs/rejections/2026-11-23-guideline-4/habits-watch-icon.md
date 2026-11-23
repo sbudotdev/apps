@@ -7,3 +7,5 @@
 **Correzione** ([SBU-410](/SBU/issues/SBU-410)). L'icona Watch è l'icona iOS chiara (stesso inchiostro, carta, verde e griglia), rimpicciolita nel quadrato inscritto nel cerchio; la griglia continua fino al bordo. Regola aggiunta in `CLAUDE.md` (App icon grammar).
 
 **Risposta nel Resolution Center.** «Updated the Apple Watch app icon with a light background so it reads as circular.»
+
+![Icona iOS, Watch prima e Watch dopo, con il ritaglio circolare simulato](habits-icone-prima-dopo.png)
