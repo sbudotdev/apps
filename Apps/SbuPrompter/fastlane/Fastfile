@@ -31,6 +31,58 @@ lane :metadata do
   end
 end
 
+# Tools/make_screenshots.py prompter writes the *_framed.png first. deliver sends every image of a
+# folder to one platform, so the Mac slides live in screenshots-mac.
+desc "Upload the framed screenshots: screenshots/ to iOS, screenshots-mac/ to macOS, without submitting"
+lane :screenshots do
+  api_key
+  { "ios" => "./fastlane/screenshots", "osx" => "./fastlane/screenshots-mac" }.each do |platform, path|
+    upload_to_app_store(
+      platform: platform,
+      screenshots_path: path,
+      overwrite_screenshots: true,
+      skip_binary_upload: true,
+      skip_metadata: true,
+      submit_for_review: false,
+      force: true,
+      run_precheck_before_submit: false
+    )
+  end
+end
+
+# Build numbers come from TestFlight, one train per platform.
+desc "Build the Mac app and the iPhone remote and upload both to App Store Connect, without submitting"
+desc "Only one: fastlane upload platform:osx (or ios)"
+lane :upload do |options|
+  api_key
+  Dir.chdir("..") { sh("xcodegen", "generate") }
+  [["osx", "SbuPrompter"], ["ios", "SbuPrompterRemote"]].each do |platform, scheme|
+    next if options[:platform] && options[:platform] != platform
+    build = latest_testflight_build_number(platform: platform, version: "1.0", initial_build_number: 0) + 1
+    # The Mac target signs ad hoc for local builds ("-"): the store archive needs a real identity,
+    # and SbuKit's resource bundle needs the team on macOS.
+    identity = platform == "osx" ? " CODE_SIGN_IDENTITY='Apple Development' DEVELOPMENT_TEAM=#{ENV.fetch("SBU_TEAM_ID")}" : ""
+    args = { scheme: scheme, export_method: "app-store", xcargs: "#{signing_args}#{identity} CURRENT_PROJECT_VERSION=#{build}", output_directory: "build/#{platform}" }
+    if platform == "osx"
+      # The export re-signs the app but not SbuKit's resource bundle, which App Store Connect then
+      # rejects (ITMS-90284, SBU-333): sign it with the distribution certificate inside the archive.
+      build_app(args.merge(skip_package_pkg: true))
+      archive = lane_context[SharedValues::XCODEBUILD_ARCHIVE]
+      sh("codesign", "--force", "--sign", "Apple Distribution", "#{archive}/Products/Applications/SbuPrompter.app/Contents/Resources/SbuKit_SbuKit.bundle")
+      build_app(args.merge(skip_build_archive: true, archive_path: archive))
+    else
+      build_app(args)
+    end
+    upload_to_testflight(app_platform: platform, skip_waiting_for_build_processing: true)
+  end
+end
+
+# Automatic signing creates the App Store profiles itself.
+def signing_args
+  "-allowProvisioningUpdates -authenticationKeyPath #{ENV.fetch("ASC_KEY_PATH")} " \
+    "-authenticationKeyID #{ENV.fetch("ASC_KEY_ID")} -authenticationKeyIssuerID #{ENV.fetch("ASC_ISSUER_ID")}"
+end
+
 private_lane :api_key do
   app_store_connect_api_key(
     key_id: ENV.fetch("ASC_KEY_ID"),

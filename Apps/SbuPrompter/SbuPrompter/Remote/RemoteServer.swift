@@ -28,7 +28,13 @@ final class RemoteServer: NSObject {
         // iPhone on the same LAN skip the code. Move them to the Keychain if they ever unlock more.
         let tokens = UserDefaults.standard.stringArray(forKey: Self.tokensKey) ?? []
         gate = RemoteGate(tokens: Set(tokens))
-        peer = MCPeerID(displayName: Host.current().localizedName ?? "Mac")
+        #if DEBUG
+        // Store screenshots must not show the name of the Mac they were taken on.
+        let name = UserDefaults.standard.string(forKey: "SbuPrompterPeerName") ?? Host.current().localizedName
+        #else
+        let name = Host.current().localizedName
+        #endif
+        peer = MCPeerID(displayName: name ?? "Mac")
         session = MCSession(peer: peer, securityIdentity: nil, encryptionPreference: .required)
         advertiser = MCNearbyServiceAdvertiser(peer: peer, discoveryInfo: nil, serviceType: Self.serviceType)
         super.init()

@@ -44,6 +44,13 @@ Deve girare un solo Sbu Prompter sul Mac: due copie si annunciano con lo stesso 
 | `-SbuPrompterForcePill YES` | mostra la pillola anche su un Mac con il notch |
 | `-SbuPrompterAllowCapture YES` | rende il prompter visibile agli screenshot (per le immagini dello Store) |
 | `-SbuPrompterSnapshots YES` | salva prompter, libreria e impostazioni in PNG nella cartella temporanea dell'app ed esce |
+| `-SbuPrompterPeerName "MacBook Pro"` | annuncia il Mac all'iPhone con questo nome invece di quello vero (per gli screenshot dello Store) |
+| `-SbuPrompterInMemory YES` | libreria in memoria: parte vuota, con il copione di benvenuto nella lingua dell'avvio, e non tocca i copioni salvati |
 | `kill -USR1 <pid>` | salva il prompter dal vivo (`live-N.png`) e scrive lo stato su stderr, con il codice del telecomando e l'iPhone collegato |
 
 Le impostazioni si possono forzare all'avvio con le loro chiavi, per esempio `-layout floating`, `-countdown 0`, `-mode voice`, `-isMirrored YES`.
+
+## Distribuzione
+
+- **Fuori dallo Store:** `./make-dmg.sh 1.0.1` crea `build/dist/SbuPrompter-1.0.1.dmg`, universale, firmato Developer ID; app e dmg sono notarizzati e graffati. Il `.dmg` va nella release GitHub `prompter-<versione>`.
+- **App Store e TestFlight:** `fastlane upload` (oppure `platform:osx` / `platform:ios`) carica le build Mac e iPhone sulla versione 1.0; `fastlane metadata` carica i testi. Servono `SBU_TEAM_ID` e la chiave API di App Store Connect (`ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_PATH`).
