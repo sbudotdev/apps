@@ -1,6 +1,6 @@
 # Lancio di Sbu Moon: kit
 
-Stato il 22/11/2026: **1.0 (2) in vendita**, approvata da Apple il 22/11 (app 6822656846). La 1.1 (4), con icona e screenshot nuovi, è in revisione dal 22/11: stesse funzioni. Pagina: sbu.dev/apps/moon. Pagina alternativa online: sbu.dev/alternatives/my-moon-phase-pro (EN: sbu.dev/en/alternatives/my-moon-phase-pro). Date nel calendario: `marketing/calendario-lanci.md`.
+Stato il 22/11/2026: **1.0 (2) in vendita**, approvata da Apple il 22/11 (app 6822656846). La 1.1 (4), con icona e screenshot nuovi, è in vendita dal 22/11: stesse funzioni. Il post di lancio usa l'immagine nuova. Pagina: sbu.dev/apps/moon. Pagina alternativa online: sbu.dev/alternatives/my-moon-phase-pro (EN: sbu.dev/en/alternatives/my-moon-phase-pro). Date nel calendario: `marketing/calendario-lanci.md`.
 
 Tutto qui è bozza: Matteo approva e pubblica. Modello: `marketing/find/`.
 
@@ -147,3 +147,39 @@ Descrizione lunga:
 > Sbu Moon shows what the moon looks like right now: how much is lit, whether it is waxing or waning and when the next full moon comes. It lists the date and time of the next four phases, moonrise and moonset where you are, the moon's age and its distance from Earth, for any day from 1900 to 2100.
 >
 > Everything is computed on the iPhone with Jean Meeus's astronomical algorithms, with no network. Phase alerts are local notifications. There is no in-app purchase, no account, no ads and no analytics, and the source code is public under MIT. It has no cloud forecast or golden hour, because it never goes online.
+
+## Aggiornamento 1.1 (4)
+
+Stato: **1.1 in vendita dal 22/11** (`READY_FOR_SALE` nella fotografia ASC di [SBU-324](/SBU/issues/SBU-324) alle 22:50; lookup pubblico `https://itunes.apple.com/lookup?id=6822656846&country=it` alle 23:07: `"version":"1.1"`). È uscita prima del post di lancio (martedì 24/11), quindi **questo post si salta**: il post di lancio esce con l'immagine nuova qui sotto (regola in `calendario-lanci.md`). I testi restano qui se servono più avanti.
+
+Novità (release notes inviate, branch `paperclip/SBU-267`): icona nuova, con l'alternativa Inversa nelle impostazioni, e schermate rifatte sul quaderno. Funzioni uguali alla 1.0. Non è un lancio: un post social, niente Show HN né Reddit. Se lo Show HN di Moon (2/12) esce con la 1.1 in vendita, il testo resta quello sopra.
+
+Immagine: `/Users/matteo/dev/sbudotdev/apps-sbu-267/Apps/SbuMoon/fastlane/screenshots/it/iPhone 17 Pro Max-01-main_framed.png` (EN: stessa cartella con `en-US`). Generata il 22/11, worktree di [SBU-267](/SBU/issues/SBU-267), fuori dal repo: se manca, la si prende dallo Store dopo l'uscita.
+
+Instagram IT:
+> Sbu Moon ha un'icona nuova e le schermate rifatte. Se la preferisci chiara su fondo scuro, nelle impostazioni c'è l'icona Inversa.
+>
+> Il resto non cambia: la fase di stasera, le prossime quattro, il sorgere e il tramonto dove sei. Tutto calcolato sull'iPhone, senza rete.
+>
+> Gratis, senza account, senza pubblicità.
+>
+> Link in bio: sbu.dev/apps/moon
+
+Instagram EN:
+> Sbu Moon has a new icon and redrawn screens. If you'd rather have it light on dark, there's the Inversa icon in Settings.
+>
+> The rest is the same: tonight's phase, the next four, moonrise and moonset where you are. All worked out on your iPhone, with no network.
+>
+> Free, no account, no ads.
+>
+> Link in bio: sbu.dev/en/apps/moon
+
+Bluesky IT (≤300):
+> Sbu Moon 1.1 è sull'App Store: icona nuova, con l'alternativa Inversa nelle impostazioni, e schermate rifatte. Le fasi sono sempre calcolate sull'iPhone, senza rete.
+> sbu.dev/apps/moon
+
+Bluesky EN (≤300):
+> Sbu Moon 1.1 is on the App Store: a new icon, with the Inversa alternate in Settings, and redrawn screens. Phases are still worked out on your iPhone, with no network.
+> sbu.dev/en/apps/moon
+
+Icona Inversa controllata il 22/11 (`AppIcon-Inversa.appiconset` sul branch di SBU-267): il cannocchiale disegnato chiaro su fondo nero.
