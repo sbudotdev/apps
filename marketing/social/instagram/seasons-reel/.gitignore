@@ -1,0 +1,6 @@
+# The screen recording and the renders stay out of git (SBU-402).
+input/
+renders/
+snapshots/
+node_modules/
+.hyperframes/
