@@ -4,7 +4,7 @@ sbu.dev ha tre rami: **App** (le app iPhone più vendute rifatte gratis), **Gioc
 
 - **Self-hosted, mai ospitato da sbu.dev.** Lo installa chi lo usa, sui propri server (Docker). sbu.dev non gestisce server, account o dati dei clienti: la promessa "i dati restano a chi li possiede" vale anche qui. È software server per natura, quindi la regola delle App Sbu "nessuna chiamata di rete" non si applica ai progetti Software.
 - **Interoperabilità solo da materiale pubblico** (come ADR-0003): documentazione pubblica e codice open source. Mai codice, binari, dati o documentazione riservata di altri prodotti, mai il loro marchio nel nome del progetto o del repo.
-- **Un repo per progetto**, qui `sbudotdev/sbu-commerce` (privato fino alla demo): il monorepo `sbu-apps` resta iOS e sito. Lo stack si sceglie dopo il primo spike (catalogo, carrello).
+- **Un repo per progetto**, qui `sbudotdev/commerce-dev` (privato fino alla demo): il monorepo `sbu-apps` resta iOS e sito. Lo stack si sceglie dopo il primo spike (catalogo, carrello).
 - **Nessuna versione a pagamento con funzioni chiuse.** Un eventuale ricavo (consulenza, supporto) si decide più avanti e non cambia il codice aperto.
 - **Copertura dichiarata**: una tabella pubblica di cosa funziona e cosa no.
 

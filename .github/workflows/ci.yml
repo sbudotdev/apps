@@ -7,9 +7,11 @@ on:
 
 # Una sola run per branch o PR: un push nuovo cancella quella vecchia,
 # così i pochi runner macOS del piano free non smaltiscono run superate.
+# Su main la run in corso finisce sempre: i push arrivati nel frattempo
+# restano in una sola run in attesa, la più recente.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   kit:
