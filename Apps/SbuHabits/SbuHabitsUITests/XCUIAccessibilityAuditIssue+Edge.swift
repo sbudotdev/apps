@@ -2,10 +2,11 @@ import XCTest
 
 extension XCUIAccessibilityAuditIssue {
     /// A list row half under the screen's edge or a bar, as a scrolled list always has at large
-    /// text sizes: the audit reports it as clipped text without naming an element. Text that is
-    /// really cut inside a row comes with its element, and still fails.
+    /// text sizes: the audit reports it as clipped text, or as text VoiceOver cannot read, without
+    /// naming an element. Scrolled into view the same row passes. Text that is really cut or
+    /// hidden inside a row comes with its element, and still fails.
     var isRowCutByTheScreenEdge: Bool {
-        auditType == .textClipped && element == nil
+        (auditType == .textClipped || auditType == .elementDetection) && element == nil
     }
 
     /// IBM Plex Mono metadata: SbuScreenTitle's cartiglio, "SBU · ABITUDINI · SAB 17 OTT", and the

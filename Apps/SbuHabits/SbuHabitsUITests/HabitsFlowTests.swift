@@ -25,7 +25,25 @@ final class HabitsFlowTests: XCTestCase {
             app.launchEnvironment["SBU_HABITS_ICLOUD"] = "available"
         }
         app.launch()
+        // On iOS 26.2 (CI), in the test right after testSegnaFattaEndsTheTimerAndMarksTheHabit, the
+        // app came up without these arguments and environment, in English on its own file, in
+        // every run (SBU-279). Only such a launch is done again.
+        if app.buttons["Impostazioni"].waitForExistence(timeout: 5) == false, app.buttons["Settings"].exists {
+            app.terminate()
+            app.launch()
+        }
         return app
+    }
+
+    /// Checks again and again with no pause: the Closure stays only two seconds, and on a slow
+    /// runner `waitForExistence` checks first after a second and then each 1.3 s, so it misses it.
+    @MainActor
+    private func appears(_ element: XCUIElement, within seconds: TimeInterval) -> Bool {
+        let deadline = Date.now.addingTimeInterval(seconds)
+        repeat {
+            if element.exists { return true }
+        } while Date.now < deadline
+        return false
     }
 
     @MainActor
@@ -137,7 +155,7 @@ final class HabitsFlowTests: XCTestCase {
         // The last habit of today done: the Closure shows its word for two seconds, then the
         // figure comes back.
         let closure = app.descendants(matching: .any)["Fatto"]
-        XCTAssertTrue(closure.waitForExistence(timeout: 2), app.debugDescription)
+        XCTAssertTrue(appears(closure, within: 3), app.debugDescription)
         XCTAssertTrue(closure.waitForNonExistence(timeout: 5))
         expectValue(leggere, "Fatta, 1 giorno")
         XCTAssertTrue(figure(in: app).hasPrefix("Serie piena, 1 giorno, 1 di 1 oggi"), figure(in: app))
@@ -153,6 +171,9 @@ final class HabitsFlowTests: XCTestCase {
 
         let share = app.buttons["Condividi la cifra"]
         XCTAssertTrue(share.waitForExistence(timeout: 5), app.debugDescription)
+        // Mid-fade the Closure's text is drawn but not yet an element: the audit would read it as
+        // text hidden from VoiceOver.
+        XCTAssertTrue(app.descendants(matching: .any)["Fatto"].waitForNonExistence(timeout: 5))
         try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
                 return true
@@ -306,8 +327,15 @@ final class HabitsFlowTests: XCTestCase {
         XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
         field.typeText("Venti pagine")
         expectValue(app.staticTexts["Caratteri"], "12 di 500")
+        let suggestions = app.otherElements["SystemInputAssistantView"]
         try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
+                return true
+            }
+            // The keyboard's suggestions bar is iOS's, not the app's: on iOS 26.2 (CI) its empty
+            // cells, a third of the bar wide, have no name.
+            if issue.auditType == .sufficientElementDescription, let frame = issue.element?.frame,
+               suggestions.exists, suggestions.frame.contains(frame) {
                 return true
             }
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? issue.detailedDescription)")
@@ -737,7 +765,8 @@ final class HabitsFlowTests: XCTestCase {
         // misreads the iOS 26 glass bar as text contrast.
         // The handler names the element in the failure, which the default message does not.
         try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
-            if issue.isCartiglio || issue.isHeroFigure {
+            // Aggiungi, after the last habit, runs half under the bar with the gear and Statistiche.
+            if issue.isCartiglio || issue.isHeroFigure || issue.isRowCutByTheScreenEdge {
                 return true
             }
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? issue.detailedDescription)")
@@ -750,7 +779,8 @@ final class HabitsFlowTests: XCTestCase {
         let large = launch(textSize: "UICTContentSizeCategoryAccessibilityXXXL")
         XCTAssertTrue(habit("Leggere", in: large).exists)
         try large.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
-            if issue.isCartiglio || issue.isHeroFigure {
+            // Aggiungi, after the last habit, runs half under the bar with the gear and Statistiche.
+            if issue.isCartiglio || issue.isHeroFigure || issue.isRowCutByTheScreenEdge {
                 return true
             }
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? issue.detailedDescription)")
@@ -767,7 +797,8 @@ final class HabitsFlowTests: XCTestCase {
             add(title, in: app)
         }
         let sette = habit("Sette", in: app)
-        for _ in 0..<6 where sette.isHittable == false {
+        for _ in 0..<6 {
+            guard sette.isHittable == false else { break }
             app.scrollViews.firstMatch.swipeUp()
         }
         XCTAssertTrue(sette.isHittable)

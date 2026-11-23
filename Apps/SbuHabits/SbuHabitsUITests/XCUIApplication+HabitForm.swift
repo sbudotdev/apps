@@ -11,7 +11,8 @@ extension XCUIApplication {
         let add = buttons["Aggiungi"].firstMatch
         XCTAssertTrue(add.waitForExistence(timeout: 10), debugDescription)
         let barTop = windows.firstMatch.frame.maxY - 120
-        for _ in 0..<6 where add.isHittable == false || add.frame.maxY > barTop {
+        for _ in 0..<6 {
+            guard add.isHittable == false || add.frame.maxY > barTop else { break }
             scrollViews.firstMatch.swipeUp()
         }
         add.tap()
@@ -53,10 +54,13 @@ extension XCUIApplication {
         if element.isHittable == false, keyboards.firstMatch.exists, returnKey.exists {
             returnKey.tap()
         }
-        for _ in 0..<10 where isOnScreen(element) == false {
+        // `for … where` would check every round even once on screen, a query each: a guard stops.
+        for _ in 0..<10 {
+            guard isOnScreen(element) == false else { break }
             list.swipeUp()
         }
-        for _ in 0..<10 where isOnScreen(element) == false {
+        for _ in 0..<10 {
+            guard isOnScreen(element) == false else { break }
             list.swipeDown()
         }
         XCTAssertTrue(isOnScreen(element), debugDescription)
@@ -104,7 +108,8 @@ extension XCUIApplication {
         // A row under the fixed button still reads as hittable, and the tap would add the habit.
         let fixedButton = buttons.matching(NSPredicate(format: "label IN %@", ["Aggiungi abitudine", "Salva abitudine"])).firstMatch
         let list = collectionViews.firstMatch
-        for _ in 0..<5 where fixedButton.exists && row.frame.maxY > fixedButton.frame.minY {
+        for _ in 0..<5 {
+            guard fixedButton.exists && row.frame.maxY > fixedButton.frame.minY else { break }
             let start = list.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.6))
             start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: 0, dy: -150)))
         }
@@ -135,6 +140,8 @@ extension XCUIApplication {
         field.typeText(title + "\n") // Return closes the keyboard, which would cover the button
         reveal(addHabitButton)
         addHabitButton.tap()
+        // The next step, or an audit, starts once the sheet has gone, not while it slides down.
+        XCTAssertTrue(addHabitButton.waitForNonExistence(timeout: 5), debugDescription)
     }
 
     /// Taps a destructive button, then the same-named button of its confirmation. On an iPhone
