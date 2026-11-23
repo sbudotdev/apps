@@ -90,7 +90,7 @@ Metà dicembre: lancio della collezione (Show HN + Product Hunt), dal piano del 
 Sezioni 6, 7, 9 e 10: non riverificate il 22/11, ferme al 18/10.
 
 - **Giochi**: ADR-0015, Squares su main e installato sul tuo iPhone ("per ora funziona bene"). Uno al mese dopo Squares: Tiles, Sudoku, Arrows, Sort, Solitaire, Words.
-- **Software**: ADR-0016 e pagine `/software` e `/software/commerce` sul sito. Il repo `sbu-commerce` non esiste ancora; nessuna riga di codice. Primo passo: lo spike di compatibilità (catalogo, prodotto, carrello). Non annunciato: nessun nome di piattaforma nel materiale pubblico.
+- **Software**: ADR-0016 e pagine `/software` e `/software/commerce` sul sito. Il repo `commerce-dev` non esiste ancora; nessuna riga di codice. Primo passo: lo spike di compatibilità (catalogo, prodotto, carrello). Non annunciato: nessun nome di piattaforma nel materiale pubblico.
 
 ## 7. Marketing
 

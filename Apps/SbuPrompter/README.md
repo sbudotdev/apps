@@ -20,6 +20,11 @@ TEST_RUNNER_SBU_PROMPTER_CODE=1234 TEST_RUNNER_SBU_PROMPTER_SHOTS=/tmp/prompter-
 
 Deve girare un solo Sbu Prompter sul Mac: due copie si annunciano con lo stesso nome, l'iPhone le mostra come «Mac (2)» e il test non sa quale scegliere. Con Xcode 27 `xcodebuild` a volte resta appeso dopo "Test Suite 'All tests' passed": il risultato è già nel log, e gli screenshot sono nella cartella di `TEST_RUNNER_SBU_PROMPTER_SHOTS`.
 
+## Scarica
+
+- **Mac:** [SbuPrompter-1.0.1.dmg](https://github.com/sbudotdev/apps/releases/download/prompter-1.0.1/SbuPrompter-1.0.1.dmg) (macOS, universale, firmato Developer ID e notarizzato). Apri il dmg e trascina Sbu Prompter in Applicazioni. Note e versioni precedenti: [release prompter-1.0.1](https://github.com/sbudotdev/apps/releases/tag/prompter-1.0.1).
+- **iPhone (telecomando):** per ora su TestFlight; su App Store dopo la review.
+
 ## Dove sta cosa
 
 - `SbuPrompter/Core`: logica pura senza AppKit (normalizzazione del testo, allineatore voce-copione, cue, scorrimento, conto alla rovescia, comandi e stato). Il target iOS `SbuPrompterRemote` la compilerà come sorgente condiviso.
