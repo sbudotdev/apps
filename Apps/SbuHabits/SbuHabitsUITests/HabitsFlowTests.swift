@@ -35,6 +35,17 @@ final class HabitsFlowTests: XCTestCase {
         return app
     }
 
+    /// Checks again and again with no pause: the Closure stays only two seconds, and on a slow
+    /// runner `waitForExistence` checks first after a second and then each 1.3 s, so it misses it.
+    @MainActor
+    private func appears(_ element: XCUIElement, within seconds: TimeInterval) -> Bool {
+        let deadline = Date.now.addingTimeInterval(seconds)
+        repeat {
+            if element.exists { return true }
+        } while Date.now < deadline
+        return false
+    }
+
     @MainActor
     private func add(_ title: String, timesPerDay: Int = 1, in app: XCUIApplication) {
         app.openHabitForm()
@@ -144,7 +155,7 @@ final class HabitsFlowTests: XCTestCase {
         // The last habit of today done: the Closure shows its word for two seconds, then the
         // figure comes back.
         let closure = app.descendants(matching: .any)["Fatto"]
-        XCTAssertTrue(closure.waitForExistence(timeout: 2), app.debugDescription)
+        XCTAssertTrue(appears(closure, within: 3), app.debugDescription)
         XCTAssertTrue(closure.waitForNonExistence(timeout: 5))
         expectValue(leggere, "Fatta, 1 giorno")
         XCTAssertTrue(figure(in: app).hasPrefix("Serie piena, 1 giorno, 1 di 1 oggi"), figure(in: app))
