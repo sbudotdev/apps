@@ -120,7 +120,7 @@ Matteo è π-shaped su **prodotto + design system** e T-shaped sulla distribuzio
 - **Pagine alternativa**: 8 scritte IT/EN (Orbit, QR Reader, Find Air, Cleanup, My Moon Phase Pro, Streaks, Speedometer 55, Moody Teleprompter) e hub `/alternatives`. Al 22/11 sono online quelle delle app in vendita, compresi Cleanup e My Moon Phase Pro; Noise e Level non hanno una pagina alternativa (la pagina di Level indica comunque l'app che sostituisce).
 - **Strumenti e contenuti**: generatore QR `/qr-code`, calcolatore abbonamenti, guida "Come disdire un abbonamento su iPhone", articoli IT (3) e EN (2).
 - **Stampa**: pagina Stampa con testi liberi e ritratto.
-- **Profili**: Instagram @sbu_dev (in inglese dal 23/11, asset in `social/instagram/`), Bluesky @sbu.dev, bio IT/EN; link campagna App Store (`pt=128487151`, `ct=` per sorgente).
+- **Profili**: Instagram @sbu_dev (in inglese dal 23/11, asset in `social/instagram/`, piano di crescita in `social/instagram/crescita.md`: 4 Reel a settimana, pilastri EN), Bluesky @sbu.dev, bio IT/EN; link campagna App Store (`pt=128487151`, `ct=` per sorgente).
 - **Repo pubblico** con README, 9 topic, MIT.
 - **Liste**: AlternativeTo inviato (in moderazione al 18/10, non riverificato), open-source-ios-apps: Subscriptions in lista (#2443), Scanner in lista (#2446, fusa: verificato su GitHub il 22/11). Per Find nessuna PR aperta al 22/11.
 - **7 app in vendita al 22/11**: Subscriptions 2.1.0 (id6780154928), Scanner 2.0.1 (id6772572337), Find 1.0 (id6823934135), Moon 1.0 (id6822656846), Clean 1.1 (id6822655310), Level 1.1 (id6822656774, ancora il binario 1.0), Noise 1.0 (id6822655015).
@@ -134,7 +134,7 @@ Matteo è π-shaped su **prodotto + design system** e T-shaped sulla distribuzio
 - Habits respinta (4.3): Apple ha offerto una telefonata con App Review, accettata. Speed ancora respinta, nessuna notizia.
 - Lanci: Show HN di Clean (24/11), Moon (2/12), Noise (9/12), collezione (15/12, se ≥ 8 app), Level dopo la 1.2 (`marketing/calendario-lanci.md`). Da approvare.
 - Sito: le anteprime OG di squares e social sono online (`sbu.dev/og/squares.png` e `/og/social.png` rispondono 200 il 22/11, site PR #6 fusa). Gli accenti os e ztl (site PR #9) aspettano il merge ([SBU-320](/SBU/issues/SBU-320)).
-- Video di lancio di **Sbu Seasons** ([SBU-157](/SBU/issues/SBU-157)): fermo, manca il video di Matteo. Data: **quando arriva il video**. Il piano di pubblicazione è già deciso (Reel Instagram e LinkedIn alle 18:30).
+- Video di lancio di **Sbu Seasons** ([SBU-157](/SBU/issues/SBU-157)), v2 del 23/11 ([SBU-400](/SBU/issues/SBU-400)): la chiave falsa sta in piccolo in un angolo, il protagonista è la neve sul desktop. Brief in `social/instagram/seasons-reel.md`; montaggio pronto (`social/instagram/seasons-reel/`, 9:16 e 4:5 con un comando). Manca la registrazione di 20 s di Matteo. Data: **quando arriva il video**. Esce come Reel su @sbu_dev in collaborazione con il profilo di Matteo e come post LinkedIn di Matteo in 4:5, alle 18:30, dopo il suo ok.
 
 ### Bloccato o mancante (22/11)
 1. **Nessun lancio registrato**: 7 app in vendita, `marketing/log.md` vuoto. Il kit c'è, manca l'ok e la pubblicazione.

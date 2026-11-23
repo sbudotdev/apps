@@ -4,7 +4,7 @@ v1 · 8 novembre 2026 · Matteo + Claude. Vale per TikTok, Instagram Reels e, co
 
 ## 1. Cosa pubblicare
 
-Un video al giorno nei primi 30 giorni, poi 4 a settimana. Lo stesso file 1080×1920 va caricato nativo su ogni piattaforma, mai con il watermark di TikTok su Instagram: l'algoritmo di Reels lo penalizza. Caricare alle 18-20 ora italiana nei giorni feriali, 11-13 nel weekend.
+Su TikTok un video al giorno nei primi 30 giorni, poi 4 a settimana. Su Instagram @sbu_dev, in inglese, valgono ritmo e pilastri di `instagram/crescita.md`: 4 Reel a settimana dall'inizio. Lo stesso file 1080×1920 va caricato nativo su ogni piattaforma, mai con il watermark di TikTok su Instagram: l'algoritmo di Reels lo penalizza. Caricare alle 18-20 ora italiana nei giorni feriali, 11-13 nel weekend.
 
 Cinque serie fisse. Il pubblico impara il formato e si ferma.
 
@@ -65,7 +65,9 @@ Hashtag, massimo 4 per post, sempre questi tre più uno dell'app:
 
 Profilo TikTok: bio corta da `bio.md` ("App iPhone gratis. Una cosa sola. Niente abbonamenti né account."), foto `sbu-mark.svg` a 1024 px, link `https://sbu.dev`, la playlist "Il prezzo" e la playlist "Dov'è la fregatura".
 
-Profilo Instagram (@sbu_dev), in inglese dal 23/11/2026, presenta tutto sbu.dev: nome, categoria, bio e link nella sezione «Instagram (EN)» di `bio.md`. Foto profilo, copertine delle Storie in evidenza (Apps, Games, Dev tools, Open source, FAQ) e i tre post di apertura della griglia sono in `instagram/`; il README ha la lista per pubblicare con ordine, file e didascalie. Hashtag in inglese: `#iphone #freeapps #nosubscription` più uno. Quando escono, fissare in alto i video 7, 1 e 3.
+Profilo Instagram (@sbu_dev), in inglese dal 23/11/2026, presenta tutto sbu.dev: nome, categoria, bio e link nella sezione «Instagram (EN)» di `bio.md`. Foto profilo, copertine delle Storie in evidenza (Apps, Games, Dev tools, Open source, FAQ) e i tre post di apertura della griglia sono in `instagram/`; il README ha la lista per pubblicare con ordine, file e didascalie. Hashtag in inglese: `#iphone #freeapps #nosubscription` più uno (per le app Mac quelli del loro brief, come `instagram/seasons-reel.md`). Quando escono, fissare in alto i video 7, 1 e 3.
+
+Il piano di crescita di @sbu_dev è in `instagram/crescita.md`: obiettivo e misure, ritmo, meccaniche di crescita e quattro pilastri in inglese, **Built in public** (35%), **The price** (30%, la serie «Il prezzo»), **One thing** (20%, la serie «Una cosa sola») e **Your answers** (15%, le risposte ai commenti, come «Dov'è la fregatura»). I 12 video del §2 si adattano in inglese, chiusura compresa, e sono la scorta delle prime 3 settimane. Il primo Reel è quello di Sbu Seasons (`instagram/seasons-reel.md`).
 
 Instagram in più: ogni Reel va anche nelle Storie con lo sticker link alla pagina app, e il carosello settimanale a 5 slide (prezzo dell'originale, cosa fa, la Cifra, le sei promesse, link) ricavato dagli screenshot fastlane già pronti. Il feed è il quaderno: carta, reticolo, una cifra per post. I post della griglia sono 1080×1440 e il reticolo continua da un post all'altro: le regole sono in `instagram/README.md` («Il quaderno della griglia»).
 

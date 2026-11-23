@@ -1,0 +1,83 @@
+<!doctype html>
+<!-- Reel of Sbu Seasons (brief: ../seasons-reel.md). One 1080x1920 composition; everything lives in the centre band
+     1080x1350 (y 285-1635), so render.sh crops the 4:5 cut for LinkedIn out of the same render. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Sbu Seasons reel</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* assets/fonts is a symlink to Design/fonts. Colours from Design/tokens.json, light theme. */
+      @font-face { font-family: "Bricolage Grotesque"; src: url("assets/fonts/BricolageGrotesque-Variable.ttf"); font-weight: 200 800; font-stretch: 75% 100%; }
+      @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/IBMPlexMono-Medium.ttf"); font-weight: 500; }
+      :root {
+        --paper: #f6f6f2; /* paper */
+        --ink: #0a0a00; /* ink = brand */
+        --ink-muted: #6b6b63; /* ink-muted */
+        --grid: #e6e6de; /* grid */
+        --cell: 45px; /* the notebook cell of the profile grid (../README.md) */
+        --band: 285px; /* top of the 4:5 band: (1920 - 1350) / 2 */
+        --display: "Bricolage Grotesque", sans-serif;
+        --mono: "IBM Plex Mono", monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: var(--paper); }
+      #root {
+        position: relative; width: 100%; height: 100%; overflow: hidden; color: var(--ink);
+        background-color: var(--paper);
+        background-image:
+          linear-gradient(to right, var(--grid) 0 2px, transparent 2px),
+          linear-gradient(to bottom, var(--grid) 0 2px, transparent 2px);
+        background-size: var(--cell) var(--cell);
+        background-position: 0 var(--band); /* a grid line on the top edge of the 4:5 crop too */
+      }
+      .caption {
+        position: absolute; left: calc(var(--cell) * 3); right: calc(var(--cell) * 3); /* inside every platform safe zone */
+        bottom: calc(1920px - var(--band) - var(--cell) * 11); /* bottom of the caption = one cell above the recording */
+        font-family: var(--display); font-weight: 800; font-stretch: 87%;
+        font-size: 80px; line-height: 84px; letter-spacing: -0.01em; text-wrap: pretty;
+      }
+      .caption span { display: block; }
+      #caption-price { text-wrap: balance; } /* pretty leaves "Mac." alone on the last line */
+      /* The recording is never cropped (contain): the easter egg sits in its top right corner. */
+      #screen-frame {
+        position: absolute; left: var(--cell); right: var(--cell); top: calc(var(--band) + var(--cell) * 12);
+        height: 630px; border: 3px solid var(--ink); background: var(--ink); overflow: hidden;
+      }
+      #screen { width: 100%; height: 100%; object-fit: contain; display: block; }
+      /* Closing card: the same paper, the sbu glyphs and the line. */
+      #closing { position: absolute; inset: 0; background: inherit; }
+      #closing-inner { position: absolute; left: calc(var(--cell) * 3); right: calc(var(--cell) * 3); top: calc(var(--band) + var(--cell) * 10); }
+      #closing img { width: 540px; height: auto; display: block; }
+      #closing p { margin-top: calc(var(--cell) * 2); font-family: var(--display); font-weight: 800; font-stretch: 87%; font-size: 80px; line-height: 84px; letter-spacing: -0.01em; }
+      #closing p span { display: block; margin-top: var(--cell); font: 500 44px/1 var(--mono); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="seasons-reel" data-start="0" data-width="1080" data-height="1920" data-duration="18">
+      <p id="caption-price" class="clip caption" data-start="0" data-duration="3" data-track-index="1"><span>Paid apps charge up to €10 for snow on your Mac.</span></p>
+      <p id="caption-free" class="clip caption" data-start="3" data-duration="7" data-track-index="1"><span>This one is free.</span></p>
+      <p id="caption-promises" class="clip caption" data-start="10" data-duration="5" data-track-index="1"><span>No account. No ads. Open source.</span></p>
+      <div id="screen-frame">
+        <!-- The only input: the screen recording. 15 s are used; raise data-media-start to skip a slow start. -->
+        <video id="screen" src="input/seasons.mp4" muted playsinline data-start="0" data-duration="15" data-media-start="0" data-track-index="0"></video>
+      </div>
+      <section id="closing" class="clip" data-layout-allow-occlusion data-start="15" data-duration="3" data-track-index="2">
+        <div id="closing-inner">
+          <img id="closing-mark" src="assets/sbu-glyphs.svg" alt="sbu" />
+          <p id="closing-line">Sbu Seasons for Mac. <span>sbu.dev/seasons</span></p>
+        </div>
+      </section>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      // Each caption rises in at the start of its clip window; the runtime hides it when the window ends.
+      document.querySelectorAll(".caption").forEach((el) => {
+        tl.fromTo(el.firstElementChild, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, Number(el.dataset.start));
+      });
+      tl.fromTo("#closing-inner", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 15);
+      window.__timelines["seasons-reel"] = tl;
+    </script>
+  </body>
+</html>
