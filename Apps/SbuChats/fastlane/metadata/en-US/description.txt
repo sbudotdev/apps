@@ -1,7 +1,7 @@
 Export a chat from your messaging app and Sbu Chats turns it into numbers, on your iPhone: how many messages you've sent each other, who replies faster, what time you talk.
 
 - Imports exported chats as .zip, with or without media, or .txt, from the share sheet or Files
-- Reads iPhone and Android exports, in English, Italian and other languages, with 12- or 24-hour times
+- Reads exported chats, in English, Italian and other languages, with 12- or 24-hour times
 - The total of messages, then for each person: messages, words, photos and videos, conversations started and ended, longest streak
 - Typical and average reply time for each person
 - Charts by hour, weekday, month and year, your messages apart from everyone else's

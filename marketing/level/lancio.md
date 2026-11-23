@@ -136,3 +136,47 @@ Descrizione lunga:
 > There is no in-app purchase, no account, no ads and no analytics, and the source code is public under MIT.
 
 (Quando la 1.2 è in vendita: aggiungere il mirino con la fotocamera e le unità %, x:12, 1V:H.)
+
+## Aggiornamento 1.2 (7): il post di Level
+
+Stato: `IN_REVIEW` nella fotografia ASC di [SBU-324](/SBU/issues/SBU-324) del 22/11 alle 22:50. Il 22/11 alle 23:07 il lookup pubblico dello Store dà ancora la **1.1** (binario 1.0). Lo stato ASC lo scrive [SBU-324](/SBU/issues/SBU-324). **Si pubblica solo quando la 1.2 è `READY_FOR_SALE`** e il lookup `https://itunes.apple.com/lookup?id=6822656774&country=it` risponde `"version":"1.2"`. Questi post **sostituiscono** quelli di Instagram e Bluesky sopra: con la 1.2 il listing e l'app dicono le stesse cose. Il primo sabato dopo l'uscita (calendario).
+
+Novità (testo su ASC, copiato in [SBU-324](/SBU/issues/SBU-324); il `release_notes.txt` su main è diverso e non va usato): icona nuova, con l'alternativa Inversa nelle impostazioni, e schermate rifatte sul quaderno; mirino con la fotocamera per misurare l'angolo di un punto lontano, un tetto o un albero; unità in gradi, %, x:12 e 1V:H; Azzera qui per l'angolo relativo; blocco a lettura stabile; voce che legge la cifra; suono alla misura; tasto volume nel mirino; quadrante che ruota; schermo intero con un tocco; pagina Come si usa.
+
+Immagine: `/Users/matteo/dev/sbudotdev/apps-sbu-267/Apps/SbuLevel/fastlane/screenshots/it/iPhone 17 Pro Max-01-main_framed.png` (EN: stessa cartella con `en-US`). Generata il 22/11, worktree di [SBU-267](/SBU/issues/SBU-267), fuori dal repo. Nessuno dei cinque screenshot mostra il mirino: se Matteo vuole un'immagine del mirino, serve uno screenshot dal telefono (la fotocamera non va nel simulatore).
+
+Instagram IT:
+> Quanto è inclinato quel tetto? Apri il mirino di Sbu Level, inquadra la falda e leggi l'angolo. Funziona anche con un albero o un palo lontano.
+>
+> Con la 1.2 scegli l'unità che ti serve: gradi, percentuale, x:12 o 1V:H. "Azzera qui" misura un angolo rispetto a un altro. Quando la lettura è stabile si blocca, e se vuoi una voce ti legge la cifra.
+>
+> C'è anche un'icona nuova: se la preferisci chiara su fondo scuro, nelle impostazioni c'è l'Inversa.
+>
+> Appoggiato resta una livella a bolla, in piedi su un bordo un clinometro al decimo di grado, dopo la calibrazione.
+>
+> Niente abbonamento, niente account, niente pubblicità, niente tracking.
+>
+> Link in bio: sbu.dev/apps/level
+
+Instagram EN:
+> How steep is that roof? Open the sight in Sbu Level, aim at the slope and read the angle. It works on a tree or a distant pole too.
+>
+> With 1.2 you pick the unit you need: degrees, percent, x:12 or 1V:H. "Zero here" measures one angle against another. When the reading is steady it locks, and a voice can read the figure out.
+>
+> There's a new icon too: if you'd rather have it light on dark, pick Inversa in Settings.
+>
+> Laid flat it's still a bubble level, on its edge a clinometer to a tenth of a degree, after calibration.
+>
+> No subscription, no account, no ads, no tracking.
+>
+> Link in bio: sbu.dev/en/apps/level
+
+Bluesky IT (≤300):
+> Sbu Level 1.2 è sull'App Store: icona nuova, un mirino con la fotocamera per leggere l'angolo di un tetto o di un albero, unità in gradi, %, x:12 e 1V:H, una voce che legge la cifra. Gratis, senza account.
+> sbu.dev/apps/level
+
+Bluesky EN (≤300):
+> Sbu Level 1.2 is on the App Store: a new icon, a camera sight to read the angle of a roof or a tree, units in degrees, %, x:12 and 1V:H, a voice that reads the figure. Free, no account.
+> sbu.dev/en/apps/level
+
+Precisione: la regola sopra vale anche per il mirino. Mai "preciso come un laser": l'angolo dipende dai sensori e dalla calibrazione.

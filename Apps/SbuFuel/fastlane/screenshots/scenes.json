@@ -1,0 +1,7 @@
+{
+  "01-main": {"layout": "hero", "engraving": "icon", "mark": {"shape": "circle", "box": [20, 840, 960, 1320]}},
+  "02-history": {"layout": "left", "subject": "an old leather logbook lying open with a fountain pen, three-quarter view", "mark": {"shape": "underline", "box": [260, 840, 1300, 960]}},
+  "03-costs": {"layout": "detail", "subject": "a small stack of old coins beside a worn leather wallet, three-quarter view", "zoom": [0, 560, 1320, 1220]},
+  "04-services": {"layout": "right", "subject": "an old adjustable wrench next to a vintage oil can, three-quarter view", "mark": {"shape": "circle", "box": [900, 1080, 1220, 1180]}},
+  "05-privacy": {"layout": "flat", "subject": "a vintage metal jerrycan, three-quarter view", "mark": {"shape": "underline", "box": [130, 2280, 1030, 2530]}}
+}
