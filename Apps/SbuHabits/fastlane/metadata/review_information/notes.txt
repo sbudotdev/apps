@@ -21,12 +21,12 @@ Settings: the gear at the bottom. "Start of the day" sets when the day begins, f
 
 Sync with iCloud (off by default): Settings > Data. Habits and history go to one file in the user's own iCloud and merge with their other devices.
 
-Shared habits: in an existing habit's form, "Share" opens the system iCloud sharing screen to invite people, read only. The habit goes to a zone of the owner's iCloud (CloudKit private database); reminders, notes and Health details are not shared. Invited people need Sbu Habits and iCloud: the habit shows on their grid with a person badge, and "Remove" leaves the share. Remote notifications are registered only for iCloud's silent change notifications.
+Shared habits: in an existing habit's form, "Share" opens the system iCloud sharing screen to invite people, read only. The habit goes to a zone of the owner's iCloud (CloudKit private database); reminders, notes and Health details are not shared. Invited people need Sbu Habits and iCloud: the habit shows on their grid with a person badge, and "Remove" leaves the share. Remote notifications are only iCloud's silent change pushes.
 
 Apple Watch: today's habits from the paired iPhone (WatchConnectivity only); tap a ring to mark it. A complication shows the full streak.
 
-How it differs from the other Sbu apps: the only one that tracks habits, and the only one with Health, a Watch app and a Live Activity. They share only a small design package, no habit or data logic.
+How it differs from the other Sbu apps: the only one that tracks habits, and the only one with Health, a Watch app and a Live Activity. They share only a design package.
 
 Since 1.0 (rejected 14 Oct): new icon, new screenshots, description rewritten.
 
-Since the 23 Nov review (guideline 4): the Apple Watch app icon now has a light background, the same as the iPhone icon, so it reads as circular on Apple Watch.
+Since the 23 Nov review (guideline 4): the Apple Watch icon has a light background, like the iPhone icon, so it reads as circular.
