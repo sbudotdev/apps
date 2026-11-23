@@ -28,3 +28,5 @@ Apple Watch: today's habits from the paired iPhone (WatchConnectivity only); tap
 How it differs from the other Sbu apps: the only one that tracks habits, and the only one with Health, a Watch app and a Live Activity. They share only a small design package, no habit or data logic.
 
 Since 1.0 (rejected 14 Oct): new icon, new screenshots, description rewritten.
+
+Since the 23 Nov review (guideline 4): the Apple Watch app icon now has a light background, the same as the iPhone icon, so it reads as circular on Apple Watch.

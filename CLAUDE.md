@@ -39,7 +39,7 @@ Direction **Quaderno** (v5, ADR-0013, supersedes v4 "Carta e punto fermo"): Sbu 
 - `brand` is the logo's warm black: logo, sbu.dev footer and splash. `onAccent` only for marketing and icons.
 - Nothing that looks like a paywall: no gradients, shadows (marketing only), colored-border cards, stars, "PRO".
 - Status colors (`success`, `warning`, `danger`) always come with a word or SF Symbol. Delete and reset are `danger` and confirm (`SbuButton(kind: .destructive)` does it).
-- App icon grammar: the real instrument behind the app, engraved in `ink` on paper, closed by the square full stop in the app's accent at the bottom right; dark is light ink on warm black, tinted is greys. One alternate icon for every app, **Inversa** (paper on ink, `AppIcon-Inversa`). Subjects in `Design/icons/engravings.json`, ink masks in `Design/icons/source/`. Generate with `Tools/make_icons.py` (`--generate` uses Gemini, `--inverse` the alternate).
+- App icon grammar: the real instrument behind the app, engraved in `ink` on paper, closed by the square full stop in the app's accent at the bottom right; dark is light ink on warm black, tinted is greys. One alternate icon for every app, **Inversa** (paper on ink, `AppIcon-Inversa`). Subjects in `Design/icons/engravings.json`, ink masks in `Design/icons/source/`. Generate with `Tools/make_icons.py` (`--generate` uses Gemini, `--inverse` the alternate). The Apple Watch icon is the light icon shrunk into the circle's safe square (`--watch-appiconset`), never a dark ground: App Review rejected Habits' black Watch icon as not circular (23/11/2026).
 - The logo (`Design/logos/sbu-logo.svg`: lowercase `sbu` plus the square, `#0A0A00`) is never redrawn; `sbu-mark.svg` is the same wordmark in paper on warm black.
 
 ## Product rules
