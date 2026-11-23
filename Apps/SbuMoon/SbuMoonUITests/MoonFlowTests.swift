@@ -193,7 +193,7 @@ final class MoonFlowTests: XCTestCase {
     @MainActor
     private func audit(_ app: XCUIApplication, inSheet: Bool = false) throws {
         let types = XCUIAccessibilityAuditType.all.subtracting(inSheet ? [.contrast, .dynamicType] : [.contrast])
-        try app.performAccessibilityAudit(for: types) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: types) { issue in
             if Self.isSbuKitGridType(issue) {
                 return true
             }

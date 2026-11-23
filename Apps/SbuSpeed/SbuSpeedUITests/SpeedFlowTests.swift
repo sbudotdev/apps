@@ -51,7 +51,7 @@ final class SpeedFlowTests: XCTestCase {
     /// and the audit misreads the iOS 26 glass bar.
     @MainActor
     private func audit(_ app: XCUIApplication, excluding excluded: XCUIAccessibilityAuditType = .contrast) throws {
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(excluded)) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting(excluded)) { issue in
             guard Self.isSbuKitGridType(issue) == false else { return true }
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? "no element")")
             return true
@@ -146,7 +146,7 @@ final class SpeedFlowTests: XCTestCase {
         XCTAssertEqual(app.buttons.matching(identifier: "trip").count, 3)
         XCTAssertTrue(app.buttons["Esporta CSV"].isEnabled)
 
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? "no element")")
             return true
         }
@@ -156,7 +156,7 @@ final class SpeedFlowTests: XCTestCase {
         XCTAssertTrue(delete.waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["Massima"].exists)
 
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? "no element")")
             return true
         }
@@ -221,7 +221,7 @@ final class SpeedFlowTests: XCTestCase {
 
         // Dynamic Type is left out as in Sbu Habits: in the settings sheet the audit flags every
         // text as partially unsupported, system ones included.
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? "no element")")
             return true
         }
