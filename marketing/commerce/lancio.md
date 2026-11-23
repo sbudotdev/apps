@@ -36,7 +36,7 @@ Il canale principale: parla a sviluppatori, agenzie e chi decide in azienda (pub
 IT, lungo:
 > Ho pubblicato la prima versione di Sbu Commerce: un backend e-commerce per il B2B, open source con licenza MIT.
 >
-> Lavoro da anni su piattaforme e-commerce enterprise che costano licenze molto care. Sbu Commerce prova un'altra strada: parla la stessa REST API che gli storefront esistenti già usano, così uno storefront può cambiare backend cambiando solo l'URL.
+> Lavoro da anni su piattaforme e-commerce enterprise che costano licenze molto care. Sbu Commerce prova un'altra strada: parla la stessa REST API che gli storefront esistenti già usano. L'obiettivo è che uno storefront possa cambiare backend cambiando solo l'URL. Oggi vale per catalogo e carrello.
 >
 > Cosa fa la v0.1.0, oggi:
 > · catalogo con categorie, ricerca con suggerimenti, pagina prodotto con prezzo e disponibilità
@@ -59,7 +59,7 @@ IT, corto:
 EN, lungo:
 > I've released the first version of Sbu Commerce: an open source B2B e-commerce backend, MIT licensed.
 >
-> I've spent years on enterprise e-commerce platforms with very expensive licences. Sbu Commerce tries another way: it speaks the same REST API existing storefronts already use, so a storefront can switch backend by changing only its base URL.
+> I've spent years on enterprise e-commerce platforms with very expensive licences. Sbu Commerce tries another way: it speaks the same REST API existing storefronts already use. The goal is that a storefront can switch backend by changing only its base URL. Today that works for the catalog and the cart.
 >
 > What v0.1.0 does today:
 > · catalog with categories, search with suggestions, product page with price and stock
