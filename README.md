@@ -71,7 +71,7 @@ Specs come only from public App Store data. Nothing here decompiles or extracts 
 | [Sbu Clean](Apps/SbuClean) | `accent-clean` | Cleanup | [App Store](https://apps.apple.com/app/id6822655310) |
 | [Sbu Level](Apps/SbuLevel) | `accent-level` | Clinometer + bubble level | [App Store](https://apps.apple.com/app/id6822656774) |
 | [Sbu Noise](Apps/SbuNoise) | `accent-noise` | White Noise | [App Store](https://apps.apple.com/app/id6822655015) |
-| [Sbu Habits](Apps/SbuHabits) | `accent-habits` | Streaks | Rejected (4.3), talking to App Review |
+| [Sbu Habits](Apps/SbuHabits) | `accent-habits` | Streaks | Rejected for the Watch icon (guideline 4), fixed in 1.1 (7), to resubmit |
 | [Sbu Speed](Apps/SbuSpeed) | `accent-speed` | Speedometer 55 Pro. GPS kit. | Rejected |
 | [Sbu Chats](Apps/SbuChats) | `accent-chats` | The Cringe: Chat Wrapped | Ready for review, week of 23 Nov |
 | [Sbu Fuel](Apps/SbuFuel) | `accent-fuel` | Fuelly: MPG & Service Tracker | Ready for review, week of 30 Nov |

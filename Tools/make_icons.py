@@ -230,6 +230,7 @@ def watch_icon(mask: Image.Image, line: str, ground: str, stop: str, grid: str) 
     icon = ImageChops.multiply(paper, compose(shrunk, line, "#ffffff", None))
     start, end = offset + round((GRID - 2) * cell), offset + round((GRID - 1) * cell)
     ImageDraw.Draw(icon).rectangle([start, start, end - 1, end - 1], fill=rgb(stop))
+    assert ImageStat.Stat(icon.convert("L")).mean[0] > 180, "a dark Watch icon reads as a black square (SBU-409)"
     return icon
 
 
