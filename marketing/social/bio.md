@@ -4,7 +4,7 @@ Nome visualizzato: **sbu.dev** (mai "Sbu" da solo). Handle: `sbudevapp` ovunque,
 Foto: `Design/logos/sbu-mark.svg` esportato 1024 × 1024. Link: `https://sbu.dev`.
 Email: un alias `@sbu.dev` per servizio (catch-all di Cloudflare Email Routing).
 
-## Bio lunga (X 160, Instagram 150, Threads, Bluesky, Mastodon)
+## Bio lunga (X 160, Threads, Bluesky, Mastodon)
 
 IT (118):
 > App iPhone gratis che fanno una cosa sola. Niente abbonamenti, account, pubblicità o tracking. I dati restano sul telefono.
