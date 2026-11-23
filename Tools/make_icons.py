@@ -24,7 +24,7 @@ Usage:
   python3 Tools/make_icons.py level --from-image raw.png # engraving from an image you supply
 
 Writes Design/icons/sbu-<name>.png (light, 1024, no alpha); with --appiconset also the dark and tinted variants.
-With --watch-appiconset, a watchOS icon: the dark variant shrunk into the square inscribed in the
+With --watch-appiconset, a watchOS icon: the light variant shrunk into the square inscribed in the
 circle watchOS masks the icon to, so the engraving and the full stop are never cropped.
 """
 import argparse
@@ -207,12 +207,34 @@ def write_appiconset(icons: dict, folder: Path) -> None:
     (folder / "Contents.json").write_text(json.dumps({"images": images, "info": {"author": "xcode", "version": 1}}, indent=2) + "\n")
 
 
-def write_watch_appiconset(mask: Image.Image, line: str, ground: str, stop: str, grid: str, folder: Path) -> None:
-    """watchOS crops the icon to a circle: compose inside its safe square, on the same ground."""
+def watch_icon(mask: Image.Image, line: str, ground: str, stop: str, grid: str) -> Image.Image:
+    """watchOS crops the icon to a circle: the light icon shrunk into the circle's safe square.
+
+    A dark ground made the icon read as a black square and App Review rejected it (SBU-409), so the
+    Watch icon is the iOS light icon: same ink, paper, accent and grid. The grid keeps its pitch out
+    to the canvas edge, so the circle shows one sheet of paper; engraving and full stop stay inside.
+    """
     inner = int(CANVAS * WATCH_SAFE)
-    icon = Image.new("RGB", (CANVAS, CANVAS), rgb(ground))
     offset = (CANVAS - inner) // 2
-    icon.paste(compose(mask.resize((inner, inner), Image.LANCZOS), line, ground, stop, grid), (offset, offset))
+    cell = inner / GRID
+    shrunk = Image.new("L", (CANVAS, CANVAS), 0)
+    shrunk.paste(mask.resize((inner, inner), Image.LANCZOS), (offset, offset))
+    paper = Image.new("RGB", (CANVAS, CANVAS), rgb(ground))
+    draw = ImageDraw.Draw(paper)
+    width = max(1, round(GRID_LINE * WATCH_SAFE))
+    steps = int(offset // cell) + 1
+    for i in range(-steps, GRID + steps + 1):
+        at = offset + round(i * cell) - width // 2
+        draw.rectangle([at, 0, at + width - 1, CANVAS], fill=rgb(grid))
+        draw.rectangle([0, at, CANVAS, at + width - 1], fill=rgb(grid))
+    icon = ImageChops.multiply(paper, compose(shrunk, line, "#ffffff", None))
+    start, end = offset + round((GRID - 2) * cell), offset + round((GRID - 1) * cell)
+    ImageDraw.Draw(icon).rectangle([start, start, end - 1, end - 1], fill=rgb(stop))
+    assert ImageStat.Stat(icon.convert("L")).mean[0] > 180, "a dark Watch icon reads as a black square (SBU-409)"
+    return icon
+
+
+def write_watch_appiconset(icon: Image.Image, folder: Path) -> None:
     folder.mkdir(parents=True, exist_ok=True)
     for old in folder.glob("*.png"):
         old.unlink()
@@ -272,7 +294,7 @@ def main() -> None:
     source_group.add_argument("--from-image", type=Path, help="use this image as the engraving")
     parser.add_argument("--appiconset", type=Path, help="also write this AppIcon.appiconset")
     parser.add_argument("--artwork", type=Path, help="also write this AppIconArtwork.imageset")
-    parser.add_argument("--watch-appiconset", type=Path, help="also write this watchOS AppIcon.appiconset (dark, circle-safe)")
+    parser.add_argument("--watch-appiconset", type=Path, help="also write this watchOS AppIcon.appiconset (light, circle-safe)")
     parser.add_argument("--mac-appiconset", type=Path, help="also write this macOS AppIcon.appiconset (light, rounded square, 16-1024)")
     parser.add_argument("--inverse", type=Path, help="also write the Inversa alternate icon to this AppIcon-Inversa.appiconset")
     args = parser.parse_args()
@@ -315,7 +337,7 @@ def main() -> None:
         write_mac_appiconset(variants["light"], args.mac_appiconset)
         print(args.mac_appiconset)
     if args.watch_appiconset:
-        write_watch_appiconset(mask, ink["dark"], ink["light"], accent["dark"], grid["dark"], args.watch_appiconset)
+        write_watch_appiconset(watch_icon(mask, ink["light"], surface["light"], accent["light"], grid["light"]), args.watch_appiconset)
         print(args.watch_appiconset)
 
 
