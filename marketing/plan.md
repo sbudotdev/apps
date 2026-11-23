@@ -277,7 +277,7 @@ La storia è già scritta: **"Questa app costa 40 € l'anno. L'ho rifatta grati
 
 | Canale | Formato | Ritmo | Pubblico |
 |---|---|---|---|
-| TikTok + Reels + Shorts | 30–45 s: prezzo dell'originale → la tua app che fa la stessa cosa → "gratis, niente account, link in bio" | 1 a settimana (l'app della settimana) + 1 extra | A |
+| TikTok + Reels + Shorts | 30–45 s: prezzo dell'originale → la tua app che fa la stessa cosa → "gratis, niente account, link in bio" | 1 a settimana (l'app della settimana) + 1 extra; su Instagram @sbu_dev 4 Reel a settimana (`social/instagram/crescita.md`) | A |
 | X | Mentre lavori: numeri, screenshot, rifiuti Apple, il codice | 3–5 a settimana, brevi | C |
 | LinkedIn (IT) | Un post lungo a settimana: la storia, cosa hai imparato | 1 a settimana | C, stampa IT |
 | Blog sbu.dev | Un articolo ogni 2 settimane: "Come Apple mi ha rifiutato 6 app in un giorno", "Una app a settimana: il sistema", "Quanto costano davvero gli abbonamenti iPhone" | 2 al mese | A, B, C + SEO |

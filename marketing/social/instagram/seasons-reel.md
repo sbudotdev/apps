@@ -35,6 +35,8 @@ Seconda traccia, piccola: il titolo di una scheda del browser, **«how to remove
 
 Nessuno zoom sull'angolo: chi lo trova deve trovarlo da solo.
 
+Nel 9:16 la registrazione è larga circa un terzo dell'originale. Per questo l'editor usa un carattere di 16-18 pt: è ancora una grandezza normale, non uno zoom, e la riga della chiave resta leggibile in pausa. Prima dell'ok di Matteo si controlla un fotogramma in pausa sul telefono.
+
 ## Didascalia (EN)
 
 ```
@@ -84,4 +86,4 @@ Il progetto è in `seasons-reel/` (HyperFrames). Una sola composizione 1080×192
    Escono `seasons-reel/renders/seasons-reel-9x16.mp4` (1080×1920) e `seasons-reel-4x5.mp4` (1080×1350). Alla fine lo script stampa misure e durata di tutti e due con `ffprobe`.
 3. Se la registrazione parte lenta, alza `data-media-start` del `<video>` in `seasons-reel/index.html` (secondi da saltare). Il montaggio usa 15 s di registrazione, poi 3 s di chiusura.
 
-Servono Node (`npx hyperframes`) e ffmpeg. `input/` e `renders/` non vanno nel repo (`seasons-reel/.gitignore`). Per controllare il progetto prima di rendere: `npx hyperframes check marketing/social/instagram/seasons-reel`.
+Servono Node (`npx hyperframes`), ffmpeg e la rete: GSAP (3.14.2, versione fissa) arriva da jsDelivr. `input/` e `renders/` non vanno nel repo (`seasons-reel/.gitignore`). Per controllare il progetto prima di rendere: `npx hyperframes check marketing/social/instagram/seasons-reel`.
