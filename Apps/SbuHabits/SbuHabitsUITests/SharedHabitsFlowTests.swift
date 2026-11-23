@@ -36,6 +36,19 @@ final class SharedHabitsFlowTests: XCTestCase {
         return cell
     }
 
+    /// Opens a shared habit's screen. On iOS 26.2 (CI) a tap right after launch was once lost,
+    /// with the grid still settling, and the screen never came (SBU-376): one more tap, only then.
+    @MainActor
+    private func openShared(_ title: String, in app: XCUIApplication) {
+        let row = cell(title, in: app)
+        let bar = app.navigationBars["Abitudine condivisa"]
+        row.tap()
+        if bar.waitForExistence(timeout: 10) == false, row.isHittable {
+            row.tap()
+        }
+        XCTAssertTrue(bar.waitForExistence(timeout: 10), app.debugDescription)
+    }
+
     /// Adds Leggere and opens its form.
     @MainActor
     private func editNewHabit(in app: XCUIApplication) -> XCUIElement {
@@ -119,9 +132,8 @@ final class SharedHabitsFlowTests: XCTestCase {
     @MainActor
     func testTheSharedScreenPicksTheOwnersIconAndShowsTheStatistics() throws {
         let app = launch(received: true)
-        cell("Correre", in: app).tap()
+        openShared("Correre", in: app)
 
-        XCTAssertTrue(app.navigationBars["Abitudine condivisa"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["Chi la condivide la segna. Tu vedi i progressi e le statistiche."].exists)
         XCTAssertTrue(app.buttons["Persona"].isSelected)
         let emoji = app.buttons["😎"]
@@ -132,7 +144,7 @@ final class SharedHabitsFlowTests: XCTestCase {
         try audit(app)
 
         app.buttons["Fine"].tap()
-        cell("Correre", in: app).tap()
+        openShared("Correre", in: app)
         XCTAssertTrue(app.buttons["😎"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["😎"].isSelected)
     }
@@ -140,7 +152,7 @@ final class SharedHabitsFlowTests: XCTestCase {
     @MainActor
     func testRemovingASharedHabitAsksFirst() throws {
         let app = launch(received: true)
-        cell("Correre", in: app).tap()
+        openShared("Correre", in: app)
         let remove = app.buttons["Rimuovi"].firstMatch
         XCTAssertTrue(remove.waitForExistence(timeout: 5))
         for _ in 0..<6 {
