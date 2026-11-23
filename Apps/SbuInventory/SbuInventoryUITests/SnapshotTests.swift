@@ -28,6 +28,8 @@ final class SnapshotTests: XCTestCase {
         XCTAssertTrue(batteries.waitForExistence(timeout: 5))
         snapshot("02-folder")
 
+        // Under the big total the row sits behind the floating search field, which takes the tap.
+        app.swipeUp()
         batteries.tap()
         XCTAssertTrue(row(["quantity"], in: app).waitForExistence(timeout: 5))
         snapshot("03-item")

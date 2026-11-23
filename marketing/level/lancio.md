@@ -10,7 +10,7 @@ Onestà sul prodotto: la precisione dipende dai sensori dell'iPhone e dalla cali
 
 Quando la 1.2 è in vendita: aggiungere al post e allo Show HN il mirino ("guarda un tetto o un albero dalla fotocamera e leggi l'angolo"), che è l'aggancio più forte. Per questo lo Show HN di Level va dopo l'approvazione della 1.2 (vedi calendario).
 
-## Instagram @sbudevapp
+## Instagram @sbu_dev
 
 **Quando:** dopo l'approvazione della 1.2. La descrizione dello Store della 1.1 in vendita promette già il mirino e le unità nuove, ma il binario è la 1.0: chi arriva dal post troverebbe nel listing funzioni che non ci sono. Con la 1.2 in vendita, aggiungere al post il mirino.
 

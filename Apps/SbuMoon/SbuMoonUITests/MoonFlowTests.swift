@@ -140,9 +140,9 @@ final class MoonFlowTests: XCTestCase {
         // The Closure, once the alert is set, for two seconds: right away when notifications are
         // already allowed, or once they are allowed the first time on this simulator.
         let closure = app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH 'Impostato'")).firstMatch
-        if closure.waitForExistence(timeout: 1) == false {
+        if appears(closure, within: 1) == false {
             allowNotificationsIfAsked()
-            XCTAssertTrue(closure.waitForExistence(timeout: 2))
+            XCTAssertTrue(appears(closure, within: 3))
         }
         XCTAssertTrue(closure.waitForNonExistence(timeout: 5), "The Closure goes after two seconds")
         XCTAssertTrue(app.staticTexts["Ora dell'avviso"].exists)
@@ -150,6 +150,17 @@ final class MoonFlowTests: XCTestCase {
 
         fullMoon.tap()
         XCTAssertFalse(app.staticTexts["Ora dell'avviso"].waitForExistence(timeout: 2))
+    }
+
+    /// Checks again and again with no pause: the Closure stays only two seconds, and on a slow
+    /// runner `waitForExistence` checks first after a second and then each 1.3 s, so it misses it.
+    @MainActor
+    private func appears(_ element: XCUIElement, within seconds: TimeInterval) -> Bool {
+        let deadline = Date.now.addingTimeInterval(seconds)
+        repeat {
+            if element.exists { return true }
+        } while Date.now < deadline
+        return false
     }
 
     /// iOS asks for notifications the first time on this simulator, over the app: allow them.

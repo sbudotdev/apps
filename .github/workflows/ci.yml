@@ -78,7 +78,8 @@ jobs:
     needs: list
     if: needs.list.outputs.apps != '[]'
     runs-on: macos-26
-    timeout-minutes: 45
+    # SbuHabits' UI tests alone take 40 to 46 minutes on the runner (SBU-376).
+    timeout-minutes: ${{ matrix.app == 'SbuHabits' && 60 || 45 }}
     strategy:
       fail-fast: false
       matrix:

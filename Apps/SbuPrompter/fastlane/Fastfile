@@ -10,7 +10,7 @@ lane :create_app do
   produce(
     username: ENV.fetch("FASTLANE_USER"),
     app_name: "Sbu Prompter",
-    language: "Italian",
+    language: "it",
     sku: "dev.sbu.prompter",
     platforms: ["ios", "osx"]
   )

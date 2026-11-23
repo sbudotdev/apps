@@ -1,2 +1,4 @@
 app_identifier("dev.sbu.prompter")
 team_id(ENV["SBU_TEAM_ID"]) if ENV["SBU_TEAM_ID"]
+# The Apple ID also sees another company's ASC team: pin sbu.dev's (individual team U38D796ZBJ).
+itc_team_id("128487151")
