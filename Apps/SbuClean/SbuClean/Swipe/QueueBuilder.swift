@@ -30,6 +30,8 @@ nonisolated struct QueueBuilder {
             return Array(undecided.shuffled(using: &generator).prefix(Self.randomCount)).map(\.id)
         case .onThisDay:
             return onThisDayItems.map(\.id)
+        case .onDay(let day):
+            return items(on: day).map(\.id)
         case .later:
             return items.filter { state.later.contains($0.id) }.map(\.id)
         case .month(let month):
@@ -58,13 +60,33 @@ nonisolated struct QueueBuilder {
 
     /// Items taken on today's day and month in past years, still to see.
     var onThisDayItems: [MediaItem] {
-        let today = calendar.dateComponents([.year, .month, .day], from: now)
+        items(on: DayOfYear(now, calendar: calendar))
+    }
+
+    /// Items taken on a day of the year in past years, still to see.
+    func items(on day: DayOfYear) -> [MediaItem] {
+        let thisYear = calendar.component(.year, from: now)
         return undecided.filter { item in
             guard let date = item.creationDate else { return false }
 
             let components = calendar.dateComponents([.year, .month, .day], from: date)
-            return components.month == today.month && components.day == today.day && components.year != today.year
+            return components.month == day.month && components.day == day.day && components.year != thisYear
         }
+    }
+
+    /// How many items of past years are still to see on each day of a month, by day.
+    func dayCounts(inMonth month: Int) -> [Int: Int] {
+        let thisYear = calendar.component(.year, from: now)
+        var counts: [Int: Int] = [:]
+        for item in undecided {
+            guard let date = item.creationDate else { continue }
+
+            let components = calendar.dateComponents([.year, .month, .day], from: date)
+            if components.month == month, components.year != thisYear, let day = components.day {
+                counts[day, default: 0] += 1
+            }
+        }
+        return counts
     }
 
     /// Every month with items, newest first, with how many are decided.

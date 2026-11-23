@@ -43,10 +43,12 @@ final class CleanFlowTests: XCTestCase {
             if issue.auditType == .textClipped, let label = issue.element?.label, label == label.uppercased() {
                 return true
             }
-            // On iPhone 16e the audit flags these two as clipped though they are whole on screen:
-            // the home's "1 elemento" and the system title "Screenshot" (SBU-85). Only these
-            // labels: iOS 27 gives a truly clipped text the same "larger Dynamic Type" reason (SBU-87).
-            if issue.auditType == .textClipped, let label = issue.element?.label, ["1 elemento", "Screenshot"].contains(label) {
+            // The audit flags these as clipped though they are whole on screen: the counts under the
+            // home's rows ("1 elemento", "12 elementi") and the system title "Screenshot" (SBU-85,
+            // SBU-291). Only these labels: iOS 27 gives a truly clipped text the same "larger Dynamic
+            // Type" reason (SBU-87).
+            if issue.auditType == .textClipped, let label = issue.element?.label,
+               label == "Screenshot" || label.wholeMatch(of: /\d+ element[oi]/) != nil {
                 return true
             }
             // At the largest text size the audit also flags a text it cannot name (no element, so
@@ -135,7 +137,8 @@ final class CleanFlowTests: XCTestCase {
         try audit(app)
 
         app.cells.containing(.staticText, identifier: "Recenti").allElementsBoundByIndex.last { $0.isHittable }?.tap()
-        let card = element(startingWith: "Foto,", in: app)
+        // The demo's newest item is a long video: the card reads "Video, …", the others "Foto, …".
+        let card = app.descendants(matching: .any).matching(identifier: "swipe.card").firstMatch
         let found = card.waitForExistence(timeout: 5)
         attachScreenshot("05-swipe", of: app)
         XCTAssertTrue(found)
@@ -143,7 +146,7 @@ final class CleanFlowTests: XCTestCase {
 
         let firstCard = card.label
         card.swipeLeft()
-        let moved = XCTNSPredicateExpectation(predicate: NSPredicate(format: "label != %@", firstCard), object: element(startingWith: "Foto,", in: app))
+        let moved = XCTNSPredicateExpectation(predicate: NSPredicate(format: "label != %@", firstCard), object: app.descendants(matching: .any).matching(identifier: "swipe.card").firstMatch)
         XCTAssertEqual(XCTWaiter.wait(for: [moved], timeout: 5), .completed)
         XCTAssertTrue(element(startingWith: "Nel cestino", in: app).label.contains("2 di"))
 
@@ -207,7 +210,7 @@ final class CleanFlowTests: XCTestCase {
         // Each video is a checkbox: a system toggle for VoiceOver.
         let first = app.switches.matching(NSPredicate(format: "label BEGINSWITH 'Video,'")).firstMatch
         XCTAssertTrue(first.waitForExistence(timeout: 5))
-        XCTAssertTrue(first.label.contains("420"), first.label)
+        XCTAssertTrue(first.label.contains("1,14 GB"), first.label)
         attachScreenshot("10-videos", of: app)
         try audit(app)
     }
@@ -217,8 +220,11 @@ final class CleanFlowTests: XCTestCase {
         let app = launch()
         openHomeRow("Screenshot", in: app)
 
-        app.buttons["Seleziona tutto"].tap()
-        XCTAssertTrue(element(startingWith: "Selezionati", in: app).label.contains("5 di 5"))
+        let selectAll = app.buttons["Seleziona tutto"]
+        XCTAssertTrue(selectAll.waitForExistence(timeout: 5))
+        selectAll.tap()
+        let all = XCTNSPredicateExpectation(predicate: NSPredicate(format: "label CONTAINS '12 di 12'"), object: element(startingWith: "Selezionati", in: app))
+        XCTAssertEqual(XCTWaiter.wait(for: [all], timeout: 5), .completed)
         attachScreenshot("11-screenshots", of: app)
         try audit(app)
     }

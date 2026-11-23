@@ -1,7 +1,7 @@
 import SbuKit
 import SwiftUI
 
-/// Screenshots or screen recordings in a grid, biggest first: select them, or swipe through
+/// Screenshots, screen recordings, chat photos or blurry photos in a grid, biggest first: select them, or swipe through
 /// them, and send them to the bin.
 struct MediaGridScreen: View {
     let model: CleanModel
@@ -9,6 +9,7 @@ struct MediaGridScreen: View {
 
     @State private var selection: Set<String> = []
     @State private var showsBin = false
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private let columns = [GridItem(.adaptive(minimum: 100), spacing: SbuTheme.space1)]
 
@@ -17,9 +18,7 @@ struct MediaGridScreen: View {
         let bytes = model.bytes(of: selection)
         Group {
             if items.isEmpty {
-                EmptyScreen(sentence: category == .screenshots
-                            ? "Nessuno screenshot nella libreria."
-                            : "Nessuna registrazione dello schermo nella libreria.")
+                EmptyScreen(sentence: category.emptySentence)
             } else {
                 grid(items, bytes: bytes)
             }
@@ -36,8 +35,16 @@ struct MediaGridScreen: View {
             VStack(alignment: .leading, spacing: SbuTheme.space4) {
                 SpaceStat(label: "Selezionati", bytes: bytes, context: "\(selection.count) di \(items.count)")
 
-                NavigationLink("Scorri uno per uno", value: Route.swipe(.category(category)))
-                    .buttonStyle(SbuFieldPillStyle())
+                // In the content, not in the bar: on a small iPhone the bar button cut the title.
+                // Not ViewThatFits: its hidden layout stayed in the accessibility tree, and a tap
+                // on it landed on a photo.
+                let layout = dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: SbuTheme.space2))
+                    : AnyLayout(HStackLayout(spacing: SbuTheme.space2))
+                layout {
+                    actions(items)
+                }
+                .buttonStyle(SbuFieldPillStyle())
 
                 LazyVGrid(columns: columns, spacing: SbuTheme.space1) {
                     ForEach(items) { item in
@@ -50,13 +57,6 @@ struct MediaGridScreen: View {
             .padding(SbuTheme.space4)
         }
         .background(SbuTheme.paper)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button(selection.count == items.count ? "Deseleziona tutto" : "Seleziona tutto") {
-                    selection = selection.count == items.count ? [] : Set(items.map(\.id))
-                }
-            }
-        }
         .bottomAction {
             SbuButton(DeleteTitle.forBytes(bytes)) {
                 model.moveToTrash(items.map(\.id).filter(selection.contains))
@@ -65,6 +65,14 @@ struct MediaGridScreen: View {
             }
             .disabled(selection.isEmpty)
             .accessibilityIdentifier("bottomAction")
+        }
+    }
+
+    @ViewBuilder
+    private func actions(_ items: [MediaItem]) -> some View {
+        NavigationLink("Scorri uno per uno", value: Route.swipe(.category(category)))
+        Button(selection.count == items.count ? "Deseleziona tutto" : "Seleziona tutto") {
+            selection = selection.count == items.count ? [] : Set(items.map(\.id))
         }
     }
 
