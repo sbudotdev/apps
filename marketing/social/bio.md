@@ -28,7 +28,23 @@ IT:
 EN:
 > sbu.dev makes free iPhone apps. Each app does one thing, all the way: it adds up what you spend on subscriptions, reads a QR code. No subscriptions, no in-app purchases, no accounts, no ads, no tracking. Your data stays on your iPhone. The code is public on GitHub.
 
+## Instagram (EN)
+
+Deciso il 23/11/2026 (SBU-385): il profilo Instagram è in inglese. Foto, copertine e post di apertura in `instagram/` (vedi il suo README).
+
+- Name (26/30): `sbu.dev · free iPhone apps`
+- Username: `sbudevapp`
+- Category: `App Page`
+- Bio (124/150, contati anche i due a capo):
+  ```
+  Free iPhone apps that do one thing.
+  No subscriptions, accounts, ads or tracking.
+  Your data stays on your phone. Open source.
+  ```
+- Links: `https://sbu.dev` (primo), `https://github.com/sbudotdev/apps` (secondo: la repo è pubblica, verificato il 23/11/2026).
+- Foto: `instagram/profile-1080.png`.
+
 ## Lingua per profilo
 
-- EN: X, Bluesky, Mastodon, Reddit, Product Hunt, GitHub, LinkedIn.
-- Lingua dei video: Instagram, TikTok, YouTube (IT finché i video sono in italiano).
+- EN: Instagram, X, Bluesky, Mastodon, Reddit, Product Hunt, GitHub, LinkedIn.
+- Lingua dei video: TikTok, YouTube (IT finché i video sono in italiano).
