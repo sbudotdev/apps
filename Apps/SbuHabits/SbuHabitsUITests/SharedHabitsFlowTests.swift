@@ -66,7 +66,7 @@ final class SharedHabitsFlowTests: XCTestCase {
 
     @MainActor
     private func audit(_ app: XCUIApplication) throws {
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
                 return true
             }

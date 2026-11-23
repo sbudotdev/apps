@@ -31,7 +31,7 @@ final class StatisticsShareFlowTests: XCTestCase {
 
         let share = app.buttons["Condividi"]
         XCTAssertTrue(share.isHittable)
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? issue.detailedDescription)")
             return true
         }

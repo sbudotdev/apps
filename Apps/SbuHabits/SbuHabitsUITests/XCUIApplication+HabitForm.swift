@@ -165,7 +165,7 @@ extension XCUIApplication {
     /// Annulla included, as partially supported.
     @MainActor
     func auditHabitForm() throws {
-        try performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             if issue.isRowCutByTheScreenEdge {
                 return true
             }

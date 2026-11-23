@@ -21,7 +21,7 @@ final class AddHabitFlowTests: XCTestCase {
     /// Contrast is left out as on the other screens.
     @MainActor
     private func audit(_ app: XCUIApplication) throws {
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
             // The system search field fits its placeholder; the audit reads the glass bar around
             // it as clipping it, as in the symbol picker.
             if issue.auditType == .textClipped, issue.element?.elementType == .searchField {

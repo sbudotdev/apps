@@ -53,7 +53,7 @@ final class SymbolPickerFlowTests: XCTestCase {
         XCTAssertTrue(search.waitForExistence(timeout: 5))
 
         // Contrast is left out as on the other screens.
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
             // The system search field fits its placeholder (see the screenshots); the audit reads
             // the glass bar around it as clipping it.
             if issue.auditType == .textClipped, issue.element?.elementType == .searchField {

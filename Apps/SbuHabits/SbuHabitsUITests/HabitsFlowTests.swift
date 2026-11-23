@@ -174,7 +174,7 @@ final class HabitsFlowTests: XCTestCase {
         // Mid-fade the Closure's text is drawn but not yet an element: the audit would read it as
         // text hidden from VoiceOver.
         XCTAssertTrue(app.descendants(matching: .any)["Fatto"].waitForNonExistence(timeout: 5))
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
                 return true
             }
@@ -328,7 +328,7 @@ final class HabitsFlowTests: XCTestCase {
         field.typeText("Venti pagine")
         expectValue(app.staticTexts["Caratteri"], "12 di 500")
         let suggestions = app.otherElements["SystemInputAssistantView"]
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
                 return true
             }
@@ -357,7 +357,7 @@ final class HabitsFlowTests: XCTestCase {
         app.buttons["statistics-Leggere"].tap()
         let note = app.buttons.matching(NSPredicate(format: "label CONTAINS 'Venti pagine e un caffè'")).firstMatch
         XCTAssertTrue(note.waitForExistence(timeout: 5))
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
                 return true
             }
@@ -448,7 +448,7 @@ final class HabitsFlowTests: XCTestCase {
 
         nothingYet.swipeRight()
         expectValue(pages, "2 di 3")
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
                 return true
             }
@@ -479,7 +479,7 @@ final class HabitsFlowTests: XCTestCase {
         XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Riordina'")).firstMatch.exists)
         // Text clipped is left out too: in edit mode the audit measures a row's title against
         // the whole row, reorder handle included, and flags text that shows in full.
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType, .textClipped])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType, .textClipped])) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
                 return true
             }
@@ -535,7 +535,7 @@ final class HabitsFlowTests: XCTestCase {
         app.reveal(app.buttons["Nessun promemoria"])
         // Taller with the Salute section, the screen always has a system row cut by the screen
         // edge or the bar, which the audit reports as clipped text with no element, as in Impostazioni.
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
                 return true
             }
@@ -708,7 +708,7 @@ final class HabitsFlowTests: XCTestCase {
         XCTAssertEqual(left.value as? String, paused)
 
         // Contrast is left out as on the tool screen.
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
                 return true
             }
@@ -764,7 +764,7 @@ final class HabitsFlowTests: XCTestCase {
         // Contrast is left out: text colors come from tokens with checked ratios, and the audit
         // misreads the iOS 26 glass bar as text contrast.
         // The handler names the element in the failure, which the default message does not.
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
             // Aggiungi, after the last habit, runs half under the bar with the gear and Statistiche.
             if issue.isCartiglio || issue.isHeroFigure || issue.isRowCutByTheScreenEdge {
                 return true
@@ -778,7 +778,7 @@ final class HabitsFlowTests: XCTestCase {
         app.terminate()
         let large = launch(textSize: "UICTContentSizeCategoryAccessibilityXXXL")
         XCTAssertTrue(habit("Leggere", in: large).exists)
-        try large.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
+        try large.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
             // Aggiungi, after the last habit, runs half under the bar with the gear and Statistiche.
             if issue.isCartiglio || issue.isHeroFigure || issue.isRowCutByTheScreenEdge {
                 return true
@@ -806,7 +806,7 @@ final class HabitsFlowTests: XCTestCase {
         expectValue(sette, "Fatta, 1 giorno")
         XCTAssertTrue(app.buttons["Aggiungi"].exists)
         // Contrast is left out as on the tool screen.
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
                 return true
             }
@@ -830,7 +830,7 @@ final class HabitsFlowTests: XCTestCase {
         // Contrast is left out as on the tool screen. Dynamic Type too: in the settings sheet the
         // audit flags every text as partially unsupported, system ones included (the Fine button,
         // a plain section footer), so it says nothing about this screen.
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
                 return true
             }
@@ -855,7 +855,7 @@ final class HabitsFlowTests: XCTestCase {
         XCTAssertTrue(app.buttons["Esporta"].isEnabled)
 
         // As in testSettingsOfferExportAndImportAndPassTheAccessibilityAudit.
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
                 return true
             }
@@ -879,7 +879,7 @@ final class HabitsFlowTests: XCTestCase {
         app.toggleSwitch("Sincronizza con iCloud")
 
         expectValue(toggle, "1")
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.performAccessibilityAuditRetryingTimeouts(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
             if issue.isCartiglio || issue.isHeroFigure {
                 return true
             }
