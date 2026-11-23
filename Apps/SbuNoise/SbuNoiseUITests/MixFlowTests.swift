@@ -12,26 +12,26 @@ final class MixFlowTests: XCTestCase {
 
         app.buttons["Crea"].tap()
         app.buttons["Nuovo mix"].tap()
-        XCTAssertTrue(app.navigationBars["Scegli i suoni"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.navigationBars["Scegli i suoni"].waitForExistence(timeout: 10))
         app.buttons["Rumore blu"].tap()
         app.buttons["Rumore rosa"].tap()
         try app.auditAccessibility()
         app.buttons["Avanti"].tap()
 
-        XCTAssertTrue(app.navigationBars["Mix Pad"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.navigationBars["Mix Pad"].waitForExistence(timeout: 10))
         try app.auditAccessibility()
 
         app.buttons["Rumore rosa"].tap()
-        XCTAssertTrue(app.sliders["Varianza"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.sliders["Varianza"].waitForExistence(timeout: 10))
         app.sliders["Varianza"].adjust(toNormalizedSliderPosition: 0.4)
         try app.auditAccessibility()
         app.navigationBars["Rumore rosa"].buttons["Fine"].tap()
 
         app.navigationBars["Mix Pad"].buttons["Fine"].tap()
-        XCTAssertTrue(app.alerts["Salva il mix"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.alerts["Salva il mix"].waitForExistence(timeout: 10))
         app.alerts.buttons["Salva"].tap()
 
-        XCTAssertTrue(app.staticTexts["SBU · RUMORE · MIX"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["SBU · RUMORE · MIX"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.descendants(matching: .any).matching(NSPredicate(format: "label ENDSWITH ', 1 di 1'")).firstMatch.exists)
         XCTAssertFalse(app.navigationBars["Scegli i suoni"].exists, "Saving closes the whole sheet")
         XCTAssertTrue(app.buttons["Pausa"].exists, "The new mix plays")

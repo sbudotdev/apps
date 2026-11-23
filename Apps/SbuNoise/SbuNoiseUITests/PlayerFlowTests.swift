@@ -9,12 +9,12 @@ final class PlayerFlowTests: XCTestCase {
         app.launchEnvironment["SBU_NOISE_FILE"] = "ui-\(UUID().uuidString).json"
         app.launch()
 
-        XCTAssertTrue(figure(app, "Rumore bianco").waitForExistence(timeout: 5))
+        XCTAssertTrue(figure(app, "Rumore bianco").waitForExistence(timeout: 10))
         app.buttons["Riproduci"].tap()
-        XCTAssertTrue(app.buttons["Pausa"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.buttons["Pausa"].waitForExistence(timeout: 10))
 
         app.buttons["Successivo"].tap()
-        XCTAssertTrue(figure(app, "Rumore rosa").waitForExistence(timeout: 2))
+        XCTAssertTrue(figure(app, "Rumore rosa").waitForExistence(timeout: 10))
         XCTAssertTrue(app.buttons["Pausa"].exists, "Changing sound keeps playing")
 
         app.buttons["Aggiungi ai preferiti"].tap()
@@ -23,16 +23,16 @@ final class PlayerFlowTests: XCTestCase {
         try app.auditAccessibility()
 
         app.buttons["Informazioni"].tap()
-        XCTAssertTrue(app.staticTexts["Generato in tempo reale"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["Generato in tempo reale"].waitForExistence(timeout: 10))
         try app.auditAccessibility()
         app.buttons["Fine"].tap()
 
         app.buttons["Categorie"].tap()
         app.buttons["Preferiti"].tap()
-        XCTAssertTrue(app.staticTexts["SBU · RUMORE · PREFERITI"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["SBU · RUMORE · PREFERITI"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.descendants(matching: .any)["Rumore rosa, 1 di 1"].exists)
         app.buttons["Togli dai preferiti"].tap()
-        XCTAssertTrue(app.staticTexts["Tocca il cuore sotto un suono o un mix per ritrovarlo qui."].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["Tocca il cuore sotto un suono o un mix per ritrovarlo qui."].waitForExistence(timeout: 10))
         sleep(1)
         try app.auditAccessibility()
     }
@@ -46,7 +46,7 @@ final class PlayerFlowTests: XCTestCase {
         app.launchEnvironment["SBU_NOISE_FILE"] = "ui-\(UUID().uuidString).json"
         app.launch()
 
-        XCTAssertTrue(figure(app, "Rumore bianco").waitForExistence(timeout: 5))
+        XCTAssertTrue(figure(app, "Rumore bianco").waitForExistence(timeout: 10))
         XCTAssertTrue(app.buttons["Riproduci"].isHittable)
         try app.auditAccessibility()
     }

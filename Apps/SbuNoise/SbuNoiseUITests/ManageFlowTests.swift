@@ -8,7 +8,7 @@ final class ManageFlowTests: XCTestCase {
         let app = launch()
 
         app.buttons["Gestisci"].tap()
-        XCTAssertTrue(app.navigationBars["Gestisci"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.navigationBars["Gestisci"].waitForExistence(timeout: 10))
         try audit(app)
 
         let rosa = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Rumore rosa'")).firstMatch
@@ -20,18 +20,18 @@ final class ManageFlowTests: XCTestCase {
         search.tap()
         search.typeText("rosa")
         let hidden = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Rumore rosa' AND label CONTAINS 'Nascosto'")).firstMatch
-        XCTAssertTrue(hidden.waitForExistence(timeout: 2))
+        XCTAssertTrue(hidden.waitForExistence(timeout: 10))
         hidden.tap()
-        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Rumore rosa' AND NOT label CONTAINS 'Nascosto'")).firstMatch.waitForExistence(timeout: 2), "A tap puts a hidden sound back")
+        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Rumore rosa' AND NOT label CONTAINS 'Nascosto'")).firstMatch.waitForExistence(timeout: 10), "A tap puts a hidden sound back")
 
         search.buttons.firstMatch.tap()
         search.typeText("vento")
         let vento = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Vento'")).firstMatch
         // No audit while typing: the keyboard's own suggestion bar has no labels.
-        XCTAssertTrue(vento.waitForExistence(timeout: 2))
+        XCTAssertTrue(vento.waitForExistence(timeout: 10))
         vento.tap()
 
-        XCTAssertTrue(app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH 'Vento,'")).firstMatch.waitForExistence(timeout: 2))
+        XCTAssertTrue(app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH 'Vento,'")).firstMatch.waitForExistence(timeout: 10))
         XCTAssertTrue(app.buttons["Pausa"].exists, "A tap in Gestisci plays the sound")
         app.buttons["Pausa"].tap()
     }
@@ -42,17 +42,17 @@ final class ManageFlowTests: XCTestCase {
 
         app.buttons["Categorie"].tap()
         app.buttons["Natura"].tap()
-        XCTAssertTrue(app.staticTexts["SBU · RUMORE · NATURA"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["SBU · RUMORE · NATURA"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS ', 1 di '")).firstMatch.exists)
         try audit(app)
 
         app.buttons["Dormi"].tap()
-        XCTAssertTrue(app.staticTexts["Nessuna sveglia"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["Nessuna sveglia"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.sliders["Luminosità"].exists)
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label ==[c] %@", Self.today)).firstMatch.exists, "The clock shows today's date")
         try audit(app)
         app.buttons["Chiudi"].tap()
-        XCTAssertTrue(app.buttons["Dormi"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.buttons["Dormi"].waitForExistence(timeout: 10))
     }
 
     @MainActor

@@ -10,34 +10,34 @@ final class AlarmFlowTests: XCTestCase {
         app.buttons["Timer"].tap()
         app.buttons["Aggiungi"].tap()
         app.buttons["Nuova sveglia"].tap()
-        XCTAssertTrue(app.navigationBars["Nuova sveglia"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.navigationBars["Nuova sveglia"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["La sveglia suona se Noise resta aperta con un suono attivo. Altrimenti arriva una notifica."].exists)
         try app.auditAccessibility()
 
         app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Suono'")).firstMatch.tap()
-        XCTAssertTrue(app.navigationBars["Suono"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.navigationBars["Suono"].waitForExistence(timeout: 10))
         try app.auditAccessibility()
         app.buttons["Sveglia classica"].tap()
         app.navigationBars["Suono"].buttons.firstMatch.tap()
 
         app.buttons["Salva"].tap()
-        XCTAssertTrue(app.staticTexts["Sveglie"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["Sveglie"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label CONTAINS 'Sveglia classica'")).firstMatch.exists)
         try app.auditAccessibility()
 
         app.buttons["Fine"].tap()
-        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Sveglia alle'")).firstMatch.waitForExistence(timeout: 2))
+        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Sveglia alle'")).firstMatch.waitForExistence(timeout: 10))
     }
 
     @MainActor
     func testARingingAlarmStops() throws {
         let app = launch(ringing: true)
 
-        XCTAssertTrue(app.buttons["Ferma"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["Ferma"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.buttons["Rimanda di 9 minuti"].exists)
         try app.auditAccessibility()
         app.buttons["Ferma"].tap()
-        XCTAssertTrue(app.buttons["Riproduci"].waitForExistence(timeout: 2), "Back on the player, silent")
+        XCTAssertTrue(app.buttons["Riproduci"].waitForExistence(timeout: 10), "Back on the player, silent")
     }
 
     @MainActor

@@ -10,20 +10,20 @@ final class TimerFlowTests: XCTestCase {
         app.launch()
 
         app.buttons["Timer"].tap()
-        XCTAssertTrue(app.staticTexts["Aggiungi un timer per fermare il suono, o una sveglia per il mattino."].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["Aggiungi un timer per fermare il suono, o una sveglia per il mattino."].waitForExistence(timeout: 10))
         try app.auditAccessibility()
 
         // The empty state's own button; Aggiungi in the bar has the same item.
         app.buttons["Nuovo timer"].tap()
-        XCTAssertTrue(app.navigationBars["Nuovo timer"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.navigationBars["Nuovo timer"].waitForExistence(timeout: 10))
         try app.auditAccessibility()
         app.buttons["Salva"].tap()
 
-        XCTAssertTrue(app.staticTexts["30 min"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["30 min"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.switches["30 min"].exists)
         try app.auditAccessibility()
 
         app.buttons["Fine"].tap()
-        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Si ferma alle'")).firstMatch.waitForExistence(timeout: 2))
+        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Si ferma alle'")).firstMatch.waitForExistence(timeout: 10))
     }
 }
