@@ -1,55 +1,51 @@
-# Stato di sbu.dev — 22 novembre 2026
+# Stato di sbu.dev — 23 novembre 2026
 
-Fotografia del 22/11 alle 17:00. Gli stati App Store Connect sono letti dall'API (chiave `ASC_*`, sola lettura) il 22/11; il resto viene dai ticket indicati riga per riga. Sostituisce la versione del 18/10.
+Fotografia del 23/11 alle 23:00. Gli stati App Store Connect sono letti dall'API (chiave `ASC_*`, sola lettura) il 23/11 alle 22:50; il resto viene da GitHub e dai ticket indicati riga per riga. Sostituisce la versione del 22/11.
 
 ## In una frase
 
-Il 22/11 Apple ha sbloccato quattro delle sei app respinte il 14/10: sullo Store ora ci sono 7 app, e 3 aggiornamenti sono in revisione. Restano fuori Habits (Apple offre una telefonata) e Speed. Da qui in avanti esce un'app nuova a settimana, secondo il calendario approvato da Matteo.
+Sullo Store ci sono 7 app, tutte alla versione nuova (Level 1.2 approvata il 23/11). Chats e Habits sono in revisione. Prompter e Squares sono su TestFlight. Resta fuori solo Speed. La CI di questo repo è spenta dal 23/11 sera, su richiesta di Matteo.
 
 ## 1. Sullo Store oggi
 
 | App | Versione in vendita (build) | Fonte |
 |---|---|---|
-| Sbu Subscriptions | **2.1.0** (7) | API ASC 22/11 |
-| Sbu Scanner | **2.0.1** (4) | API ASC 22/11 |
-| Sbu Find | **1.0** (3) | API ASC 22/11 |
-| Sbu Moon | **1.0** (2), approvata il 22/11 | [SBU-264](/SBU/issues/SBU-264), [SBU-271](/SBU/issues/SBU-271), API ASC 22/11 |
-| Sbu Clean | **1.1** (7), approvata il 22/11 | [SBU-264](/SBU/issues/SBU-264), [SBU-271](/SBU/issues/SBU-271), API ASC 22/11 |
-| Sbu Level | **1.1** (3), approvata il 22/11. È ancora il binario 1.0: le funzioni 1.1 arrivano con la 1.2 | [SBU-264](/SBU/issues/SBU-264), [SBU-270](/SBU/issues/SBU-270), API ASC 22/11 |
-| Sbu Noise | **1.0** (3), approvata il 22/11 | [SBU-264](/SBU/issues/SBU-264), [SBU-271](/SBU/issues/SBU-271), API ASC 22/11 |
+| Sbu Subscriptions | **2.1.0** (7) | API ASC 23/11 |
+| Sbu Scanner | **2.0.1** (4) | API ASC 23/11 |
+| Sbu Find | **1.0** (3) | API ASC 23/11 |
+| Sbu Clean | **1.1** (7) | API ASC 23/11 |
+| Sbu Moon | **1.1** (4), uscita il 22/11 | API ASC 23/11, [SBU-324](/SBU/issues/SBU-324) |
+| Sbu Noise | **1.1** (5), uscita il 22/11 | API ASC 23/11, [SBU-324](/SBU/issues/SBU-324) |
+| Sbu Level | **1.2** (7), approvata il 23/11 | API ASC 23/11 |
 
-Fuori dallo Store: **Sbu Seasons** (Mac) **2.3.0** (13), .dmg notarizzato, release GitHub `v2.3.0` del 22/11, pagina sbu.dev/seasons ([SBU-246](/SBU/issues/SBU-246)).
+Fuori dallo Store: **Sbu Seasons** (Mac) **2.3.0** (13), .dmg notarizzato, release `v2.3.0` in [sbudotdev/seasons](https://github.com/sbudotdev/seasons); **Sbu Prompter** (Mac) **1.0.1**, release `prompter-1.0.1` di questo repo.
 
 ## 2. In revisione
 
-Inviate il 22/11 con l'ok di Matteo ([SBU-270](/SBU/issues/SBU-270)). Sono aggiornamenti con icona e screenshot nuovi: non occupano lo slot settimanale.
-
-| App | Versione (build) | Stato ASC (API 22/11) |
-|---|---|---|
-| Sbu Moon | 1.1 (4) | WAITING_FOR_REVIEW |
-| Sbu Level | 1.2 (7) | WAITING_FOR_REVIEW |
-| Sbu Noise | 1.1 (5) | WAITING_FOR_REVIEW |
+| App | Versione (build) | Inviata | Nota |
+|---|---|---|---|
+| Sbu Chats | 1.0 (5) | 23/11, 11:53 | prima versione; moduli di conformità (Cina) compilati su tutte le app ([SBU-378](/SBU/issues/SBU-378)) |
+| Sbu Habits | 1.1 (7) | 23/11, 19:07 | reinvio dopo il rifiuto del 23/11 (guideline 4: icona Watch nera, non circolare). Icona Watch ora chiara nel cerchio ([apps#94](https://github.com/sbudotdev/apps/pull/94)); la spiegazione è nelle note per la review, perché con l'invio in attesa il Resolution Center non accetta risposte. La build 8 è valida ma non agganciata: `main` è già a 8, il prossimo caricamento parte da 9 ([SBU-410](/SBU/issues/SBU-410)) |
 
 ## 3. Tutte le altre app, una riga ciascuna
 
 Ogni app è su `main`, tranne ZTL. "Prossimo passo" è l'unica cosa che sblocca l'app.
 
-### Ancora respinte
+### Ancora respinta
 
-| App | ASC (API 22/11) | Prossimo passo | Fonte |
+| App | ASC (API 23/11) | Prossimo passo | Fonte |
 |---|---|---|---|
-| Habits | 1.0 (5) REJECTED, guideline 4.3 | Il 22/11 Apple ha offerto una telefonata con App Review e Matteo l'ha accettata (pomeriggi feriali). Nello stesso messaggio ha chiesto perché le altre quattro sì e Habits no. Si aspetta la chiamata. Il piano B (build nuova con nota "could a human look at this app?") è pronto ma fermo | [SBU-263](/SBU/issues/SBU-263) |
-| Speed | 1.1 (2) REJECTED, stato del 14/10 | Nessuna notizia da Apple. Matteo ci aggiorna lui | API ASC 22/11, [SBU-264](/SBU/issues/SBU-264) |
+| Speed | 1.1 (2) agganciata, build 6 caricata; rifiuto 4.3 del 14/10 non risolto | telefonata con Apple (Matteo), poi piano B: build nuova con la nota "could a human look at this app?" | [SBU-263](/SBU/issues/SBU-263) |
 
-### Pronte su ASC, non inviate
+### Su TestFlight o pronte su ASC, non inviate
 
-| App | ASC (API 22/11) | Manca | Fonte |
+| App | ASC (API 23/11) | Manca | Fonte |
 |---|---|---|---|
-| Chats | 1.0 PREPARE_FOR_SUBMISSION, build 2 agganciata | build 4 da `main` con icona, screenshot e descrizione nuovi (in corso); poi App Privacy e prova insieme via cavo (Matteo) | [SBU-276](/SBU/issues/SBU-276) |
-| Fuel | 1.0 PREPARE_FOR_SUBMISSION, build 2 agganciata | idem | [SBU-276](/SBU/issues/SBU-276) |
-| Prompter (Mac + iPhone) | record creato il 22/11 (Apple ID 6837935605), 1.0 macOS e iOS PREPARE_FOR_SUBMISSION, nessuna build | build, screenshot, note per App Review (ancora in bozza). Per ora è distribuita su GitHub | [SBU-251](/SBU/issues/SBU-251) |
-| Inventory | 1.0 PREPARE_FOR_SUBMISSION, build 2 | foto di esempio per gli screenshot, App Privacy, prova insieme | API ASC 22/11 |
-| ZTL | 1.0 PREPARE_FOR_SUBMISSION, nessuna build (record del 01/11) | vive sul branch `app/ztl` | API ASC 22/11 |
+| Prompter (Mac + iPhone) | 1.0 macOS e iOS PREPARE_FOR_SUBMISSION. Build **1.0 (3)** Mac e iPhone da `main` del 23/11 su TestFlight (gruppo interno). Alla versione sono ancora agganciate le build 2 (Mac) e 1 (iPhone) | agganciare la build 3, screenshot, invio nello slot | [SBU-333](/SBU/issues/SBU-333) |
+| Squares (primo gioco) | record creato il 23/11 (Apple ID 6838484975, SKU `dev.sbu.squares`), build **1.0 (1)** su TestFlight (gruppo interno) | prova su TestFlight, screenshot e metadati (`fastlane release`), invio il 7/12 | [SBU-275](/SBU/issues/SBU-275) |
+| Fuel | 1.0 (5) PREPARE_FOR_SUBMISSION, moduli e App Privacy fatti | invio nello slot | [SBU-282](/SBU/issues/SBU-282) |
+| Inventory | 1.0 (4) PREPARE_FOR_SUBMISSION | invio nello slot | [SBU-305](/SBU/issues/SBU-305) |
+| ZTL | 1.0 PREPARE_FOR_SUBMISSION, nessuna build agganciata (build 2 del 01/11) | vive sul branch `app/ztl`, fuori calendario | API ASC 23/11 |
 
 ### Scritte, mai su ASC
 
@@ -57,8 +53,7 @@ Ogni app è su `main`, tranne ZTL. "Prossimo passo" è l'unica cosa che sblocca 
 |---|---|
 | Shrink, Grid, Tidy, Libretto | test sul device, record ASC, TestFlight |
 | Meds | test del task in background sul device, record ASC, TestFlight |
-| Remote | prova su una TV vera, richiesta entitlement multicast (Matteo, `docs/remote-multicast-entitlement.md`), conferma delle scelte provvisorie, record ASC |
-| Squares (primo Gioco) | prova completa, screenshot Store, record ASC; invio previsto il 7/12 ([SBU-275](/SBU/issues/SBU-275)) |
+| Remote | prova su una TV vera, richiesta entitlement multicast (Matteo, `docs/remote-multicast-entitlement.md`), record ASC |
 
 ### Pianificate, non iniziate
 
@@ -66,56 +61,52 @@ Cycle, Cast, Image, Gif, Tags, Knit, Chores, Reader, Exposure.
 
 ## 4. Calendario degli invii
 
-Approvato da Matteo il 22/11 ([SBU-275](/SBU/issues/SBU-275)). Un'app nuova a settimana. **Ogni invio va approvato a parte.**
+Un'app nuova a settimana ([SBU-275](/SBU/issues/SBU-275)). **Ogni invio va approvato a parte.**
 
 | Settimana | App |
 |---|---|
-| 23/11 | Sbu Chats |
-| 30/11 | Sbu Fuel |
+| 23/11 | Sbu Chats (inviata) e Sbu Habits (reinvio dopo rifiuto) |
+| 30/11 | Sbu Prompter se pronto, altrimenti Sbu Fuel |
 | 7/12 | Sbu Squares (primo gioco) |
-| 14/12 | Sbu Prompter (Mac + iPhone) |
-| poi | Inventory, poi Shrink, Grid, Tidy, Libretto, Meds |
+| 14/12 | quella tra Prompter e Fuel rimasta indietro |
+| 21/12 | Sbu Inventory |
+| poi | Shrink, Grid, Tidy, Libretto, Meds |
 
-Metà dicembre: lancio della collezione (Show HN + Product Hunt), dal piano del 18/10.
+## 5. Repo, CI e strumenti
 
-## 5. Bloccanti, in ordine di peso
-
-1. **Il test insieme via cavo** manca a Chats e Fuel, ed è il prossimo passo per tutte le app del calendario. Nessuna va inviata senza ([SBU-275](/SBU/issues/SBU-275), [SBU-276](/SBU/issues/SBU-276)).
-2. **Habits** aspetta la telefonata con Apple ([SBU-263](/SBU/issues/SBU-263)). **Speed** è ancora REJECTED su ASC.
-3. **App Privacy** di Chats e Fuel: la compila Matteo sul web ([SBU-276](/SBU/issues/SBU-276)).
-4. **TestFlight sul tuo iPhone** e **CI rossa** (test UI di Clean e Noise sui runner GitHub): non riverificati dal 18/10.
+- **CI spenta**: il workflow `CI` è disattivato dal 23/11 sera (`gh workflow disable CI`), su richiesta di Matteo. Per riaccenderlo: `gh workflow enable CI -R sbudotdev/apps`. Finché è spenta, prima di ogni merge si lanciano i test in locale.
+- **Ultimo stato della CI su `main`**: rossa su SbuHabits per i timeout dell'audit di accessibilità («Audit failed to complete in time»). [apps#96](https://github.com/sbudotdev/apps/pull/96) aggiunge il riprova per Habits, Moon e Speed (come #92 per Noise), unita ma mai girata su `main`. Restano due test di Moon che non sono timeout: `testToolScreenShowsTheFigureAndPassesTheAccessibilityAudit` e `testPhaseAlertsInSettings` ([SBU-279](/SBU/issues/SBU-279)).
+- **Simulatori di questo Mac**: reinstallati da zero il 23/11 (iOS 27.0, iOS 27.1, watchOS 27.0). iOS 27.1 supporta solo «iPhone Duo»: «Incompatible device» su iPhone 17 con 27.1 è normale. I test (`run_tests(devices: ["iPhone 17"])`) girano su iOS 27.0.
+- **Numeri di build**: `CURRENT_PROJECT_VERSION` in `project.yml` è l'ultima build caricata per Chats, Fuel, Habits, Inventory, Level, Moon, Noise, Speed, Squares. Prompter (`fastlane upload`, [apps#88](https://github.com/sbudotdev/apps/pull/88)) e le app su `fastlane beta` (Clean, Find, Scanner, Subscriptions) prendono il numero da TestFlight e il valore locale non conta: per Prompter la prossima build è la 4.
+- **PR aperte**: nessuna. Il 23/11 sera sono state unite [apps#88](https://github.com/sbudotdev/apps/pull/88) (Prompter verso l'App Store: `fastlane upload`, screenshot, note per la review; 88 test Mac e 26 iOS verdi in locale) e [apps#93](https://github.com/sbudotdev/apps/pull/93) (piano di crescita Instagram, QA in [SBU-406](/SBU/issues/SBU-406); il reel di Seasons che contiene è annullato).
 
 ## 6. Gli altri due rami
 
-Sezioni 6, 7, 9 e 10: non riverificate il 22/11, ferme al 18/10.
-
-- **Giochi**: ADR-0015, Squares su main e installato sul tuo iPhone ("per ora funziona bene"). Uno al mese dopo Squares: Tiles, Sudoku, Arrows, Sort, Solitaire, Words.
-- **Software**: ADR-0016 e pagine `/software` e `/software/commerce` sul sito. Il repo `commerce-dev` non esiste ancora; nessuna riga di codice. Primo passo: lo spike di compatibilità (catalogo, prodotto, carrello). Non annunciato: nessun nome di piattaforma nel materiale pubblico.
+- **Giochi**: ADR-0015. Squares su TestFlight, invio il 7/12. Uno al mese dopo Squares: Tiles, Sudoku, Arrows, Sort, Solitaire, Words.
+- **Software**: ADR-0016. **Sbu Commerce v0.1.0** pubblicata il 23/11 in [sbudotdev/commerce](https://github.com/sbudotdev/commerce) (MIT, CI verde): catalogo, ricerca, carrello anonimo e storefront di riferimento con `docker compose`. Il lavoro continua nella privata `commerce-dev` ([SBU-358](/SBU/issues/SBU-358)). Sul sito `/software/commerce` dice ancora «In costruzione»: la correzione è [site#16](https://github.com/sbudotdev/site/pull/16).
 
 ## 7. Marketing
 
-Fatto: sito live con i tre rami, Search Console e Bing, Smart App Banner, `sameAs` e `llms.txt`, pagine alternativa, generatore QR e calcolatore abbonamenti, badge con link campagna, RSS, Instagram @sbu_dev, foto stampa, listing AlternativeTo (in moderazione), open-source-ios-apps: Subscriptions in lista (#2443), Scanner in lista (#2446) (una PR per app). In SbuKit (su main, arrivano con la prossima versione di ogni app): richiesta di recensione dopo la Chiusura, Condividi l'app, `SbuFigureCard`. Piano 12 mesi v3.3 in `marketing/plan.md` (copia pubblica), punteggio 53/85.
-
-Deciso e chiuso: niente newsletter (solo RSS), niente GitHub Sponsors, un Show HN per app.
-
-Aperto: indicizzazione delle pagine nuove (#575), handle su X/TikTok/YouTube/LinkedIn, video di Find e "costa 40 € l'anno, l'ho rifatta gratis", articolo "sei app rifiutate" (bozza IT).
+- **Instagram @sbu_dev**: foto profilo, copertine, 3 post di apertura e bio in inglese ([SBU-386](/SBU/issues/SBU-386)). Le 5 Storie in evidenza le pubblica Matteo (istruzioni in SBU-386). Piano di crescita in `marketing/`.
+- **Lancio di Sbu Commerce**: post per LinkedIn, Bluesky e X approvati da Matteo, escono **mercoledì 25/11 alle 9:00** e li pubblica lui ([SBU-363](/SBU/issues/SBU-363)). Dopo l'uscita vanno registrati in `marketing/log.md`.
+- **Reel di Sbu Seasons**: annullato il 23/11, manca la registrazione di Matteo ([SBU-404](/SBU/issues/SBU-404)).
+- Piano 12 mesi in `marketing/plan.md`. Deciso e chiuso: niente newsletter (solo RSS), niente GitHub Sponsors, un Show HN per app. Metà dicembre: lancio della collezione (Show HN + Product Hunt).
 
 ## 8. Cosa serve da te (Matteo)
 
-1. App Privacy "nessun dato" sul web per Chats e Fuel (poi Inventory) ([SBU-276](/SBU/issues/SBU-276)).
-2. La prova insieme via cavo di Chats e Fuel, prima dell'invio del 23/11.
-3. La telefonata con App Review per Habits, quando Apple la fissa ([SBU-263](/SBU/issues/SBU-263)).
-4. Notizie su Speed: su ASC è ancora respinta.
-5. L'ok a ogni invio del calendario, uno alla volta.
-6. Richiesta entitlement multicast per Remote, quando vuoi riprenderla.
+1. Il 25/11 alle 9:00: i post di lancio di Sbu Commerce.
+2. Provare Prompter e Squares da TestFlight (l'invito è sulla tua email).
+3. La telefonata con App Review per Speed (e per Habits, se torna indietro) ([SBU-263](/SBU/issues/SBU-263)).
+4. L'ok a ogni invio del calendario, uno alla volta.
+5. Il token nuovo `ntfy_token` nei Secrets di Paperclip: finché manca, gli agenti non mandano notifiche (401).
+6. Le 5 Storie in evidenza su Instagram.
+7. Richiesta entitlement multicast per Remote, quando vuoi riprenderla.
 
 ## 9. Cosa NON fare adesso
 
-Il rischio vero è disperdersi: 20 app scritte, tre rami, 274 ticket aperti. Finché Apple e il test insieme sono il collo di bottiglia, ogni app nuova allunga la coda senza far uscire niente.
-
 - Nessuna app nuova (Cycle e le pianificate restano ferme) finché la coda "pronte su ASC" non si svuota.
-- Software resta allo spike, niente lancio prima di una demo che gira.
-- Un fronte al giorno: test insieme, poi invio, poi lancio.
+- Un invio a settimana: la regola tiene lontano il 4.3.
+- Niente merge senza test locali verdi finché la CI è spenta.
 
 ## 10. Pulizia in sospeso
 
