@@ -14,6 +14,9 @@ Boxes are pixels of the raw screenshot; a scene may override keys per language, 
 icon engraving. A "subject" is engraved once with --engrave (Tools/make_icons.py style, GEMINI_API_KEY)
 into Design/icons/scenes/sbu-<app>-<key>.png and kept, like the icon masks.
 
+A Mac app adds fastlane/screenshots-mac/ with the same files for its 2880×1800 slides (raw `Mac-<key>.png`,
+layouts "mac-notch" | "mac-floating", 1 to 5 slides): deliver uploads a folder to one platform only.
+
 Writes `<raw name>_framed.png` next to each raw screenshot;
 `deliver` uploads only the framed ones when they exist. Renders with Chrome headless.
 
@@ -41,6 +44,9 @@ ROOT = Path(__file__).resolve().parent.parent
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 SIZE = (1320, 2868)
 DEVICE = "iPhone 17 Pro Max"
+# fastlane/screenshots holds the iPhone slides; a Mac app keeps its own in fastlane/screenshots-mac
+# (raw `Mac-<key>.png`, 2880×1800), because deliver uploads every image of a folder to one platform.
+KINDS = {"screenshots": (DEVICE, SIZE), "screenshots-mac": ("Mac", (2880, 1800))}
 
 
 # Store screenshots are 1320 px wide for a 440 pt screen: 3 px per point.
@@ -89,16 +95,16 @@ def read_titles(path):
     return titles
 
 
-def raw_shots(folder):
-    return sorted(p for p in folder.glob(f"{DEVICE}-*.png") if "_framed" not in p.name)
+def raw_shots(folder, device=DEVICE):
+    return sorted(p for p in folder.glob(f"{device}-*.png") if "_framed" not in p.name)
 
 
 def scene_mask(app, key):
     return ROOT / "Design/icons/scenes" / f"sbu-{app}-{key}.png"
 
 
-def read_scenes(app):
-    path = ROOT / "Apps" / f"Sbu{app.capitalize()}" / "fastlane/screenshots/scenes.json"
+def read_scenes(app, kind="screenshots"):
+    path = ROOT / "Apps" / f"Sbu{app.capitalize()}" / "fastlane" / kind / "scenes.json"
     return json.loads(path.read_text()) if path.exists() else {}
 
 
@@ -106,7 +112,7 @@ def engrave(app):
     """Engrave every scene subject that has no mask yet."""
     from make_icons import generate, ink_mask
 
-    for key, scene in read_scenes(app).items():
+    for key, scene in {**read_scenes(app), **read_scenes(app, "screenshots-mac")}.items():
         out = scene_mask(app, key)
         if "subject" in scene and not out.exists():
             mask = ink_mask(generate(scene["subject"]))
@@ -115,14 +121,15 @@ def engrave(app):
             print(out.relative_to(ROOT))
 
 
-def app_config(app, lang_dir, colors):
+def app_config(app, lang_dir, colors, kind="screenshots"):
+    device, size = KINDS[kind]
     titles = read_titles(lang_dir / "title.strings")
-    scenes = read_scenes(app)
+    scenes = read_scenes(app, kind)
     icon = f"/Design/icons/source/sbu-{app}.png"
     shots = []
-    images = raw_shots(lang_dir)
+    images = raw_shots(lang_dir, device)
     for i, image in enumerate(images):
-        key = image.stem.removeprefix(f"{DEVICE}-")
+        key = image.stem.removeprefix(f"{device}-")
         if key not in titles:
             sys.exit(f"{image}: no title for {key!r} in {lang_dir / 'title.strings'}")
         title, subtitle = titles[key]
@@ -137,10 +144,11 @@ def app_config(app, lang_dir, colors):
         shots.append({"image": "/" + image.relative_to(ROOT).as_posix(), "title": title, "subtitle": subtitle,
                       "layout": scene["layout"], "engraving": engraving,
                       "zoom": scene.get("zoom"), "mark": scene.get("mark")})
-    if not 2 <= len(shots) <= 5:
+    if not (1 if device == "Mac" else 2) <= len(shots) <= 5:
         sys.exit(f"{lang_dir}: {len(shots)} screenshots, the layout takes 2 to 5 (run fastlane snapshot)")
     number = catalogue_number(app)
     return {
+        "size": size,
         "cartiglio": " / ".join(["SBU", *([f"{number:02d}"] if number else []), app.upper()]),
         "tokens": {
             "paper": colors["paper"], "grid": colors["grid"], "surface-raised": colors["surface-raised"], "line": colors["line"], "sunken": colors["surface-sunken"], "ink": colors["ink"],
@@ -165,25 +173,25 @@ def serve():
     return f"http://127.0.0.1:{server.server_port}/Tools/screenshots/store.html"
 
 
-def shoot(url, out):
+def shoot(url, out, size=SIZE):
     # ponytail: headless Chrome sometimes leaves the bottom ~70px of the window unpainted when a
     # slide is heavy, so render a taller window and keep the top SIZE.
     subprocess.run([CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=1",
                     "--run-all-compositor-stages-before-draw",
-                    f"--window-size={SIZE[0]},{SIZE[1] + 200}", "--virtual-time-budget=20000", f"--screenshot={out}", url],
+                    f"--window-size={size[0]},{size[1] + 200}", "--virtual-time-budget=20000", f"--screenshot={out}", url],
                    check=True, capture_output=True)
     with Image.open(out) as image:
-        if image.size != (SIZE[0], SIZE[1] + 200):
-            sys.exit(f"{out}: {image.size}, expected {SIZE[0]}×{SIZE[1] + 200}")
-        return image.crop((0, 0) + SIZE).convert("RGB")  # App Store Connect rejects alpha
+        if image.size != (size[0], size[1] + 200):
+            sys.exit(f"{out}: {image.size}, expected {size[0]}×{size[1] + 200}")
+        return image.crop((0, 0) + size).convert("RGB")  # App Store Connect rejects alpha
 
 
-def render(url, out):
+def render(url, out, size=SIZE):
     """Headless Chrome now and then skips tiles of a slide, never the same way twice:
     a slice is kept once two renders in a row agree."""
-    previous = shoot(url, out)
+    previous = shoot(url, out, size)
     for _ in range(5):
-        image = shoot(url, out)
+        image = shoot(url, out, size)
         if ImageChops.difference(image, previous).getbbox() is None:
             break
         previous = image
@@ -201,24 +209,27 @@ def main():
 
     colors = light_tokens()
     apps = args.apps or sorted(p.name.removeprefix("Sbu").lower() for p in (ROOT / "Apps").iterdir()
-                               if any((p / "fastlane/screenshots").glob(f"*/{DEVICE}-*.png")))
+                               if any((p / "fastlane").glob("screenshots*/*/*-*.png")))
     base = serve()
     for app in apps:
         if args.engrave:
             engrave(app)
-        folder = ROOT / "Apps" / f"Sbu{app.capitalize()}" / "fastlane/screenshots"
-        for lang_dir in sorted(d for d in folder.iterdir() if (d / "title.strings").exists() and raw_shots(d)):
-            config = urllib.parse.quote(json.dumps(app_config(app, lang_dir, colors)))
-            if args.preview:
-                webbrowser.get("open -a 'Google Chrome' %s").open(f"{base}#{config}")
+        for kind, (device, size) in KINDS.items():
+            folder = ROOT / "Apps" / f"Sbu{app.capitalize()}" / "fastlane" / kind
+            if not folder.exists():
                 continue
-            for old in lang_dir.glob("*_framed.png"):
-                old.unlink()
-            shots = raw_shots(lang_dir)
-            outs = [s.with_name(f"{s.stem}_framed.png") for s in shots]
-            for i, out in enumerate(outs):
-                render(f"{base}?slice={i}#{config}", out)
-            print(f"{app} {lang_dir.name}: {len(outs)} screenshots")
+            for lang_dir in sorted(d for d in folder.iterdir() if (d / "title.strings").exists() and raw_shots(d, device)):
+                config = urllib.parse.quote(json.dumps(app_config(app, lang_dir, colors, kind)))
+                if args.preview:
+                    webbrowser.get("open -a 'Google Chrome' %s").open(f"{base}#{config}")
+                    continue
+                for old in lang_dir.glob("*_framed.png"):
+                    old.unlink()
+                shots = raw_shots(lang_dir, device)
+                outs = [s.with_name(f"{s.stem}_framed.png") for s in shots]
+                for i, out in enumerate(outs):
+                    render(f"{base}?slice={i}#{config}", out, size)
+                print(f"{app} {kind} {lang_dir.name}: {len(outs)} screenshots")
     if args.preview:
         input("Preview open in Chrome. Press Return to stop the server.")
 

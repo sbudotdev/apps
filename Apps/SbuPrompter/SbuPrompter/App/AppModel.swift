@@ -18,7 +18,13 @@ final class AppModel {
 
     init() {
         do {
+            #if DEBUG
+            // `-SbuPrompterInMemory YES`: a fresh library with the welcome script in the launch language, for store screenshots.
+            let inMemory = UserDefaults.standard.bool(forKey: "SbuPrompterInMemory")
+            container = try ModelContainer(for: Script.self, configurations: ModelConfiguration(isStoredInMemoryOnly: inMemory))
+            #else
             container = try ModelContainer(for: Script.self)
+            #endif
         } catch {
             fatalError("Library store failed to open: \(error)")
         }

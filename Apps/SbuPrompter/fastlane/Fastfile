@@ -31,6 +31,25 @@ lane :metadata do
   end
 end
 
+# Tools/make_screenshots.py prompter writes the *_framed.png first. deliver sends every image of a
+# folder to one platform, so the Mac slides live in screenshots-mac.
+desc "Upload the framed screenshots: screenshots/ to iOS, screenshots-mac/ to macOS, without submitting"
+lane :screenshots do
+  api_key
+  { "ios" => "./fastlane/screenshots", "osx" => "./fastlane/screenshots-mac" }.each do |platform, path|
+    upload_to_app_store(
+      platform: platform,
+      screenshots_path: path,
+      overwrite_screenshots: true,
+      skip_binary_upload: true,
+      skip_metadata: true,
+      submit_for_review: false,
+      force: true,
+      run_precheck_before_submit: false
+    )
+  end
+end
+
 # Build numbers come from TestFlight, one train per platform.
 desc "Build the Mac app and the iPhone remote and upload both to App Store Connect, without submitting"
 desc "Only one: fastlane upload platform:osx (or ios)"

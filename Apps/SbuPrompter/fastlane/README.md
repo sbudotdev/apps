@@ -29,6 +29,14 @@ Register the bundle ID and create the App Store Connect record for macOS and iOS
 
 Upload only the metadata (no build, no screenshots) to the macOS and iOS listings, without submitting
 
+### screenshots
+
+```sh
+[bundle exec] fastlane screenshots
+```
+
+Upload the framed screenshots: screenshots/ to iOS, screenshots-mac/ to macOS, without submitting
+
 ### upload
 
 ```sh

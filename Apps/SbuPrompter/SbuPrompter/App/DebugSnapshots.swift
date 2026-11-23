@@ -64,10 +64,16 @@ enum DebugSnapshots {
     }
 
     private static func save(_ view: NSView?, _ url: URL) {
-        guard let view, let rep = view.bitmapImageRepForCachingDisplay(in: view.bounds) else {
+        // 3x whatever the display, sharp enough for the 2880×1800 Mac App Store slides.
+        let scale = 3.0
+        guard let view, let rep = NSBitmapImageRep(
+            bitmapDataPlanes: nil, pixelsWide: Int(view.bounds.width * scale), pixelsHigh: Int(view.bounds.height * scale),
+            bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0
+        ) else {
             FileHandle.standardError.write(Data("SNAPSHOT no view for \(url.lastPathComponent)\n".utf8))
             return
         }
+        rep.size = view.bounds.size
         view.cacheDisplay(in: view.bounds, to: rep)
         do {
             try rep.representation(using: .png, properties: [:])?.write(to: url)

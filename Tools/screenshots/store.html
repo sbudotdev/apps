@@ -69,13 +69,22 @@
   .zoom { position: absolute; overflow: hidden; background: var(--surface-raised); border: 3px solid var(--line);
     border-radius: 18px; filter: drop-shadow(var(--shadow)); }
   .zoom img, .zoom svg { position: absolute; }
+
+  /* Mac slides (2880×1800): the top of a MacBook display, drawn, with the app's real panel in it.
+     The display runs off the bottom and right edges, like the phones. */
+  .mac { position: absolute; background: #111; border-radius: 64px 64px 0 0; filter: drop-shadow(var(--shadow)); }
+  .mac .desk { position: absolute; inset: 34px 34px 0; background: var(--sunken); border-radius: 30px 30px 0 0; overflow: hidden; }
+  .mac .desk::before { content: ""; position: absolute; inset: 0 0 auto; height: 96px; background: var(--surface-raised); border-bottom: 3px solid var(--line); }
+  .mac .notch { position: absolute; top: 0; height: 96px; background: #111; border-radius: 0 0 30px 30px; }
+  .mac .panel { position: absolute; display: block; }
+  .mac .panel.floating { border-radius: 36px; filter: drop-shadow(var(--shadow)); }
 </style>
 </head>
 <body>
 <div class="row" id="row"></div>
 <script>
-  const W = 1320, H = 2868;
   const app = JSON.parse(decodeURIComponent(location.hash.slice(1)));
+  const [W, H] = app.size ?? [1320, 2868];
   const slice = new URLSearchParams(location.search).get("slice");
   const n = app.shots.length; // 2...5
   const root = document.documentElement.style;
@@ -90,6 +99,9 @@
     detail: { phone: { x: 60, top: 1380, w: 760 },   engraving: { x: 640, top: 1800, w: 1100 },
               zoom: { x: 300, top: 960, w: 940 } },
     flat:   { phone: { x: 120, top: 1060, w: 860 },  engraving: { x: 620, top: 1700, w: 1000 } },
+    // Mac: the panel hangs from the notch, or floats as a window; the engraving sits under the titles.
+    "mac-notch":    { mac: { x: 1240, top: 300, w: 1760 }, panel: "notch",    engraving: { x: -40, top: 860, w: 1100 } },
+    "mac-floating": { mac: { x: 1240, top: 300, w: 1760 }, panel: "floating", engraving: { x: -40, top: 860, w: 1100 } },
   };
 
   const BEZEL = "../../Design/devices/iphone-17-pro-max-silver.png";
@@ -125,6 +137,17 @@
       <img src="${s.image}" alt="" style="${place}">${ink(s.mark, place)}</div>`;
   }
 
+  // The display's screen starts 34px in; the notch is centred on the visible part of the screen.
+  function mac(s, m, kind) {
+    const desk = m.w - 68, centre = Math.min(desk, W - m.x - 34) / 2, notch = 520;
+    const panel = kind === "notch"
+      ? `<img class="panel" src="${s.image}" alt="" style="left:${centre - 520}px;top:0;width:1040px">`
+      : `<div class="notch" style="left:${centre - notch / 2}px;width:${notch}px"></div>
+         <img class="panel floating" src="${s.image}" alt="" style="left:${centre - 560}px;top:240px;width:1120px">`;
+    return `<div class="mac" style="left:${m.x}px;top:${m.top}px;width:${m.w}px;height:${H - m.top + 60}px">
+      <div class="desk">${panel}</div></div>`;
+  }
+
   const esc = s => s.replace(/[&<>"]/g, c => `&#${c.charCodeAt(0)};`);
   const cell = parseFloat(app.tokens["grid-cell"]), offset = parseFloat(app.tokens["grid-offset"]);
   const margin = offset + cell * Math.ceil((120 - offset) / cell); // first vertical line past 120px
@@ -136,12 +159,12 @@
       <img class="engraving" src="${s.engraving}" alt="" style="left:${e.x}px;top:${e.top}px;width:${e.w}px;height:${e.w}px">
       ${i === 0 ? `<p class="c" style="left:${margin}px">${esc(app.cartiglio)}</p>` : ""}
       <p class="t" style="left:${margin}px">${esc(s.title)}${i === n - 1 ? '<span class="stop"></span>' : ""}${s.subtitle ? `<small>${esc(s.subtitle)}</small>` : ""}</p>
-      ${phone(zoomed ? { ...s, mark: null } : s, L.phone)}
+      ${L.mac ? mac(s, L.mac, L.panel) : phone(zoomed ? { ...s, mark: null } : s, L.phone)}
       ${zoomed ? zoom(s, L.zoom) : ""}</div>`;
   }
 
   const indices = slice === null ? [...Array(n).keys()] : [Number(slice)];
-  document.getElementById("row").innerHTML = indices.map(i => `<div class="slice">${slide(app.shots[i], i)}</div>`).join("");
+  document.getElementById("row").innerHTML = indices.map(i => `<div class="slice" style="width:${W}px;height:${H}px">${slide(app.shots[i], i)}</div>`).join("");
   if (slice === null) {
     document.body.classList.add("preview");
     const fit = Math.min(0.25, (innerWidth - 32 - n * 14) / (n * W));
