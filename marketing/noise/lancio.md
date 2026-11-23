@@ -8,7 +8,7 @@ Fatti (descrizione dello Store e codice): 34 suoni in loop, cioè rumori colorat
 
 Onestà sul prodotto: è un'app per addormentarsi con un suono, non una terapia. Mai "cura l'insonnia", "dormi meglio garantito", "scientificamente provato".
 
-## Instagram @sbudevapp
+## Instagram @sbu_dev
 
 Immagine: primo screenshot dello Store. Testo sull'immagine: "Pioggia, mare, ventilatore. Gratis, senza rete."
 

@@ -120,7 +120,7 @@ Matteo è π-shaped su **prodotto + design system** e T-shaped sulla distribuzio
 - **Pagine alternativa**: 8 scritte IT/EN (Orbit, QR Reader, Find Air, Cleanup, My Moon Phase Pro, Streaks, Speedometer 55, Moody Teleprompter) e hub `/alternatives`. Al 22/11 sono online quelle delle app in vendita, compresi Cleanup e My Moon Phase Pro; Noise e Level non hanno una pagina alternativa (la pagina di Level indica comunque l'app che sostituisce).
 - **Strumenti e contenuti**: generatore QR `/qr-code`, calcolatore abbonamenti, guida "Come disdire un abbonamento su iPhone", articoli IT (3) e EN (2).
 - **Stampa**: pagina Stampa con testi liberi e ritratto.
-- **Profili**: Instagram @sbudevapp, Bluesky @sbu.dev, bio IT/EN; link campagna App Store (`pt=128487151`, `ct=` per sorgente).
+- **Profili**: Instagram @sbu_dev (in inglese dal 23/11, asset in `social/instagram/`), Bluesky @sbu.dev, bio IT/EN; link campagna App Store (`pt=128487151`, `ct=` per sorgente).
 - **Repo pubblico** con README, 9 topic, MIT.
 - **Liste**: AlternativeTo inviato (in moderazione al 18/10, non riverificato), open-source-ios-apps: Subscriptions in lista (#2443), Scanner in lista (#2446, fusa: verificato su GitHub il 22/11). Per Find nessuna PR aperta al 22/11.
 - **7 app in vendita al 22/11**: Subscriptions 2.1.0 (id6780154928), Scanner 2.0.1 (id6772572337), Find 1.0 (id6823934135), Moon 1.0 (id6822656846), Clean 1.1 (id6822655310), Level 1.1 (id6822656774, ancora il binario 1.0), Noise 1.0 (id6822655015).
@@ -259,7 +259,7 @@ Poi Fuel (Fuelly), Inventory (Sortly), Speed, Meds (Medisafe), Tidy (Tody), Remo
 - `Organization` JSON-LD con `sameAs`: GitHub, pagina sviluppatore App Store, X, LinkedIn, Mastodon, YouTube. `founder` → `Person` Matteo con i suoi profili.
 - `MobileApplication` con `author`, `aggregateRating` solo quando ci sono recensioni vere.
 - **`llms.txt`** e una pagina "Cos'è sbu.dev" chiara, perché ChatGPT/Perplexity/AI Overviews la citino (skill `ai-seo`). Chi chiede "app gratis senza abbonamento per iPhone" a un'AI deve trovare sbu.dev.
-- Stesso nome ovunque: `sbudevapp` come handle (Instagram @sbudevapp preso, Bluesky @sbu.dev; X, TikTok, YouTube, LinkedIn da prendere con lo stesso nome).
+- Stesso nome ovunque: `sbudevapp` come handle (eccezione: Instagram è @sbu_dev; Bluesky @sbu.dev; X, TikTok, YouTube, LinkedIn da prendere con lo stesso nome).
 
 ### Mossa 3 — ASO
 - Sottotitoli già buoni. Nei metadati provare **"gratis" / "senza abbonamento" / "free, no subscription"** (consentito, sono fatti) nel sottotitolo o nelle keyword, dove ci stanno.
@@ -577,7 +577,7 @@ Tempo di Matteo: **5–10 h/settimana** di marketing, oltre allo sviluppo. Il co
 | # | Cosa | Owner | Tag | Fatto quando |
 |---|---|---|---|---|
 | 1 | Google Search Console + Bing Webmaster via DNS, sitemap inviata, indicizzazione richiesta per home + 2 app live | M | Acq | **Fatto 17/10** (#558); indicizzazione delle pagine nuove aperta (#575) |
-| 2 | Handle `sbudevapp` su X, TikTok, Instagram, YouTube, LinkedIn page (bio in `marketing/social/bio.md`) | M | Acq | **In parte**: Instagram @sbudevapp, Bluesky @sbu.dev; gli altri da prendere |
+| 2 | Handle `sbudevapp` su X, TikTok, YouTube, LinkedIn page (Instagram è @sbu_dev) (bio in `marketing/social/bio.md`) | M | Acq | **In parte**: Instagram @sbu_dev, Bluesky @sbu.dev; gli altri da prendere |
 | 3 | `Organization` + `Person` JSON-LD con `sameAs`, `llms.txt`, link social nel footer | C | Acq | **Fatto 17/10** |
 | 4 | Smart App Banner + `ct=` su ogni link App Store | C | Act | **Fatto 17/10** (`pt=128487151`) |
 | 5 | `SbuReviewRequest` (3 Chiusure, giorni diversi) + "Scrivi una recensione" + "Condividi" in Impostazioni (SbuKit, locale, test) | C → M review | Act/Ref | **Fatto, su main**; arriva agli utenti con la prossima versione di ogni app |
