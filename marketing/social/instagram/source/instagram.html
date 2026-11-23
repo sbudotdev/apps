@@ -67,8 +67,9 @@
   .post .headline.big { font-size: 120px; line-height: 120px; margin-top: calc(var(--cell) * 3); }
 
   /* Post 3: every project, real icons, name, platform and state. */
-  .projects { display: grid; grid-template-columns: repeat(4, 210px); column-gap: 16px; row-gap: 40px; margin-top: var(--cell); }
-  .project img, .project .tile { width: 168px; height: 168px; border-radius: 38px; display: block; box-shadow: 0 0 0 2px var(--line); }
+  /* On the notebook: columns of 5 cells, rows of 7, icons 4 × 4 cells; the grid starts on line 7 (the headline ends on 231 px). */
+  .projects { display: grid; grid-template-columns: repeat(4, calc(var(--cell) * 5)); grid-auto-rows: calc(var(--cell) * 7); margin-top: calc(var(--cell) * 7 - 231px); }
+  .project img, .project .tile { width: calc(var(--cell) * 4); height: calc(var(--cell) * 4); border-radius: 40px; display: block; box-shadow: 0 0 0 2px var(--line); }
   /* Same geometry as the engraved icons: grid of 8 cells, the full stop is the cell second from the bottom right. */
   .project .tile { position: relative; background-size: 12.5% 12.5%; }
   .project .tile .stop { --size: 12.5%; position: absolute; right: 12.5%; bottom: 12.5%; margin: 0; }
