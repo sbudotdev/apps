@@ -2,6 +2,12 @@
 
 Asset del profilo in inglese (SBU-386). Il profilo presenta tutto sbu.dev: app iPhone e Mac, giochi, strumenti per sviluppatori. Le regole dei contenuti sono in `../tiktok-instagram.md`, la bio anche in `../bio.md` («Instagram (EN)»). Lo stile è quello del quaderno: carta, reticolo, il punto fermo. Colori e font vengono solo da `Design/tokens.json` (tema chiaro) e `Design/fonts/`.
 
+## Piano e Reel
+
+- `crescita.md`: il piano di crescita del profilo (obiettivo, pilastri in inglese, ritmo, meccaniche, decisioni).
+- `seasons-reel.md`: il brief v2 del Reel di Sbu Seasons, con scaletta, didascalia EN e cosa fare dopo la pubblicazione.
+- `seasons-reel/`: il montaggio HyperFrames del Reel. Con la registrazione in `seasons-reel/input/seasons.mp4`, `sh marketing/social/instagram/seasons-reel/render.sh` rende il 9:16 e il 4:5.
+
 ## Lista per pubblicare
 
 **1. Modifica profilo**
@@ -75,6 +81,9 @@ Deciso da Matteo il 23/11/2026: la griglia del profilo è un unico quaderno a qu
 | `grid-preview.png` | 3246×1440 | I tre post affiancati come nel profilo, con 3 px di stacco: serve a controllare che i quadretti combacino |
 | `source/instagram.html` | | Sorgente unico, con un frame per file (`?f=<nome>`) |
 | `source/render.py` | | Esporta i PNG |
+| `seasons-reel/index.html` | 1080×1920 | Montaggio del Reel di Sbu Seasons; il 4:5 (1080×1350) è la fascia centrale |
+| `seasons-reel/render.sh` | | Rende le due uscite e ne stampa le misure |
+| `seasons-reel/assets/sbu-glyphs.svg` | | Le lettere sbu di `Design/logos/sbu-mark.svg` in `ink`, per la chiusura |
 
 `post-3-projects` mostra i progetti di `docs/stato.md` (22/11) che sono anche sul sito, con lo stato al 23/11/2026:
 - le 7 app sullo Store, verificate con il lookup pubblico (`itunes.apple.com/lookup`): Subscriptions, Scanner, Find, Moon, Clean, Level, Noise;

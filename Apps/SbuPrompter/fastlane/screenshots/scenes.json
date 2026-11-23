@@ -1,0 +1,15 @@
+{
+  "01-main": {
+    "layout": "hero",
+    "engraving": "icon",
+    "mark": {"shape": "circle", "box": [20, 760, 1080, 1160]}
+  },
+  "02-sections": {
+    "layout": "right",
+    "subject": "an antique leather-bound book with three silk ribbon bookmarks, three-quarter view"
+  },
+  "03-privacy": {
+    "layout": "flat",
+    "subject": "an antique brass padlock, closed, three-quarter view"
+  }
+}

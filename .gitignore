@@ -9,6 +9,7 @@ __pycache__/
 **/fastlane/report.xml
 **/fastlane/test_output/
 **/fastlane/screenshots/**/*.png
+**/fastlane/screenshots-mac/**/*.png
 *.ipa
 *.dSYM.zip
 research/*/screenshots/
