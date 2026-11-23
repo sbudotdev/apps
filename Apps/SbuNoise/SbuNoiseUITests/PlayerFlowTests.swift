@@ -20,11 +20,11 @@ final class PlayerFlowTests: XCTestCase {
         app.buttons["Aggiungi ai preferiti"].tap()
         XCTAssertTrue(app.buttons["Togli dai preferiti"].exists)
 
-        try audit(app)
+        try app.auditAccessibility()
 
         app.buttons["Informazioni"].tap()
         XCTAssertTrue(app.staticTexts["Generato in tempo reale"].waitForExistence(timeout: 2))
-        try audit(app)
+        try app.auditAccessibility()
         app.buttons["Fine"].tap()
 
         app.buttons["Categorie"].tap()
@@ -34,7 +34,7 @@ final class PlayerFlowTests: XCTestCase {
         app.buttons["Togli dai preferiti"].tap()
         XCTAssertTrue(app.staticTexts["Tocca il cuore sotto un suono o un mix per ritrovarlo qui."].waitForExistence(timeout: 2))
         sleep(1)
-        try audit(app)
+        try app.auditAccessibility()
     }
 
     /// The player at the largest text size: the figure keeps one line, the controls stay reachable.
@@ -48,22 +48,12 @@ final class PlayerFlowTests: XCTestCase {
 
         XCTAssertTrue(figure(app, "Rumore bianco").waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["Riproduci"].isHittable)
-        try audit(app)
+        try app.auditAccessibility()
     }
 
     /// The figure: one element, the name then its place in the list.
     @MainActor
     private func figure(_ app: XCUIApplication, _ name: String) -> XCUIElement {
         app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH %@", name + ",")).firstMatch
-    }
-
-    /// Contrast comes from the tokens (checked by sync_tokens.py) and the figure is sized with
-    /// @ScaledMetric, which the Dynamic Type audit does not recognize, as in the other apps.
-    @MainActor
-    private func audit(_ app: XCUIApplication) throws {
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
-            XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? "no element")")
-            return true
-        }
     }
 }

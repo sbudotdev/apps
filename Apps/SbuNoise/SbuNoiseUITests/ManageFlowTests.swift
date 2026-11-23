@@ -70,18 +70,15 @@ final class ManageFlowTests: XCTestCase {
         Date.now.formatted(Date.FormatStyle(locale: Locale(identifier: "it_IT")).weekday(.wide).day().month(.wide)).localizedLowercase
     }
 
-    /// The same exclusions as the player flow: contrast comes from the tokens. The system search
-    /// field's placeholder is reported as clipped although it is drawn in full (checked on the
-    /// screenshots): it is the system's control, not ours.
+    /// The system search field's placeholder is reported as clipped although it is drawn in full
+    /// (checked on the screenshots): it is the system's control, not ours.
     @MainActor
     private func audit(_ app: XCUIApplication) throws {
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting([.contrast, .dynamicType])) { issue in
+        try app.auditAccessibility { issue in
             if issue.auditType == .textClipped && issue.element?.elementType == .searchField { return true }
             // On iPhone 16e with iOS 26.2 (CI) the audit flags the bedside clock's date as clipped
             // every day, though it is a third of the screen wide and whole; iOS 27 does not (SBU-161).
-            if issue.auditType == .textClipped, issue.element?.label.localizedLowercase == Self.today { return true }
-            XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? "no element")")
-            return true
+            return issue.auditType == .textClipped && issue.element?.label.localizedLowercase == Self.today
         }
     }
 }
