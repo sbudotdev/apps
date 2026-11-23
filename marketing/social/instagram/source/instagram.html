@@ -15,8 +15,8 @@
     --ink-muted: #6b6b63;    /* ink-muted */
     --grid: #e6e6de;         /* grid */
     --line: #e2e2da;         /* line */
-    --cell: 48px;            /* grid-cell 24 at 2x: a 1080 px post shows at about 400-470 pt */
-    --margin: 96px;          /* two cells, a grid line falls on it */
+    --cell: 45px;            /* grid-cell at about 2x. 45 divides 1080 and 1440, so every post starts and ends on a line (24 × 32 cells) */
+    --margin: 90px;          /* two cells, a grid line falls on it */
     --display: "Bricolage Grotesque", -apple-system, "SF Pro Display", system-ui, sans-serif;
     --sans: -apple-system, "SF Pro Text", system-ui, sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
@@ -25,6 +25,8 @@
   html, body { background: var(--paper); }
   .frame { display: none; position: relative; overflow: hidden; color: var(--ink); }
   .frame.on { display: block; }
+  /* One endless notebook across the profile grid: every post has the same paper, line colour and width, and a line only on the
+     left and top side of each cell, so the edge between two posts never doubles. Content never crosses a post edge. */
   .paper {
     background-color: var(--paper);
     background-image:
@@ -32,7 +34,7 @@
       linear-gradient(to bottom, var(--grid) 0 2px, transparent 2px);
     background-size: var(--cell) var(--cell);
   }
-  .post { width: 1080px; height: 1350px; }
+  .post { width: 1080px; height: 1440px; }  /* 3:4, the shape of the profile grid */
   .cover { width: 1080px; height: 1920px; }
   .profile { width: 1080px; height: 1080px; }
 
@@ -106,7 +108,7 @@
 <section class="frame cover paper" id="highlight-open-source"><div class="label"><p class="cartiglio">sbu.dev · 04</p><p class="word medium">Open<br>source<i class="stop"></i></p></div></section>
 <section class="frame cover paper" id="highlight-faq"><div class="label"><p class="cartiglio">sbu.dev · 05</p><p class="word">FAQ<i class="stop"></i></p></div></section>
 
-<!-- Grid posts, 4:5 -->
+<!-- Grid posts, 3:4 -->
 <section class="frame post paper" id="post-1-intro">
   <div class="top"><span class="cartiglio">sbu.dev · 01 / 03</span><span class="cartiglio">free · open source</span></div>
   <div class="body">

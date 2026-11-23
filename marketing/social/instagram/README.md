@@ -52,15 +52,27 @@ Everything is on sbu.dev, link in bio.
 | Open source | `highlight-open-source.png` | codice e GitHub |
 | FAQ | `highlight-faq.png` | domande frequenti |
 
+## Il quaderno della griglia (regola per tutti i post, anche quelli futuri)
+
+Deciso da Matteo il 23/11/2026: la griglia del profilo è un unico quaderno a quadretti senza fine. Ogni post è un pezzo dello stesso foglio, e i quadretti continuano da un post all'altro.
+
+- **Formato 1080×1440 (3:4).** È la forma con cui la griglia del profilo mostra i post: con un 4:5 Instagram taglierebbe i bordi.
+- **Quadretto da 45 px, riga da 2 px nel colore `grid` (#e6e6de), su fondo `paper` (#f6f6f2).** 45 divide sia 1080 sia 1440: ogni post ha 24 × 32 quadretti, comincia su una riga e finisce su una riga.
+- **La riga sta solo sul lato sinistro e su quello in alto di ogni quadretto.** Sul bordo destro e su quello basso il post non ha riga: la mette il post accanto, così sul bordo la riga non diventa doppia.
+- **Fondo, colore e spessore della riga sono uguali in tutti i post.** Così il quaderno regge qualsiasi ordine, anche quando Instagram sposta tutta la griglia di una casella a ogni post nuovo.
+- **Il contenuto resta dentro il suo post.** Niente testo o disegni a cavallo tra due post, perché lo spostamento di una casella li spezzerebbe. Continua solo il foglio.
+- **Ogni post nuovo si fa in `source/instagram.html`**, con la classe `post paper`, e si controlla in `grid-preview.png`.
+
 ## File
 
 | File | Misure | Cosa |
 |---|---|---|
 | `profile-1080.png` | 1080×1080 | Il marchio di `Design/logos/sbu-mark.svg` su un quadrato pieno di `ink`. La scritta è larga 708 px al centro, quindi il ritaglio a cerchio non la tocca. Si legge anche a 110 px. |
 | `highlight-*.png` | 1080×1920 | Copertine: la parola sta nel cerchio centrale di 1080 px, l'unica parte che Instagram mostra |
-| `post-1-intro.png` | 1080×1350 (4:5) | Il marchio e «Free software that replaces paid apps.» |
-| `post-2-promises.png` | 1080×1350 (4:5) | La cifra 0 e le promesse: no subscriptions, no ads, no tracking, open source |
-| `post-3-projects.png` | 1080×1350 (4:5) | Tutti i progetti, ognuno con icona, nome, piattaforma e stato |
+| `post-1-intro.png` | 1080×1440 (3:4) | Il marchio e «Free software that replaces paid apps.» |
+| `post-2-promises.png` | 1080×1440 (3:4) | La cifra 0 e le promesse: no subscriptions, no ads, no tracking, open source |
+| `post-3-projects.png` | 1080×1440 (3:4) | Tutti i progetti, ognuno con icona, nome, piattaforma e stato |
+| `grid-preview.png` | 3246×1440 | I tre post affiancati come nel profilo, con 3 px di stacco: serve a controllare che i quadretti combacino |
 | `source/instagram.html` | | Sorgente unico, con un frame per file (`?f=<nome>`) |
 | `source/render.py` | | Esporta i PNG |
 
@@ -82,6 +94,6 @@ python3 marketing/social/instagram/source/render.py                    # tutti
 python3 marketing/social/instagram/source/render.py post-3-projects    # uno solo
 ```
 
-Servono Google Chrome (headless) e ImageMagick (`magick`). Lo script avvia un server locale su una porta libera scelta dal sistema, lo spegne alla fine e controlla le misure di ogni PNG.
+Servono Google Chrome (headless) e ImageMagick (`magick`). Dopo i post rifà anche `grid-preview.png`. Lo script avvia un server locale su una porta libera scelta dal sistema, lo spegne alla fine e controlla le misure di ogni PNG.
 
 Quando un progetto cambia stato, aggiorna la sua casella nel frame `post-3-projects` e riesporta. Il post già pubblicato resta com'è.

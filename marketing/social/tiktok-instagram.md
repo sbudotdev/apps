@@ -67,7 +67,7 @@ Profilo TikTok: bio corta da `bio.md` ("App iPhone gratis. Una cosa sola. Niente
 
 Profilo Instagram (@sbu_dev), in inglese dal 23/11/2026, presenta tutto sbu.dev: nome, categoria, bio e link nella sezione «Instagram (EN)» di `bio.md`. Foto profilo, copertine delle Storie in evidenza (Apps, Games, Dev tools, Open source, FAQ) e i tre post di apertura della griglia sono in `instagram/`; il README ha la lista per pubblicare con ordine, file e didascalie. Hashtag in inglese: `#iphone #freeapps #nosubscription` più uno. Quando escono, fissare in alto i video 7, 1 e 3.
 
-Instagram in più: ogni Reel va anche nelle Storie con lo sticker link alla pagina app, e il carosello settimanale a 5 slide (prezzo dell'originale, cosa fa, la Cifra, le sei promesse, link) ricavato dagli screenshot fastlane già pronti. Il feed è il quaderno: carta, reticolo, una cifra per post.
+Instagram in più: ogni Reel va anche nelle Storie con lo sticker link alla pagina app, e il carosello settimanale a 5 slide (prezzo dell'originale, cosa fa, la Cifra, le sei promesse, link) ricavato dagli screenshot fastlane già pronti. Il feed è il quaderno: carta, reticolo, una cifra per post. I post della griglia sono 1080×1440 e il reticolo continua da un post all'altro: le regole sono in `instagram/README.md` («Il quaderno della griglia»).
 
 Commenti: rispondere a tutti nella prima ora. Chi scrive "e Android?" riceve sempre la stessa risposta: "Solo iPhone, per ora. Il codice è pubblico, se qualcuno la porta su Android la linkiamo."
 

@@ -22,10 +22,13 @@ FRAMES = {
     "highlight-dev-tools": (1080, 1920),
     "highlight-open-source": (1080, 1920),
     "highlight-faq": (1080, 1920),
-    "post-1-intro": (1080, 1350),
-    "post-2-promises": (1080, 1350),
-    "post-3-projects": (1080, 1350),
+    "post-1-intro": (1080, 1440),
+    "post-2-promises": (1080, 1440),
+    "post-3-projects": (1080, 1440),
 }
+
+
+POSTS = ["post-1-intro", "post-2-promises", "post-3-projects"]  # left to right in the profile once published 3, 2, 1
 
 
 class QuietHandler(SimpleHTTPRequestHandler):
@@ -66,6 +69,16 @@ def main():
         shoot(f"{page}?f={name}", OUT / f"{name}.png", width, height)
         print(f"{name}.png {width}×{height}")
     server.shutdown()
+    if any(n in POSTS for n in names):
+        grid_preview()
+
+
+def grid_preview():
+    """The three posts side by side with the 3 px gap of the profile grid, newest first: the cells must line up."""
+    files = [str(OUT / f"{n}.png") for n in POSTS]
+    subprocess.run(["magick", *files, "-background", "white", "-splice", "3x0", "+append", "-chop", "3x0", "-alpha", "off",
+                    str(OUT / "grid-preview.png")], check=True, capture_output=True)
+    print("grid-preview.png")
 
 
 if __name__ == "__main__":
