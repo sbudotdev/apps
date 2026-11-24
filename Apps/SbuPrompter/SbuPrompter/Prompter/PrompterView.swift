@@ -53,6 +53,9 @@ struct PrompterView: View {
                 progressLine
             }
             overlayControls
+            if chrome != .floating, reportsLayout {
+                PanelResizeHandles(settings: settings)
+            }
         }
         // Floating, the whole prompter is a handle to move it.
         .gesture(WindowDragGesture(), including: chrome == .floating ? .all : .subviews)
