@@ -13,6 +13,8 @@ final class PrompterWindowController: NSObject {
     var isOccluded: Bool { !panel.occlusionState.contains(.visible) }
     private var scrollMonitor: Any?
     private var chrome: PrompterChrome = .pill
+    private var shownChrome: PrompterChrome?
+    private var shownIsEmpty: Bool?
 
     private static let floatingName = "SbuPrompterFloating"
 
@@ -64,9 +66,13 @@ final class PrompterWindowController: NSObject {
             chrome = placement.style == .notch ? .notch(height: placement.notchHeight) : .pill
             panel.setFrame(placement.frame, display: true)
         }
+        let isEmpty = model.controller.script.words.isEmpty && model.controller.script.cues.isEmpty
+        // Only a new frame for a new size: replacing the view would cut a drag on the panel's edge.
+        guard panel.contentView == nil || chrome != shownChrome || isEmpty != shownIsEmpty else { return }
+        shownChrome = chrome
+        shownIsEmpty = isEmpty
         panel.contentView = NSHostingView(rootView: PrompterView(
-            controller: model.controller, settings: settings, speech: model.speech, chrome: chrome,
-            isEmpty: model.controller.script.words.isEmpty && model.controller.script.cues.isEmpty))
+            controller: model.controller, settings: settings, speech: model.speech, chrome: chrome, isEmpty: isEmpty))
     }
 
     /// Runs the display link only while the text can move.

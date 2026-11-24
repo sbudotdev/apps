@@ -26,8 +26,8 @@ enum ScriptImporter {
             guard let text = PDFDocument(url: url)?.string else { throw Failure.unreadable }
             body = unwrapLines(text)
         case "rtf", "rtfd", "doc", "docx", "odt", "html", "htm", "webarchive":
-            // AppKit picks the reader from the file itself.
-            body = try NSAttributedString(url: url, options: [:], documentAttributes: nil).string
+            // AppKit picks the reader from the file itself; headings and emphasis become script marks.
+            body = RichTextConverter.script(from: try NSAttributedString(url: url, options: [:], documentAttributes: nil))
         default:
             var encoding = String.Encoding.utf8
             // UTF-8 or a marked encoding first; old Windows and Mac files are often Latin-1.

@@ -34,7 +34,7 @@ nonisolated struct ParsedScript: Sendable, Equatable {
                 cues.append(Cue(title: nil, lineIndex: lines.count, wordIndex: words.count))
                 lines.append(Line(text: "", kind: .separator, wordRange: words.count..<words.count))
             } else {
-                let lineWords = TextNormalizer.words(in: trimmed)
+                let lineWords = ScriptMarkup.words(in: trimmed)
                 lines.append(Line(text: String(raw), kind: .text, wordRange: words.count..<words.count + lineWords.count))
                 words += lineWords
             }

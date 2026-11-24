@@ -125,6 +125,7 @@ final class AppModel {
         controller.countdownSeconds = settings.countdown
         controller.speed = settings.speed
         syncSpeech()
+        relayout()
     }
 
     private func syncSpeech() {

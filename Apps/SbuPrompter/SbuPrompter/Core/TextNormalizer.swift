@@ -4,12 +4,10 @@ import Foundation
 /// no punctuation, and spelled numbers as digits, so "tre" matches "3".
 nonisolated enum TextNormalizer {
     static func words(in text: String) -> [String] {
-        tokens(in: text).compactMap { $0.normalized.isEmpty ? nil : $0.normalized }
-    }
-
-    /// Every whitespace-separated token as written, with its normalized form (empty for punctuation).
-    static func tokens(in text: String) -> [(text: Substring, normalized: String)] {
-        text.split(whereSeparator: \.isWhitespace).map { ($0, normalize(String($0))) }
+        text.split(whereSeparator: \.isWhitespace).compactMap {
+            let word = normalize(String($0))
+            return word.isEmpty ? nil : word
+        }
     }
 
     static func normalize(_ word: String) -> String {

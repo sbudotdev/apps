@@ -64,15 +64,19 @@ struct PrompterTextColumn: View {
         }
     }
 
-    /// In voice mode the words already read fade to the muted ink.
+    /// In voice mode the words already read fade to the muted ink. Bold and italic come from the
+    /// script's `**` and `*`; stage directions in square brackets stay muted and are never "read".
     private func attributed(_ line: ParsedScript.Line) -> AttributedString {
         var result = AttributedString()
         let read = controller.mode == .voice ? controller.readWordCount - line.wordRange.lowerBound : 0
         var wordIndex = 0
-        for (offset, token) in TextNormalizer.tokens(in: line.text).enumerated() {
+        for (offset, token) in ScriptMarkup.tokens(in: line.text).enumerated() {
             var piece = AttributedString((offset == 0 ? "" : " ") + token.text)
             let isRead = wordIndex < read
-            piece.foregroundColor = isRead ? SbuTheme.inkMuted : textColor
+            piece.foregroundColor = isRead || token.isDirection ? SbuTheme.inkMuted : textColor
+            var font = Font.system(size: settings.fontSize, weight: token.isBold ? .heavy : .medium)
+            if token.isItalic || token.isDirection { font = font.italic() }
+            piece.font = font
             if !token.normalized.isEmpty { wordIndex += 1 }
             result += piece
         }
