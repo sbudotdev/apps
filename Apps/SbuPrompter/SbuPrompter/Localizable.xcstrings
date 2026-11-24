@@ -1,16 +1,6 @@
 {
   "sourceLanguage": "it",
   "strings": {
-    "%lld parole · %lld sezioni": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld words · %lld sections"
-          }
-        }
-      }
-    },
     "%lld s": {
       "localizations": {
         "en": {
@@ -531,16 +521,6 @@
         }
       }
     },
-    "Righe che iniziano con # o una riga di --- dividono il copione in sezioni.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lines that start with # or a line of --- split the script into sections."
-          }
-        }
-      }
-    },
     "Ripristina": {
       "localizations": {
         "en": {
@@ -557,16 +537,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sbu Prompter"
-          }
-        }
-      }
-    },
-    "Sbu Prompter importa file .txt, .md e .rtf.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sbu Prompter imports .txt, .md and .rtf files."
           }
         }
       }
@@ -607,16 +577,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Scrolling"
-          }
-        }
-      }
-    },
-    "Scrivi o importa un copione da leggere.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Write or import a script to read."
           }
         }
       }
@@ -767,13 +727,13 @@
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "# Prima di iniziare\nQuesto è un copione di prova. Premi Avvia nel menu, oppure Controllo Opzione Spazio, e il testo scorre sotto la fotocamera.\nPorta il mouse sopra il prompter per fermarlo. Toglilo e riparte. Con il trackpad vai avanti e indietro.\n\n# Le sezioni\nUna riga che inizia con il cancelletto apre una sezione. Saltaci dal menu, oppure con Controllo Opzione e le frecce.\n---\nAnche tre trattini di fila dividono il copione.\n\n# A voce\nScegli lo scorrimento a voce: il testo segue le parole che leggi e si ferma quando taci. La voce resta sul Mac.\n\n# Nessuno lo vede\nIl prompter non compare quando condividi lo schermo, nelle registrazioni e negli screenshot. Lo vedi solo tu."
+            "value": "# Prima di iniziare\nQuesto è un copione di prova. Premi Avvia nel menu, oppure Controllo Opzione Spazio, e il testo scorre sotto la fotocamera.\nPorta il mouse sopra il prompter per fermarlo. Toglilo e riparte. Con il trackpad vai avanti e indietro.\n\n# Le sezioni\nUna riga che inizia con il cancelletto apre una sezione. Saltaci dal menu, oppure con Controllo Opzione e le frecce.\n---\nAnche tre trattini di fila dividono il copione.\n\n# A voce\nScegli lo scorrimento a voce: il testo segue le parole che leggi e si ferma quando taci. La voce resta sul Mac.\n\n# Nessuno lo vede\nIl prompter non compare quando condividi lo schermo, nelle registrazioni e negli screenshot. Lo vedi solo tu.\n\n# I tuoi copioni\nApri la libreria e trascinaci i tuoi file: testo, Markdown, Word, PDF. Oppure copia un testo e scegli Incolla come copione. Poi premi Leggi nel prompter."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "# Before you start\nThis is a practice script. Choose Start in the menu, or press Control Option Space, and the text scrolls under the camera.\nMove the pointer over the prompter to stop it. Move it away and it starts again. Scroll with the trackpad to go back and forth.\n\n# Sections\nA line that starts with a hash opens a section. Jump to it from the menu, or with Control Option and the arrow keys.\n---\nThree dashes in a row also split the script.\n\n# By voice\nChoose voice scrolling: the text follows the words you read and stops when you stop. Your voice stays on the Mac.\n\n# Nobody sees it\nThe prompter doesn't show up when you share your screen, in recordings or in screenshots. Only you can see it."
+            "value": "# Before you start\nThis is a practice script. Choose Start in the menu, or press Control Option Space, and the text scrolls under the camera.\nMove the pointer over the prompter to stop it. Move it away and it starts again. Scroll with the trackpad to go back and forth.\n\n# Sections\nA line that starts with a hash opens a section. Jump to it from the menu, or with Control Option and the arrow keys.\n---\nThree dashes in a row also split the script.\n\n# By voice\nChoose voice scrolling: the text follows the words you read and stops when you stop. Your voice stays on the Mac.\n\n# Nobody sees it\nThe prompter doesn't show up when you share your screen, in recordings or in screenshots. Only you can see it.\n\n# Your scripts\nOpen the library and drag your files into it: text, Markdown, Word, PDF. Or copy some text and choose Paste as script. Then choose Read in the prompter."
           }
         }
       }
@@ -828,6 +788,346 @@
           "stringUnit": {
             "state": "translated",
             "value": "Forget Paired iPhones"
+          }
+        }
+      }
+    },
+    "Esporta…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export…"
+          }
+        }
+      }
+    },
+    "Cerca nei copioni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search scripts"
+          }
+        }
+      }
+    },
+    "Sbu Prompter importa file %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Prompter imports %@ files."
+          }
+        }
+      }
+    },
+    "Copione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Script"
+          }
+        }
+      }
+    },
+    "Microfono": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Microphone"
+          }
+        }
+      }
+    },
+    "Quello del sistema": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System input"
+          }
+        }
+      }
+    },
+    "Non collegato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not connected"
+          }
+        }
+      }
+    },
+    "Non sento niente da %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing heard from %@."
+          }
+        }
+      }
+    },
+    "il microfono": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the microphone"
+          }
+        }
+      }
+    },
+    "Sezione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Section"
+          }
+        }
+      }
+    },
+    "Interruzione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Break"
+          }
+        }
+      }
+    },
+    "Inserisce un titolo di sezione dove sei: una riga che inizia con #.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inserts a section title where you are: a line that starts with #."
+          }
+        }
+      }
+    },
+    "Inserisce una riga di --- che divide il copione.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inserts a line of --- that splits the script."
+          }
+        }
+      }
+    },
+    "Anteprima del prompter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prompter preview"
+          }
+        }
+      }
+    },
+    "%lld parole": {
+      "localizations": {
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld parola"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld parole"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld word"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld words"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld sezioni": {
+      "localizations": {
+        "it": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld sezione"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld sezioni"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld section"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld sections"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Sbu · Prompter · Benvenuto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu · Prompter · Welcome"
+          }
+        }
+      }
+    },
+    "Il copione scorre nel notch, vicino all'obiettivo: guardi chi ti ascolta mentre leggi. Lo vedi solo tu, anche quando condividi lo schermo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The script scrolls in the notch, next to the lens: you look at your audience while you read. Only you can see it, even when you share your screen."
+          }
+        }
+      }
+    },
+    "I tuoi copioni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your scripts"
+          }
+        }
+      }
+    },
+    "Trascina i file nella libreria, scegli Importa, oppure copia il testo e scegli Incolla come copione. Vanno bene file di testo, Markdown, RTF, Word, OpenDocument, HTML e PDF.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag files into the library, choose Import, or copy the text and choose Paste as script. Plain text, Markdown, RTF, Word, OpenDocument, HTML and PDF files all work."
+          }
+        }
+      }
+    },
+    "Le sezioni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sections"
+          }
+        }
+      }
+    },
+    "Una riga che inizia con # apre una sezione: ci salti dal menu o dal telecomando.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A line that starts with # opens a section: jump to it from the menu or the remote."
+          }
+        }
+      }
+    },
+    "Avvia e ferma": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start and stop"
+          }
+        }
+      }
+    },
+    "Premi %@ in qualsiasi app. Il resto è nel menu %@ in alto a destra.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press %@ in any app. Everything else is in the %@ menu at the top right."
+          }
+        }
+      }
+    },
+    "Più tardi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Later"
+          }
+        }
+      }
+    },
+    "Apri la libreria": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Library"
+          }
+        }
+      }
+    },
+    "Come si usa…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How It Works…"
+          }
+        }
+      }
+    },
+    "Scrivi un copione, oppure trascina qui i tuoi file.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write a script, or drag your files here."
           }
         }
       }

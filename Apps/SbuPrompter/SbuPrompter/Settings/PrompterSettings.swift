@@ -35,6 +35,8 @@ final class PrompterSettings {
     var speed: Double { didSet { save(speed, "speed") } }
     /// Speech recognition locale, for example "it-IT".
     var voiceLocale: String { didSet { save(voiceLocale, "voiceLocale") } }
+    /// Core Audio UID of the chosen input; nil follows the system input.
+    var microphone: String? { didSet { save(microphone, "microphone") } }
     var shortcuts: [ShortcutAction: KeyCombo] {
         didSet { save(try? JSONEncoder().encode(shortcuts), "shortcuts") }
     }
@@ -53,6 +55,7 @@ final class PrompterSettings {
         speed = Self.double(defaults, "speed", default: 40)
         voiceLocale = defaults.string(forKey: "voiceLocale")
             ?? (Locale.current.language.languageCode == .italian ? "it-IT" : "en-US")
+        microphone = defaults.string(forKey: "microphone")
         let saved = defaults.data(forKey: "shortcuts").flatMap { try? JSONDecoder().decode([ShortcutAction: KeyCombo].self, from: $0) }
         shortcuts = saved ?? Dictionary(uniqueKeysWithValues: ShortcutAction.allCases.map { ($0, $0.defaultCombo) })
     }

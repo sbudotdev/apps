@@ -40,13 +40,15 @@ enum DebugSnapshots {
         Task {
             // Out of the SwiftUI update that creates the app model.
             try? await Task.sleep(for: .seconds(1))
-            let settings = window(SettingsView().environment(model), size: NSSize(width: 540, height: 360), title: String(localized: "Impostazioni"))
+            let settings = window(SettingsView().environment(model), size: NSSize(width: 540, height: 520), title: String(localized: "Impostazioni"))
             try? await Task.sleep(for: .seconds(2))
             save(prompter, folder.appending(path: "prompter\(suffix).png"))
             // The library is the real scene, opened at launch by `defaultLaunchBehavior` in snapshot mode.
             let library = NSApp.windows.first { $0.identifier?.rawValue.contains(LibraryView.windowID) == true }
             save(library?.contentView?.superview, folder.appending(path: "library\(suffix).png"))
             save(settings.contentView?.superview, folder.appending(path: "settings\(suffix).png"))
+            let welcome = NSApp.windows.first { $0.identifier?.rawValue.contains(WelcomeView.windowID) == true }
+            save(welcome?.contentView?.superview, folder.appending(path: "welcome\(suffix).png"))
             FileHandle.standardError.write(Data("SNAPSHOTS \(folder.path(percentEncoded: false))\n".utf8))
             NSApp.terminate(nil)
         }

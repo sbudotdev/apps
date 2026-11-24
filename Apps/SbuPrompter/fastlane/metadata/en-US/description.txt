@@ -4,12 +4,12 @@ Sbu Prompter shows your script in the Mac's notch, right under the camera: you r
 - Or a floating window you place and resize wherever you like
 - Hidden when you share your screen, in screen recordings and in screenshots
 - Scrolls at a fixed speed you can change while you read, or by voice: the text follows the words you read and stops when you stop talking
-- Your voice is recognized on the Mac and never leaves the computer
+- Choose the microphone; your voice is recognized on the Mac and never leaves the computer
 - Stops when you hover the mouse over the text; scroll on the trackpad to go back or forward
 - Sections: a line that starts with # splits the script, and you jump from one part to another
 - Countdown before you start: 3, 5 or 10 seconds
 - Text color and size, background opacity, mirrored text for teleprompter glass
-- A script library on the Mac, with import of .txt, .md and .rtf files
+- A searchable script library on the Mac: drag in .txt, .md, .rtf, .docx, .odt, .html or .pdf files, or paste the text; export any script to a file
 - Keyboard shortcuts that work in every app, and you can change them
 - Your iPhone as a remote: start and pause, change the speed, jump between sections, see the line you're reading and the reading time
 

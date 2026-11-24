@@ -4,12 +4,12 @@ Sbu Prompter mostra il copione nel notch del Mac, proprio sotto la fotocamera: l
 - Oppure una finestra mobile da mettere e ridimensionare dove vuoi
 - Nascosto quando condividi lo schermo, nelle registrazioni dello schermo e negli screenshot
 - Scorrimento a velocità fissa, da cambiare mentre leggi, oppure a voce: il testo segue le parole che leggi e si ferma quando taci
-- La voce viene riconosciuta sul Mac e non esce dal computer
+- Scegli il microfono; la voce viene riconosciuta sul Mac e non esce dal computer
 - Si ferma quando passi col mouse sopra il testo; col trackpad torni indietro o vai avanti
 - Sezioni: una riga che inizia con # divide il copione, e salti da una parte all'altra
 - Conto alla rovescia prima di partire: 3, 5 o 10 secondi
 - Colore e dimensione del testo, opacità dello sfondo, testo specchiato per il vetro di un teleprompter
-- Libreria dei copioni sul Mac, con importazione di file .txt, .md e .rtf
+- Libreria dei copioni sul Mac, con ricerca: trascina file .txt, .md, .rtf, .docx, .odt, .html o .pdf, oppure incolla il testo; esporti ogni copione in un file
 - Scorciatoie da tastiera che funzionano in ogni app, e le puoi cambiare
 - L'iPhone come telecomando: avvia e ferma, cambia la velocità, salta tra le sezioni, vedi la riga che stai leggendo e il tempo di lettura
 

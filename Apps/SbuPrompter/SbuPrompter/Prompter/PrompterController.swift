@@ -10,6 +10,9 @@ final class PrompterController {
 
     /// The reading line sits this fraction of the viewport below the top edge.
     static let readingAnchor = 0.2
+    /// How fast voice mode glides to the word being read: slow enough to look like steady scrolling
+    /// between one recognized word and the next.
+    static let voiceGlideRate = 3.0
 
     private(set) var script = ParsedScript("")
     var mode: Mode = .fixed {
@@ -115,7 +118,7 @@ final class PrompterController {
         case .fixed:
             engine.advance(by: seconds)
             if engine.isAtEnd { pause() }
-        case .voice: engine.approach(targetOffset(forLine: currentLine), by: seconds)
+        case .voice: engine.approach(voiceTarget, by: seconds, rate: Self.voiceGlideRate)
         }
     }
 
@@ -165,8 +168,16 @@ final class PrompterController {
         lineOffsets.indices.contains(line) ? lineOffsets[line] : 0
     }
 
-    private func targetOffset(forLine line: Int) -> Double {
-        offset(ofLine: line) - anchor
+    /// Voice mode: the reading line moves through a paragraph in step with the words read,
+    /// so a long paragraph scrolls steadily instead of jumping when the next one starts.
+    var voiceTarget: Double {
+        guard !script.lines.isEmpty else { return 0 }
+        let line = currentLine
+        let range = script.lines[line].wordRange
+        let top = offset(ofLine: line)
+        guard !range.isEmpty, lineOffsets.indices.contains(line + 1) else { return top - anchor }
+        let fraction = min(max(Double(aligner.position - range.lowerBound) / Double(range.count), 0), 1)
+        return top + fraction * (offset(ofLine: line + 1) - top) - anchor
     }
 
     private func line(atOffset offset: Double) -> Int {

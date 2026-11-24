@@ -8,6 +8,7 @@ struct PrompterView: View {
     let speech: SpeechFollower
     let chrome: PrompterChrome
     let isEmpty: Bool
+    var reportsLayout = true
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -15,7 +16,7 @@ struct PrompterView: View {
             background
             GeometryReader { proxy in
                 PrompterTextColumn(controller: controller, settings: settings, width: proxy.size.width,
-                                   viewportHeight: proxy.size.height)
+                                   viewportHeight: proxy.size.height, reportsLayout: reportsLayout)
                     .offset(y: -controller.engine.offset)
                     .scaleEffect(x: settings.isMirrored ? -1 : 1, y: 1)
             }
@@ -48,11 +49,15 @@ struct PrompterView: View {
                     .accessibilityLabel(Text("Si parte tra \(left) secondi"))
             }
 
+            if !isEmpty, controller.engine.maxOffset > 0 {
+                progressLine
+            }
             overlayControls
         }
         // Floating, the whole prompter is a handle to move it.
         .gesture(WindowDragGesture(), including: chrome == .floating ? .all : .subviews)
         .environment(\.colorScheme, .dark)
+        .environment(\.sbuAccent, .prompter)
     }
 
     private var shape: some Shape {
@@ -65,6 +70,23 @@ struct PrompterView: View {
 
     private var background: some View {
         shape.fill(SbuTheme.paper.opacity(settings.backgroundOpacity))
+    }
+
+    /// How far through the script the text is: a hairline along the bottom edge.
+    private var progressLine: some View {
+        let fraction = min(max(controller.engine.offset / controller.engine.maxOffset, 0), 1)
+        return Rectangle()
+            .fill(SbuTheme.line)
+            .frame(height: 2)
+            .overlay(alignment: .leading) {
+                Rectangle()
+                    .fill(SbuTheme.inkMuted)
+                    .scaleEffect(x: fraction, anchor: .leading)
+            }
+            .frame(maxHeight: .infinity, alignment: .bottom)
+            .padding(.horizontal, SbuTheme.radiusXl)
+            .padding(.bottom, 1)
+            .accessibilityHidden(true)
     }
 
     private var overlayControls: some View {
@@ -84,6 +106,14 @@ struct PrompterView: View {
                 .accessibilityLabel(controller.isPlaying ? Text("Pausa") : Text("Avvia"))
             }
             Spacer()
+            if speech.isSilent, controller.isMoving {
+                // Says which input is listening: when nothing is heard is listening, the usual cause is the wrong one.
+                Text("Non sento niente da \(speech.inputName ?? String(localized: "il microfono")).")
+                    .font(SbuTheme.caption)
+                    .foregroundStyle(SbuTheme.inkMuted)
+                    .lineLimit(1)
+                    .transition(.opacity)
+            }
             if speech.isListening {
                 Capsule()
                     .fill(SbuAccent.prompter.base)

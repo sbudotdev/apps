@@ -1,7 +1,8 @@
 /// Scroll position of the prompter text, in points from the top.
 nonisolated struct ScrollEngine: Sendable, Equatable {
-    static let speedRange: ClosedRange<Double> = 10...300
-    static let speedStep: Double = 10
+    /// Faster and slower move between these, finer at the slow end where a step is felt most.
+    static let speedSteps: [Double] = [4, 6, 8, 10, 12, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 100, 120, 150, 180, 220, 260, 300]
+    static let speedRange: ClosedRange<Double> = speedSteps[0]...speedSteps[speedSteps.count - 1]
 
     private(set) var offset: Double = 0
 
@@ -33,15 +34,16 @@ nonisolated struct ScrollEngine: Sendable, Equatable {
         offset = clamped(points)
     }
 
-    /// Eases toward `target` (voice mode): covers most of the gap in about a third of a second.
-    mutating func approach(_ target: Double, by seconds: Double) {
-        let factor = min(1, seconds * 8)
+    /// Eases toward `target` (voice mode). `rate` 8 covers most of the gap in about a third of a second;
+    /// lower is a slower, smoother glide.
+    mutating func approach(_ target: Double, by seconds: Double, rate: Double = 8) {
+        let factor = min(1, seconds * rate)
         offset = clamped(offset + (target - offset) * factor)
     }
 
     mutating func rewind() { offset = 0 }
-    mutating func faster() { speed += Self.speedStep }
-    mutating func slower() { speed -= Self.speedStep }
+    mutating func faster() { speed = Self.speedSteps.first { $0 > speed } ?? Self.speedRange.upperBound }
+    mutating func slower() { speed = Self.speedSteps.last { $0 < speed } ?? Self.speedRange.lowerBound }
 
     private func clamped(_ value: Double) -> Double {
         min(max(value, 0), max(maxOffset, 0))

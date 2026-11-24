@@ -35,8 +35,8 @@ targets:
         com.apple.security.app-sandbox: true
         # Microphone for the voice scrolling; nothing else leaves the sandbox.
         com.apple.security.device.audio-input: true
-        # Import of .txt, .md and .rtf the user picks.
-        com.apple.security.files.user-selected.read-only: true
+        # Import of the files the user picks or drops, export of a script where the user saves it.
+        com.apple.security.files.user-selected.read-write: true
         # MultipeerConnectivity for the iPhone remote, on the local network only.
         com.apple.security.network.server: true
         com.apple.security.network.client: true

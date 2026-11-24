@@ -58,12 +58,12 @@ struct PrompterControllerTests {
 
     @Test func speedCommands() {
         let controller = makeController()
-        let start = controller.engine.speed
+        controller.perform(.setSpeed(40))
         controller.perform(.faster)
-        #expect(controller.engine.speed == start + ScrollEngine.speedStep)
+        #expect(controller.engine.speed == 50)
         controller.perform(.slower)
         controller.perform(.slower)
-        #expect(controller.engine.speed == start - ScrollEngine.speedStep)
+        #expect(controller.engine.speed == 35)
         controller.perform(.setSpeed(100))
         #expect(controller.engine.speed == 100)
     }
@@ -116,8 +116,28 @@ struct PrompterControllerTests {
         #expect(controller.readWordCount == 6)
         #expect(controller.currentLine == 2)
         for _ in 0..<100 { controller.tick(0.05) }
-        // Line 2 sits a fifth of the viewport below the top.
-        #expect(abs(controller.engine.offset - (60 - 12)) < 0.5)
+        // Halfway through line 2 (top 60, next line at 90), with the reading line a fifth of the viewport down.
+        #expect(abs(controller.engine.offset - (75 - 12)) < 0.5)
+    }
+
+    @Test(arguments: [(4, 48.0), (5, 55.5), (7, 70.5)])
+    func voiceGlidesThroughALineWordByWord(heard: Int, target: Double) {
+        let controller = makeController()
+        controller.mode = .voice
+        controller.perform(.togglePlay)
+        let words = TextNormalizer.words(in: "uno due tre quattro cinque sei sette")
+        controller.heard(Array(words.prefix(heard)))
+        #expect(controller.voiceTarget == target)
+    }
+
+    @Test func voiceGlidesInsteadOfJumping() {
+        let controller = makeController()
+        controller.mode = .voice
+        controller.perform(.togglePlay)
+        controller.heard(TextNormalizer.words(in: "uno due tre quattro cinque sei"))
+        controller.tick(1.0 / 60)
+        // One frame covers a small part of the way, not most of it.
+        #expect(controller.engine.offset > 0 && controller.engine.offset < controller.voiceTarget * 0.1)
     }
 
     @Test func voiceIsIgnoredWhilePaused() {

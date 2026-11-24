@@ -8,6 +8,8 @@ struct PrompterTextColumn: View {
     let settings: PrompterSettings
     let width: CGFloat
     let viewportHeight: CGFloat
+    /// False for the settings preview: it draws the same text but must not move the real prompter.
+    var reportsLayout = true
 
     @State private var lineOffsets: [Int: CGFloat] = [:]
     @State private var contentHeight: CGFloat = 0
@@ -20,6 +22,12 @@ struct PrompterTextColumn: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .onGeometryChange(for: CGFloat.self) { $0.frame(in: .named("column")).minY } action: { lineOffsets[index] = $0 }
+            }
+            if !controller.script.words.isEmpty {
+                // The end of the text: the script closes on its full stop.
+                SbuFullStop(.set, size: .inline)
+                    .padding(.top, settings.fontSize * 0.35)
+                    .accessibilityHidden(true)
             }
         }
         // Room after the last line so it can reach the reading line.
@@ -80,6 +88,7 @@ struct PrompterTextColumn: View {
     }
 
     private func report() {
+        guard reportsLayout else { return }
         let offsets = (0..<controller.script.lines.count).map { Double(lineOffsets[$0] ?? 0) }
         controller.setLayout(lineOffsets: offsets, contentHeight: contentHeight, viewportHeight: viewportHeight)
     }
