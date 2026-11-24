@@ -40,7 +40,7 @@ enum DebugSnapshots {
         Task {
             // Out of the SwiftUI update that creates the app model.
             try? await Task.sleep(for: .seconds(1))
-            let settings = window(SettingsView().environment(model), size: NSSize(width: 540, height: 360), title: String(localized: "Impostazioni"))
+            let settings = window(SettingsView().environment(model), size: NSSize(width: 540, height: 520), title: String(localized: "Impostazioni"))
             try? await Task.sleep(for: .seconds(2))
             save(prompter, folder.appending(path: "prompter\(suffix).png"))
             // The library is the real scene, opened at launch by `defaultLaunchBehavior` in snapshot mode.

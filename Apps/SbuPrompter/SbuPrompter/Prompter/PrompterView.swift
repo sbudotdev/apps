@@ -8,6 +8,7 @@ struct PrompterView: View {
     let speech: SpeechFollower
     let chrome: PrompterChrome
     let isEmpty: Bool
+    var reportsLayout = true
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -15,7 +16,7 @@ struct PrompterView: View {
             background
             GeometryReader { proxy in
                 PrompterTextColumn(controller: controller, settings: settings, width: proxy.size.width,
-                                   viewportHeight: proxy.size.height)
+                                   viewportHeight: proxy.size.height, reportsLayout: reportsLayout)
                     .offset(y: -controller.engine.offset)
                     .scaleEffect(x: settings.isMirrored ? -1 : 1, y: 1)
             }
@@ -53,6 +54,7 @@ struct PrompterView: View {
         // Floating, the whole prompter is a handle to move it.
         .gesture(WindowDragGesture(), including: chrome == .floating ? .all : .subviews)
         .environment(\.colorScheme, .dark)
+        .environment(\.sbuAccent, .prompter)
     }
 
     private var shape: some Shape {

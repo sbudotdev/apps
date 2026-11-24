@@ -23,32 +23,35 @@ private struct AppearanceSettings: View {
 
     var body: some View {
         @Bindable var settings = model.settings
-        Form {
-            Picker("Colore del testo", selection: $settings.textColor) {
-                Text("Chiaro").tag(PrompterSettings.TextColor.ink)
-                Text("Grigio").tag(PrompterSettings.TextColor.muted)
-                Text("Ciano").tag(PrompterSettings.TextColor.accent)
-            }
-            LabeledContent("Dimensione del testo") {
-                Slider(value: $settings.fontSize, in: PrompterSettings.fontSizes, step: 2) {
-                    Text("Dimensione del testo")
-                } minimumValueLabel: {
-                    Image(systemName: "textformat.size.smaller").accessibilityHidden(true)
-                } maximumValueLabel: {
-                    Image(systemName: "textformat.size.larger").accessibilityHidden(true)
+        VStack(spacing: SbuTheme.space3) {
+            PrompterPreview()
+            Form {
+                Picker("Colore del testo", selection: $settings.textColor) {
+                    Text("Chiaro").tag(PrompterSettings.TextColor.ink)
+                    Text("Grigio").tag(PrompterSettings.TextColor.muted)
+                    Text("Ciano").tag(PrompterSettings.TextColor.accent)
                 }
-                .labelsHidden()
-            }
-            LabeledContent("Opacità dello sfondo") {
-                Slider(value: $settings.backgroundOpacity, in: PrompterSettings.opacities) {
-                    Text("Opacità dello sfondo")
+                LabeledContent("Dimensione del testo") {
+                    Slider(value: $settings.fontSize, in: PrompterSettings.fontSizes, step: 2) {
+                        Text("Dimensione del testo")
+                    } minimumValueLabel: {
+                        Image(systemName: "textformat.size.smaller").accessibilityHidden(true)
+                    } maximumValueLabel: {
+                        Image(systemName: "textformat.size.larger").accessibilityHidden(true)
+                    }
+                    .labelsHidden()
                 }
-                .labelsHidden()
+                LabeledContent("Opacità dello sfondo") {
+                    Slider(value: $settings.backgroundOpacity, in: PrompterSettings.opacities) {
+                        Text("Opacità dello sfondo")
+                    }
+                    .labelsHidden()
+                }
+                Toggle("Specchia il testo", isOn: $settings.isMirrored)
+                Text("Per leggere attraverso il vetro di un teleprompter.")
+                    .font(SbuTheme.caption)
+                    .foregroundStyle(SbuTheme.inkMuted)
             }
-            Toggle("Specchia il testo", isOn: $settings.isMirrored)
-            Text("Per leggere attraverso il vetro di un teleprompter.")
-                .font(SbuTheme.caption)
-                .foregroundStyle(SbuTheme.inkMuted)
         }
     }
 }
@@ -58,28 +61,31 @@ private struct PositionSettings: View {
 
     var body: some View {
         @Bindable var settings = model.settings
-        Form {
-            Picker("Prompter", selection: $settings.layout) {
-                Text("Sotto la fotocamera").tag(PrompterSettings.Layout.notch)
-                Text("Finestra mobile").tag(PrompterSettings.Layout.floating)
-            }
-            .pickerStyle(.radioGroup)
-            if settings.layout == .notch {
-                LabeledContent("Larghezza") {
-                    Slider(value: $settings.width, in: PrompterSettings.widths, step: 10) { Text("Larghezza") }
-                        .labelsHidden()
+        VStack(spacing: SbuTheme.space3) {
+            PrompterPreview()
+            Form {
+                Picker("Prompter", selection: $settings.layout) {
+                    Text("Sotto la fotocamera").tag(PrompterSettings.Layout.notch)
+                    Text("Finestra mobile").tag(PrompterSettings.Layout.floating)
                 }
-                LabeledContent("Altezza") {
-                    Slider(value: $settings.height, in: PrompterSettings.heights, step: 10) { Text("Altezza") }
-                        .labelsHidden()
+                .pickerStyle(.radioGroup)
+                if settings.layout == .notch {
+                    LabeledContent("Larghezza") {
+                        Slider(value: $settings.width, in: PrompterSettings.widths, step: 10) { Text("Larghezza") }
+                            .labelsHidden()
+                    }
+                    LabeledContent("Altezza") {
+                        Slider(value: $settings.height, in: PrompterSettings.heights, step: 10) { Text("Altezza") }
+                            .labelsHidden()
+                    }
+                    Text("Sui Mac senza notch il prompter è una pillola in alto al centro.")
+                        .font(SbuTheme.caption)
+                        .foregroundStyle(SbuTheme.inkMuted)
+                } else {
+                    Text("Trascina il prompter dove vuoi e ridimensionalo dai bordi: la posizione resta.")
+                        .font(SbuTheme.caption)
+                        .foregroundStyle(SbuTheme.inkMuted)
                 }
-                Text("Sui Mac senza notch il prompter è una pillola in alto al centro.")
-                    .font(SbuTheme.caption)
-                    .foregroundStyle(SbuTheme.inkMuted)
-            } else {
-                Text("Trascina il prompter dove vuoi e ridimensionalo dai bordi: la posizione resta.")
-                    .font(SbuTheme.caption)
-                    .foregroundStyle(SbuTheme.inkMuted)
             }
         }
         .onChange(of: settings.layout) { model.relayout() }

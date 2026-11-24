@@ -531,16 +531,6 @@
         }
       }
     },
-    "Righe che iniziano con # o una riga di --- dividono il copione in sezioni.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lines that start with # or a line of --- split the script into sections."
-          }
-        }
-      }
-    },
     "Ripristina": {
       "localizations": {
         "en": {
@@ -908,6 +898,56 @@
           "stringUnit": {
             "state": "translated",
             "value": "the microphone"
+          }
+        }
+      }
+    },
+    "Sezione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Section"
+          }
+        }
+      }
+    },
+    "Interruzione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Break"
+          }
+        }
+      }
+    },
+    "Inserisce un titolo di sezione dove sei: una riga che inizia con #.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inserts a section title where you are: a line that starts with #."
+          }
+        }
+      }
+    },
+    "Inserisce una riga di --- che divide il copione.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inserts a line of --- that splits the script."
+          }
+        }
+      }
+    },
+    "Anteprima del prompter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prompter preview"
           }
         }
       }

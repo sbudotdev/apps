@@ -5,6 +5,7 @@ import SwiftUI
 struct ScriptEditor: View {
     @Bindable var script: Script
     @Environment(AppModel.self) private var model
+    @State private var selection: TextSelection?
 
     var body: some View {
         let parsed = ParsedScript(script.body)
@@ -16,16 +17,17 @@ struct ScriptEditor: View {
                 .padding(.top, SbuTheme.space4)
                 .padding(.bottom, SbuTheme.space2)
             Divider()
-            TextEditor(text: $script.body)
+            TextEditor(text: $script.body, selection: $selection)
                 .font(SbuTheme.body)
                 .scrollContentBackground(.hidden)
                 .padding(SbuTheme.space3)
                 .accessibilityLabel(Text("Testo del copione"))
             Divider()
             HStack(spacing: SbuTheme.space3) {
-                Text("Righe che iniziano con # o una riga di --- dividono il copione in sezioni.")
-                    .font(SbuTheme.caption)
-                    .foregroundStyle(SbuTheme.inkMuted)
+                Button("Sezione", systemImage: "number") { insert(.section) }
+                    .help(Text("Inserisce un titolo di sezione dove sei: una riga che inizia con #."))
+                Button("Interruzione", systemImage: "minus") { insert(.divider) }
+                    .help(Text("Inserisce una riga di --- che divide il copione."))
                 Spacer()
                 Text("\(parsed.words.count) parole · \(parsed.cues.count) sezioni")
                     .font(SbuTheme.caption)
@@ -47,5 +49,16 @@ struct ScriptEditor: View {
             model.scriptChanged(script)
         }
         .onChange(of: script.title) { script.updatedAt = .now }
+    }
+
+    private func insert(_ insertion: ScriptInsertion) {
+        let body = script.body
+        var offset = body.count
+        if case .selection(let range) = selection?.indices, range.upperBound <= body.endIndex {
+            offset = body.distance(from: body.startIndex, to: range.upperBound)
+        }
+        let result = insertion.apply(to: body, at: offset)
+        script.body = result.text
+        selection = TextSelection(insertionPoint: result.text.index(result.text.startIndex, offsetBy: result.cursor))
     }
 }
