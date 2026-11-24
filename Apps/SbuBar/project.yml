@@ -1,0 +1,64 @@
+name: SbuBar
+options:
+  bundleIdPrefix: dev.sbu
+  deploymentTarget:
+    macOS: "15.0"
+  developmentLanguage: it
+  createIntermediateGroups: true
+packages:
+  SbuKit:
+    path: ../../Packages/SbuKit
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: $(SBU_TEAM_ID)
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+    SWIFT_APPROACHABLE_CONCURRENCY: YES
+    SWIFT_STRICT_CONCURRENCY: complete
+# Not sandboxed (ADR-0025): reading and moving other apps' menu bar items needs
+# Accessibility and Screen Recording outside the sandbox. Distributed as a notarised .dmg.
+targets:
+  SbuBar:
+    type: application
+    platform: macOS
+    sources: [SbuBar]
+    dependencies:
+      - package: SbuKit
+    entitlements:
+      path: SbuBar/SbuBar.entitlements
+      properties:
+        com.apple.security.app-sandbox: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.bar
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Sbu Bar
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        # Menu bar app: no Dock icon.
+        INFOPLIST_KEY_LSUIElement: YES
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "-"
+        ENABLE_HARDENED_RUNTIME: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+  SbuBarTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [SbuBarTests]
+    dependencies:
+      - target: SbuBar
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        BUNDLE_LOADER: $(TEST_HOST)
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/SbuBar.app/Contents/MacOS/SbuBar
+schemes:
+  SbuBar:
+    build:
+      targets:
+        SbuBar: all
+    test:
+      targets: [SbuBarTests]
