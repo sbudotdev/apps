@@ -49,6 +49,9 @@ struct PrompterView: View {
                     .accessibilityLabel(Text("Si parte tra \(left) secondi"))
             }
 
+            if !isEmpty, controller.engine.maxOffset > 0 {
+                progressLine
+            }
             overlayControls
         }
         // Floating, the whole prompter is a handle to move it.
@@ -67,6 +70,23 @@ struct PrompterView: View {
 
     private var background: some View {
         shape.fill(SbuTheme.paper.opacity(settings.backgroundOpacity))
+    }
+
+    /// How far through the script the text is: a hairline along the bottom edge.
+    private var progressLine: some View {
+        let fraction = min(max(controller.engine.offset / controller.engine.maxOffset, 0), 1)
+        return Rectangle()
+            .fill(SbuTheme.line)
+            .frame(height: 2)
+            .overlay(alignment: .leading) {
+                Rectangle()
+                    .fill(SbuTheme.inkMuted)
+                    .scaleEffect(x: fraction, anchor: .leading)
+            }
+            .frame(maxHeight: .infinity, alignment: .bottom)
+            .padding(.horizontal, SbuTheme.radiusXl)
+            .padding(.bottom, 1)
+            .accessibilityHidden(true)
     }
 
     private var overlayControls: some View {

@@ -5,14 +5,20 @@ struct LibraryRow: View {
     let script: Script
     let isActive: Bool
 
+    /// Whitespace-separated words: close enough for a reading time, and cheap for a long list.
+    private var wordCount: Int {
+        script.body.split(whereSeparator: \.isWhitespace).count { !$0.hasPrefix("#") && !$0.allSatisfy { "-*_=".contains($0) } }
+    }
+
     var body: some View {
         HStack(spacing: SbuTheme.space2) {
             VStack(alignment: .leading, spacing: SbuTheme.space1) {
                 Text(script.title.isEmpty ? String(localized: "Senza titolo") : script.title)
                     .font(SbuTheme.headline)
                     .lineLimit(1)
-                Text(script.updatedAt, format: .dateTime.day().month().hour().minute())
+                Text("\(ReadingTime.text(words: wordCount)) · \(script.updatedAt, format: .dateTime.day().month().hour().minute())")
                     .font(SbuTheme.caption)
+                    .monospacedDigit()
                     .foregroundStyle(SbuTheme.inkMuted)
             }
             Spacer()
