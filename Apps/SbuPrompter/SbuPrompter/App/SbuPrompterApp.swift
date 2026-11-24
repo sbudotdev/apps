@@ -12,6 +12,14 @@ struct SbuPrompterApp: App {
         return .suppressed
     }
 
+    /// A menu bar app shows nothing at launch: the first time, the welcome says where it is.
+    private static var welcomeAtLaunch: SceneLaunchBehavior {
+        #if DEBUG
+        if DebugSnapshots.isRequested { return .presented }
+        #endif
+        return UserDefaults.standard.bool(forKey: WelcomeView.seenKey) ? .suppressed : .presented
+    }
+
     var body: some Scene {
         MenuBarExtra {
             MenuContent()
@@ -29,6 +37,15 @@ struct SbuPrompterApp: App {
         }
         .defaultSize(width: 820, height: 560)
         .defaultLaunchBehavior(Self.libraryAtLaunch)
+
+        Window("Benvenuto", id: WelcomeView.windowID) {
+            WelcomeView()
+                .environment(model)
+                .environment(\.sbuAccent, .prompter)
+        }
+        .windowResizability(.contentSize)
+        .windowStyle(.hiddenTitleBar)
+        .defaultLaunchBehavior(Self.welcomeAtLaunch)
 
         Settings {
             SettingsView()

@@ -57,7 +57,7 @@ struct LibraryView: View {
                 ScriptEditor(script: script)
                     .id(script.id)
             } else {
-                SbuEmpty(sentence: "Scrivi o importa un copione da leggere.") {
+                SbuEmpty(sentence: "Scrivi un copione, oppure trascina qui i tuoi file.") {
                     Button("Nuovo copione", action: newScript)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)

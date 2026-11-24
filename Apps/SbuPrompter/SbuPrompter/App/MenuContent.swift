@@ -50,6 +50,10 @@ struct MenuContent: View {
             NSApp.activate()
             openWindow(id: LibraryView.windowID)
         }
+        Button("Come si usa…") {
+            NSApp.activate()
+            openWindow(id: WelcomeView.windowID)
+        }
         Button("Impostazioni…") {
             NSApp.activate()
             openSettings()
