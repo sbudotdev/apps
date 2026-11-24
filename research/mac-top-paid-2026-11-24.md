@@ -1,44 +1,44 @@
 # App Mac a pagamento da rifare gratis — ricerca del 24/11/2026
 
-Fonti: classifica «Top Paid» del Mac App Store, tutte le categorie, US e IT (`apps.apple.com/<cc>/mac/charts/36?chart=top-paid`, letta il 24/11/2026 alle 21:30); prezzi dalla search API di iTunes (`entity=macSoftware`, US). Le app vendute fuori dallo Store non hanno classifiche: per loro valgono i prezzi dei siti e delle rassegne, da riverificare sul sito del produttore. L'API non espone il numero di recensioni delle app Mac, quindi la popolarità viene solo dalla posizione in classifica.
+Solo app **native per Mac**: le app iPhone/iPad che girano anche sul Mac (nelle classifiche Mac ce ne sono molte: Shadowrocket, forScore, FL Studio Mobile, Wipr 2, Dark Reader…) sono escluse.
 
-## Classifica Top Paid Mac, 24/11
+Fonti: classifiche «Top Paid» del Mac App Store, 24/11/2026 sera, US e IT, per categoria: Utility (6002), Produttività (6007), Sviluppatori (6026), Foto e video (6008), Grafica (6027), Business (6000), Musica (6011) e la generale (36), da `apps.apple.com/<cc>/mac/charts/<genere>?chart=top-paid`. App nativa = `kind: mac-software` nella lookup API di iTunes; prezzi in dollari dalla lookup US. L'API non espone il numero di recensioni delle app Mac: la domanda si misura con la posizione e con quante app a pagamento fanno la stessa cosa. Le app vendute solo fuori dallo Store (Bartender, CleanShot X, BetterTouchTool) non hanno classifiche.
 
-**US (1–25):** Shadowrocket, Logic Pro, Things 3, Jump Desktop, Wipr 2, Keka, Magnet, DaisyDisk, Klack, Noir, FL Studio Mobile, Pixelmator Pro, Final Cut Pro, Dark Reader for Safari, UTM, GrandPerspective, RAR Extractor - Unarchiver Pro, Console Remote, Tampermonkey, Quantumult X, forScore, MainStage, LibreOffice, PhotoSweeper, Scrivener 3.
+## La domanda, per bisogno
 
-**IT (1–25):** Logic Pro, RAR Extractor - Unarchiver Pro, Shadowrocket, forScore, LibreOffice, Magnet, MediaInfo, Wipr 2, Keka, MainStage, UTM, Final Cut Pro, Miele-LXIV, Magic Packet (WOL), iReal Pro, Noir, PDF Squeezer 4, Things 3, xSearch for Safari, Whisper Notes, Pixelmator Pro, Upscayl, Just Press Record, Caffeinated, Vinegar.
+Un bisogno con più app a pagamento in classifica è un segnale più forte di una sola app alta.
 
-Klack (9° US) è già rifatta: Sbu Keys.
+| Bisogno | App a pagamento in classifica (posizione nella categoria) | Prezzi | Alternativa gratis | Note per Sbu |
+|---|---|---|---|---|
+| **Finestre a metà e a quarti** | Magnet (US Prod. 2, IT Prod. 2), BetterSnapTool (US Prod. 10), Moom Classic (US Util. 25) | 4,99 $, 1,99 $, 6,99 $ | Rectangle (open source, fuori dallo Store) | tre app pagate sullo stesso bisogno; sullo Store (Accessibilità) |
+| **Foto e file doppi** | PhotoSweeper (US Foto 2, IT Foto 5), Duplicate Photos Fixer Pro (IT Foto 23), Duplicate File Finder Pro (US Util. 17), Duplicate Manager Pro (US e IT Business), Duplicate Cleaner Pro (IT Business 6) | 14,99 $, 14,99 $, 27,99 $, 5,99 $, 2,99 $ | nessuna diffusa | il gruppo più numeroso; è Sbu Clean portata sul Mac con SbuKit |
+| **Spazio su disco** | DaisyDisk (US Util. 4, IT Util. 14), GrandPerspective (US Util. 7, IT Util. 18) | 9,99 $, 2,99 $ | GrandPerspective gratis da SourceForge | la cifra Quaderno è i GB liberi; sandbox con la cartella scelta o l'Accesso completo al disco |
+| **Annotare lo schermo e evidenziare il cursore** | Presentify (US Prod. 15), DemoPro (US Prod. 21), Pro Mouse (IT Prod. 10) | 14,99 $, 3,99 $, 7,99 $ | nessuna diffusa | stesso pubblico di Sbu Prompter (chi presenta e registra) |
+| **Comprimere e sistemare PDF** | PDF Squeezer 4 (IT Prod. 3), PDF Toolkit+ (IT Prod. 24) | 19,99 $, 1,99 $ | Anteprima con il filtro Quartz, di qualità bassa | prezzo alto e una cosa sola; PDFKit; gemella di Sbu Shrink |
+| **Testo da una zona dello schermo (OCR)** | TextSniper (US Prod. 11, IT Prod. 20) | 5,99 $ | Testo attivo, solo nelle immagini | Vision sul dispositivo; lavoro piccolo, come Klack |
+| **Safari scuro** | Noir (US Util. 6, IT Util. 7) | 3,99 $ | Dark Reader (open source su altri browser) | estensione Safari, nessuna rete |
+| **Monitor di sistema e barra dei menu** | iStat Menus 7 (IT Util. 20), iBar Pro (IT Util. 23), Bartender (fuori dallo Store, 20 $ circa) | 11,99 $, 9,99 $ | Stats, Ice (open source) | alternative gratis già note |
+| **Cuffie Bluetooth dalla barra dei menu** | ToothFairy (IT Util. 12) | 6,99 $ | nessuna diffusa | una cosa sola; IOBluetooth, sta sullo Store |
+| **Taglia e incolla i file nel Finder** | Command X (US Util. 19, IT Util. 16), PowerClick (US Util. 10, barra nel clic destro del Finder) | 4,00 $, 9,99 $ | nessuna | estensioni del Finder, lavoro piccolo |
+| **Tag di MP3 e audio** | Mp3tag (US Musica 6), Metadatics (IT Musica 6) | 24,99 $, 14,99 $ | Mp3tag è gratis su Windows | prezzo alto; AVFoundation |
+| **Info su un file video** | MediaInfo (US Util. 11, IT Util. 3) | 0,99 $ | MediaInfo è open source | costa poco: poca notizia |
 
 ## Scartate
 
-- **Troppo grandi o professionali**: Logic Pro, Final Cut Pro, MainStage, Pixelmator Pro, Things 3, Scrivener, FL Studio, forScore, iReal Pro, Miele-LXIV.
-- **Rete o proxy**: Shadowrocket, Quantumult X, Jump Desktop, Console Remote (vietati dalle regole di prodotto, salvo ADR-0007).
-- **Già gratis o open source**: LibreOffice, UTM (gratis fuori dallo Store), Keka (gratis dal sito), Tampermonkey, Upscayl, Amphetamine.
-- **Rischio legale o dipendenze**: RAR Extractor (serve un decoder RAR proprio, la libreria unrar è una dipendenza di terze parti), Vinegar e xSearch (dipendono da YouTube e dai motori di ricerca).
-- **Troppe funzioni per la parità**: CleanShot X (29 $ una tantum o 8 $/mese), Bartender (vedi sotto).
+- **Professionali o troppo grandi**: Logic Pro, Final Cut Pro, Motion, Compressor, MainStage, Pixelmator Pro, DaVinci Resolve Studio, Things 3, Scrivener, iA Writer, PDF Expert, GraphicConverter, Snagit.
+- **Già gratis o open source**: Keka, LibreOffice, UTM, Upscayl, Maccy, LosslessCut, System Color Picker (tutte gratis fuori dallo Store), Amphetamine e Caffeinated (Amphetamine è gratis).
+- **Rete o desktop remoto**: Jump Desktop, Tailscale, VPN.
+- **Rischio o dipendenze**: RAR Extractor e unRAR Pro (serve un decoder RAR proprio), Antivirus.
+- **Troppo di nicchia**: ShutterCount, RailModeller, Mocha TN5250, MDB/Access viewer.
 
-## Candidate
-
-| App originale | Prezzo | Classifica 24/11 | Cosa fa | Alternativa gratis già esistente | Sandbox / Mac App Store | Note per Sbu |
-|---|---|---|---|---|---|---|
-| **DaisyDisk** (+ GrandPerspective) | 9,99 $ (2,99 $) | US 8 (US 16) | mappa dello spazio occupato sul disco | GrandPerspective gratis da SourceForge, OmniDiskSweeper | sì, con la cartella scelta dall'utente o l'Accesso completo al disco | la cifra Quaderno è naturale: i GB liberi. Gemella di Sbu Clean |
-| **Magnet** | 4,99 $ | US 7, IT 6 | finestre a metà, a quarti, a tutto schermo con scorciatoie | Rectangle (open source) | sì, Magnet è sullo Store (Accessibilità) | in classifica da anni in tutti e due i Paesi |
-| **PDF Squeezer 4** | 19,99 $ | IT 17 | comprime i PDF | Anteprima con il filtro Quartz, di qualità bassa | sì (PDFKit, Quartz) | prezzo alto e una cosa sola, gemella di Sbu Shrink |
-| **Wipr 2** | 4,99 $ | US 5, IT 8 | blocca pubblicità e tracker in Safari | AdGuard e uBlock Origin Lite (gratis) | sì (estensione Safari di blocco contenuti) | coerente con la promessa «nessuna pubblicità»; le liste di filtri hanno licenze (EasyList GPL/CC BY-SA) e si aggiornano solo con l'app, senza rete. Può andare anche su iPhone |
-| **Noir / Dark Reader** | 3,99 $ / 4,99 $ | US 10 e 14, IT 16 | tema scuro su ogni sito in Safari | Dark Reader è open source su altri browser | sì (estensione Safari) | piccola, ma sono due app in classifica sullo stesso bisogno |
-| **TextSniper** | 5,99 $ | — | seleziona una zona dello schermo e ne copia il testo (OCR) | Testo attivo di macOS solo nelle immagini | sì (permesso Registrazione schermo, Vision sul dispositivo) | piccola come Klack, si fa in una settimana |
-| **PhotoSweeper** | 14,99 $ | US 24 | foto doppie e simili sul Mac | nessuna diffusa | sì (PhotoKit) | il cuore di Sbu Clean, portato sul Mac con SbuKit |
-| **Just Press Record** | 6,99 $ | IT 23 | registra e trascrive sul dispositivo | Memo Vocali, con la trascrizione solo dalle versioni recenti | sì (Speech) | anche iPhone e Watch: è più grande |
-| **Bartender** | 20 $ una tantum, Pro 15 $/anno (prezzi da rassegne) | fuori dallo Store | nasconde e ordina le icone nella barra dei menu | Ice, Hidden Bar (open source) | parziale: Hidden Bar sta sullo Store con un separatore, la parità completa con Bartender (ordinare, nascondere icone di altri) richiede Accessibilità e Registrazione schermo, quindi Developer ID come Sbu Seasons | .dmg ufficiale scaricato il 24/11 per provarlo da utente; Ice gratis toglie la notizia |
-| **iStat Menus** | 11,99 $ | fuori dalla top 25 | sensori, CPU, rete nella barra dei menu | Stats (open source) | sì, versione Store esistente | l'alternativa gratis è già molto conosciuta |
+Già rifatte: Klack (US Util. 5) è Sbu Keys; NotchPrompter (US Prod. 17) è il genere di Sbu Prompter.
 
 ## Raccomandazione
 
-1. **DaisyDisk → Sbu Disk** (nome provvisorio). È in classifica in US con due app che fanno la stessa cosa (DaisyDisk e GrandPerspective). La cifra del design system c'è già (i GB liberi). Sta nella sandbox e quindi sul Mac App Store. Nessuna alternativa gratis è altrettanto curata.
-2. **Magnet → Sbu Windows** (nome provvisorio). È l'unica utility in classifica alta sia in US sia in IT. Rectangle esiste, ma chi compra Magnet sullo Store non lo trova.
-3. **PDF Squeezer → Sbu Shrink per il Mac**. Costa 19,99 $ e fa una cosa sola: comprime i PDF. Il nome è da decidere con Shrink.
+1. **Foto e file doppi sul Mac.** Cinque app a pagamento in classifica, fino a 27,99 $. Il motore c'è già in Sbu Clean: è la più veloce da portare e la più forte come domanda.
+2. **Finestre (Magnet).** Tre app a pagamento sullo stesso bisogno, Magnet seconda in Produttività sia in US sia in IT. Rectangle è gratis ma non sta sullo Store.
+3. **Spazio su disco (DaisyDisk).** Due app in classifica in tutti e due i Paesi, e la cifra Quaderno più naturale di tutte (i GB liberi).
 
-Da tenere in coda: Wipr 2 (forte per il messaggio «nessuna pubblicità», ma ha più lavoro sulle licenze dei filtri) e TextSniper (il lavoro più veloce).
+Subito dopo: annotare lo schermo (Presentify), da lanciare insieme a Sbu Prompter, e PDF Squeezer (19,99 $, terza in Produttività in Italia).
 
 Tutte le specifiche nascono da dati pubblici (`Tools/spec.py`, pagine del produttore, prova dell'app da utente): niente decompilazione o estrazione di asset.
