@@ -1,0 +1,64 @@
+name: SbuKeys
+options:
+  bundleIdPrefix: dev.sbu
+  deploymentTarget:
+    macOS: "15.0"
+  developmentLanguage: it
+  createIntermediateGroups: true
+packages:
+  SbuKit:
+    path: ../../Packages/SbuKit
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: $(SBU_TEAM_ID)
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+    SWIFT_APPROACHABLE_CONCURRENCY: YES
+    SWIFT_STRICT_CONCURRENCY: complete
+# Sandboxed: the key tap is listen-only and needs Input Monitoring, which the sandbox allows,
+# so the app can go on the Mac App Store and as a notarised .dmg (ADR-0024).
+targets:
+  SbuKeys:
+    type: application
+    platform: macOS
+    sources: [SbuKeys]
+    dependencies:
+      - package: SbuKit
+    entitlements:
+      path: SbuKeys/SbuKeys.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.keys
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Sbu Keys
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        # Menu bar app: no Dock icon.
+        INFOPLIST_KEY_LSUIElement: YES
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "-"
+        ENABLE_HARDENED_RUNTIME: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+  SbuKeysTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [SbuKeysTests]
+    dependencies:
+      - target: SbuKeys
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        BUNDLE_LOADER: $(TEST_HOST)
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/SbuKeys.app/Contents/MacOS/SbuKeys
+schemes:
+  SbuKeys:
+    build:
+      targets:
+        SbuKeys: all
+    test:
+      targets: [SbuKeysTests]

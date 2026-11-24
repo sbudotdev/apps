@@ -1,0 +1,246 @@
+{
+  "sourceLanguage": "it",
+  "version": "1.0",
+  "strings": {
+    "Benvenuto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome"
+          }
+        }
+      }
+    },
+    "Clic": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clicky"
+          }
+        }
+      }
+    },
+    "Come si usa…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How it works…"
+          }
+        }
+      }
+    },
+    "Consenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow"
+          }
+        }
+      }
+    },
+    "Consenti a Sbu Keys di sentire i tasti, in Monitoraggio input.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Let Sbu Keys hear your keys, in Input Monitoring."
+          }
+        }
+      }
+    },
+    "Esci": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quit"
+          }
+        }
+      }
+    },
+    "Fatto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "In ogni app, come una tastiera meccanica. Scegli lo switch e il volume dal menu %@ in alto a destra.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In every app, like a mechanical keyboard. Pick the switch and volume from the %@ menu at the top right."
+          }
+        }
+      }
+    },
+    "In ogni app.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In every app."
+          }
+        }
+      }
+    },
+    "Lineare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Linear"
+          }
+        }
+      }
+    },
+    "Nessuna rete, nessun account. Il conteggio di oggi resta qui.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No network, no account. Today's count stays here."
+          }
+        }
+      }
+    },
+    "Per sentire i tasti serve Monitoraggio input. Sbu Keys conta i tasti e non legge mai cosa scrivi; nelle password non suona.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To hear your keys it needs Input Monitoring. Sbu Keys counts keys and never reads what you type; it stays silent in passwords."
+          }
+        }
+      }
+    },
+    "Più tardi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Later"
+          }
+        }
+      }
+    },
+    "Sbu Keys": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Keys"
+          }
+        }
+      }
+    },
+    "Sbu · Keys · Benvenuto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu · Keys · Welcome"
+          }
+        }
+      }
+    },
+    "Suono dalla posizione del tasto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sound from where the key is"
+          }
+        }
+      }
+    },
+    "Suono dei tasti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Key sounds"
+          }
+        }
+      }
+    },
+    "Switch": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switch"
+          }
+        }
+      }
+    },
+    "Tattile": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tactile"
+          }
+        }
+      }
+    },
+    "Tutto sul Mac": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All on your Mac"
+          }
+        }
+      }
+    },
+    "Un solo permesso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One permission"
+          }
+        }
+      }
+    },
+    "Un suono a ogni tasto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A sound for every key"
+          }
+        }
+      }
+    },
+    "Volume": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volume"
+          }
+        }
+      }
+    },
+    "tasti oggi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "keys today"
+          }
+        }
+      }
+    }
+  }
+}
