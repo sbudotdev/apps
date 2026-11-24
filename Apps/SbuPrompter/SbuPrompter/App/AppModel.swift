@@ -113,6 +113,7 @@ final class AppModel {
 
     func relayout() {
         if isPrompterVisible { window?.layout() }
+        window?.updateMouseHandling()
     }
 
     /// While recording a new shortcut the old ones must not fire.

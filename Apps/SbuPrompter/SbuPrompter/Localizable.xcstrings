@@ -1131,6 +1131,26 @@
           }
         }
       }
+    },
+    "Lascia passare i clic": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Let clicks through"
+          }
+        }
+      }
+    },
+    "I clic e lo scroll vanno all'app sotto il prompter. Lo comandi con le scorciatoie, dal menu o dall'iPhone.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clicks and scrolling go to the app under the prompter. Control it with the shortcuts, the menu or the iPhone."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

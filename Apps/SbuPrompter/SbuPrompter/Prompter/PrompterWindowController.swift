@@ -12,6 +12,7 @@ final class PrompterWindowController: NSObject {
     private(set) var ticks = 0
     var isOccluded: Bool { !panel.occlusionState.contains(.visible) }
     private var scrollMonitor: Any?
+    private var mouseMonitors: [Any] = []
     private var chrome: PrompterChrome = .pill
     private var shownChrome: PrompterChrome?
     private var shownIsEmpty: Bool?
@@ -27,11 +28,36 @@ final class PrompterWindowController: NSObject {
             self.model.controller.scrollManually(by: -Double(event.scrollingDeltaY) * factor)
             return nil
         }
+        // The panel takes the mouse only where it is drawn, and never with "Let clicks through" on:
+        // everywhere else clicks and scrolling reach the menu bar and the windows under it.
+        let moves: NSEvent.EventTypeMask = [.mouseMoved, .leftMouseDragged]
+        if let global = NSEvent.addGlobalMonitorForEvents(matching: moves, handler: { [weak self] _ in
+            MainActor.assumeIsolated { self?.updateMouseHandling() }
+        }) {
+            mouseMonitors.append(global)
+        }
+        if let local = NSEvent.addLocalMonitorForEvents(matching: moves, handler: { [weak self] event in
+            self?.updateMouseHandling()
+            return event
+        }) {
+            mouseMonitors.append(local)
+        }
         NotificationCenter.default.addObserver(self, selector: #selector(screensChanged),
                                                name: NSApplication.didChangeScreenParametersNotification, object: nil)
     }
 
     var isVisible: Bool { panel.isVisible }
+    var ignoresMouse: Bool { panel.ignoresMouseEvents }
+
+    /// The pointer is on the prompter's drawn area.
+    private var isPointerOnPanel: Bool {
+        chrome.contains(NSEvent.mouseLocation, panelFrame: panel.frame)
+    }
+
+    func updateMouseHandling() {
+        let ignores = model.settings.clickThrough || !isPointerOnPanel
+        if panel.ignoresMouseEvents != ignores { panel.ignoresMouseEvents = ignores }
+    }
 
     var contentView: NSView? { panel.contentView }
 
@@ -63,7 +89,7 @@ final class PrompterWindowController: NSObject {
             panel.configure(floating: false)
             let placement = PanelPlacement(screen: Self.describe(screen), width: settings.width, height: settings.height,
                                            forcePill: Self.forcePill)
-            chrome = placement.style == .notch ? .notch(height: placement.notchHeight) : .pill
+            chrome = placement.style == .notch ? .notch(height: placement.notchHeight, width: placement.notchWidth) : .pill
             panel.setFrame(placement.frame, display: true)
         }
         let isEmpty = model.controller.script.words.isEmpty && model.controller.script.cues.isEmpty
@@ -98,7 +124,9 @@ final class PrompterWindowController: NSObject {
         let now = CACurrentMediaTime()
         let seconds = lastTimestamp.map { min(now - $0, 0.5) } ?? 0
         lastTimestamp = now
-        let hovering = panel.frame.contains(NSEvent.mouseLocation)
+        // With clicks let through the pointer is busy with the app underneath: no hover pause.
+        let hovering = !model.settings.clickThrough && isPointerOnPanel
+        updateMouseHandling()
         if model.controller.isHoverPaused != hovering { model.controller.isHoverPaused = hovering }
         model.controller.tick(seconds)
     }

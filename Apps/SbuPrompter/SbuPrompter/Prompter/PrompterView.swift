@@ -54,7 +54,7 @@ struct PrompterView: View {
             }
             overlayControls
             if chrome != .floating, reportsLayout {
-                PanelResizeHandles(settings: settings)
+                PanelResizeHandles(settings: settings, topInset: chrome.topInset)
             }
         }
         // Floating, the whole prompter is a handle to move it.
@@ -65,7 +65,8 @@ struct PrompterView: View {
 
     private var shape: some Shape {
         switch chrome {
-        case .notch: AnyShape(UnevenRoundedRectangle(bottomLeadingRadius: SbuTheme.radiusXl, bottomTrailingRadius: SbuTheme.radiusXl))
+        case .notch(let height, let width):
+            AnyShape(NotchPanelShape(notchHeight: height, notchWidth: width, cornerRadius: SbuTheme.radiusXl))
         case .pill: AnyShape(RoundedRectangle(cornerRadius: SbuTheme.radiusXl))
         case .floating: AnyShape(RoundedRectangle(cornerRadius: SbuTheme.radiusLg))
         }

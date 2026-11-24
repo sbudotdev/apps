@@ -32,7 +32,8 @@ struct PrompterPreview: View {
 
     private var chrome: PrompterChrome {
         if model.settings.layout == .floating { return .floating }
-        let notch = NSScreen.screens.map(\.safeAreaInsets.top).max() ?? 0
-        return notch > 0 ? .notch(height: notch) : .pill
+        guard let screen = NSScreen.screens.first(where: { $0.safeAreaInsets.top > 0 }) else { return .pill }
+        let notchWidth = screen.frame.width - (screen.auxiliaryTopLeftArea?.width ?? 0) - (screen.auxiliaryTopRightArea?.width ?? 0)
+        return .notch(height: screen.safeAreaInsets.top, width: notchWidth)
     }
 }

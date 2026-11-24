@@ -86,6 +86,11 @@ private struct PositionSettings: View {
                         .font(SbuTheme.caption)
                         .foregroundStyle(SbuTheme.inkMuted)
                 }
+                Toggle("Lascia passare i clic", isOn: $settings.clickThrough)
+                Text("I clic e lo scroll vanno all'app sotto il prompter. Lo comandi con le scorciatoie, dal menu o dall'iPhone.")
+                    .font(SbuTheme.caption)
+                    .foregroundStyle(SbuTheme.inkMuted)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
         .onChange(of: settings.layout) { model.relayout() }

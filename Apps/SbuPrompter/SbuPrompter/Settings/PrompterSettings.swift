@@ -28,6 +28,8 @@ final class PrompterSettings {
     var isMirrored: Bool { didSet { save(isMirrored, "isMirrored") } }
     var backgroundOpacity: Double { didSet { save(backgroundOpacity, "backgroundOpacity") } }
     var layout: Layout { didSet { save(layout.rawValue, "layout") } }
+    /// Clicks and scrolling go to whatever is under the prompter; it is driven by shortcuts, menu and remote.
+    var clickThrough: Bool { didSet { save(clickThrough, "clickThrough") } }
     var width: Double { didSet { save(width, "width") } }
     var height: Double { didSet { save(height, "height") } }
     var mode: PrompterController.Mode { didSet { save(mode.rawValue, "mode") } }
@@ -48,6 +50,7 @@ final class PrompterSettings {
         isMirrored = defaults.bool(forKey: "isMirrored")
         backgroundOpacity = Self.double(defaults, "backgroundOpacity", default: 1)
         layout = defaults.string(forKey: "layout").flatMap(Layout.init) ?? .notch
+        clickThrough = defaults.bool(forKey: "clickThrough")
         width = Self.double(defaults, "width", default: 460)
         height = Self.double(defaults, "height", default: 160)
         mode = defaults.string(forKey: "mode").flatMap(PrompterController.Mode.init) ?? .fixed

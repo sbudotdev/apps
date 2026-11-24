@@ -6,6 +6,8 @@ import SwiftUI
 /// panel stays centered under the camera.
 struct PanelResizeHandles: View {
     let settings: PrompterSettings
+    /// The menu bar row beside the notch belongs to the menu bar: the side handles start below it.
+    var topInset: CGFloat = 0
 
     private enum Edge { case bottom, leading, trailing }
     private static let thickness: CGFloat = 6
@@ -21,9 +23,11 @@ struct PanelResizeHandles: View {
             handle(.leading)
                 .frame(width: Self.thickness)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, topInset)
             handle(.trailing)
                 .frame(width: Self.thickness)
                 .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.top, topInset)
         }
         .accessibilityHidden(true) // the same sizes are sliders in Settings > Position
     }
