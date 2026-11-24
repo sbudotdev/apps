@@ -59,7 +59,7 @@ final class PrompterController {
         PrompterStatus(
             isPlaying: isPlaying, speed: engine.speed, isVoice: mode == .voice,
             cueTitles: script.cues.map(\.title), currentCue: currentCue,
-            currentLine: script.lines.isEmpty ? "" : script.lines[currentLine].text,
+            currentLine: script.lines.isEmpty ? "" : ScriptMarkup.plainText(script.lines[currentLine].text),
             elapsed: elapsed, countdownLeft: countdownLeft)
     }
 
