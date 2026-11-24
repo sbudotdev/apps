@@ -4,7 +4,7 @@ Fotografia del 23/11 alle 23:00. Gli stati App Store Connect sono letti dall'API
 
 ## In una frase
 
-Sullo Store ci sono 7 app, tutte alla versione nuova (Level 1.2 approvata il 23/11). Chats e Habits sono in revisione. Prompter e Squares sono su TestFlight. Resta fuori solo Speed. La CI di questo repo è spenta dal 23/11 sera, su richiesta di Matteo.
+Sullo Store ci sono 8 app, tutte alla versione nuova (Sbu Chats 1.0 uscita il 24/11, Level 1.2 approvata il 23/11). Habits è in revisione. Prompter e Squares sono su TestFlight. Resta fuori solo Speed. La CI di questo repo è spenta dal 23/11 sera, su richiesta di Matteo.
 
 ## 1. Sullo Store oggi
 
@@ -17,6 +17,7 @@ Sullo Store ci sono 7 app, tutte alla versione nuova (Level 1.2 approvata il 23/
 | Sbu Moon | **1.1** (4), uscita il 22/11 | API ASC 23/11, [SBU-324](/SBU/issues/SBU-324) |
 | Sbu Noise | **1.1** (5), uscita il 22/11 | API ASC 23/11, [SBU-324](/SBU/issues/SBU-324) |
 | Sbu Level | **1.2** (7), approvata il 23/11 | API ASC 23/11 |
+| Sbu Chats | **1.0** (5), uscita il 24/11 (Apple ID 6823369633) | API ASC 24/11 |
 
 Fuori dallo Store: **Sbu Seasons** (Mac) **2.3.0** (13), .dmg notarizzato, release `v2.3.0` in [sbudotdev/seasons](https://github.com/sbudotdev/seasons); **Sbu Prompter** (Mac) **1.0.1**, release `prompter-1.0.1` di questo repo.
 
@@ -24,7 +25,6 @@ Fuori dallo Store: **Sbu Seasons** (Mac) **2.3.0** (13), .dmg notarizzato, relea
 
 | App | Versione (build) | Inviata | Nota |
 |---|---|---|---|
-| Sbu Chats | 1.0 (5) | 23/11, 11:53 | prima versione; moduli di conformità (Cina) compilati su tutte le app ([SBU-378](/SBU/issues/SBU-378)) |
 | Sbu Habits | 1.1 (7) | 23/11, 19:07 | reinvio dopo il rifiuto del 23/11 (guideline 4: icona Watch nera, non circolare). Icona Watch ora chiara nel cerchio ([apps#94](https://github.com/sbudotdev/apps/pull/94)); la spiegazione è nelle note per la review, perché con l'invio in attesa il Resolution Center non accetta risposte. La build 8 è valida ma non agganciata: `main` è già a 8, il prossimo caricamento parte da 9 ([SBU-410](/SBU/issues/SBU-410)) |
 
 ## 3. Tutte le altre app, una riga ciascuna
@@ -65,7 +65,7 @@ Un'app nuova a settimana ([SBU-275](/SBU/issues/SBU-275)). **Ogni invio va appro
 
 | Settimana | App |
 |---|---|
-| 23/11 | Sbu Chats (inviata) e Sbu Habits (reinvio dopo rifiuto) |
+| 23/11 | Sbu Chats (uscita il 24/11) e Sbu Habits (reinvio dopo rifiuto) |
 | 30/11 | Sbu Prompter se pronto, altrimenti Sbu Fuel |
 | 7/12 | Sbu Squares (primo gioco) |
 | 14/12 | quella tra Prompter e Fuel rimasta indietro |
