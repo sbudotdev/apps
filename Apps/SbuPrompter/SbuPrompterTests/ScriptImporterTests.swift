@@ -30,6 +30,30 @@ struct ScriptImporterTests {
         #expect(imported.body == "Grassetto e corsivo.")
     }
 
+    @Test(arguments: [NSAttributedString.DocumentType.officeOpenXML, .html, .openDocument])
+    func readsWordHTMLAndOpenDocument(type: NSAttributedString.DocumentType) throws {
+        let rich = NSAttributedString(string: "Buongiorno a tutti.\nSeconda riga.")
+        let data = try rich.data(from: NSRange(location: 0, length: rich.length), documentAttributes: [.documentType: type])
+        let ext = [NSAttributedString.DocumentType.officeOpenXML: "docx", .html: "html", .openDocument: "odt"][type] ?? "txt"
+        let imported = try ScriptImporter.read(try temporaryFile("intervento.\(ext)", data))
+        #expect(imported.title == "intervento")
+        #expect(imported.body == "Buongiorno a tutti.\nSeconda riga.")
+    }
+
+    @Test func readsLatin1Text() throws {
+        let url = try temporaryFile("vecchio.txt", try #require("Perché sì".data(using: .isoLatin1)))
+        #expect(try ScriptImporter.read(url).body == "Perché sì")
+    }
+
+    @Test func cleanTurnsWindowsLineEndsIntoLines() {
+        #expect(ScriptImporter.clean("Uno\r\nDue\rTre\u{2029}\u{FFFC}Quattro\n") == "Uno\nDue\nTre\nQuattro")
+    }
+
+    @Test func unwrapJoinsPrintedLinesAndKeepsParagraphs() {
+        let pdf = "Questo è un paragrafo\nche va a capo\nnel PDF.\n\n  \nSecondo paragrafo.\n"
+        #expect(ScriptImporter.unwrapLines(pdf) == "Questo è un paragrafo che va a capo nel PDF.\n\nSecondo paragrafo.")
+    }
+
     @Test func titleFromPastedTextIsItsFirstLine() {
         #expect(ScriptImporter.title(fromText: "\n  # Apertura del video\nTesto") == "Apertura del video")
         #expect(ScriptImporter.title(fromText: "   ") == nil)

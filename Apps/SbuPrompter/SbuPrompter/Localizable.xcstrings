@@ -561,16 +561,6 @@
         }
       }
     },
-    "Sbu Prompter importa file .txt, .md e .rtf.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sbu Prompter imports .txt, .md and .rtf files."
-          }
-        }
-      }
-    },
     "Scarica la lingua della dettatura in Impostazioni di Sistema > Tastiera > Dettatura: Sbu Prompter riconosce la voce solo sul Mac.": {
       "localizations": {
         "en": {
@@ -828,6 +818,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "Forget Paired iPhones"
+          }
+        }
+      }
+    },
+    "Esporta…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export…"
+          }
+        }
+      }
+    },
+    "Cerca nei copioni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search scripts"
+          }
+        }
+      }
+    },
+    "Sbu Prompter importa file %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Prompter imports %@ files."
+          }
+        }
+      }
+    },
+    "Copione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Script"
           }
         }
       }

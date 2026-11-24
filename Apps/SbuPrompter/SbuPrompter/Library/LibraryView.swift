@@ -13,15 +13,25 @@ struct LibraryView: View {
     @State private var isImporting = false
     @State private var importFailed = false
     @State private var scriptToDelete: Script?
+    @State private var scriptToExport: ScriptDocument?
+    @State private var exportName = ""
+    @State private var query = ""
+    @State private var isDropTargeted = false
+
+    private var visibleScripts: [Script] {
+        guard !query.isEmpty else { return scripts }
+        return scripts.filter { $0.title.localizedStandardContains(query) || $0.body.localizedStandardContains(query) }
+    }
 
     var body: some View {
         NavigationSplitView {
             List(selection: $selection) {
-                ForEach(scripts) { script in
+                ForEach(visibleScripts) { script in
                     LibraryRow(script: script, isActive: script.id == model.activeScriptID)
                         .tag(script.id)
                         .contextMenu {
                             Button("Leggi nel prompter") { model.read(script) }
+                            Button("Esporta…") { export(script) }
                             Button("Elimina…", role: .destructive) { scriptToDelete = script }
                         }
                 }
@@ -29,6 +39,12 @@ struct LibraryView: View {
             .scrollContentBackground(.hidden)
             .background(SbuTheme.paper)
             .navigationSplitViewColumnWidth(min: 200, ideal: 240)
+            .searchable(text: $query, placement: .sidebar, prompt: Text("Cerca nei copioni"))
+            .overlay {
+                if visibleScripts.isEmpty, !query.isEmpty {
+                    ContentUnavailableView.search(text: query)
+                }
+            }
             .toolbar {
                 ToolbarItemGroup {
                     Button("Nuovo copione", systemImage: "square.and.pencil", action: newScript)
@@ -50,12 +66,32 @@ struct LibraryView: View {
         }
         .navigationTitle("Libreria")
         .fileImporter(isPresented: $isImporting, allowedContentTypes: ScriptImporter.types, allowsMultipleSelection: true) { result in
-            importFiles(result)
+            switch result {
+            case .success(let urls): importFiles(urls)
+            case .failure: importFailed = true
+            }
+        }
+        .fileExporter(isPresented: isExporting, document: scriptToExport, contentType: .plainText, defaultFilename: exportName) { _ in
+            scriptToExport = nil
+        }
+        // Files dragged from the Finder become scripts.
+        .dropDestination(for: URL.self) { urls, _ in
+            importFiles(urls)
+            return !urls.isEmpty
+        } isTargeted: { isDropTargeted = $0 }
+        .overlay {
+            if isDropTargeted {
+                RoundedRectangle(cornerRadius: SbuTheme.radiusCard)
+                    .strokeBorder(SbuTheme.ink, lineWidth: 2)
+                    .padding(SbuTheme.space1)
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
+            }
         }
         .alert("Non riesco a leggere il file.", isPresented: $importFailed) {
             Button("OK", role: .cancel) {}
         } message: {
-            Text("Sbu Prompter importa file .txt, .md e .rtf.")
+            Text("Sbu Prompter importa file \(ScriptImporter.extensionsList).")
         }
         .confirmationDialog("Eliminare il copione?", isPresented: isConfirmingDelete, presenting: scriptToDelete) { script in
             Button("Elimina", role: .destructive) { delete(script) }
@@ -84,8 +120,16 @@ struct LibraryView: View {
         insert(Script(title: ScriptImporter.title(fromText: text) ?? String(localized: "Copione incollato"), body: text))
     }
 
-    private func importFiles(_ result: Result<[URL], any Error>) {
-        guard case .success(let urls) = result else { importFailed = true; return }
+    private var isExporting: Binding<Bool> {
+        Binding { scriptToExport != nil } set: { if !$0 { scriptToExport = nil } }
+    }
+
+    private func export(_ script: Script) {
+        exportName = script.title.isEmpty ? String(localized: "Copione") : script.title
+        scriptToExport = ScriptDocument(text: script.body)
+    }
+
+    private func importFiles(_ urls: [URL]) {
         for url in urls {
             let scoped = url.startAccessingSecurityScopedResource()
             defer { if scoped { url.stopAccessingSecurityScopedResource() } }
