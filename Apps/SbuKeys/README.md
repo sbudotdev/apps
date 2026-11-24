@@ -7,6 +7,10 @@ xcodegen generate
 xcodebuild test -project SbuKeys.xcodeproj -scheme SbuKeys -destination platform=macOS
 ```
 
+## Scarica
+
+[SbuKeys-1.0.dmg](https://github.com/sbudotdev/apps/releases/download/keys-1.0/SbuKeys-1.0.dmg) (macOS 15, universale, firmato Developer ID e notarizzato). Anteprima: i suoni sono ancora sintetici. Note: [release keys-1.0](https://github.com/sbudotdev/apps/releases/tag/keys-1.0).
+
 ## Permesso
 
 Serve **Monitoraggio input** (Impostazioni di Sistema → Privacy e sicurezza). L'app ascolta i tasti con un event tap in sola lettura: riceve solo il codice del tasto e se è premuto o rilasciato, mai i caratteri. Conta i tasti di oggi e non salva altro. Con Secure Input attivo (campi password) macOS non manda gli eventi, quindi lì non suona. Senza il permesso il pannello mostra «Consenti»; l'app controlla ogni secondo e parte appena il permesso arriva.

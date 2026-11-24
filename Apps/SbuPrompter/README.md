@@ -22,7 +22,7 @@ Deve girare un solo Sbu Prompter sul Mac: due copie si annunciano con lo stesso 
 
 ## Scarica
 
-- **Mac:** [SbuPrompter-1.0.1.dmg](https://github.com/sbudotdev/apps/releases/download/prompter-1.0.1/SbuPrompter-1.0.1.dmg) (macOS, universale, firmato Developer ID e notarizzato). Apri il dmg e trascina Sbu Prompter in Applicazioni. Note e versioni precedenti: [release prompter-1.0.1](https://github.com/sbudotdev/apps/releases/tag/prompter-1.0.1).
+- **Mac:** [SbuPrompter-1.1.0.dmg](https://github.com/sbudotdev/apps/releases/download/prompter-1.1.0/SbuPrompter-1.1.0.dmg) (macOS, universale, firmato Developer ID e notarizzato). Apri il dmg e trascina Sbu Prompter in Applicazioni. Note e versioni precedenti: [release prompter-1.1.0](https://github.com/sbudotdev/apps/releases/tag/prompter-1.1.0).
 - **iPhone (telecomando):** per ora su TestFlight; su App Store dopo la review.
 
 ## Dove sta cosa
@@ -53,5 +53,5 @@ Le impostazioni si possono forzare all'avvio con le loro chiavi, per esempio `-l
 
 ## Distribuzione
 
-- **Fuori dallo Store:** `./make-dmg.sh 1.0.1` crea `build/dist/SbuPrompter-1.0.1.dmg`, universale, firmato Developer ID; app e dmg sono notarizzati e graffati. Il `.dmg` va nella release GitHub `prompter-<versione>`.
+- **Fuori dallo Store:** `./make-dmg.sh 1.1.0` crea `build/dist/SbuPrompter-1.1.0.dmg`, universale, firmato Developer ID; app e dmg sono notarizzati e graffati. Il `.dmg` va nella release GitHub `prompter-<versione>`.
 - **App Store e TestFlight:** `fastlane upload` (oppure `platform:osx` / `platform:ios`) carica le build Mac e iPhone sulla versione 1.0; `fastlane metadata` carica i testi. Servono `SBU_TEAM_ID` e la chiave API di App Store Connect (`ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_PATH`).
