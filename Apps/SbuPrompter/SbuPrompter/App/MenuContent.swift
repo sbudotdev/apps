@@ -12,6 +12,7 @@ struct MenuContent: View {
             .disabled(controller.script.words.isEmpty)
         Button(model.isPrompterVisible ? "Nascondi prompter" : "Mostra prompter") { model.perform(.toggleVisibility) }
         Button("Riavvolgi") { model.perform(.rewind) }
+        Toggle("Lascia passare i clic", isOn: Bindable(model.settings).clickThrough)
 
         if !controller.script.cues.isEmpty {
             Menu("Sezioni") {

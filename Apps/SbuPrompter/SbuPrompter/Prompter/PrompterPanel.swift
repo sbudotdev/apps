@@ -15,6 +15,8 @@ final class PrompterPanel: NSPanel {
         backgroundColor = .clear
         hasShadow = false
         hidesOnDeactivate = false
+        // Moves over the panel must reach the controller, so it lets go of the mouse in the menu bar row.
+        acceptsMouseMovedEvents = true
         isReleasedWhenClosed = false
         collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary, .ignoresCycle]
         setAccessibilityLabel(String(localized: "Prompter"))
