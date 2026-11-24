@@ -40,6 +40,12 @@ struct ScriptImporterTests {
         #expect(imported.body == "Buongiorno a tutti.\nSeconda riga.")
     }
 
+    @Test func htmlHeadingsAndBoldBecomeScriptMarks() throws {
+        let html = "<html><body><h1>Apertura</h1><p>Benvenuti, oggi parliamo di <b>teleprompter</b>.</p></body></html>"
+        let imported = try ScriptImporter.read(try temporaryFile("talk.html", Data(html.utf8)))
+        #expect(imported.body == "# Apertura\nBenvenuti, oggi parliamo di **teleprompter**.")
+    }
+
     @Test func readsLatin1Text() throws {
         let url = try temporaryFile("vecchio.txt", try #require("Perché sì".data(using: .isoLatin1)))
         #expect(try ScriptImporter.read(url).body == "Perché sì")
