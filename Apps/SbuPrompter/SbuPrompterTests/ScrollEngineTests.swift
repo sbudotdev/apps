@@ -38,7 +38,22 @@ struct ScrollEngineTests {
         engine.slower()
         #expect(engine.speed == ScrollEngine.speedRange.lowerBound)
         engine.faster()
-        #expect(engine.speed == ScrollEngine.speedRange.lowerBound + ScrollEngine.speedStep)
+        #expect(engine.speed == ScrollEngine.speedSteps[1])
+    }
+
+    @Test(arguments: [(40.0, 50.0, 35.0), (43, 50, 40), (4, 6, 4), (5, 6, 4)])
+    func fasterAndSlowerSnapToTheNextStep(start: Double, faster: Double, slower: Double) {
+        var up = ScrollEngine(speed: start, maxOffset: 100)
+        up.faster()
+        #expect(up.speed == faster)
+        var down = ScrollEngine(speed: start, maxOffset: 100)
+        down.slower()
+        #expect(down.speed == slower)
+    }
+
+    @Test func slowestSpeedIsFourPointsASecond() {
+        #expect(ScrollEngine.speedRange.lowerBound == 4)
+        #expect(ScrollEngine.speedSteps == ScrollEngine.speedSteps.sorted())
     }
 
     @Test func settingSpeedClamps() {

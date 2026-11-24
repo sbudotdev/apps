@@ -102,7 +102,7 @@ private struct ScrollingSettings: View {
             .pickerStyle(.radioGroup)
             if settings.mode == .fixed {
                 LabeledContent("Velocità") {
-                    Slider(value: $settings.speed, in: ScrollEngine.speedRange, step: ScrollEngine.speedStep) { Text("Velocità") }
+                    Slider(value: $settings.speed, in: ScrollEngine.speedRange, step: 1) { Text("Velocità") }
                         .labelsHidden()
                 }
             } else {
