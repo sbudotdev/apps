@@ -29,9 +29,10 @@ Deve girare un solo Sbu Prompter sul Mac: due copie si annunciano con lo stesso 
 
 - `SbuPrompter/Core`: logica pura senza AppKit (normalizzazione del testo, allineatore voce-copione, cue, scorrimento, conto alla rovescia, comandi e stato). Il target iOS `SbuPrompterRemote` la compilerà come sorgente condiviso.
 - `Prompter`: il pannello (notch, pillola, finestra mobile) e il controller che applica i comandi.
-- `Speech`: microfono e `SFSpeechRecognizer` solo sul dispositivo.
+- `Speech`: microfono scelto nelle impostazioni (`Microphones`, per UID Core Audio; riparte se colleghi o scolleghi un microfono) e `SFSpeechRecognizer` solo sul dispositivo. Dopo 5 s di silenzio il prompter dice quale ingresso sta ascoltando.
 - `Shortcuts`: scorciatoie globali con `RegisterEventHotKey` (niente permesso Accessibilità).
-- `Library`: copioni in SwiftData, importazione `.txt`, `.md`, `.rtf`.
+- `Library`: copioni in SwiftData con ricerca; importazione (file picker o trascinamento) di `.txt`, `.md`, `.rtf`, `.rtfd`, `.docx`, `.doc`, `.odt`, `.html`, `.pdf`; esportazione in `.txt`; pulsanti Sezione e Interruzione nell'editor.
+- `Welcome`: la finestra del primo avvio (riaperta da «Come si usa…» nel menu).
 - `Remote`: il lato Mac del telecomando. `RemoteGate` decide chi può comandare (codice di 4 cifre nel menu, poi un token; pausa che raddoppia dopo 5 codici sbagliati), `RemoteServer` fa Multipeer e manda lo stato.
 - `Core/RemoteMessage` e `Core/RemoteCodec`: il protocollo, con la versione in ogni messaggio. Un peer con un'altra versione viene rifiutato.
 - `../SbuPrompterRemote`: l'app iPhone. `RemoteModel` (stato e abbinamento, testato), `MacLink` (Multipeer), le schermate.
