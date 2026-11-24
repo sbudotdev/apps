@@ -1,6 +1,6 @@
 # Lancio di Sbu Chats: kit
 
-Stato il 22/11/2026, 22:50: **1.0 (5) pronta su App Store Connect**, invio ad App Review previsto il 23/11 ([SBU-324](/SBU/issues/SBU-324)). App 6823369633. Non è in vendita: `apps.apple.com/app/id6823369633` oggi risponde 404. Pagina: sbu.dev/apps/chats (200). Nessuna pagina alternativa sul sito; la pagina dell'app indica l'app che rifà. Date nel calendario: `marketing/calendario-lanci.md`.
+Stato il 24/11/2026: **1.0 (5) in vendita** (`READY_FOR_SALE`, API ASC 24/11). App 6823369633, `apps.apple.com/app/id6823369633`. Pagina: sbu.dev/apps/chats, ora con il link allo Store. Nessuna pagina alternativa sul sito; la pagina dell'app indica l'app che rifà. Date nel calendario: `marketing/calendario-lanci.md`.
 
 Tutto qui è bozza: Matteo approva e pubblica. **Si pubblica solo quando la 1.0 è `READY_FOR_SALE`** e il link dello Store risponde 200. Modello: `marketing/find/`.
 

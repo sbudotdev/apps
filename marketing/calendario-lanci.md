@@ -27,7 +27,7 @@ Proposta del 22/11, da approvare. Niente di questo è pubblicato: ogni post, Sho
 
 Aggiornamenti (Moon 1.1, Level 1.2, Noise 1.1): Moon 1.1 e Noise 1.1 sono in vendita dal 22/11, prima dei loro post di lancio. Quindi il 24/11 e il 26/11 escono i post di lancio con l'immagine nuova e i post degli aggiornamenti di Moon e Noise si saltano. Level 1.2 è ancora in revisione: il suo post esce il giorno dopo `READY_FOR_SALE`, mai nello stesso giorno di un altro post della stessa app. Se Moon 1.1 o Noise 1.1 escono prima del post di lancio di questa settimana, si pubblica solo il post di lancio, con l'immagine nuova, e il post dell'aggiornamento si salta. Testi nella sezione «Aggiornamento» di ogni `lancio.md`.
 
-Chats: post Instagram e Bluesky il giorno dopo `READY_FOR_SALE`. Testi in `chats/lancio.md`.
+Chats: post Instagram e Bluesky il giorno dopo `READY_FOR_SALE` (in vendita dal 24/11, quindi post il 25/11). Testi in `chats/lancio.md`.
 
 ## Settimana 2 · 30 novembre – 6 dicembre
 

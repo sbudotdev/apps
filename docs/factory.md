@@ -14,7 +14,7 @@ Un solo stato per app, aggiornato a ogni passaggio: **pianificata** → **in svi
 | Sbu Scanner | 2.0.0 (2) | TestFlight, test insieme da fare | Sbu Scanner 2.0 (#213) |
 | Sbu Level | 1.1 (5) | TestFlight, reinvio dopo il 4.3 | Sbu Level (#130) |
 | Sbu Speed | 1.1 (4) | TestFlight, reinvio dopo il 4.3 | Sbu Speed 1.1 (#459) |
-| Sbu Chats | 1.0 (2) | TestFlight | Sbu Chats (#466) |
+| Sbu Chats | 1.0 (5) | pubblicata il 24/11/2026 | Sbu Chats (#466) |
 | Sbu Fuel | 1.0 (2) | TestFlight | Sbu Fuel (#469) |
 | Sbu Inventory | 1.0 (2) | TestFlight | Sbu Inventory (#468) |
 | Sbu Clean | 1.0 | respinta il 14/10 (4.3), risposta in attesa | Sbu Clean (#292) |
