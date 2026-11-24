@@ -90,6 +90,7 @@ private struct PositionSettings: View {
 
 private struct ScrollingSettings: View {
     @Environment(AppModel.self) private var model
+    @State private var microphones: [Microphones.Device] = []
 
     var body: some View {
         @Bindable var settings = model.settings
@@ -110,6 +111,13 @@ private struct ScrollingSettings: View {
                         Text(Locale.current.localizedString(forIdentifier: identifier) ?? identifier).tag(identifier)
                     }
                 }
+                Picker("Microfono", selection: $settings.microphone) {
+                    Text("Quello del sistema").tag(String?.none)
+                    ForEach(microphones) { Text(verbatim: $0.name).tag(Optional($0.id)) }
+                    if let chosen = settings.microphone, !microphones.contains(where: { $0.id == chosen }) {
+                        Text("Non collegato").tag(Optional(chosen))
+                    }
+                }
                 Text("Il testo segue le parole che leggi e si ferma quando taci. La voce resta sul Mac.")
                     .font(SbuTheme.caption)
                     .foregroundStyle(SbuTheme.inkMuted)
@@ -125,6 +133,7 @@ private struct ScrollingSettings: View {
                 }
             }
         }
+        .onAppear { microphones = Microphones.all }
     }
 
     private static let locales: [String] = {

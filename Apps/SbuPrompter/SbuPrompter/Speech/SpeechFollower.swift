@@ -23,6 +23,12 @@ final class SpeechFollower {
     private(set) var level: Double = 0
     private(set) var isListening = false
     private(set) var problem: Problem?
+    /// The input being listened to, for the settings and the silence hint.
+    private(set) var inputName: String?
+    /// Listening, but nothing louder than room noise for a few seconds: maybe the wrong microphone.
+    private(set) var isSilent = false
+
+    static let silenceHintDelay: Duration = .seconds(5)
 
     @ObservationIgnored var onWords: ([String]) -> Void = { _ in }
 
@@ -31,9 +37,26 @@ final class SpeechFollower {
     @ObservationIgnored private var recognizer: SFSpeechRecognizer?
     @ObservationIgnored private var task: SFSpeechRecognitionTask?
     @ObservationIgnored private var generation = 0
+    @ObservationIgnored private var lastHeard = ContinuousClock.now
+    /// What the current listening uses, so a settings change can tell it must start again.
+    @ObservationIgnored private(set) var localeIdentifier = ""
+    @ObservationIgnored private(set) var microphone: String?
+    @ObservationIgnored private var configurationObserver: (any NSObjectProtocol)?
 
-    func start(localeIdentifier: String) async {
+    init() {
+        // A microphone plugged in or out (AirPods, a USB mic) changes the engine's input: listen again on the new one.
+        configurationObserver = NotificationCenter.default.addObserver(
+            forName: .AVAudioEngineConfigurationChange, object: engine, queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated { self?.restart() }
+        }
+    }
+
+    /// `microphone` is a Core Audio UID; nil, or a device that is gone, means the system input.
+    func start(localeIdentifier: String, microphone: String? = nil) async {
         guard !isListening else { return }
+        self.localeIdentifier = localeIdentifier
+        self.microphone = microphone
         problem = nil
         guard await Self.authorize() else { problem = .denied; return }
         guard let recognizer = SFSpeechRecognizer(locale: Locale(identifier: localeIdentifier)), recognizer.isAvailable else {
@@ -44,6 +67,11 @@ final class SpeechFollower {
         self.recognizer = recognizer
 
         let input = engine.inputNode
+        if let microphone, Microphones.select(microphone, on: input) {
+            inputName = Microphones.name(of: microphone)
+        } else {
+            inputName = Microphones.systemDefaultName
+        }
         input.removeTap(onBus: 0)
         input.installTap(onBus: 0, bufferSize: 1024, format: input.outputFormat(forBus: 0),
                          block: Self.makeTap(box: current) { [weak self] value in
@@ -58,7 +86,15 @@ final class SpeechFollower {
             return
         }
         isListening = true
+        lastHeard = .now
+        isSilent = false
         startTask()
+    }
+
+    private func restart() {
+        guard isListening else { return }
+        stop()
+        Task { await start(localeIdentifier: localeIdentifier, microphone: microphone) }
     }
 
     func stop() {
@@ -71,6 +107,7 @@ final class SpeechFollower {
         task?.cancel()
         task = nil
         level = 0
+        isSilent = false
     }
 
     /// A recognition task ends after a while or on an error: start a fresh one while listening.
@@ -98,6 +135,10 @@ final class SpeechFollower {
     private func updateLevel(_ value: Double) {
         guard isListening else { return }
         level = level * 0.6 + value * 0.4
+        let now = ContinuousClock.now
+        if value > 0.2 { lastHeard = now }
+        let silent = now - lastHeard > Self.silenceHintDelay
+        if silent != isSilent { isSilent = silent }
     }
 
     private nonisolated static func authorize() async -> Bool {

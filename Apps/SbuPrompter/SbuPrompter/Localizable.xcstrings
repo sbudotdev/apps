@@ -861,6 +861,56 @@
           }
         }
       }
+    },
+    "Microfono": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Microphone"
+          }
+        }
+      }
+    },
+    "Quello del sistema": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System input"
+          }
+        }
+      }
+    },
+    "Non collegato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not connected"
+          }
+        }
+      }
+    },
+    "Non sento niente da %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing heard from %@."
+          }
+        }
+      }
+    },
+    "il microfono": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the microphone"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

@@ -84,6 +84,14 @@ struct PrompterView: View {
                 .accessibilityLabel(controller.isPlaying ? Text("Pausa") : Text("Avvia"))
             }
             Spacer()
+            if speech.isSilent, controller.isMoving {
+                // Says which input is listening: when nothing is heard is listening, the usual cause is the wrong one.
+                Text("Non sento niente da \(speech.inputName ?? String(localized: "il microfono")).")
+                    .font(SbuTheme.caption)
+                    .foregroundStyle(SbuTheme.inkMuted)
+                    .lineLimit(1)
+                    .transition(.opacity)
+            }
             if speech.isListening {
                 Capsule()
                     .fill(SbuAccent.prompter.base)

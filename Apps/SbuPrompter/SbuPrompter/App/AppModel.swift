@@ -129,8 +129,12 @@ final class AppModel {
 
     private func syncSpeech() {
         let shouldListen = settings.mode == .voice && controller.isPlaying && isPrompterVisible
+        // Another microphone or language chosen while listening: listen again with it.
+        if speech.isListening, speech.microphone != settings.microphone || speech.localeIdentifier != settings.voiceLocale {
+            speech.stop()
+        }
         if shouldListen, !speech.isListening {
-            Task { await speech.start(localeIdentifier: settings.voiceLocale) }
+            Task { await speech.start(localeIdentifier: settings.voiceLocale, microphone: settings.microphone) }
         } else if !shouldListen, speech.isListening {
             speech.stop()
         }
