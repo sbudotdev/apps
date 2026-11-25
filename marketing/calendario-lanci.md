@@ -70,7 +70,7 @@ Oggi (22/11) sono in vendita 7 app: Subscriptions, Scanner, Find, Moon, Clean, L
 
 Il rischio è a monte dell'invio: Chats e Fuel non partono senza la prova insieme via cavo e l'App Privacy (`docs/stato.md` §5). Se il 10/12 le app in vendita sono 7, lo Show HN della collezione va al 12/1 come da piano, e il 15/12 passa a Level.
 
-Habits e Speed non entrano nel conto: sono ancora respinte.
+Habits è in vendita dal 24/11 (1.1): entra nel conto. Speed no, è ancora respinta.
 
 ## Fuori calendario, da tenere presente
 

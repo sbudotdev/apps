@@ -18,7 +18,7 @@ Un solo stato per app, aggiornato a ogni passaggio: **pianificata** → **in svi
 | Sbu Fuel | 1.0 (2) | TestFlight | Sbu Fuel (#469) |
 | Sbu Inventory | 1.0 (2) | TestFlight | Sbu Inventory (#468) |
 | Sbu Clean | 1.0 | respinta il 14/10 (4.3), risposta in attesa | Sbu Clean (#292) |
-| Sbu Habits | 1.0 | respinta il 14/10 (4.3), risposta in attesa | Sbu Habits (#108) |
+| Sbu Habits | 1.1 (7) | pubblicata il 24/11/2026 | Sbu Habits (#108) |
 | Sbu Noise | 1.0 | respinta il 14/10 (4.3), risposta in attesa | Sbu Noise (#422) |
 | Sbu Moon | 1.0 | respinta il 14/10 (4.2.6), risposta in attesa | – |
 | Sbu Find | 1.0 | su main 17/10: app e scheda pronte; mancano test sul device e TestFlight | Sbu Find (#248) |
