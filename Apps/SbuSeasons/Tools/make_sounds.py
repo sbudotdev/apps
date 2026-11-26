@@ -264,7 +264,6 @@ def gift_open():
 
 
 def gingerbread_run():
-    rng = random.Random(18)
     out = silence(0.8)
     at, gap = 0.0, 0.085
     for step in range(7):
