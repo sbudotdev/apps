@@ -150,7 +150,7 @@ def snow_step(seed):
     dur = 0.22 + 0.05 * (seed % 3)
     n = int(dur * SR)
     out = [0.0] * n
-    for _ in range(140 + 30 * (seed % 3)):
+    for _crystal in range(140 + 30 * (seed % 3)):
         at = rng.betavariate(2, 3) * dur * 0.9
         g = int(rng.uniform(0.002, 0.006) * SR)
         grain = mul(noise(g, rng), env(g, 0.0005, 0.3))
@@ -188,11 +188,11 @@ def snowman_done():
 def snowglobe_shake():
     rng = random.Random(12)
     out = silence(0.9)
-    for k in range(3):
+    for shake in range(3):
         g = int(0.12 * SR)
         sh = mul(highpass(noise(g, rng), 4000), env(g, 0.02, 0.35))
-        place(out, [s * 0.5 for s in sh], 0.03 + 0.15 * k)
-    for _ in range(14):
+        place(out, [s * 0.5 for s in sh], 0.03 + 0.15 * shake)
+    for _sparkle in range(14):
         f = rng.uniform(2600, 5200)
         place(out, [s * 0.25 for s in tone(f, 0.25, decay=0.05)], rng.uniform(0.05, 0.7))
     return fade(normalize(out, 0.6), fout=0.1)
@@ -241,8 +241,8 @@ def ornament(nm):
 def sleigh_bells():
     rng = random.Random(16)
     out = silence(0.95)
-    for k in range(8):
-        at = 0.02 + k * 0.11 + rng.uniform(-0.01, 0.01)
+    for beat in range(8):
+        at = 0.02 + beat * 0.11 + rng.uniform(-0.01, 0.01)
         for _ in range(3):
             f = rng.uniform(2400, 4200)
             place(out, [s * rng.uniform(0.2, 0.4) for s in tone(f, 0.18, ((1, 1), (1.5, 0.4), (2.4, 0.2)), decay=0.05, attack=0.001)], at + rng.uniform(0, 0.015))
@@ -267,8 +267,8 @@ def gingerbread_run():
     rng = random.Random(18)
     out = silence(0.8)
     at, gap = 0.0, 0.085
-    for k in range(7):
-        f = 700 + 60 * (k % 2) + 20 * k
+    for step in range(7):
+        f = 700 + 60 * (step % 2) + 20 * step
         place(out, [s * 0.5 for s in tone(f, 0.05, ((1, 1), (2, 0.3)), decay=0.012, attack=0.001)], at)
         at += gap
         gap *= 0.88
@@ -287,7 +287,7 @@ def fireplace():
     n = int(0.95 * SR)
     bed = lowpass(brown(n, rng), 600)
     out = [s * 0.35 for s in bed]
-    for _ in range(26):
+    for _crackle in range(26):
         g = int(rng.uniform(0.002, 0.008) * SR)
         pop = bandpass(mul(noise(g, rng), env(g, 0.0003, 0.2)), rng.uniform(1500, 5000), q=1.5)
         place(out, [s * rng.uniform(0.6, 2.2) for s in pop], rng.uniform(0.02, 0.9))
@@ -345,7 +345,7 @@ def rain(n):
     rng = random.Random(31)
     bed = lowpass(highpass(noise(n, rng), 400, sr=LOOP_SR), 5000, sr=LOOP_SR)
     out = [s * 0.25 for s in bed]
-    for _ in range(int(n / LOOP_SR * 40)):
+    for _drop in range(int(n / LOOP_SR * 40)):
         g = int(0.006 * LOOP_SR)
         d = bandpass(mul(noise(g, rng), env(g, 0.0005, 0.2, sr=LOOP_SR)), rng.uniform(1800, 4500), q=2, sr=LOOP_SR)
         place(out, [s * rng.uniform(0.3, 1.0) for s in d], rng.uniform(0, n / LOOP_SR - 0.01), sr=LOOP_SR)
