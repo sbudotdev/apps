@@ -44,14 +44,30 @@ struct NoMacView: View {
 
     @ViewBuilder private var status: some View {
         if case .connecting(let mac) = model.phase {
-            ProgressView {
-                Text("Collegamento a \(mac)")
+            VStack(alignment: .leading, spacing: SbuTheme.space3) {
+                ProgressView {
+                    Text("Collegamento a \(mac)")
+                }
+                .controlSize(.small)
+                if model.macs.count > 1 {
+                    ChooseAnotherMacButton(model: model)
+                }
             }
-            .controlSize(.small)
         } else if model.phase == .searching, model.macs.count == 1, let mac = model.macs.first {
             Button("Collega \(mac)", systemImage: "laptopcomputer") { model.choose(mac) }
                 .buttonStyle(.bordered)
         }
+    }
+}
+
+/// Back to the list, when the Mac being joined is not the one in front of the person.
+struct ChooseAnotherMacButton: View {
+    let model: RemoteModel
+
+    var body: some View {
+        Button("Scegli un altro Mac", systemImage: "list.bullet") { model.chooseAnother() }
+            .buttonStyle(.bordered)
+            .accessibilityIdentifier("chooseAnotherMac")
     }
 }
 

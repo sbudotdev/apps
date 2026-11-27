@@ -130,21 +130,32 @@ final class PrompterController {
 
     /// Trackpad or wheel scrolling, in points (positive goes forward).
     func scrollManually(by points: Double) {
-        engine.scroll(by: points)
+        moveByHand { engine.scroll(by: points) }
         syncVoicePositionToOffset()
+    }
+
+    /// Moving the text by hand moves the reading time too, at the current speed: the time shown
+    /// on the iPhone stays where the text is (SBU-424).
+    // shortcut: points become seconds at today's speed, so after speed changes (or in voice mode,
+    // where speed does not set the pace) going back to the top may not land on 0:00 exactly.
+    // Keep a time per offset if that ever shows.
+    private func moveByHand(_ move: () -> Void) {
+        let before = engine.offset
+        move()
+        elapsed = max(0, elapsed + (engine.offset - before) / engine.speed)
     }
 
     private func jump(toCue index: Int) {
         guard script.cues.indices.contains(index) else { return }
         if returnPoint == nil { returnPoint = (engine.offset, aligner.position) }
         let cue = script.cues[index]
-        engine.scroll(to: offset(ofLine: cue.lineIndex))
+        moveByHand { engine.scroll(to: offset(ofLine: cue.lineIndex)) }
         aligner.reset(to: cue.wordIndex)
     }
 
     private func returnFromCue() {
         guard let point = returnPoint else { return }
-        engine.scroll(to: point.offset)
+        moveByHand { engine.scroll(to: point.offset) }
         aligner.reset(to: point.word)
         returnPoint = nil
     }

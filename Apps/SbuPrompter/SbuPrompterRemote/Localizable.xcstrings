@@ -265,6 +265,17 @@
         }
       }
     },
+    "Scegli un altro Mac": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose another Mac"
+          }
+        }
+      }
+    },
     "Scrivi il codice di 4 cifre che trovi nel menu di Sbu Prompter, nella barra dei menu del Mac.": {
       "extractionState": "manual",
       "localizations": {

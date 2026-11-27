@@ -63,7 +63,8 @@ nonisolated struct RemoteGate<Peer: Hashable> {
             guard tokens.contains(token) else { return [.send(.pairingRequired)] }
             return trust(peer, token: token)
         case .command(let command):
-            return trusted.contains(peer) ? [.perform(command)] : [.send(.pairingRequired)]
+            // The status right after the command: the iPhone shows its effect without waiting for the timer.
+            return trusted.contains(peer) ? [.perform(command), .sendStatus] : [.send(.pairingRequired)]
         case .paired, .pairingRequired, .pairingPaused, .status:
             return []
         }

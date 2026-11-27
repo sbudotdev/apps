@@ -100,7 +100,7 @@ struct RemoteGateTests {
         var gate = gate()
         #expect(gate.receive(.command(.togglePlay), from: "iPhone") == [.send(.pairingRequired)])
         _ = gate.receive(.pair(code: "1234"), from: "iPhone")
-        #expect(gate.receive(.command(.togglePlay), from: "iPhone") == [.perform(.togglePlay)])
+        #expect(gate.receive(.command(.togglePlay), from: "iPhone") == [.perform(.togglePlay), .sendStatus])
     }
 
     @Test func disconnectingDropsTrust() {

@@ -35,12 +35,16 @@ final class RemoteModel {
 
     @ObservationIgnored var send: (RemoteMessage) -> Void = { _ in }
     @ObservationIgnored var connect: (String) -> Void = { _ in }
+    /// Drops the link to the Mac being joined.
+    @ObservationIgnored var leave: () -> Void = {}
 
     @ObservationIgnored private let defaults: UserDefaults
     @ObservationIgnored private var sentCode = false
     /// Failed invitations to the current Mac; Multipeer often drops the first after a relaunch.
     @ObservationIgnored private var failedAttempts = 0
     @ObservationIgnored private var hasStarted = false
+    /// Off once the person goes back to the list: the Macs found then wait for their choice.
+    @ObservationIgnored private var joinsByItself = true
     static let maxAttempts = 3
     private static let tokensKey = "macTokens"
 
@@ -83,7 +87,7 @@ final class RemoteModel {
 
     func found(_ names: [String]) {
         macs = names.sorted()
-        guard phase == .searching else { return }
+        guard phase == .searching, joinsByItself else { return }
         if let paired = macs.first(where: isPaired) {
             choose(paired)
         } else if macs.count == 1 {
@@ -92,6 +96,8 @@ final class RemoteModel {
     }
 
     func connected(to mac: String) {
+        // A late answer from a Mac left behind for another one.
+        guard mac == currentMac else { return }
         // A new link: the Mac says again if it still refuses codes.
         isPairingPaused = false
         if let token = tokens[mac] {
@@ -104,6 +110,7 @@ final class RemoteModel {
 
     func disconnected(from mac: String) {
         guard mac == currentMac else { return }
+        let wasDriving = phase == .connected(mac)
         if phase == .connecting(mac), status == nil, failedAttempts + 1 < Self.maxAttempts, macs.contains(mac) {
             failedAttempts += 1
             connect(mac)
@@ -113,10 +120,37 @@ final class RemoteModel {
         phase = .searching
         status = nil
         sentCode = false
+        // Wi-Fi hiccups drop the link while the Mac is still there: join it again, with the token.
+        if wasDriving, macs.contains(mac) { choose(mac) }
+    }
+
+    /// The link starts looking from scratch (launch, back from the background): the paired Mac is
+    /// joined by itself again, even after the person opened the list.
+    func restarted() {
+        joinsByItself = true
+    }
+
+    /// The Mac app quit and opened again: a new peer with the same name. The one being joined,
+    /// or the paired one given up on, is joined again at once.
+    func macRelaunched(_ mac: String) {
+        guard mac == currentMac || (phase == .searching && joinsByItself && isPaired(with: mac)) else { return }
+        failedAttempts = 0
+        status = nil
+        sentCode = false
+        phase = .connecting(mac)
+        connect(mac)
     }
 
     func receive(_ message: RemoteMessage) {
         guard let mac = currentMac else { return }
+        // A driving Mac that no longer knows this iPhone (a link it dropped late, a restart):
+        // the saved token first, the code only if the token is refused.
+        if message == .pairingRequired, phase == .connected(mac), let token = tokens[mac] {
+            phase = .connecting(mac)
+            status = nil
+            send(.resume(token: token))
+            return
+        }
         switch message {
         case .paired(let token):
             failedAttempts = 0
@@ -144,8 +178,20 @@ final class RemoteModel {
     // MARK: From the person
 
     func choose(_ mac: String) {
+        joinsByItself = true
         phase = .connecting(mac)
         connect(mac)
+    }
+
+    /// Back to the list of Macs, from joining one or from its code: it may be the wrong Mac,
+    /// or one that does not answer.
+    func chooseAnother() {
+        joinsByItself = false
+        failedAttempts = 0
+        sentCode = false
+        status = nil
+        phase = .searching
+        leave()
     }
 
     func enter(code: String) {
