@@ -1261,6 +1261,22 @@
         }
       }
     },
+    "Ordina per CFU" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credits"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CFU"
+          }
+        }
+      }
+    },
     "Ordine crescente" : {
       "localizations" : {
         "en" : {
