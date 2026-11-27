@@ -5,17 +5,19 @@ import UIKit
 /// MultipeerConnectivity (encrypted, nothing leaves the LAN) and carries `RemoteModel`'s messages.
 final class MacLink: NSObject {
     private let model: RemoteModel
-    private let peer = MCPeerID(displayName: UIDevice.current.name)
-    private let session: MCSession
-    private let browser: MCNearbyServiceBrowser
+    private var peer = MCPeerID(displayName: UIDevice.current.name)
+    private var session: MCSession
+    private var browser: MCNearbyServiceBrowser
     /// The Macs nearby by the name shown; two Macs with the same name get "Studio (2)".
-    // shortcut: tokens are keyed by this label, and the label depends on which Mac is found
-    // first. Two Macs with the same name can swap tokens after a relaunch, and a refused
-    // `resume` then forgets the other Mac's token. Key tokens by a Mac id if that ever matters.
+    // shortcut: tokens are keyed by this label. A Mac opened again keeps its label (`ids`), but two
+    // Macs with the same name can swap labels when this app restarts, and a refused `resume` then
+    // forgets the other Mac's token. Key tokens by the Mac id if that ever matters.
     private var found: [String: MCPeerID] = [:]
     /// The Mac invited last. The session also reports the other iPhones driving that Mac (Multipeer
     /// links every peer of a session), so everything else is ignored and nothing is sent to them.
     private var mac: MCPeerID?
+    /// The id each Mac announces: the same Mac app opened again is a new peer with the same id.
+    private var ids: [MCPeerID: String] = [:]
 
     init(model: RemoteModel) {
         self.model = model
@@ -36,9 +38,19 @@ final class MacLink: NSObject {
     /// dropped the session.
     func restart() {
         browser.stopBrowsingForPeers()
+        browser.delegate = nil
         session.disconnect()
+        session.delegate = nil
+        // A new peer each time: the Mac may still hold the old link, and when it drops it late
+        // it must not drop this one too (SBU-424).
+        peer = MCPeerID(displayName: UIDevice.current.name)
+        session = MCSession(peer: peer, securityIdentity: nil, encryptionPreference: .required)
+        session.delegate = self
+        browser = MCNearbyServiceBrowser(peer: peer, serviceType: "sbu-prompter")
+        browser.delegate = self
         found = [:]
         names = [:]
+        ids = [:]
         mac = nil
         settle?.cancel()
         // The list first, so the model does not try to join again a Mac this link no longer knows.
@@ -87,6 +99,11 @@ final class MacLink: NSObject {
     /// first Mac found would be joined as if it were the only one.
     private func foundChanged() {
         settle?.cancel()
+        // The paired Mac is the one joined anyway: no need to wait for the others.
+        if found.keys.contains(where: model.isPaired) {
+            model.found(Array(found.keys))
+            return
+        }
         settle = Task { @MainActor [weak self] in
             try? await Task.sleep(for: .milliseconds(700))
             guard !Task.isCancelled, let self else { return }
@@ -104,6 +121,18 @@ extension MacLink: MCNearbyServiceBrowserDelegate {
     nonisolated func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID,
                              withDiscoveryInfo info: [String: String]?) {
         Task { @MainActor in
+            guard browser === self.browser else { return }
+            let id = info?["id"]
+            if let id, let old = self.found.first(where: { self.ids[$0.value] == id }), old.value != peerID {
+                // The same Mac app, quit and opened again: same label, so its token still matches.
+                self.found[old.key] = peerID
+                self.names[peerID] = old.key
+                self.ids[peerID] = id
+                if self.mac == old.value { self.mac = nil }
+                self.model.macRelaunched(old.key)
+                return
+            }
+            if let id { self.ids[peerID] = id }
             self.found[self.name(for: peerID)] = peerID
             self.foundChanged()
         }
@@ -111,6 +140,7 @@ extension MacLink: MCNearbyServiceBrowserDelegate {
 
     nonisolated func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
         Task { @MainActor in
+            guard browser === self.browser else { return }
             // A relaunched Mac comes back as a new peer and takes its plain name again,
             // since labels only clash with the Macs found now.
             if let name = self.names[peerID], self.found[name] == peerID { self.found[name] = nil }
@@ -122,6 +152,7 @@ extension MacLink: MCNearbyServiceBrowserDelegate {
 extension MacLink: MCSessionDelegate {
     nonisolated func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         Task { @MainActor in
+            guard session === self.session else { return }
             guard peerID == self.mac else {
                 // A Mac left behind for another one may still answer the old invitation.
                 if state == .connected, self.found.values.contains(peerID) { session.cancelConnectPeer(peerID) }
@@ -138,7 +169,7 @@ extension MacLink: MCSessionDelegate {
 
     nonisolated func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         Task { @MainActor in
-            guard peerID == self.mac else { return }
+            guard session === self.session, peerID == self.mac else { return }
             self.receive(data)
         }
     }

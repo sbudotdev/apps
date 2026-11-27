@@ -316,6 +316,55 @@ struct RemoteModelTests {
         #expect(MacLink.label(for: "Studio", taken: ["Studio", "Studio (2)"]) == "Studio (3)")
     }
 
+    /// SBU-424: a Mac that lost track of this iPhone (it restarted, or dropped the old link late)
+    /// gets the saved token again before the code is asked.
+    @Test func aConnectedMacThatAsksForTheCodeGetsTheTokenFirst() {
+        pair()
+        sent.messages = []
+        model.receive(.pairingRequired)
+        #expect(model.phase == .connecting("Studio"))
+        #expect(sent.messages == [.resume(token: "t1")])
+        #expect(model.isPaired(with: "Studio"))
+        // The token itself is refused: now the code.
+        model.receive(.pairingRequired)
+        #expect(model.phase == .needsCode(mac: "Studio", wrong: false))
+        #expect(!model.isPaired(with: "Studio"))
+    }
+
+    /// SBU-424: the Mac app quit and opened again comes back as a new peer: join it right away,
+    /// instead of waiting for the invitations to the old one to time out.
+    @Test func aRelaunchedMacIsJoinedAgainRightAway() {
+        pair()
+        model.receive(.status(Self.status))
+        model.disconnected(from: "Studio")
+        model.disconnected(from: "Studio")
+        sent.macs = []
+        model.macRelaunched("Studio")
+        #expect(model.phase == .connecting("Studio"))
+        #expect(sent.macs == ["Studio"])
+        // Its failures count from zero again.
+        for _ in 1..<RemoteModel.maxAttempts { model.disconnected(from: "Studio") }
+        #expect(model.phase == .connecting("Studio"))
+    }
+
+    @Test func aRelaunchedMacThatWasGivenUpOnIsJoinedAgain() {
+        pair()
+        model.disconnected(from: "Studio")
+        for _ in 1...RemoteModel.maxAttempts { model.disconnected(from: "Studio") }
+        #expect(model.phase == .searching)
+        sent.macs = []
+        model.macRelaunched("Studio")
+        #expect(model.phase == .connecting("Studio"))
+        #expect(sent.macs == ["Studio"])
+    }
+
+    @Test func aRelaunchedMacNotBeingDrivenIsLeftAlone() {
+        model.found(["Studio", "Ufficio"])
+        model.macRelaunched("Studio")
+        #expect(model.phase == .searching)
+        #expect(sent.macs.isEmpty)
+    }
+
     private func pair() {
         model.found(["Studio"])
         model.connected(to: "Studio")

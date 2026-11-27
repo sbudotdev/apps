@@ -9,6 +9,7 @@ import Observation
 final class RemoteServer: NSObject {
     static let serviceType = "sbu-prompter"
     private static let tokensKey = "remoteTokens"
+    private static let idKey = "remoteID"
     /// The line being read changes several times a second while the text scrolls.
     private static let statusInterval: TimeInterval = 0.1
 
@@ -40,7 +41,17 @@ final class RemoteServer: NSObject {
         #endif
         peer = MCPeerID(displayName: name ?? "Mac")
         session = MCSession(peer: peer, securityIdentity: nil, encryptionPreference: .required)
-        advertiser = MCNearbyServiceAdvertiser(peer: peer, discoveryInfo: nil, serviceType: Self.serviceType)
+        // A random id kept across launches: the iPhone tells this Mac opened again from another Mac
+        // with the same name, and joins it again with its token.
+        #if DEBUG
+        // Test Macs named on the command line run beside the real one: each needs its own id.
+        let idKey = UserDefaults.standard.string(forKey: "SbuPrompterPeerName").map { "\(Self.idKey)-\($0)" } ?? Self.idKey
+        #else
+        let idKey = Self.idKey
+        #endif
+        let id = UserDefaults.standard.string(forKey: idKey) ?? UUID().uuidString
+        UserDefaults.standard.set(id, forKey: idKey)
+        advertiser = MCNearbyServiceAdvertiser(peer: peer, discoveryInfo: ["id": id], serviceType: Self.serviceType)
         super.init()
         session.delegate = self
         advertiser.delegate = self

@@ -124,8 +124,27 @@ final class RemoteModel {
         if wasDriving, macs.contains(mac) { choose(mac) }
     }
 
+    /// The Mac app quit and opened again: a new peer with the same name. The one being joined,
+    /// or the paired one given up on, is joined again at once.
+    func macRelaunched(_ mac: String) {
+        guard mac == currentMac || (phase == .searching && joinsByItself && isPaired(with: mac)) else { return }
+        failedAttempts = 0
+        status = nil
+        sentCode = false
+        phase = .connecting(mac)
+        connect(mac)
+    }
+
     func receive(_ message: RemoteMessage) {
         guard let mac = currentMac else { return }
+        // A driving Mac that no longer knows this iPhone (a link it dropped late, a restart):
+        // the saved token first, the code only if the token is refused.
+        if message == .pairingRequired, phase == .connected(mac), let token = tokens[mac] {
+            phase = .connecting(mac)
+            status = nil
+            send(.resume(token: token))
+            return
+        }
         switch message {
         case .paired(let token):
             failedAttempts = 0
