@@ -1,7 +1,3 @@
-Three tabs: Subscriptions, Calendar and Settings. The payments calendar is one tap away.
+A new icon: the cash register drawn in squares on the notebook, with the coloured full stop.
 
-The detail opens in a sheet: the price up top, what you've spent so far, how long you've been subscribed, the latest payments and prices. Mark as cancelled is the main button of the detail.
-
-Each row says in how many days it renews, and you change the order above the list. If notifications are off, the form tells you and takes you to Settings.
-
-Under the figure, Share the figure makes a picture on squared paper to send to anyone.
+From 1 December to 15 January, at the top of the list, Your year in subscriptions: what you spent and what renews in January. One tap hides it.

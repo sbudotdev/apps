@@ -1,3 +1,5 @@
+What changes in 1.2: only the app icon (a wastebasket drawn in squares). The app is otherwise version 1.1.
+
 No account. Sbu Clean has no server and sends nothing: no analytics, ads or tracking. The library scan runs on the device with Vision; no photo leaves the iPhone.
 
 On first launch the app explains why it needs the Photos library and then iOS asks for access. With access denied or limited, the screen says so and offers to open Settings.

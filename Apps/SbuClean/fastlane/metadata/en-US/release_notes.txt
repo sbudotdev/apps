@@ -1,1 +1,1 @@
-First release.
+A new icon: the wastebasket drawn in squares on the notebook, with the coloured full stop. Nothing else in the app changes.

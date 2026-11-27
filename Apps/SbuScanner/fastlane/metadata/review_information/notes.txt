@@ -1,3 +1,5 @@
+What changes in 2.1.0: only the app icon (the same magnifying glass, now drawn in squares). The app is otherwise version 2.0.1.
+
 No account. Sbu Scanner has no server and makes no network calls: no analytics, ads or tracking. The history stays on the device and is never synced.
 
 This is version 2.0 of an app already on the App Store, rebuilt in Swift. At first launch it brings over the history and folders saved by version 1.x on the same device; on a new install it opens empty.
