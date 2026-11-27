@@ -4,6 +4,8 @@ Obiettivo: ogni app a pagamento che non ha bisogno di un server ha la sua App Sb
 
 Traguardi: ~~25 app in revisione entro il 31 ottobre 2026, 100 entro fine anno~~, abbandonati dopo il rifiuto 4.3 del 14/10: conta la salute dell'account (vedi il calendario sotto). Il codice non è il collo di bottiglia: lo sono la revisione Apple e il test insieme.
 
+> **27/11: stop alle app singole nuove.** Matteo ha scelto un'app sola «Sbu» con gli strumenti dentro ([SBU-460](/SBU/issues/SBU-460#document-strategia), [SBU-461](/SBU/issues/SBU-461)). Shrink, Grid, Tidy, Libretto, Meds e le pianificate (Cycle, Cast, Image, Gif, Tags, Knit, Chores, Reader, Exposure) sono ferme come app singole: se lo spike passa diventano strumenti di Sbu. Il calendario già deciso continua: Prompter, Fuel, Squares, Inventory. La roadmap e il calendario qui sotto restano come storia.
+
 ## Stato delle app (16 ottobre 2026)
 
 Un solo stato per app, aggiornato a ogni passaggio: **pianificata** → **in sviluppo** → **TestFlight** → **in revisione** → **pubblicata il <data>** (o **respinta**, con il motivo). La mappa di ogni app porta l'app fino a TestFlight.

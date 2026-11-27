@@ -58,7 +58,7 @@ Ogni app è su `main`, tranne ZTL. "Prossimo passo" è l'unica cosa che sblocca 
 
 ### Pianificate, non iniziate
 
-Cycle, Cast, Image, Gif, Tags, Knit, Chores, Reader, Exposure.
+Cycle, Cast, Image, Gif, Tags, Knit, Chores, Reader, Exposure. Ferme come app singole dal 27/11 (§9).
 
 ## 4. Calendario degli invii
 
@@ -105,7 +105,7 @@ Un'app nuova a settimana ([SBU-275](/SBU/issues/SBU-275)). **Ogni invio va appro
 
 ## 9. Cosa NON fare adesso
 
-- Nessuna app nuova (Cycle e le pianificate restano ferme) finché la coda "pronte su ASC" non si svuota.
+- Dal 27/11 sono **ferme come app singole** Shrink, Grid, Tidy, Libretto, Meds e le pianificate (Cycle, Cast, Image, Gif, Tags, Knit, Chores, Reader, Exposure). Matteo ha scelto l'app sola «Sbu» con gli strumenti dentro ([SBU-460](/SBU/issues/SBU-460#document-strategia), [SBU-461](/SBU/issues/SBU-461)): se lo spike passa diventano strumenti di Sbu. Il calendario già deciso continua: Prompter, Fuel, Squares, Inventory.
 - Un invio a settimana: la regola tiene lontano il 4.3.
 - Niente merge senza test locali verdi finché la CI è spenta.
 

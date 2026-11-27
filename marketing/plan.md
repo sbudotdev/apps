@@ -6,6 +6,8 @@ v3.4 · 22 novembre 2026, sera (corretta dopo la revisione di SBU-346): coda App
 
 ## 1. Executive summary
 
+> 27/11: in prova la premessa dell'app sola, vedi [SBU-460](/SBU/issues/SBU-460#document-strategia).
+
 **sbu.dev rifà gratis il software che oggi si paga, in tre rami.** **App**: le app iPhone più vendute, rifatte gratis, una a settimana. **Giochi**: i giochi più giocati, rifatti senza pubblicità, uno al mese. **Software**: il software che le aziende pagano centinaia di migliaia di euro l'anno, rifatto open source; il primo progetto è **Sbu Commerce**, un backend e-commerce B2B open source e self-hosted. Stesse regole per tutti: niente abbonamenti, niente pubblicità, niente tracking, i dati restano a chi li possiede.
 
 **Oggi (22/11, verificato su App Store Connect e con il lookup pubblico dell'App Store):** 7 app in vendita (Subscriptions 2.1.0, Scanner 2.0.1, Find 1.0, e dal 22/11 Moon, Clean, Level e Noise). Moon 1.1 e Noise 1.1 sono già in vendita, Level 1.2 è in revisione; Habits e Speed ancora respinte. Coda delle app nuove, una a settimana: Chats 23/11; il 30/11 Prompter se [SBU-333](/SBU/issues/SBU-333) è pronto e approvato dal QA entro il 29/11, altrimenti Fuel il 30/11 e Prompter il 7/12 (lo decide il Lead il 30/11); poi Squares e Inventory, le date le fissa il Lead dopo il 30/11; Speed e Habits ferme sulla telefonata con Apple. Nessun lancio registrato in `marketing/log.md`. Punteggio 53/85 (§3).
