@@ -59,8 +59,10 @@ final class SnapshotTests: XCTestCase {
         result.tap()
         sleep(2)
         springboard.swipeLeft()
-        // The gallery draws the widget a moment after the page settles.
-        sleep(4)
+        // The gallery draws the widget a moment after the page settles. Its figure isn't always in the
+        // accessibility tree, so this is a ceiling, not a check; the Snapfile reinstalls the app per language,
+        // without which the gallery could keep the placeholder's grey bars.
+        _ = springboard.descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS %@", "544")).firstMatch.waitForExistence(timeout: 15)
         snapshot("05-widget")
     }
 

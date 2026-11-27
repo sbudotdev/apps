@@ -73,6 +73,30 @@ nonisolated struct ActivityChartData: Equatable, Sendable {
         bars.first { $0.slot == slot && $0.series == series }?.count ?? 0
     }
 
+    /// The labels the x axis shows. Every hour would crowd the axis: one in three ("21"), one in four
+    /// on a 12-hour clock ("9 PM" is twice as wide), twice as far apart at the accessibility sizes.
+    /// Months about four labels (one). Never a label on the first bar, nor a month on the last, where
+    /// it would run past the chart's edge and be cut.
+    func axisLabels(axis: ActivityAxis, isLarge: Bool) -> [String] {
+        let labels = slots.map(\.label)
+        switch axis {
+        case .hour:
+            let step = (labels.contains { $0.count > 2 } ? 4 : 3) * (isLarge ? 2 : 1)
+            return labels.enumerated().filter { $0.offset > 0 && $0.offset.isMultiple(of: step) }.map(\.element)
+        case .weekday, .year:
+            return labels
+        case .month:
+            // At the accessibility sizes a month's name is wider than a third of the chart: one, mid-way.
+            if isLarge { return labels.isEmpty ? [] : [labels[labels.count / 2]] }
+            let count = 4
+            guard labels.count > count else { return labels }
+            let stride = max(1, (labels.count - 2) / count)
+            return labels.enumerated()
+                .filter { $0.offset > 0 && $0.offset < labels.count - 1 && ($0.offset - 1).isMultiple(of: stride) }
+                .map(\.element)
+        }
+    }
+
     /// "21" in Italian, "9 PM" in English (US): the hour as the locale writes it.
     private static func hourLabel(_ hour: Int, calendar: Calendar, locale: Locale) -> String {
         guard let date = calendar.date(from: DateComponents(year: 2001, month: 1, day: 1, hour: hour)) else { return String(hour) }

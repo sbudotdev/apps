@@ -41,10 +41,15 @@ final class SnapshotTests: XCTestCase {
         search.typeText("Roma")
         app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Roma' OR label BEGINSWITH 'Rome'")).firstMatch.tap()
         XCTAssertTrue(place.waitForExistence(timeout: 5))
-        // Up to the rise and set and the next four phases: the figure goes past the top and the
-        // status bar sits over the blank grid between it and the phase name.
-        let lower = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.75))
-        lower.press(forDuration: 0.1, thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.283)))
+        // Up to the rise and set and the next four phases, the figure still whole under the status bar:
+        // scrolled to the end it slides under the clock. A flick lands wherever its momentum ends, so drag
+        // slowly and hold until the place under the rise and set sits at a set height.
+        let target = app.frame.height * 0.68
+        for _ in 0..<3 where abs(place.frame.minY - target) > 8 {
+            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.8))
+            start.press(forDuration: 0.1, thenDragTo: start.withOffset(CGVector(dx: 0, dy: target - place.frame.minY)),
+                        withVelocity: .slow, thenHoldForDuration: 0.5)
+        }
         sleep(1)
         snapshot("03-phases")
         app.swipeDown()
