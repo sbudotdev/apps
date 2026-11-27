@@ -136,6 +136,9 @@ final class PrompterController {
 
     /// Moving the text by hand moves the reading time too, at the current speed: the time shown
     /// on the iPhone stays where the text is (SBU-424).
+    // shortcut: points become seconds at today's speed, so after speed changes (or in voice mode,
+    // where speed does not set the pace) going back to the top may not land on 0:00 exactly.
+    // Keep a time per offset if that ever shows.
     private func moveByHand(_ move: () -> Void) {
         let before = engine.offset
         move()

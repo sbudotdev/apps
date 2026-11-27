@@ -365,6 +365,18 @@ struct RemoteModelTests {
         #expect(sent.macs.isEmpty)
     }
 
+    /// QA SBU-425: going back to the list stops joining by itself only until the link starts again.
+    @Test func aRestartJoinsThePairedMacAgainAfterTheListWasOpened() {
+        pair()
+        model.found(["Studio", "Ufficio"])
+        model.chooseAnother()
+        model.restarted()
+        sent.macs = []
+        model.found(["Studio", "Ufficio"])
+        #expect(model.phase == .connecting("Studio"))
+        #expect(sent.macs == ["Studio"])
+    }
+
     private func pair() {
         model.found(["Studio"])
         model.connected(to: "Studio")

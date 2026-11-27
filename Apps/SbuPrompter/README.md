@@ -2,7 +2,7 @@
 
 Teleprompter gratuito per Mac: il copione scorre nel notch, sotto la fotocamera, e non compare quando condividi lo schermo, nelle registrazioni o negli screenshot. Spec: SBU-166, ADR-0024 per SbuKit sul Mac.
 
-Il telecomando iPhone (`SbuPrompterRemote`, iOS 17) è la stessa app: stesso bundle id, universal purchase. Parla col Mac solo in rete locale, con MultipeerConnectivity cifrato (ADR-0007).
+Il telecomando iPhone (`SbuPrompterRemote`, iOS 17) è la stessa app: stesso bundle id, universal purchase. Parla col Mac solo in rete locale, con MultipeerConnectivity cifrato (ADR-0007). Il Mac manda lo stato subito dopo ogni comando e ogni 0,1 s, con App Nap spento mentre un iPhone guida, e annuncia un id casuale fisso: il telefono riconosce lo stesso Mac riaperto e si ricollega col token, senza codice. A ogni riapertura il telefono riparte con una sessione nuova.
 
 ```sh
 xcodegen generate
@@ -18,12 +18,12 @@ TEST_RUNNER_SBU_PROMPTER_CODE=1234 TEST_RUNNER_SBU_PROMPTER_SHOTS=/tmp/prompter-
   -destination 'platform=iOS Simulator,name=<iPhone>' -only-testing:SbuPrompterRemoteUITests
 ```
 
-Deve girare un solo Sbu Prompter sul Mac: due copie si annunciano con lo stesso nome, l'iPhone le mostra come «Mac (2)» e il test non sa quale scegliere. Con Xcode 27 `xcodebuild` a volte resta appeso dopo "Test Suite 'All tests' passed": il risultato è già nel log, e gli screenshot sono nella cartella di `TEST_RUNNER_SBU_PROMPTER_SHOTS`.
+Più copie sul Mac vanno distinte: lancia ogni build Debug con `-SbuPrompterPeerName "<nome>"` (nome e id propri) e scegli quella del test con `TEST_RUNNER_SBU_PROMPTER_MAC=<nome>`. Con Xcode 27 `xcodebuild` a volte resta appeso dopo "Test Suite 'All tests' passed": il risultato è già nel log, e gli screenshot sono nella cartella di `TEST_RUNNER_SBU_PROMPTER_SHOTS`.
 
 ## Scarica
 
 - **Mac:** [SbuPrompter-1.1.0.dmg](https://github.com/sbudotdev/apps/releases/download/prompter-1.1.0/SbuPrompter-1.1.0.dmg) (macOS, universale, firmato Developer ID e notarizzato). Apri il dmg e trascina Sbu Prompter in Applicazioni. Note e versioni precedenti: [release prompter-1.1.0](https://github.com/sbudotdev/apps/releases/tag/prompter-1.1.0).
-- **iPhone (telecomando):** per ora su TestFlight; su App Store dopo la review.
+- **iPhone (telecomando):** 1.0 in review (build 7, 27/11), anche su TestFlight.
 
 ## Dove sta cosa
 

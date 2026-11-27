@@ -53,6 +53,7 @@ final class MacLink: NSObject {
         ids = [:]
         mac = nil
         settle?.cancel()
+        model.restarted()
         // The list first, so the model does not try to join again a Mac this link no longer knows.
         model.found([])
         if let mac = model.currentMac { model.disconnected(from: mac) }
@@ -123,11 +124,13 @@ extension MacLink: MCNearbyServiceBrowserDelegate {
         Task { @MainActor in
             guard browser === self.browser else { return }
             let id = info?["id"]
-            // Same id and same name: the same Mac app, quit and opened again. It keeps its label, so its
-            // token still matches. The id is not a proof (discovery data is public): with the name it
-            // trusts no peer the name alone did not already.
+            // Same id and same name, and the old peer no longer linked: the same Mac app, quit and opened
+            // again. It keeps its label, so its token still matches.
+            // shortcut: the id is public discovery data, not a proof. A peer copying name and id gets the
+            // token once the real Mac is gone, as a peer copying the name alone already could. A Mac
+            // still linked is never left for it (QA SBU-425). Prove the Mac at pairing if that matters.
             if let id, let old = self.found.first(where: { self.ids[$0.value] == id && $0.value.displayName == peerID.displayName }),
-               old.value != peerID {
+               old.value != peerID, !self.session.connectedPeers.contains(old.value) {
                 self.found[old.key] = peerID
                 self.names[peerID] = old.key
                 self.ids[peerID] = id

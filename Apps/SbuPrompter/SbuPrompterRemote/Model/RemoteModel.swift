@@ -124,6 +124,12 @@ final class RemoteModel {
         if wasDriving, macs.contains(mac) { choose(mac) }
     }
 
+    /// The link starts looking from scratch (launch, back from the background): the paired Mac is
+    /// joined by itself again, even after the person opened the list.
+    func restarted() {
+        joinsByItself = true
+    }
+
     /// The Mac app quit and opened again: a new peer with the same name. The one being joined,
     /// or the paired one given up on, is joined again at once.
     func macRelaunched(_ mac: String) {

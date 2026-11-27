@@ -25,7 +25,7 @@ final class RemoteServer: NSObject {
     @ObservationIgnored private var timer: Timer?
     @ObservationIgnored private var lastSent: PrompterStatus?
     /// Keeps App Nap off while an iPhone drives: it throttles the status timer to seconds when the
-    /// prompter is on another Space or behind other windows.
+    /// prompter is on another Space or behind other windows. The Mac may still sleep when idle.
     @ObservationIgnored private var driving: NSObjectProtocol?
 
     override init() {
@@ -104,7 +104,7 @@ final class RemoteServer: NSObject {
             driving.map(ProcessInfo.processInfo.endActivity)
             driving = nil
         } else if driving == nil {
-            driving = ProcessInfo.processInfo.beginActivity(options: .userInitiated, reason: "iPhone remote connected")
+            driving = ProcessInfo.processInfo.beginActivity(options: .userInitiatedAllowingIdleSystemSleep, reason: "iPhone remote connected")
         }
     }
 
