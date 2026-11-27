@@ -98,6 +98,17 @@ struct PrompterControllerTests {
         #expect(controller.engine.offset == 0)
     }
 
+    /// SBU-424: going back on the Mac changes what the iPhone remote shows.
+    @Test func scrollingBackOnTheMacChangesTheStatus() {
+        let controller = makeController()
+        let top = controller.status
+        controller.scrollManually(by: 90)
+        let ahead = controller.status
+        #expect(ahead.currentLine != top.currentLine)
+        controller.scrollManually(by: -90)
+        #expect(controller.status.currentLine == top.currentLine)
+    }
+
     @Test func rewindStopsAtTheTop() {
         let controller = makeController()
         controller.perform(.togglePlay)

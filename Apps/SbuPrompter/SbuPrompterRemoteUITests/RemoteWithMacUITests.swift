@@ -87,6 +87,41 @@ final class RemoteWithMacUITests: XCTestCase {
         }
     }
 
+    /// SBU-424: back from the home screen the remote joins the Mac again and follows it, with no code.
+    @MainActor
+    func testTheRemoteFollowsTheMacBackFromTheBackground() throws {
+        guard let code = ProcessInfo.processInfo.environment["SBU_PROMPTER_CODE"] else {
+            throw XCTSkip("No Mac code given.")
+        }
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launchArguments = ["-AppleLanguages", "(it)", "-AppleLocale", "it_IT"]
+        app.launch()
+        let field = app.textFields["pairingCode"]
+        let pad = app.descendants(matching: .any)["gesturePad"].firstMatch
+        let connect = ProcessInfo.processInfo.environment["SBU_PROMPTER_MAC"].map { app.buttons[$0] }
+            ?? app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Collega ")).firstMatch
+        _ = field.waitForExistence(timeout: 20) || pad.exists
+        if !field.exists, !pad.exists, connect.exists { connect.tap() }
+        if field.waitForExistence(timeout: 20) { field.typeText(code) }
+        XCTAssertTrue(pad.waitForExistence(timeout: 15), "The Mac did not pair")
+
+        app.buttons["Riavvolgi"].tap()
+        app.buttons["playPause"].tap()
+        XCTAssertTrue(app.buttons["Pausa"].waitForExistence(timeout: 5), "The Mac did not start")
+
+        XCUIDevice.shared.press(.home)
+        sleep(5)
+        app.activate()
+        XCTAssertTrue(pad.waitForExistence(timeout: 20), "The remote did not join the Mac again")
+        let figure = app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH %@", "Tempo di lettura")).firstMatch
+        XCTAssertTrue(figure.waitForExistence(timeout: 5))
+        XCTAssertTrue(waitForChange(figure, from: figure.label), "The remote stopped following the Mac")
+        // The commands reach the Mac and their effect comes back.
+        app.buttons["playPause"].tap()
+        XCTAssertTrue(app.buttons["Avvia"].waitForExistence(timeout: 5), "The pause did not come back from the Mac")
+    }
+
     @MainActor
     private func waitForChange(_ element: XCUIElement, from label: String) -> Bool {
         let changed = expectation(for: NSPredicate(format: "label != %@", label), evaluatedWith: element)
