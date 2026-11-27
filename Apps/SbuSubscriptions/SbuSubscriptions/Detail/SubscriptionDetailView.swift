@@ -35,6 +35,7 @@ struct SubscriptionDetailView: View {
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
             .background(SbuTheme.paper)
+            .solidTopEdge()
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(isPresented: $showsHistory) {
                 HistoryView(subscription: subscription)
