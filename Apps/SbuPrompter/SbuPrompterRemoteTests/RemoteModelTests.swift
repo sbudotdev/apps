@@ -12,6 +12,7 @@ struct RemoteModelTests {
     final class Sent {
         var messages: [RemoteMessage] = []
         var macs: [String] = []
+        var left = 0
     }
 
     init() {
@@ -22,6 +23,7 @@ struct RemoteModelTests {
         sent = Sent()
         model.send = { [sent] in sent.messages.append($0) }
         model.connect = { [sent] in sent.macs.append($0) }
+        model.leave = { [sent] in sent.left += 1 }
     }
 
     static let status = PrompterStatus(isPlaying: true, speed: 40, isVoice: false, cueTitles: ["A", nil],
@@ -49,6 +51,7 @@ struct RemoteModelTests {
         model.found(["Studio"])
         model.connected(to: "Studio")
         model.receive(.paired(token: "t1"))
+        model.found([])
         model.disconnected(from: "Studio")
         sent.macs = []
         model.found(["Portatile", "Studio"])
@@ -127,9 +130,65 @@ struct RemoteModelTests {
     @Test func losingTheMacGoesBackToSearching() {
         pair()
         model.receive(.status(Self.status))
+        model.found([])
         model.disconnected(from: "Studio")
         #expect(model.phase == .searching)
         #expect(model.status == nil)
+    }
+
+    @Test func aDroppedLinkComesBackOnItsOwnWhileTheMacIsAround() {
+        pair()
+        model.receive(.status(Self.status))
+        sent.macs = []
+        sent.messages = []
+        model.disconnected(from: "Studio")
+        #expect(model.phase == .connecting("Studio"))
+        #expect(model.status == nil)
+        #expect(sent.macs == ["Studio"])
+        model.connected(to: "Studio")
+        #expect(sent.messages == [.resume(token: "t1")])
+    }
+
+    @Test func aRejoinThatKeepsFailingStops() {
+        pair()
+        model.disconnected(from: "Studio")
+        for _ in 1...RemoteModel.maxAttempts { model.disconnected(from: "Studio") }
+        #expect(model.phase == .searching)
+    }
+
+    @Test func aMacFoundLaterThanTheOneBeingJoinedCanBeChosen() {
+        model.found(["Studio"])
+        model.found(["Portatile", "Studio"])
+        #expect(model.phase == .connecting("Studio"))
+        model.chooseAnother()
+        #expect(model.phase == .searching)
+        #expect(sent.left == 1)
+        // The list stays: the same Macs found again do not join one by themselves.
+        model.found(["Portatile", "Studio"])
+        #expect(model.phase == .searching)
+        model.choose("Portatile")
+        #expect(model.phase == .connecting("Portatile"))
+    }
+
+    @Test func theCodeScreenOfTheWrongMacCanBeLeft() {
+        model.found(["Studio", "Portatile"])
+        model.choose("Studio")
+        model.connected(to: "Studio")
+        model.chooseAnother()
+        #expect(model.phase == .searching)
+        model.choose("Portatile")
+        #expect(model.phase == .connecting("Portatile"))
+    }
+
+    @Test func aLateAnswerFromTheMacLeftBehindIsRefused() {
+        model.found(["Studio", "Portatile"])
+        model.choose("Studio")
+        model.chooseAnother()
+        model.choose("Portatile")
+        model.connected(to: "Studio")
+        #expect(model.phase == .connecting("Portatile"))
+        model.connected(to: "Portatile")
+        #expect(model.phase == .needsCode(mac: "Portatile", wrong: false))
     }
 
     @Test func aFailedInvitationIsRetriedThenGivesUp() {

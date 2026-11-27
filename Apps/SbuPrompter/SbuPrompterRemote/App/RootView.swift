@@ -14,7 +14,10 @@ struct RootView: View {
             case .searching, .connecting, .outdated:
                 NoMacView(model: model)
             case .needsCode(let mac, let wrong):
-                PairingView(mac: mac, wrong: wrong, paused: model.isPairingPaused) { model.enter(code: $0) }
+                PairingView(mac: mac, wrong: wrong, paused: model.isPairingPaused,
+                            chooseAnother: model.macs.count > 1 ? ChooseAnotherMacButton(model: model) : nil) {
+                    model.enter(code: $0)
+                }
                     // A fresh view, so an empty field, after every wrong code.
                     .id(model.wrongCodes)
             case .connected(let mac):

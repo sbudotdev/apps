@@ -6,6 +6,8 @@ struct PairingView: View {
     let mac: String
     let wrong: Bool
     let paused: Bool
+    /// Shown when other Macs are around: this one may not be the right Mac.
+    var chooseAnother: ChooseAnotherMacButton?
     let onCode: (String) -> Void
 
     @State private var code = ""
@@ -45,6 +47,7 @@ struct PairingView: View {
                         .font(SbuTheme.body)
                         .foregroundStyle(SbuTheme.danger)
                 }
+                chooseAnother
             }
             .padding(SbuTheme.space4)
         }

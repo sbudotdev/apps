@@ -5,6 +5,7 @@ import XCTest
 /// `TEST_RUNNER_SBU_PROMPTER_CODE=1234 xcodebuild test -scheme SbuPrompterRemote ...`
 /// Without the code (CI, no Mac nearby) it is skipped. `TEST_RUNNER_SBU_PROMPTER_SHOTS=<folder>` also saves the screenshots there,
 /// `TEST_RUNNER_SBU_PROMPTER_LANG=en` runs it in English (for the en-US store screenshots).
+/// `TEST_RUNNER_SBU_PROMPTER_MAC=<name>` picks that Mac when the network has more than one Sbu Prompter.
 final class RemoteWithMacUITests: XCTestCase {
     @MainActor
     func testPairAndDriveTheMac() throws {
@@ -24,7 +25,9 @@ final class RemoteWithMacUITests: XCTestCase {
 
         let field = app.textFields["pairingCode"]
         let pad = app.descendants(matching: .any)["gesturePad"].firstMatch
-        let connect = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", label("Collega "))).firstMatch
+        // One Mac: "Collega <Mac>". Several: a button per Mac, by name.
+        let connect = ProcessInfo.processInfo.environment["SBU_PROMPTER_MAC"].map { app.buttons[$0] }
+            ?? app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", label("Collega "))).firstMatch
         _ = field.waitForExistence(timeout: 20) || pad.exists
         if !field.exists, !pad.exists, connect.exists {
             connect.tap()

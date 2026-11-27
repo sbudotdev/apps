@@ -13,6 +13,9 @@ final class MacLink: NSObject {
     // first. Two Macs with the same name can swap tokens after a relaunch, and a refused
     // `resume` then forgets the other Mac's token. Key tokens by a Mac id if that ever matters.
     private var found: [String: MCPeerID] = [:]
+    /// The Mac invited last. The session also reports the other iPhones driving that Mac (Multipeer
+    /// links every peer of a session), so everything else is ignored and nothing is sent to them.
+    private var mac: MCPeerID?
 
     init(model: RemoteModel) {
         self.model = model
@@ -23,6 +26,10 @@ final class MacLink: NSObject {
         browser.delegate = self
         model.send = { [weak self] message in self?.send(message) }
         model.connect = { [weak self] name in self?.invite(name) }
+        model.leave = { [weak self] in
+            self?.mac = nil
+            self?.session.disconnect()
+        }
     }
 
     /// Starts looking from scratch: at launch and back from the background, when iOS has
@@ -32,19 +39,25 @@ final class MacLink: NSObject {
         session.disconnect()
         found = [:]
         names = [:]
-        if let mac = model.currentMac { model.disconnected(from: mac) }
+        mac = nil
+        settle?.cancel()
+        // The list first, so the model does not try to join again a Mac this link no longer knows.
         model.found([])
+        if let mac = model.currentMac { model.disconnected(from: mac) }
         browser.startBrowsingForPeers()
     }
 
     private func invite(_ name: String) {
         guard let mac = found[name] else { return }
-        browser.invitePeer(mac, to: session, withContext: nil, timeout: 15)
+        self.mac = mac
+        // A Mac on the same network answers in well under a second; one that does not is asleep
+        // or unreachable, and the model tries again or gives up.
+        browser.invitePeer(mac, to: session, withContext: nil, timeout: 8)
     }
 
     private func send(_ message: RemoteMessage) {
-        guard let data = try? RemoteCodec.encode(message), !session.connectedPeers.isEmpty else { return }
-        try? session.send(data, toPeers: session.connectedPeers, with: .reliable)
+        guard let mac, session.connectedPeers.contains(mac), let data = try? RemoteCodec.encode(message) else { return }
+        try? session.send(data, toPeers: [mac], with: .reliable)
     }
 
     private func receive(_ data: Data) {
@@ -68,8 +81,17 @@ final class MacLink: NSObject {
         return name
     }
 
+    private var settle: Task<Void, Never>?
+
+    /// Bonjour reports the Macs one by one, milliseconds apart: wait for the burst to end, or the
+    /// first Mac found would be joined as if it were the only one.
     private func foundChanged() {
-        model.found(Array(found.keys))
+        settle?.cancel()
+        settle = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .milliseconds(700))
+            guard !Task.isCancelled, let self else { return }
+            model.found(Array(found.keys))
+        }
     }
 
     static func label(for name: String, taken: Set<String>) -> String {
@@ -100,6 +122,11 @@ extension MacLink: MCNearbyServiceBrowserDelegate {
 extension MacLink: MCSessionDelegate {
     nonisolated func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         Task { @MainActor in
+            guard peerID == self.mac else {
+                // A Mac left behind for another one may still answer the old invitation.
+                if state == .connected, self.found.values.contains(peerID) { session.cancelConnectPeer(peerID) }
+                return
+            }
             switch state {
             case .connected: self.model.connected(to: self.name(for: peerID))
             case .notConnected: self.model.disconnected(from: self.name(for: peerID))
@@ -110,7 +137,10 @@ extension MacLink: MCSessionDelegate {
     }
 
     nonisolated func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        Task { @MainActor in self.receive(data) }
+        Task { @MainActor in
+            guard peerID == self.mac else { return }
+            self.receive(data)
+        }
     }
 
     nonisolated func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String,
