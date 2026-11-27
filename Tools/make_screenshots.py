@@ -11,7 +11,7 @@ the slides from fastlane/screenshots/scenes.json:
                "zoom": [x0, y0, x1, y1],                       # detail: the screen region to enlarge
                "mark": {"shape": "circle" | "underline", "box": [x0, y0, x1, y1]}}}  # ink on a real value
 Boxes are pixels of the raw screenshot; a scene may override keys per language, as "en-US": {"mark": …}. Without scenes.json the slides alternate phones left and right on the
-icon engraving. A "subject" is engraved once with --engrave (Tools/make_icons.py style, GEMINI_API_KEY)
+icon engraving. A "subject" is engraved once with --engrave (Tools/engrave.py style, GEMINI_API_KEY)
 into Design/icons/scenes/sbu-<app>-<key>.png and kept, like the icon masks.
 
 A Mac app adds fastlane/screenshots-mac/ with the same files for its 2880×1800 slides (raw `Mac-<key>.png`,
@@ -110,7 +110,7 @@ def read_scenes(app, kind="screenshots"):
 
 def engrave(app):
     """Engrave every scene subject that has no mask yet."""
-    from make_icons import generate, ink_mask
+    from engrave import generate, ink_mask
 
     for key, scene in {**read_scenes(app), **read_scenes(app, "screenshots-mac")}.items():
         out = scene_mask(app, key)

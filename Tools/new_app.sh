@@ -4,7 +4,7 @@
 # Usage: Tools/new_app.sh <Name> <accent-token> <subject>
 #   Name          English noun, capitalised: Level, Noise, Habits
 #   accent-token  an accent-* token from Design/tokens.json: accent-level
-#   subject       the instrument the icon engraves, in English: "an old iron padlock, closed" (needs GEMINI_API_KEY)
+#   subject       the instrument the plate engraves, in English: "an old iron padlock, closed" (needs GEMINI_API_KEY)
 #
 # Creates Apps/Sbu<Name> (XcodeGen project, bundle id dev.sbu.<name>, SbuKit dependency,
 # generated icon, fastlane lanes test/snapshot/frames/beta/release), the site entry ../site/src/content/apps/<name>.md,
@@ -45,18 +45,24 @@ done
 find "$dest" -type f \( -name '*.swift' -o -name '*.yml' -o -name '*.json' -o -name '*.xcstrings' -o -name '*.txt' -o -name '*.strings' -o -name 'Fastfile' -o -name 'Appfile' -o -name 'Snapfile' \) -print0 |
   xargs -0 sed -i '' -e "s/__NAME__/$name/g" -e "s/__LOWER__/$lower/g" -e "s/__ACCENT__/$accent_swift/g"
 
-# Icon: engraved instrument on paper, light/dark/tinted in AppIcon.appiconset, light/dark for SbuAppIconView.
+# Plate: the engraved instrument for sbu.dev and the slides (Tools/engrave.py). Icon: the instrument in cells
+# (ADR-0027), drawn by hand in Design/icons/cells.json; until it is there the app keeps the template icon.
 assets="$root/Apps/Sbu$name/Sbu$name/Assets.xcassets"
-python3 - "$root/Design/icons/engravings.json" "$lower" "$accent" "$subject" <<'PY'
+python3 - "$root/Design/icons/engravings.json" "$lower" "$accent" "$subject" <<'PY2'
 import json, sys
 path, name, accent, subject = sys.argv[1:]
 specs = json.load(open(path))
 specs[name] = {"accent": accent, "subject": subject}  # add "name": {"it", "en"} by hand: the site captions the plate with it
 json.dump(specs, open(path, "w"), indent=2)
 open(path, "a").write("\n")
-PY
-python3 "$root/Tools/make_icons.py" "$lower" --generate \
-  --appiconset "$assets/AppIcon.appiconset" --artwork "$assets/AppIconArtwork.imageset"
+PY2
+python3 "$root/Tools/engrave.py" "$lower" --generate
+if grep -q "\"$lower\":" "$root/Design/icons/cells.json"; then
+  python3 "$root/Tools/make_icons.py" "$lower" --appiconset "$assets/AppIcon.appiconset" \
+    --artwork "$assets/AppIconArtwork.imageset" --inverse "$assets/AppIcon-Inversa.appiconset"
+else
+  echo "Draw the icon in Design/icons/cells.json, then: python3 Tools/make_icons.py $lower --appiconset $assets/AppIcon.appiconset --artwork $assets/AppIconArtwork.imageset --inverse $assets/AppIcon-Inversa.appiconset" >&2
+fi
 
 
 # fastlane's SnapshotHelper.swift for the UI test target.
