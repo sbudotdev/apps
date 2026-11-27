@@ -123,8 +123,11 @@ extension MacLink: MCNearbyServiceBrowserDelegate {
         Task { @MainActor in
             guard browser === self.browser else { return }
             let id = info?["id"]
-            if let id, let old = self.found.first(where: { self.ids[$0.value] == id }), old.value != peerID {
-                // The same Mac app, quit and opened again: same label, so its token still matches.
+            // Same id and same name: the same Mac app, quit and opened again. It keeps its label, so its
+            // token still matches. The id is not a proof (discovery data is public): with the name it
+            // trusts no peer the name alone did not already.
+            if let id, let old = self.found.first(where: { self.ids[$0.value] == id && $0.value.displayName == peerID.displayName }),
+               old.value != peerID {
                 self.found[old.key] = peerID
                 self.names[peerID] = old.key
                 self.ids[peerID] = id
