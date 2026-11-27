@@ -8,11 +8,12 @@ nonisolated enum PlanSort: String, CaseIterable, Identifiable, Sendable {
 
     var id: Self { self }
 
-    var title: LocalizedStringKey {
+    var title: LocalizedStringResource {
         switch self {
         case .date: "Data"
         case .grade: "Voto"
-        case .credits: "CFU"
+        // Own key: "CFU" alone is also the unit after a number, lowercase "credits" in English.
+        case .credits: LocalizedStringResource("Ordina per CFU", defaultValue: "CFU")
         }
     }
 }
