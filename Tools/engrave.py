@@ -107,7 +107,6 @@ def generate(subject: str) -> Image.Image:
     sys.exit("the model returned no image: " + json.dumps(reply)[:300])
 
 
-
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("name", help="app name in Design/icons/engravings.json, like level")

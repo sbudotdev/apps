@@ -2,7 +2,7 @@
 """Generate a Sbu app icon: the instrument drawn in cells on the notebook page, closed by the full stop.
 
 Grammar (ADR-0027, Design/README.md, CLAUDE.md): a fixed 12x12 grid; the instrument is whole cells
-in `ink`, inside columns 1-9 and rows 1-10, at most 40 cells; the full stop is the one coloured
+in `ink`, inside columns 1-9 and rows 1-10, never touching the stop, at most 40 cells; the full stop is the one coloured
 cell, always cell (10, 10) (column, row from the top left, counting from 0), in the app's accent.
 Light: ink cells on `paper` with the `grid` lines. Dark: light cells on warm black, the stop in the
 accent's dark value. Tinted: white cells on black and a grey stop, for iOS to tint. Inversa, the
@@ -42,6 +42,7 @@ GRID = 12  # cells per side
 STOP = (10, 10)  # the full stop's cell: column, row
 COLUMNS, ROWS = range(1, 10), range(1, 11)  # where the drawing may put ink
 MAX_CELLS = 40  # more and it stops reading at 29 pt
+CLEAR = {(9, 9), (9, 10)}  # the stop's neighbours inside the drawing area: ink there joins the stop to the drawing
 GRID_LINE = 4  # grid line width at 1024 px
 TINTED_STOP = "#9a9a92"  # ink-muted dark: a grey apart from the white drawing
 MAC_SHAPE = 824  # macOS: side of the rounded square inside the 1024 canvas (Apple's icon grid)
@@ -69,6 +70,9 @@ def parse(rows: list[str]) -> set[tuple[int, int]]:
     outside = sorted((x, y) for x, y in cells if x not in COLUMNS or y not in ROWS)
     if outside:
         raise ValueError(f"ink outside columns 1-9 and rows 1-10: {outside}")
+    touching = sorted(cells & CLEAR)
+    if touching:
+        raise ValueError(f"ink touching the full stop: {touching}")
     if len(cells) > MAX_CELLS:
         raise ValueError(f"{len(cells)} cells, at most {MAX_CELLS}")
     return cells

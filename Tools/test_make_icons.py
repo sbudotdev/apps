@@ -25,7 +25,12 @@ def centre(x: int, y: int, side: int = m.CANVAS) -> tuple[int, int]:
 
 class ParseTests(unittest.TestCase):
     def test_reads_ink_cells_as_column_row(self):
-        self.assertEqual(m.parse(drawing((1, 1), (9, 10))), {(1, 1), (9, 10)})
+        self.assertEqual(m.parse(drawing((1, 1), (9, 8), (8, 10))), {(1, 1), (9, 8), (8, 10)})
+
+    def test_rejects_ink_touching_the_full_stop(self):
+        for cell in [(9, 9), (9, 10)]:
+            with self.subTest(cell=cell), self.assertRaises(ValueError):
+                m.parse(drawing(cell))
 
     def test_rejects_ink_outside_columns_1_to_9_and_rows_1_to_10(self):
         for cell in [(0, 5), (10, 5), (11, 5), (5, 0), (5, 11), (10, 10)]:
