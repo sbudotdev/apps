@@ -2,15 +2,16 @@
 """Generate a Sbu app icon: the instrument drawn in cells on the notebook page, closed by the full stop.
 
 Grammar (ADR-0027, Design/README.md, CLAUDE.md): a fixed 12x12 grid; the instrument is whole cells
-in `ink`, inside columns 1-9 and rows 1-10, never touching the stop, at most 40 cells; the full stop is the one coloured
-cell, always cell (10, 10) (column, row from the top left, counting from 0), in the app's accent.
+in `ink`, inside columns 1-9 and rows 1-10, at most 40 cells; the full stop is the one coloured cell,
+in the app's accent, and it is a cell of the drawing: its last cell at the bottom right, touching
+the ink, in the lower-right quarter of the drawing (`o` in the drawing, chosen by hand).
 Light: ink cells on `paper` with the `grid` lines. Dark: light cells on warm black, the stop in the
 accent's dark value. Tinted: white cells on black and a grey stop, for iOS to tint. Inversa, the
 one alternate icon: paper cells on ink, the stop in `accent-on-ink-*`. Mac: the light icon in the
 Big Sur rounded square. Watch: the light icon shrunk into the circle's safe square, the grid running
 on to the edge (a dark Watch icon was rejected, SBU-409).
 
-Drawings live in Design/icons/cells.json ({name: {name: {it, en}, cells: [12 rows of 12 "." or "#"]}});
+Drawings live in Design/icons/cells.json ({name: {name: {it, en}, cells: [12 rows of 12 ".", "#" or one "o"]}});
 accents come from Design/icons/engravings.json. The engravings themselves (Tools/engrave.py) stay as
 plates on sbu.dev, not icons.
 
@@ -20,10 +21,12 @@ Usage:
       [--inverse Apps/SbuLevel/SbuLevel/Assets.xcassets/AppIcon-Inversa.appiconset]
   python3 Tools/make_icons.py habits --watch-appiconset Apps/SbuHabits/SbuHabitsWatch/Assets.xcassets/AppIcon.appiconset
   python3 Tools/make_icons.py seasons --mac-appiconset Apps/SbuSeasons/SbuSeasons/Assets.xcassets/AppIcon.appiconset
-  python3 Tools/make_icons.py all                      # Design/icons/sbu-<name>.png for every drawing
+  python3 Tools/make_icons.py all                      # Design/icons/cells/sbu-<name>.png for every drawing
+  python3 Tools/make_icons.py clean --site             # also Design/icons/sbu-clean.png, the site's icon, once Apple approves it
   python3 Tools/make_icons.py all --sheet sheet.png    # proof: every icon light/dark/tinted at 60, 40, 29 pt
 
-Writes Design/icons/sbu-<name>.png (light, 1024, no alpha); the variants go only where you ask.
+Writes Design/icons/cells/sbu-<name>.png (light, 1024, no alpha); the variants go only where you ask.
+The site lists Design/icons/sbu-<name>.png: an app switches there (--site) when Apple approves its cell icon.
 """
 import argparse
 import json
@@ -39,10 +42,8 @@ CELLS = ICONS / "cells.json"
 SPECS = ICONS / "engravings.json"
 CANVAS = 1024
 GRID = 12  # cells per side
-STOP = (10, 10)  # the full stop's cell: column, row
 COLUMNS, ROWS = range(1, 10), range(1, 11)  # where the drawing may put ink
 MAX_CELLS = 40  # more and it stops reading at 29 pt
-CLEAR = {(9, 9), (9, 10)}  # the stop's neighbours inside the drawing area: ink there joins the stop to the drawing
 GRID_LINE = 4  # grid line width at 1024 px
 TINTED_STOP = "#9a9a92"  # ink-muted dark: a grey apart from the white drawing
 MAC_SHAPE = 824  # macOS: side of the rounded square inside the 1024 canvas (Apple's icon grid)
@@ -58,29 +59,35 @@ def colors() -> dict:
     return {t["name"]: t["value"] for t in json.loads(TOKENS.read_text())["color"]["tokens"]}
 
 
-def parse(rows: list[str]) -> set[tuple[int, int]]:
-    """12 rows of 12 '.' or '#' -> the ink cells as (column, row); ValueError if a rule is broken."""
+def parse(rows: list[str]) -> tuple[set[tuple[int, int]], tuple[int, int]]:
+    """12 rows of 12 '.', '#' or one 'o' -> (ink cells, stop cell) as (column, row); ValueError if a rule is broken."""
     if len(rows) != GRID or any(len(row) != GRID for row in rows):
         raise ValueError(f"the drawing must be {GRID} rows of {GRID} cells")
-    if any(set(row) - {".", "#"} for row in rows):
-        raise ValueError("cells are '.' (paper) or '#' (ink)")
+    if any(set(row) - {".", "#", "o"} for row in rows):
+        raise ValueError("cells are '.' (paper), '#' (ink) or 'o' (the full stop)")
     cells = {(x, y) for y, row in enumerate(rows) for x, c in enumerate(row) if c == "#"}
-    if not cells:
-        raise ValueError("the drawing is empty")
-    outside = sorted((x, y) for x, y in cells if x not in COLUMNS or y not in ROWS)
+    stops = [(x, y) for y, row in enumerate(rows) for x, c in enumerate(row) if c == "o"]
+    if not cells or len(stops) != 1:
+        raise ValueError("the drawing needs ink and exactly one full stop 'o'")
+    stop = stops[0]
+    outside = sorted((x, y) for x, y in cells | {stop} if x not in COLUMNS or y not in ROWS)
     if outside:
-        raise ValueError(f"ink outside columns 1-9 and rows 1-10: {outside}")
-    touching = sorted(cells & CLEAR)
-    if touching:
-        raise ValueError(f"ink touching the full stop: {touching}")
-    if len(cells) > MAX_CELLS:
-        raise ValueError(f"{len(cells)} cells, at most {MAX_CELLS}")
-    return cells
+        raise ValueError(f"cells outside columns 1-9 and rows 1-10: {outside}")
+    if len(cells) + 1 > MAX_CELLS:
+        raise ValueError(f"{len(cells) + 1} cells, at most {MAX_CELLS}")
+    x, y = stop
+    if not any((x + dx, y + dy) in cells for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
+        raise ValueError(f"the full stop {stop} must touch the drawing")
+    xs, ys = [c[0] for c in cells], [c[1] for c in cells]
+    if 2 * x < min(xs) + max(xs) or 2 * y < min(ys) + max(ys):
+        raise ValueError(f"the full stop {stop} must be in the lower-right quarter of the drawing")
+    return cells, stop
 
 
-def render(cells: set, ink: str, ground: str, stop: str, grid: str | None, page: int = CANVAS) -> Image.Image:
+def render(drawing: tuple, ink: str, ground: str, stop: str, grid: str | None, page: int = CANVAS) -> Image.Image:
     """Ground, grid lines, ink cells, stop. The page of 12 cells is `page` px, centred on the canvas;
     the grid keeps its pitch out to the canvas edge."""
+    cells, stop_cell = drawing
     icon = Image.new("RGB", (CANVAS, CANVAS), rgb(ground))
     draw = ImageDraw.Draw(icon)
     cell, offset = page / GRID, (CANVAS - page) / 2
@@ -95,21 +102,21 @@ def render(cells: set, ink: str, ground: str, stop: str, grid: str | None, page:
             at = edge(i) - width // 2
             draw.rectangle([at, 0, at + width - 1, CANVAS], fill=rgb(grid))
             draw.rectangle([0, at, CANVAS, at + width - 1], fill=rgb(grid))
-    for (x, y), fill in [*((c, ink) for c in cells), (STOP, stop)]:
+    for (x, y), fill in [*((c, ink) for c in cells), (stop_cell, stop)]:
         draw.rectangle([edge(x), edge(y), edge(x + 1) - 1, edge(y + 1) - 1], fill=rgb(fill))
     return icon
 
 
-def variants(cells: set, palette: dict, accent: str) -> dict[str, Image.Image]:
+def variants(drawing: tuple, palette: dict, accent: str) -> dict[str, Image.Image]:
     ink, paper, grid, stop = palette["ink"], palette["paper"], palette["grid"], palette[accent]
     on_ink = palette.get(accent.replace("accent-", "accent-on-ink-"), stop)
-    watch = render(cells, ink["light"], paper["light"], stop["light"], grid["light"], round(CANVAS * WATCH_SAFE))
+    watch = render(drawing, ink["light"], paper["light"], stop["light"], grid["light"], round(CANVAS * WATCH_SAFE))
     assert ImageStat.Stat(ImageOps.grayscale(watch)).mean[0] > 180, "a dark Watch icon reads as a black square (SBU-409)"
     return {
-        "light": render(cells, ink["light"], paper["light"], stop["light"], grid["light"]),
-        "dark": render(cells, ink["dark"], ink["light"], stop["dark"], grid["dark"]),
-        "tinted": ImageOps.grayscale(render(cells, "#ffffff", "#000000", TINTED_STOP, grid["dark"])).convert("RGB"),
-        "inversa": render(cells, paper["light"], ink["light"], on_ink["light"], grid["dark"]),
+        "light": render(drawing, ink["light"], paper["light"], stop["light"], grid["light"]),
+        "dark": render(drawing, ink["dark"], ink["light"], stop["dark"], grid["dark"]),
+        "tinted": ImageOps.grayscale(render(drawing, "#ffffff", "#000000", TINTED_STOP, grid["dark"])).convert("RGB"),
+        "inversa": render(drawing, paper["light"], ink["light"], on_ink["light"], grid["dark"]),
         "watch": watch,
     }
 
@@ -209,6 +216,7 @@ def main() -> None:
     parser.add_argument("--watch-appiconset", type=Path, help="also write this watchOS AppIcon.appiconset (light, circle-safe)")
     parser.add_argument("--mac-appiconset", type=Path, help="also write this macOS AppIcon.appiconset (light, rounded square, 16-1024)")
     parser.add_argument("--inverse", type=Path, help="also write the Inversa alternate icon to this AppIcon-Inversa.appiconset")
+    parser.add_argument("--site", action="store_true", help="also write Design/icons/sbu-<name>.png, the icon the site lists (once Apple approves it)")
     parser.add_argument("--sheet", type=Path, help="also write the real-size proof of these icons to this PNG")
     args = parser.parse_args()
 
@@ -221,12 +229,14 @@ def main() -> None:
         entry = drawings.get(name) or sys.exit(f"{name} has no drawing in {CELLS.relative_to(ROOT)}")
         spec = specs.get(name) or sys.exit(f"{name} has no accent in {SPECS.relative_to(ROOT)}")
         try:
-            cells = parse(entry["cells"])
+            drawing = parse(entry["cells"])
         except ValueError as error:
             sys.exit(f"{name}: {error}")
-        made[name] = icons = variants(cells, palette, spec["accent"])
-        icons["light"].save(ICONS / f"sbu-{name}.png")
-        print(ICONS.relative_to(ROOT) / f"sbu-{name}.png")
+        made[name] = icons = variants(drawing, palette, spec["accent"])
+        for out in [ICONS / "cells" / f"sbu-{name}.png", *([ICONS / f"sbu-{name}.png"] if args.site else [])]:
+            out.parent.mkdir(exist_ok=True)
+            icons["light"].save(out)
+            print(out.relative_to(ROOT))
     if args.appiconset:
         write_appiconset({k: icons[k] for k in ("light", "dark", "tinted")}, args.appiconset)
         print(args.appiconset)

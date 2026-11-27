@@ -52,7 +52,7 @@ Between 3 and 4 you write the app: start from `MainView.swift`, put strings in `
 | | |
 |---|---|
 | `sync_tokens.py` | Regenerates SbuKit colors (asset catalog, light/dark), metrics and the site's `src/styles/tokens.css` (in `../site`, when cloned) from `Design/tokens.json`. CI fails if they drift. |
-| `make_icons.py` | `<name>` → cell icon `Design/icons/sbu-<name>.png` from `cells.json` (ADR-0027); `--appiconset`/`--artwork`/`--inverse`/`--mac-appiconset`/`--watch-appiconset` write the asset catalogs, `all --sheet out.png` the real-size proof. Test: `python3 -m unittest Tools/test_make_icons.py`. |
+| `make_icons.py` | `<name>` → cell icon `Design/icons/cells/sbu-<name>.png` from `cells.json` (ADR-0027); `--site` also writes the site's `Design/icons/sbu-<name>.png` once Apple approves it; `--appiconset`/`--artwork`/`--inverse`/`--mac-appiconset`/`--watch-appiconset` write the asset catalogs, `all --sheet out.png` the real-size proof. Test: `python3 -m unittest Tools/test_make_icons.py`. |
 | `engrave.py` | `<name> --generate` → engraved plate `Design/icons/source/sbu-<name>.png` with Gemini, for the site, the Open Graph previews and the slides. |
 | `make_og.py` | Link previews (1200×630) for the site: each app's name closed by its full stop beside its engraving, and the home's title per locale, into `../site/public/og/`. Rerun after a new engraving. |
 | `discover.py` | Top-paid charts (Apple marketing RSS) + iTunes Lookup: description, screenshots, price, release notes, genre. |

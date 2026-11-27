@@ -11,10 +11,13 @@ import make_icons as m  # noqa: E402
 BLANK = ["." * 12] * 12
 
 
-def drawing(*cells: tuple[int, int]) -> list[str]:
+def drawing(*cells: tuple[int, int], stop: tuple[int, int] | None = (9, 9)) -> list[str]:
+    """Ink cells plus the full stop; by default a 4x4 square from (6,6) to (9,9) with the stop at its corner."""
     rows = [list(row) for row in BLANK]
-    for x, y in cells:
+    for x, y in cells or [(x, y) for x in range(6, 10) for y in range(6, 10) if (x, y) != stop]:
         rows[y][x] = "#"
+    if stop:
+        rows[stop[1]][stop[0]] = "o"
     return ["".join(row) for row in rows]
 
 
@@ -24,26 +27,33 @@ def centre(x: int, y: int, side: int = m.CANVAS) -> tuple[int, int]:
 
 
 class ParseTests(unittest.TestCase):
-    def test_reads_ink_cells_as_column_row(self):
-        self.assertEqual(m.parse(drawing((1, 1), (9, 8), (8, 10))), {(1, 1), (9, 8), (8, 10)})
+    def test_reads_ink_cells_and_the_stop_as_column_row(self):
+        self.assertEqual(m.parse(drawing((1, 1), (8, 9), stop=(9, 10))), ({(1, 1), (8, 9)}, (9, 10)))
 
-    def test_rejects_ink_touching_the_full_stop(self):
-        for cell in [(9, 9), (9, 10)]:
+    def test_rejects_cells_outside_columns_1_to_9_and_rows_1_to_10(self):
+        for cell in [(0, 5), (10, 5), (11, 5), (5, 0), (5, 11)]:
             with self.subTest(cell=cell), self.assertRaises(ValueError):
-                m.parse(drawing(cell))
-
-    def test_rejects_ink_outside_columns_1_to_9_and_rows_1_to_10(self):
-        for cell in [(0, 5), (10, 5), (11, 5), (5, 0), (5, 11), (10, 10)]:
-            with self.subTest(cell=cell), self.assertRaises(ValueError):
-                m.parse(drawing(cell))
-
-    def test_rejects_more_than_40_cells(self):
-        many = [(x, y) for y in range(1, 6) for x in range(1, 10)]  # 45
+                m.parse(drawing((1, 1), cell, stop=(2, 2)))
         with self.assertRaises(ValueError):
-            m.parse(drawing(*many))
+            m.parse(drawing((9, 9), stop=(10, 10)))
+
+    def test_rejects_more_than_40_cells_counting_the_stop(self):
+        many = [(x, y) for y in range(1, 6) for x in range(1, 9)]  # 40 ink + the stop
+        with self.assertRaises(ValueError):
+            m.parse(drawing(*many, stop=(9, 5)))
+
+    def test_the_stop_is_one_cell_of_the_drawing_at_its_lower_right(self):
+        for rows in [
+            drawing(stop=None),  # no stop
+            drawing((2, 2), stop=(9, 9))[:3] + ["..o........."] + drawing(stop=(9, 9))[4:],  # two stops
+            drawing((2, 2), (3, 3), stop=(9, 9)),  # not touching the drawing
+            drawing((5, 5), (6, 6), (7, 7), stop=(4, 4)),  # upper-left of the drawing
+        ]:
+            with self.subTest(rows=rows), self.assertRaises(ValueError):
+                m.parse(rows)
 
     def test_rejects_a_grid_that_is_not_12_by_12_or_uses_other_marks(self):
-        for rows in [BLANK[:11], [r[:11] for r in BLANK], drawing((2, 2))[:1] + ["..x........."] + BLANK[2:], BLANK]:
+        for rows in [BLANK[:11], [r[:11] for r in BLANK], drawing()[:1] + ["..x........."] + drawing()[2:], BLANK]:
             with self.subTest(rows=rows), self.assertRaises(ValueError):
                 m.parse(rows)
 
@@ -68,7 +78,8 @@ class DrawingsTests(unittest.TestCase):
     def test_no_two_apps_share_a_drawing(self):
         seen = {}
         for name, entry in self.cells.items():
-            key = frozenset(m.parse(entry["cells"]))
+            ink, stop = m.parse(entry["cells"])
+            key = (frozenset(ink), stop)
             self.assertNotIn(key, seen, f"{name} draws the same cells as {seen.get(key)}")
             seen[key] = name
 
@@ -79,7 +90,7 @@ class DrawingsTests(unittest.TestCase):
 class RenderTests(unittest.TestCase):
     def setUp(self):
         self.palette = m.colors()
-        self.cells = m.parse(drawing((1, 1), (5, 5)))
+        self.cells = m.parse(drawing((4, 4), (5, 5), stop=(6, 6)))
         self.icons = m.variants(self.cells, self.palette, "accent-habits")
 
     def pixel(self, variant: str, x: int, y: int) -> tuple[int, int, int]:
@@ -90,7 +101,8 @@ class RenderTests(unittest.TestCase):
         self.assertEqual((icon.size, icon.mode), ((1024, 1024), "RGB"))
         self.assertEqual(self.pixel("light", 5, 5), m.rgb(self.palette["ink"]["light"]))
         self.assertEqual(self.pixel("light", 3, 3), m.rgb(self.palette["paper"]["light"]))
-        self.assertEqual(self.pixel("light", 10, 10), m.rgb(self.palette["accent-habits"]["light"]))
+        self.assertEqual(self.pixel("light", 6, 6), m.rgb(self.palette["accent-habits"]["light"]))
+        self.assertEqual(self.pixel("light", 10, 10), m.rgb(self.palette["paper"]["light"]), "no second stop in the corner")
 
     def test_light_draws_the_grid_between_cells(self):
         between_columns_3_and_4 = round(4 * m.CANVAS / m.GRID)
@@ -99,26 +111,26 @@ class RenderTests(unittest.TestCase):
     def test_dark_is_light_cells_on_warm_black_with_the_dark_accent(self):
         self.assertEqual(self.pixel("dark", 5, 5), m.rgb(self.palette["ink"]["dark"]))
         self.assertEqual(self.pixel("dark", 3, 3), m.rgb(self.palette["ink"]["light"]))
-        self.assertEqual(self.pixel("dark", 10, 10), m.rgb(self.palette["accent-habits"]["dark"]))
+        self.assertEqual(self.pixel("dark", 6, 6), m.rgb(self.palette["accent-habits"]["dark"]))
 
     def test_tinted_is_greys_with_the_stop_apart_from_the_drawing(self):
-        r, g, b = self.pixel("tinted", 10, 10)
+        r, g, b = self.pixel("tinted", 6, 6)
         self.assertEqual(r, g)
         self.assertEqual(g, b)
-        self.assertNotEqual(self.pixel("tinted", 10, 10), self.pixel("tinted", 5, 5))
+        self.assertNotEqual(self.pixel("tinted", 6, 6), self.pixel("tinted", 5, 5))
         self.assertEqual(self.pixel("tinted", 3, 3)[0], 0)
 
     def test_inversa_is_paper_cells_on_ink_with_the_accent_on_ink(self):
         self.assertEqual(self.pixel("inversa", 5, 5), m.rgb(self.palette["paper"]["light"]))
         self.assertEqual(self.pixel("inversa", 3, 3), m.rgb(self.palette["ink"]["light"]))
-        self.assertEqual(self.pixel("inversa", 10, 10), m.rgb(self.palette["accent-on-ink-habits"]["light"]))
+        self.assertEqual(self.pixel("inversa", 6, 6), m.rgb(self.palette["accent-on-ink-habits"]["light"]))
 
     def test_watch_icon_is_the_light_icon_inside_the_circle(self):
         icon = self.icons["watch"]
         inner = int(m.CANVAS * m.WATCH_SAFE)
         offset = (m.CANVAS - inner) // 2
         cell = inner / m.GRID
-        stop = (int(offset + 10.5 * cell), int(offset + 10.5 * cell))
+        stop = (int(offset + 6.5 * cell), int(offset + 6.5 * cell))
         self.assertEqual(icon.getpixel(stop), m.rgb(self.palette["accent-habits"]["light"]))
         radius = ((stop[0] - m.CANVAS / 2) ** 2 + (stop[1] - m.CANVAS / 2) ** 2) ** 0.5
         self.assertLess(radius + cell / 2, m.CANVAS / 2, "the full stop must stay inside the watch circle")
@@ -126,7 +138,7 @@ class RenderTests(unittest.TestCase):
 
 class WriteTests(unittest.TestCase):
     def test_writes_every_asset_catalog(self):
-        icons = m.variants(m.parse(drawing((2, 2))), m.colors(), "accent-habits")
+        icons = m.variants(m.parse(drawing()), m.colors(), "accent-habits")
         with tempfile.TemporaryDirectory() as tmp:
             out = Path(tmp)
             m.write_appiconset({k: icons[k] for k in ("light", "dark", "tinted")}, out / "AppIcon.appiconset")
