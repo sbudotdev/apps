@@ -1,0 +1,4895 @@
+{
+  "sourceLanguage": "it",
+  "strings": {
+    "%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@"
+          }
+        }
+      }
+    },
+    "%@ %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@"
+          }
+        }
+      }
+    },
+    "%@ a settimana": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a week"
+          }
+        }
+      }
+    },
+    "%@ al giorno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a day"
+          }
+        }
+      }
+    },
+    "%@ al mese": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a month"
+          }
+        }
+      }
+    },
+    "%@ all'anno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ a year"
+          }
+        }
+      }
+    },
+    "%@ costa %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ costs %@."
+          }
+        }
+      }
+    },
+    "%@ ogni %lld anni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ every %lld years"
+          }
+        }
+      }
+    },
+    "%@ ogni %lld giorni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ every %lld days"
+          }
+        }
+      }
+    },
+    "%@ ogni %lld mesi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ every %lld months"
+          }
+        }
+      }
+    },
+    "%@ ogni %lld settimane": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ every %lld weeks"
+          }
+        }
+      }
+    },
+    "%@ per cento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ percent"
+          }
+        }
+      }
+    },
+    "%@ si rinnova %@: %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ renews %@: %@."
+          }
+        }
+      }
+    },
+    "%@ su 12": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ in 12"
+          }
+        }
+      }
+    },
+    "%@ una tantum": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ one-off"
+          }
+        }
+      }
+    },
+    "%@ · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %@"
+          }
+        }
+      }
+    },
+    "%@: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@"
+          }
+        }
+      }
+    },
+    "0": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "0"
+          }
+        }
+      }
+    },
+    "1 %@ =": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 %@ ="
+          }
+        }
+      }
+    },
+    "1 a %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 in %@"
+          }
+        }
+      }
+    },
+    "1 giorno prima": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 day before"
+          }
+        }
+      }
+    },
+    "1V:H": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1V:H"
+          }
+        }
+      }
+    },
+    "3 giorni prima": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3 days before"
+          }
+        }
+      }
+    },
+    "7 giorni prima": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 days before"
+          }
+        }
+      }
+    },
+    "AI": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI"
+          }
+        }
+      }
+    },
+    "Abbonamenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subscriptions"
+          }
+        }
+      }
+    },
+    "Abbonamenti dell'App Store": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Store subscriptions"
+          }
+        }
+      }
+    },
+    "Abbonamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subscription"
+          }
+        }
+      }
+    },
+    "Abbonato da": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subscribed for"
+          }
+        }
+      }
+    },
+    "Accedi a iCloud nelle Impostazioni dell'iPhone per sincronizzare.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to iCloud in the iPhone's Settings to sync."
+          }
+        }
+      }
+    },
+    "Acqua": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water"
+          }
+        }
+      }
+    },
+    "Affitto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rent"
+          }
+        }
+      }
+    },
+    "Aggiungi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add"
+          }
+        }
+      }
+    },
+    "Aggiungi abbonamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add subscription"
+          }
+        }
+      }
+    },
+    "Aggiungi categoria": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add category"
+          }
+        }
+      }
+    },
+    "Aggiungi da questo giorno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add from this day"
+          }
+        }
+      }
+    },
+    "Aggiungi il tuo primo abbonamento: qui vedi quanto spendi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add your first subscription: this is where you see what you spend."
+          }
+        }
+      }
+    },
+    "Aggiungi un abbonamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add a subscription"
+          }
+        }
+      }
+    },
+    "Aggiungi «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add “%@”"
+          }
+        }
+      }
+    },
+    "Al mese": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per month"
+          }
+        }
+      }
+    },
+    "All'anno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Per year"
+          }
+        }
+      }
+    },
+    "All'orizzonte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On the horizon"
+          }
+        }
+      }
+    },
+    "Altro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other"
+          }
+        }
+      }
+    },
+    "Alzata su 12 (x:12)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rise on 12 (x:12)"
+          }
+        }
+      }
+    },
+    "Angolo assoluto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Absolute angle"
+          }
+        }
+      }
+    },
+    "Angolo relativo: zero qui": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relative angle: zero here"
+          }
+        }
+      }
+    },
+    "Anni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Years"
+          }
+        }
+      }
+    },
+    "Annuale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yearly"
+          }
+        }
+      }
+    },
+    "Annulla": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "Annulla abbonamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel subscription"
+          }
+        }
+      }
+    },
+    "Annullati": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelled"
+          }
+        }
+      }
+    },
+    "Annullato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelled"
+          }
+        }
+      }
+    },
+    "Annullato non entra nel totale e non ti ricorda i pagamenti. Riattivalo quando vuoi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelled, it stays out of the total and sends no reminders. Reactivate it whenever you like."
+          }
+        }
+      }
+    },
+    "Annulli sul sito del servizio, o qui se lo paghi con l'App Store.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You cancel on the service's website, or here if you pay through the App Store."
+          }
+        }
+      }
+    },
+    "Aperta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open"
+          }
+        }
+      }
+    },
+    "App Store": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Store"
+          }
+        }
+      }
+    },
+    "Appoggia l'iPhone sul lato da calibrare, un bordo o il retro, e tocca Misura. Non serve una superficie in bolla.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest your iPhone on the side to calibrate, an edge or its back, and tap Measure. The surface doesn't need to be level."
+          }
+        }
+      }
+    },
+    "Appoggia l'iPhone sul retro: la cifra è la pendenza della superficie. In bolla, il quadrato dopo la cifra si colora.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lay your iPhone on its back: the figure is the slope of the surface. When it is level, the square after the figure takes color."
+          }
+        }
+      }
+    },
+    "Appoggia l'iPhone sullo stesso lato della prima misura.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Place your iPhone on the same side as the first reading."
+          }
+        }
+      }
+    },
+    "Appoggia un bordo dell'iPhone sulla superficie: la cifra è l'angolo di quel bordo, da 0° a 90°. I quattro bordi si riconoscono da soli.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest an edge of your iPhone on the surface: the figure is the angle of that edge, from 0° to 90°. All four edges are recognized on their own."
+          }
+        }
+      }
+    },
+    "Apri %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open %@"
+          }
+        }
+      }
+    },
+    "Apri Impostazioni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
+          }
+        }
+      }
+    },
+    "Apri abbonamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open subscription"
+          }
+        }
+      }
+    },
+    "Apri gli abbonamenti dell'App Store": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open App Store subscriptions"
+          }
+        }
+      }
+    },
+    "Apri il calendario dei pagamenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the payments calendar"
+          }
+        }
+      }
+    },
+    "Apri un abbonamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open a subscription"
+          }
+        }
+      }
+    },
+    "Archivio cloud": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloud storage"
+          }
+        }
+      }
+    },
+    "Arriva subito, anche con l'app aperta.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It arrives right away, even with the app open."
+          }
+        }
+      }
+    },
+    "Asse corto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Short edge"
+          }
+        }
+      }
+    },
+    "Asse lungo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Long edge"
+          }
+        }
+      }
+    },
+    "Assicurazione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Insurance"
+          }
+        }
+      }
+    },
+    "Assoluto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Absolute"
+          }
+        }
+      }
+    },
+    "Attivi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
+          }
+        }
+      }
+    },
+    "Audio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio"
+          }
+        }
+      }
+    },
+    "Avvisi di fase": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phase alerts"
+          }
+        }
+      }
+    },
+    "Azzera qui": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zero here"
+          }
+        }
+      }
+    },
+    "BCE": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ECB"
+          }
+        }
+      }
+    },
+    "Blocca": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lock"
+          }
+        }
+      }
+    },
+    "Blocca a lettura stabile": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lock when steady"
+          }
+        }
+      }
+    },
+    "Blocca col tasto volume nel mirino": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lock with a volume button in the sight"
+          }
+        }
+      }
+    },
+    "Blocco": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lock"
+          }
+        }
+      }
+    },
+    "Bordo destro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right edge"
+          }
+        }
+      }
+    },
+    "Bordo inferiore": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bottom edge"
+          }
+        }
+      }
+    },
+    "Bordo sinistro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Left edge"
+          }
+        }
+      }
+    },
+    "Bordo superiore": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top edge"
+          }
+        }
+      }
+    },
+    "Calcolo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calculation"
+          }
+        }
+      }
+    },
+    "Calendario": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calendar"
+          }
+        }
+      }
+    },
+    "Calendario dei pagamenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Payments calendar"
+          }
+        }
+      }
+    },
+    "Calibra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calibrate"
+          }
+        }
+      }
+    },
+    "Calibra un altro lato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calibrate another side"
+          }
+        }
+      }
+    },
+    "Calibrata": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calibrated"
+          }
+        }
+      }
+    },
+    "Calibrato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calibrated"
+          }
+        }
+      }
+    },
+    "Calibrazione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calibration"
+          }
+        }
+      }
+    },
+    "Cambia prezzo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change price"
+          }
+        }
+      }
+    },
+    "Categoria": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Category"
+          }
+        }
+      }
+    },
+    "Categorie": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Categories"
+          }
+        }
+      }
+    },
+    "Ce n'è uno che non usi più? Annullalo prima che si rinnovi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One you no longer use? Cancel it before it renews."
+          }
+        }
+      }
+    },
+    "Cerca": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search"
+          }
+        }
+      }
+    },
+    "Cerca gli addebiti con lo stesso importo ogni mese o ogni anno, anche piccoli. Guarda gli ultimi dodici mesi: gli annuali passano una volta sola.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Look for charges of the same amount every month or year, small ones too. Check the last twelve months: yearly ones show up only once."
+          }
+        }
+      }
+    },
+    "Cerca un servizio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search for a service"
+          }
+        }
+      }
+    },
+    "Cerca una città": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search for a city"
+          }
+        }
+      }
+    },
+    "Cerca «ricevuta», «rinnovo» o «abbonamento» nella tua email: ogni servizio manda una ricevuta a ogni pagamento.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search your email for “receipt”, “renewal” or “subscription”: every service sends a receipt with each payment."
+          }
+        }
+      }
+    },
+    "Chiudi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "Chiusa, ^[%lld abbonamento](inflect: true)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Closed, ^[%lld subscription](inflect: true)"
+          }
+        }
+      }
+    },
+    "Cibo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Food"
+          }
+        }
+      }
+    },
+    "Ciclo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cycle"
+          }
+        }
+      }
+    },
+    "Città": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cities"
+          }
+        }
+      }
+    },
+    "Cloud": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloud"
+          }
+        }
+      }
+    },
+    "Come annullare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How to cancel"
+          }
+        }
+      }
+    },
+    "Come si usa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How to use"
+          }
+        }
+      }
+    },
+    "Con Zero sui lati, in Impostazioni, un bordo legge 0° sui lati invece che in alto e in basso. Un tocco sulla cifra nasconde i controlli, un altro li mostra.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With Zero at the sides, in Settings, an edge reads 0° on the sides instead of the top and bottom. A tap on the figure hides the controls, another shows them."
+          }
+        }
+      }
+    },
+    "Con i tassi inseriti da te": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With the rates you typed"
+          }
+        }
+      }
+    },
+    "Conclusi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finished"
+          }
+        }
+      }
+    },
+    "Concluso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finished"
+          }
+        }
+      }
+    },
+    "Condividi %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share %@"
+          }
+        }
+      }
+    },
+    "Condividi una lista con chi vuoi, tramite iCloud: la vede in sola lettura, con il totale. Note, siti, metodi di pagamento e promemoria restano qui.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share a list with anyone, through iCloud: they see it read only, with its total. Notes, websites, payment methods and reminders stay here."
+          }
+        }
+      }
+    },
+    "Condivisa con ^[%lld persona](inflect: true)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shared with ^[%lld person](inflect: true)"
+          }
+        }
+      }
+    },
+    "Condivisa da %@, in sola lettura. Non entra nel tuo totale e non ti manda promemoria.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shared by %@, read only. It's not in your total and sends you no reminders."
+          }
+        }
+      }
+    },
+    "Condivise con te": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shared with you"
+          }
+        }
+      }
+    },
+    "Consenti la fotocamera": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow the camera"
+          }
+        }
+      }
+    },
+    "Controlli nascosti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Controls hidden"
+          }
+        }
+      }
+    },
+    "Controlli visibili": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Controls shown"
+          }
+        }
+      }
+    },
+    "Corso di lingue": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language course"
+          }
+        }
+      }
+    },
+    "Così arrivano i promemoria prima di ogni rinnovo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is how reminders arrive before each renewal."
+          }
+        }
+      }
+    },
+    "Cronologia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History"
+          }
+        }
+      }
+    },
+    "Da quando": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From"
+          }
+        }
+      }
+    },
+    "Dal %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From %@"
+          }
+        }
+      }
+    },
+    "Data": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date"
+          }
+        }
+      }
+    },
+    "Dati": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data"
+          }
+        }
+      }
+    },
+    "Design": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Design"
+          }
+        }
+      }
+    },
+    "Dice quando arriva il prossimo pagamento e quanto costa.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tells when the next payment comes and how much it is."
+          }
+        }
+      }
+    },
+    "Dice quanti abbonamenti stai pagando.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tells how many subscriptions you're paying for."
+          }
+        }
+      }
+    },
+    "Dice quanto costa un abbonamento e ogni quanto lo paghi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tells what a subscription costs and how often you pay it."
+          }
+        }
+      }
+    },
+    "Dice quanto paghi questo mese e quanto resta da pagare.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tells what you pay this month and what's still to pay."
+          }
+        }
+      }
+    },
+    "Distanza dalla Terra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distance from Earth"
+          }
+        }
+      }
+    },
+    "Dopo Blocca, la lettura si ferma quando resta entro la tolleranza per due secondi, e mostra la media. Nel mirino, con la fotocamera accesa, anche un tasto volume blocca e sblocca.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After Lock, the reading stops once it stays within the tolerance for two seconds, and shows the average. In the sight, with the camera on, a volume button locks and unlocks too."
+          }
+        }
+      }
+    },
+    "Dopo la prova: %@ al mese": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After the trial: %@ a month"
+          }
+        }
+      }
+    },
+    "Dopo la prova: %@ all'anno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After the trial: %@ a year"
+          }
+        }
+      }
+    },
+    "Dove trovare gli abbonamenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Where to find subscriptions"
+          }
+        }
+      }
+    },
+    "Due misure per lato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Two readings per side"
+          }
+        }
+      }
+    },
+    "Durante la misura": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "While measuring"
+          }
+        }
+      }
+    },
+    "Durata": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duration"
+          }
+        }
+      }
+    },
+    "Elimina %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete %@"
+          }
+        }
+      }
+    },
+    "Elimina abbonamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete subscription"
+          }
+        }
+      }
+    },
+    "Eliminare %@?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete %@?"
+          }
+        }
+      }
+    },
+    "Eliminare la categoria?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete the category?"
+          }
+        }
+      }
+    },
+    "Eliminare la lista?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete the list?"
+          }
+        }
+      }
+    },
+    "Email": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Email"
+          }
+        }
+      }
+    },
+    "Esce dal totale e dai promemoria. Puoi riattivarlo quando vuoi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It leaves the total and the reminders. You can reactivate it anytime."
+          }
+        }
+      }
+    },
+    "Esclusi %lld in %@: manca il tasso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld in %@ left out: no rate"
+          }
+        }
+      }
+    },
+    "Esclusi %lld: manca il tasso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld left out: no rate"
+          }
+        }
+      }
+    },
+    "Esporta CSV": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export CSV"
+          }
+        }
+      }
+    },
+    "Esporta crea un file con tutti gli abbonamenti: lo salvi dove vuoi tu. Importa legge un file della versione precedente, di questa o di un foglio di calcolo, e ti fa scegliere le righe.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export makes a file with every subscription: you keep it where you want. Import reads a file from the previous version, from this one or from a spreadsheet, and lets you choose the rows."
+          }
+        }
+      }
+    },
+    "Estratto conto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bank statement"
+          }
+        }
+      }
+    },
+    "Età della luna": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moon age"
+          }
+        }
+      }
+    },
+    "Eventi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Events"
+          }
+        }
+      }
+    },
+    "Famiglia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Family"
+          }
+        }
+      }
+    },
+    "Fasi, sorgere e tramonto calcolati su questo iPhone con gli algoritmi di Jean Meeus, senza rete. Gli orari hanno un errore di qualche minuto.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phases, moonrise and moonset worked out on this iPhone with Jean Meeus's algorithms, without network. Times can be off by a few minutes."
+          }
+        }
+      }
+    },
+    "Fatturazione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Billing"
+          }
+        }
+      }
+    },
+    "Ferma la cifra, così la leggi anche dopo aver tolto l'iPhone. Con Blocca a lettura stabile aspetta che l'iPhone resti fermo e mostra la media.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Freezes the figure, so you can read it after taking your iPhone away. With Lock when steady, it waits for your iPhone to hold still and shows the average."
+          }
+        }
+      }
+    },
+    "Film e serie": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Films and series"
+          }
+        }
+      }
+    },
+    "Finanza": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finance"
+          }
+        }
+      }
+    },
+    "Fine": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "Fine della prova": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trial ends"
+          }
+        }
+      }
+    },
+    "Fitness": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fitness"
+          }
+        }
+      }
+    },
+    "Fotocamera non consentita": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera not allowed"
+          }
+        }
+      }
+    },
+    "Fotocamera non disponibile": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera not available"
+          }
+        }
+      }
+    },
+    "Fuori scala": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off scale"
+          }
+        }
+      }
+    },
+    "Fuso orario": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time zone"
+          }
+        }
+      }
+    },
+    "Gas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gas"
+          }
+        }
+      }
+    },
+    "Gibbosa calante": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waning gibbous"
+          }
+        }
+      }
+    },
+    "Gibbosa crescente": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waxing gibbous"
+          }
+        }
+      }
+    },
+    "Giochi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Games"
+          }
+        }
+      }
+    },
+    "Giornale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Newspaper"
+          }
+        }
+      }
+    },
+    "Giorni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Days"
+          }
+        }
+      }
+    },
+    "Giorno precedente": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous day"
+          }
+        }
+      }
+    },
+    "Giorno successivo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next day"
+          }
+        }
+      }
+    },
+    "Gira l'iPhone di 180° sullo stesso punto, sullo stesso lato, e tocca Misura.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn your iPhone 180° on the same spot, on the same side, and tap Measure."
+          }
+        }
+      }
+    },
+    "Già presente": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Already there"
+          }
+        }
+      }
+    },
+    "Gli abbonamenti restano, senza categoria.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Its subscriptions stay, without a category."
+          }
+        }
+      }
+    },
+    "Gli abbonamenti restano, senza lista.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Its subscriptions stay, without a list."
+          }
+        }
+      }
+    },
+    "Gli abbonamenti vanno nel tuo iCloud e arrivano sui tuoi dispositivi, mai su un server di Sbu. Spento, restano solo su questo iPhone.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your subscriptions go to your iCloud and reach your devices, never a Sbu server. Off, they stay on this iPhone only."
+          }
+        }
+      }
+    },
+    "Gradi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Degrees"
+          }
+        }
+      }
+    },
+    "Gradi al decimo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Degrees to the tenth"
+          }
+        }
+      }
+    },
+    "Gradi interi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Whole degrees"
+          }
+        }
+      }
+    },
+    "Hai annullato %@?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Did you cancel %@?"
+          }
+        }
+      }
+    },
+    "I dati della versione precedente restano su questo iPhone, intatti.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The previous version's data stays on this iPhone, untouched."
+          }
+        }
+      }
+    },
+    "I limiti del sensore": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The sensor's limits"
+          }
+        }
+      }
+    },
+    "I pagamenti da quel giorno usano il nuovo prezzo, anche nel totale e nei promemoria.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Payments from that day use the new price, in the total and the reminders too."
+          }
+        }
+      }
+    },
+    "I totali sono in questa valuta. Gli abbonamenti in altre valute si convertono con i tassi BCE inclusi nell'app, o con i tuoi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Totals are in this currency. Subscriptions in other currencies are converted with the ECB rates included in the app, or with your own."
+          }
+        }
+      }
+    },
+    "Il file è vuoto o non si legge.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file is empty or can't be read."
+          }
+        }
+      }
+    },
+    "Il giorno stesso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On the day"
+          }
+        }
+      }
+    },
+    "Il lato scelto torna alla lettura del sensore, senza correzioni.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The side you pick goes back to the raw sensor reading."
+          }
+        }
+      }
+    },
+    "Il sensore dell'iPhone legge il decimo di grado, ma la misura vale quanto la calibrazione e l'appoggio: una custodia o una fotocamera sporgente cambiano l'angolo. Per lavori che chiedono uno strumento certificato, usa quello.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your iPhone's sensor reads to a tenth of a degree, but a reading is only as good as the calibration and how the iPhone rests: a case or a raised camera changes the angle. For work that calls for a certified instrument, use one."
+          }
+        }
+      }
+    },
+    "Il tuo %lld in abbonamenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your %lld in subscriptions"
+          }
+        }
+      }
+    },
+    "Illuminazione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Illumination"
+          }
+        }
+      }
+    },
+    "Importa %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import %lld"
+          }
+        }
+      }
+    },
+    "Importa CSV": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import CSV"
+          }
+        }
+      }
+    },
+    "Impostato": {
+      "comment": "The Closure word when a phase alert is turned on and iOS will deliver it.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set"
+          }
+        }
+      }
+    },
+    "Impostazioni dell'iPhone, il tuo nome in alto, poi Abbonamenti. Ci sono tutti quelli che paghi con l'App Store.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone Settings, your name at the top, then Subscriptions. Every one you pay through the App Store is there."
+          }
+        }
+      }
+    },
+    "In attesa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting"
+          }
+        }
+      }
+    },
+    "In bolla": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level"
+          }
+        }
+      }
+    },
+    "In pausa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paused"
+          }
+        }
+      }
+    },
+    "In pausa o annullato non entra nel totale e non ti ricorda i pagamenti.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paused or cancelled, it leaves the total and stops reminding you."
+          }
+        }
+      }
+    },
+    "In piano": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lying flat"
+          }
+        }
+      }
+    },
+    "In sola lettura. Non entra nel tuo totale e non ti manda promemoria.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read only. It's not in your total and sends you no reminders."
+          }
+        }
+      }
+    },
+    "Inclinazione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tilt"
+          }
+        }
+      }
+    },
+    "Internet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Internet"
+          }
+        }
+      }
+    },
+    "Invia un promemoria di prova": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send a test reminder"
+          }
+        }
+      }
+    },
+    "Iscritto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subscribed"
+          }
+        }
+      }
+    },
+    "Istruzione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Education"
+          }
+        }
+      }
+    },
+    "L'angolo dall'orizzontale, al decimo o intero.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The angle from horizontal, to the tenth or whole."
+          }
+        }
+      }
+    },
+    "L'iPhone si è mosso: la misura ricomincia.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your iPhone moved: measuring starts over."
+          }
+        }
+      }
+    },
+    "La cifra in alto e il widget mostrano questo periodo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The figure at the top and the widget show this period."
+          }
+        }
+      }
+    },
+    "La lista sparisce da questo iPhone. Chi la condivide la tiene.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The list leaves this iPhone. Whoever shares it keeps it."
+          }
+        }
+      }
+    },
+    "La posizione è disattivata per Sbu Moon. Attivala nelle Impostazioni dell'iPhone, o scegli una città.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Location is off for Sbu Moon. Turn it on in the iPhone's Settings, or choose a city."
+          }
+        }
+      }
+    },
+    "La prova finisce domani": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trial ends tomorrow"
+          }
+        }
+      }
+    },
+    "La prova finisce oggi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trial ends today"
+          }
+        }
+      }
+    },
+    "La prova finisce tra ^[%lld giorno](inflect: true)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The trial ends in ^[%lld day](inflect: true)"
+          }
+        }
+      }
+    },
+    "La prova gratuita finisce domani. Poi paghi %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The free trial ends tomorrow. Then you pay %@."
+          }
+        }
+      }
+    },
+    "La prova gratuita finisce il %@. Poi paghi %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The free trial ends on %@. Then you pay %@."
+          }
+        }
+      }
+    },
+    "La prova gratuita finisce oggi. Poi paghi %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The free trial ends today. Then you pay %@."
+          }
+        }
+      }
+    },
+    "La superficie è troppo inclinata o l'iPhone si è mosso. Riprova su una superficie stabile.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The surface is too steep or your iPhone moved. Try again on a steady surface."
+          }
+        }
+      }
+    },
+    "La tua posizione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your location"
+          }
+        }
+      }
+    },
+    "La voce dell'iPhone legge la cifra e ogni blocco, così allinei senza guardare lo schermo. Il suono segna ogni blocco e ogni passo della calibrazione. Funziona senza rete.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your iPhone's voice reads the figure and every lock, so you can line things up without looking at the screen. The sound marks every lock and every calibration step. It works offline."
+          }
+        }
+      }
+    },
+    "Lascia vuoto per il primo rinnovo tra tutti.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leave empty for the first renewal of all."
+          }
+        }
+      }
+    },
+    "Lascia vuoto per vedere tutti gli abbonamenti.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leave empty to see every subscription."
+          }
+        }
+      }
+    },
+    "Lato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Side"
+          }
+        }
+      }
+    },
+    "Le due misure si compensano: l'errore del sensore è corretto anche se la superficie non è in bolla.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The two readings balance out: the sensor error is corrected even if the surface isn't level."
+          }
+        }
+      }
+    },
+    "Le notifiche di Sbu Moon sono disattivate: gli avvisi non arrivano. Attivale nelle Impostazioni dell'iPhone.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications for Sbu Moon are off, so alerts won't arrive. Turn them on in the iPhone's Settings."
+          }
+        }
+      }
+    },
+    "Leggi ad alta voce": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read aloud"
+          }
+        }
+      }
+    },
+    "Letta una volta, con la precisione di un chilometro. Resta su questo iPhone.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read once, accurate to about a kilometer. It stays on this iPhone."
+          }
+        }
+      }
+    },
+    "Lettura bloccata": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading locked"
+          }
+        }
+      }
+    },
+    "Lettura bloccata, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading locked, %@"
+          }
+        }
+      }
+    },
+    "Lettura bloccata, relativa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading locked, relative"
+          }
+        }
+      }
+    },
+    "Lettura sbloccata": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading unlocked"
+          }
+        }
+      }
+    },
+    "Linea di mira": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Line of sight"
+          }
+        }
+      }
+    },
+    "Lista": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "List"
+          }
+        }
+      }
+    },
+    "Liste": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lists"
+          }
+        }
+      }
+    },
+    "Livella": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level"
+          }
+        }
+      }
+    },
+    "Lo schermo non si spegne mentre l'app è aperta.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The screen stays on while the app is open."
+          }
+        }
+      }
+    },
+    "Luce": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Electricity"
+          }
+        }
+      }
+    },
+    "Luna": {
+      "comment": "The app in the tool screen cartiglio: Sbu · Luna · day · place.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moon"
+          }
+        }
+      }
+    },
+    "Luna calante": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waning crescent"
+          }
+        }
+      }
+    },
+    "Luna crescente": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waxing crescent"
+          }
+        }
+      }
+    },
+    "Luna nuova": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New moon"
+          }
+        }
+      }
+    },
+    "Luna piena": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full moon"
+          }
+        }
+      }
+    },
+    "Luogo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Place"
+          }
+        }
+      }
+    },
+    "Luogo: %@": {
+      "comment": "VoiceOver label of the place pill: the city or 'Your location'.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Place: %@"
+          }
+        }
+      }
+    },
+    "Mai": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never"
+          }
+        }
+      }
+    },
+    "Manca il tasso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No rate"
+          }
+        }
+      }
+    },
+    "Mensile": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monthly"
+          }
+        }
+      }
+    },
+    "Mese precedente": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous month"
+          }
+        }
+      }
+    },
+    "Mese successivo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next month"
+          }
+        }
+      }
+    },
+    "Mesi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Months"
+          }
+        }
+      }
+    },
+    "Messo in pausa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paused"
+          }
+        }
+      }
+    },
+    "Metodo di pagamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Payment method"
+          }
+        }
+      }
+    },
+    "Metodo di pagamento è solo un'etichetta, come «Carta personale». Non scrivere mai i dati della carta.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Payment method is only a label, such as “Personal card”. Never type your card details."
+          }
+        }
+      }
+    },
+    "Metti in pausa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause"
+          }
+        }
+      }
+    },
+    "Mirino": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sight"
+          }
+        }
+      }
+    },
+    "Misura": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measure"
+          }
+        }
+      }
+    },
+    "Misura in corso: tieni fermo l'iPhone": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measuring: keep your iPhone still"
+          }
+        }
+      }
+    },
+    "Misurare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measuring"
+          }
+        }
+      }
+    },
+    "Modalità": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modes"
+          }
+        }
+      }
+    },
+    "Modifica": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit"
+          }
+        }
+      }
+    },
+    "Modifica lo storico dei pagamenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit billing history"
+          }
+        }
+      }
+    },
+    "Mostra gli abbonamenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shows the subscriptions"
+          }
+        }
+      }
+    },
+    "Mostra i controlli": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show controls"
+          }
+        }
+      }
+    },
+    "Mostra sorgere e tramonto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show moonrise and moonset"
+          }
+        }
+      }
+    },
+    "Mostra tutti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show all"
+          }
+        }
+      }
+    },
+    "Musica": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Music"
+          }
+        }
+      }
+    },
+    "Mutuo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mortgage"
+          }
+        }
+      }
+    },
+    "Nasconde gli abbonamenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hides the subscriptions"
+          }
+        }
+      }
+    },
+    "Nascondi il riepilogo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide the review"
+          }
+        }
+      }
+    },
+    "Nel %lld non hai pagato abbonamenti.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You paid for no subscriptions in %lld."
+          }
+        }
+      }
+    },
+    "Nel file non trovo le colonne del nome e del prezzo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file has no name and price columns."
+          }
+        }
+      }
+    },
+    "Nell'app PayPal: Impostazioni, Pagamenti, Gestisci pagamenti automatici.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the PayPal app: Settings, Payments, Manage automatic payments."
+          }
+        }
+      }
+    },
+    "Nessun abbonamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No subscriptions"
+          }
+        }
+      }
+    },
+    "Nessun abbonamento con questo filtro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No subscriptions with this filter"
+          }
+        }
+      }
+    },
+    "Nessun abbonamento per «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No subscriptions for “%@”"
+          }
+        }
+      }
+    },
+    "Nessun pagamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No payments"
+          }
+        }
+      }
+    },
+    "Nessun pagamento ancora": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No payments yet"
+          }
+        }
+      }
+    },
+    "Nessun pagamento in arrivo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No payments coming"
+          }
+        }
+      }
+    },
+    "Nessun pagamento in arrivo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No payments coming."
+          }
+        }
+      }
+    },
+    "Nessun rinnovo a gennaio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing renews in January"
+          }
+        }
+      }
+    },
+    "Nessuna": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None"
+          }
+        }
+      }
+    },
+    "Nessuna città trovata per «%@».": {
+      "comment": "The place search found no city; %@ is what the person typed.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No city found for “%@”."
+          }
+        }
+      }
+    },
+    "Nessuno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None"
+          }
+        }
+      }
+    },
+    "Nome": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        }
+      }
+    },
+    "Non ancora": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not yet"
+          }
+        }
+      }
+    },
+    "Non calibrato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not calibrated"
+          }
+        }
+      }
+    },
+    "Non importati dalla versione precedente: ^[%lld abbonamento](inflect: true).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not imported from the previous version: ^[%lld subscription](inflect: true)."
+          }
+        }
+      }
+    },
+    "Non in questo giorno": {
+      "comment": "Value of Sorge or Tramonta when the moon does not rise or set on the day shown.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not on this day"
+          }
+        }
+      }
+    },
+    "Non riesco a leggere gli abbonamenti della versione precedente.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The previous version's subscriptions can't be read."
+          }
+        }
+      }
+    },
+    "Note": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes"
+          }
+        }
+      }
+    },
+    "Notifiche disattivate": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications off"
+          }
+        }
+      }
+    },
+    "Notifiche spente per Sbu Subscriptions": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications are off for Sbu Subscriptions"
+          }
+        }
+      }
+    },
+    "Notizie": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "News"
+          }
+        }
+      }
+    },
+    "Numero di abbonamenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Number of subscriptions"
+          }
+        }
+      }
+    },
+    "Numero fisso di pagamenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fixed number of payments"
+          }
+        }
+      }
+    },
+    "Nuova categoria": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New category"
+          }
+        }
+      }
+    },
+    "Nuova lista": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New list"
+          }
+        }
+      }
+    },
+    "Nuovo abbonamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New subscription"
+          }
+        }
+      }
+    },
+    "Nuovo prezzo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New price"
+          }
+        }
+      }
+    },
+    "Oggi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
+          }
+        }
+      }
+    },
+    "Oggi alle %@.": {
+      "comment": "Phase alert body: the phase happens today at this time.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today at %@."
+          }
+        }
+      }
+    },
+    "Oggi, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today, %@"
+          }
+        }
+      }
+    },
+    "Oggi, %@: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today, %@: %@"
+          }
+        }
+      }
+    },
+    "Ogni %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every %lld"
+          }
+        }
+      }
+    },
+    "Ogni %lld anni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every %lld years"
+          }
+        }
+      }
+    },
+    "Ogni %lld giorni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every %lld days"
+          }
+        }
+      }
+    },
+    "Ogni %lld mesi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every %lld months"
+          }
+        }
+      }
+    },
+    "Ogni %lld settimane": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every %lld weeks"
+          }
+        }
+      }
+    },
+    "Ogni 3 mesi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every 3 months"
+          }
+        }
+      }
+    },
+    "Ogni 3 secondi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every 3 seconds"
+          }
+        }
+      }
+    },
+    "Ogni giorno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily"
+          }
+        }
+      }
+    },
+    "Ogni lato si calibra a parte, in due misure. La calibrazione resta su questo iPhone.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each side is calibrated on its own, in two readings. The calibration stays on this iPhone."
+          }
+        }
+      }
+    },
+    "Ogni lato si calibra a parte: misura, gira l'iPhone di 180° sullo stesso punto e misura ancora. Le due misure si compensano, quindi la superficie non deve essere in bolla.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each side is calibrated on its own: measure, turn your iPhone 180° on the same spot and measure again. The two readings cancel out, so the surface doesn't need to be level."
+          }
+        }
+      }
+    },
+    "Ora dei promemoria": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder time"
+          }
+        }
+      }
+    },
+    "Ora dell'avviso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alert time"
+          }
+        }
+      }
+    },
+    "Ora locale di %@": {
+      "comment": "Under moonrise and moonset when the chosen city's clock differs from the iPhone's: the city's name.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ local time"
+          }
+        }
+      }
+    },
+    "Ordina e filtra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sort and filter"
+          }
+        }
+      }
+    },
+    "Ordina per": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sort by"
+          }
+        }
+      }
+    },
+    "Organizza": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Organize"
+          }
+        }
+      }
+    },
+    "Pagamenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Payments"
+          }
+        }
+      }
+    },
+    "Pagamenti in arrivo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upcoming payments"
+          }
+        }
+      }
+    },
+    "Pagamenti rimanenti: %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Payments left: %lld"
+          }
+        }
+      }
+    },
+    "Pagamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Payment"
+          }
+        }
+      }
+    },
+    "Pagato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paid"
+          }
+        }
+      }
+    },
+    "Palestra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gym"
+          }
+        }
+      }
+    },
+    "Passo 1 di 2": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step 1 of 2"
+          }
+        }
+      }
+    },
+    "Passo 2 di 2": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step 2 of 2"
+          }
+        }
+      }
+    },
+    "PayPal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PayPal"
+          }
+        }
+      }
+    },
+    "Pendenza in %": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slope in %"
+          }
+        }
+      }
+    },
+    "Per condividere una lista accedi a iCloud nelle Impostazioni dell'iPhone.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To share a list, sign in to iCloud in the iPhone's Settings."
+          }
+        }
+      }
+    },
+    "Per esempio Famiglia o Lavoro. Ogni abbonamento può stare in una lista.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Such as Family or Work. Each subscription can be in one list."
+          }
+        }
+      }
+    },
+    "Per sempre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Until you cancel"
+          }
+        }
+      }
+    },
+    "Personalizzato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom"
+          }
+        }
+      }
+    },
+    "Piano": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flat"
+          }
+        }
+      }
+    },
+    "Posizione non trovata. Riprova all'aperto, o scegli una città.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Location not found. Try again outdoors, or choose a city."
+          }
+        }
+      }
+    },
+    "Precisione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accuracy"
+          }
+        }
+      }
+    },
+    "Prende la posizione attuale come zero: la cifra mostra di quanto ti sposti da lì. Assoluto torna all'angolo vero.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Takes the current position as zero: the figure shows how far you move from there. Absolute goes back to the true angle."
+          }
+        }
+      }
+    },
+    "Prezzi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prices"
+          }
+        }
+      }
+    },
+    "Prezzo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Price"
+          }
+        }
+      }
+    },
+    "Prezzo al mese": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Price per month"
+          }
+        }
+      }
+    },
+    "Prezzo cambiato: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Price changed: %@"
+          }
+        }
+      }
+    },
+    "Prezzo di un abbonamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Price of a subscription"
+          }
+        }
+      }
+    },
+    "Primo quarto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First quarter"
+          }
+        }
+      }
+    },
+    "Produttività": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Productivity"
+          }
+        }
+      }
+    },
+    "Promemoria": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder"
+          }
+        }
+      }
+    },
+    "Prossimo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next"
+          }
+        }
+      }
+    },
+    "Prossimo pagamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next payment"
+          }
+        }
+      }
+    },
+    "Prossimo rinnovo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next renewal"
+          }
+        }
+      }
+    },
+    "Prossimo: %@, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next: %@, %@"
+          }
+        }
+      }
+    },
+    "Prova fino al": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trial until"
+          }
+        }
+      }
+    },
+    "Prova fino al %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trial until %@"
+          }
+        }
+      }
+    },
+    "Prova gratuita": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free trial"
+          }
+        }
+      }
+    },
+    "Prova: ancora %lld giorni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trial: %lld days left"
+          }
+        }
+      }
+    },
+    "Prove gratuite": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free trials"
+          }
+        }
+      }
+    },
+    "Quando si ferma": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When it settles"
+          }
+        }
+      }
+    },
+    "Quanta base per 1 di alzata, come si scrive una scarpata.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How much run for 1 of rise, as an embankment is written."
+          }
+        }
+      }
+    },
+    "Quanti abbonamenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How many subscriptions"
+          }
+        }
+      }
+    },
+    "Quanti giorni prima lo scegli per ogni abbonamento.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How many days ahead you choose for each subscription."
+          }
+        }
+      }
+    },
+    "Quanto sale ogni 100 di base: 100 % è 45°. A 90° non ha valore e la cifra mostra un trattino.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How much it rises for every 100 of run: 100 % is 45°. At 90° it has no value and the figure shows a dash."
+          }
+        }
+      }
+    },
+    "Quanto sale ogni 12 di base, come si misura un tetto.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How much it rises for every 12 of run, as a roof is measured."
+          }
+        }
+      }
+    },
+    "Quanto spendi e i prossimi rinnovi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What you spend and the next renewals."
+          }
+        }
+      }
+    },
+    "Quanto vale 1 %@ in %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What 1 %@ is worth in %@."
+          }
+        }
+      }
+    },
+    "Questo mese paghi %@. Ancora da pagare: %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This month you pay %@. Still to pay: %@."
+          }
+        }
+      }
+    },
+    "Raggruppa per": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Group by"
+          }
+        }
+      }
+    },
+    "Rapporto 1V:H": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ratio 1V:H"
+          }
+        }
+      }
+    },
+    "Relativo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relative"
+          }
+        }
+      }
+    },
+    "Relativo, allo zero": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relative, at zero"
+          }
+        }
+      }
+    },
+    "Riattiva": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reactivate"
+          }
+        }
+      }
+    },
+    "Riattivato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reactivated"
+          }
+        }
+      }
+    },
+    "Ricorrente": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recurring"
+          }
+        }
+      }
+    },
+    "Riga %lld: ciclo non riconosciuto «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Line %lld: unknown cycle “%@”"
+          }
+        }
+      }
+    },
+    "Riga %lld: data non valida «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Line %lld: invalid date “%@”"
+          }
+        }
+      }
+    },
+    "Riga %lld: manca il nome": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Line %lld: no name"
+          }
+        }
+      }
+    },
+    "Riga %lld: prezzo non valido «%@»": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Line %lld: invalid price “%@”"
+          }
+        }
+      }
+    },
+    "Righe non importabili": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rows that can't be imported"
+          }
+        }
+      }
+    },
+    "Rimuovere %@?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove %@?"
+          }
+        }
+      }
+    },
+    "Rimuovi lista": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove list"
+          }
+        }
+      }
+    },
+    "Rinnova domani": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renews tomorrow"
+          }
+        }
+      }
+    },
+    "Rinnova oggi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renews today"
+          }
+        }
+      }
+    },
+    "Rinnova tra ^[%lld giorno](inflect: true)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renews in ^[%lld day](inflect: true)"
+          }
+        }
+      }
+    },
+    "Riprendi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume"
+          }
+        }
+      }
+    },
+    "Ripreso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resumed"
+          }
+        }
+      }
+    },
+    "Ripristina calibrazione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset calibration"
+          }
+        }
+      }
+    },
+    "Riprova a importare": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try importing again"
+          }
+        }
+      }
+    },
+    "Risultato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Result"
+          }
+        }
+      }
+    },
+    "Salva": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        }
+      }
+    },
+    "Sblocca": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlock"
+          }
+        }
+      }
+    },
+    "Sbu Level": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Level"
+          }
+        }
+      }
+    },
+    "Sbu Moon": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Moon"
+          }
+        }
+      }
+    },
+    "Sbu Subscriptions": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Subscriptions"
+          }
+        }
+      }
+    },
+    "Scegli la lista": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the list"
+          }
+        }
+      }
+    },
+    "Scegli un altro giorno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose another day"
+          }
+        }
+      }
+    },
+    "Scegli un altro luogo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose another place"
+          }
+        }
+      }
+    },
+    "Schermo intero": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full screen"
+          }
+        }
+      }
+    },
+    "Schermo sempre acceso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep screen on"
+          }
+        }
+      }
+    },
+    "Scrivi tu il tasso di ogni valuta.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type the rate of each currency yourself."
+          }
+        }
+      }
+    },
+    "Se lo paghi con l'App Store lo annulli qui. Altrimenti aggiungi il sito del servizio con Modifica.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If you pay through the App Store, cancel it here. Otherwise add the service's website with Edit."
+          }
+        }
+      }
+    },
+    "Segna come annullato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark as cancelled"
+          }
+        }
+      }
+    },
+    "Segna come pagato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark as paid"
+          }
+        }
+      }
+    },
+    "Sensore di movimento non disponibile": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motion sensor unavailable"
+          }
+        }
+      }
+    },
+    "Senza categoria": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No category"
+          }
+        }
+      }
+    },
+    "Senza notifiche nessun rinnovo ti avvisa. Attivale nelle Impostazioni dell'iPhone.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without notifications no renewal warns you. Turn them on in the iPhone's Settings."
+          }
+        }
+      }
+    },
+    "Settimanale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly"
+          }
+        }
+      }
+    },
+    "Settimane": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weeks"
+          }
+        }
+      }
+    },
+    "Si attiva quando riapri l'app.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It starts when you reopen the app."
+          }
+        }
+      }
+    },
+    "Si ferma quando riapri l'app. I dati restano su questo iPhone.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It stops when you reopen the app. Your data stays on this iPhone."
+          }
+        }
+      }
+    },
+    "Si rinnova domani: %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renews tomorrow: %@."
+          }
+        }
+      }
+    },
+    "Si rinnova il %@: %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renews on %@: %@."
+          }
+        }
+      }
+    },
+    "Si rinnova oggi: %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renews today: %@."
+          }
+        }
+      }
+    },
+    "Si rinnovano a gennaio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renewing in January"
+          }
+        }
+      }
+    },
+    "Simbolo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Symbol"
+          }
+        }
+      }
+    },
+    "Sincronizza con iCloud": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync with iCloud"
+          }
+        }
+      }
+    },
+    "Sito": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Website"
+          }
+        }
+      }
+    },
+    "Sito per gestirlo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Website to manage it"
+          }
+        }
+      }
+    },
+    "Social": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Social"
+          }
+        }
+      }
+    },
+    "Sopra l'orizzonte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Above the horizon"
+          }
+        }
+      }
+    },
+    "Sopra l'orizzonte tutto il giorno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Above the horizon all day"
+          }
+        }
+      }
+    },
+    "Sorge": {
+      "comment": "Moonrise time label.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rises"
+          }
+        }
+      }
+    },
+    "Sorgere e tramonto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moonrise and moonset"
+          }
+        }
+      }
+    },
+    "Sotto l'orizzonte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Below the horizon"
+          }
+        }
+      }
+    },
+    "Sotto l'orizzonte tutto il giorno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Below the horizon all day"
+          }
+        }
+      }
+    },
+    "Spendi al mese": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You spend a month"
+          }
+        }
+      }
+    },
+    "Spendi al mese · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You spend a month · %@"
+          }
+        }
+      }
+    },
+    "Spendi all'anno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You spend a year"
+          }
+        }
+      }
+    },
+    "Spendi all'anno · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You spend a year · %@"
+          }
+        }
+      }
+    },
+    "Spesa del mese": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monthly spending"
+          }
+        }
+      }
+    },
+    "Speso finora": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spent so far"
+          }
+        }
+      }
+    },
+    "Stai pagando ^[%lld abbonamento](inflect: true).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You're paying for ^[%lld subscription](inflect: true)."
+          }
+        }
+      }
+    },
+    "Stato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status"
+          }
+        }
+      }
+    },
+    "Storico dei pagamenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Billing history"
+          }
+        }
+      }
+    },
+    "Storico dei prezzi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Price history"
+          }
+        }
+      }
+    },
+    "Streaming": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Streaming"
+          }
+        }
+      }
+    },
+    "Strumenti di design": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Design tools"
+          }
+        }
+      }
+    },
+    "Sul bordo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On its edge"
+          }
+        }
+      }
+    },
+    "Suono alla misura": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sound on measure"
+          }
+        }
+      }
+    },
+    "Sviluppo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Development"
+          }
+        }
+      }
+    },
+    "Tassi BCE del %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ECB rates of %@"
+          }
+        }
+      }
+    },
+    "Tassi di cambio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exchange rates"
+          }
+        }
+      }
+    },
+    "Tassi di riferimento BCE del %@, inclusi nell'app: Sbu non va in rete. Tocca una valuta per scrivere il tasso del tuo estratto conto.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ECB reference rates of %@, included in the app: Sbu never goes online. Tap a currency to type the rate on your bank statement."
+          }
+        }
+      }
+    },
+    "Tasso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rate"
+          }
+        }
+      }
+    },
+    "Ti avvisa il giorno della fase, all'ora che scegli.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You get an alert on the day of the phase, at the time you choose."
+          }
+        }
+      }
+    },
+    "Tieni fermo l'iPhone": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold your iPhone still"
+          }
+        }
+      }
+    },
+    "Tipo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type"
+          }
+        }
+      }
+    },
+    "Tocca Mirino e inquadra un punto lontano, il colmo di un tetto o la cima di un albero: la cifra è l'angolo della linea di mira sopra o sotto l'orizzonte. L'immagine non viene salvata.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap Sight and aim at a distant point, the ridge of a roof or the top of a tree: the figure is the angle of the line of sight above or below the horizon. The picture is never saved."
+          }
+        }
+      }
+    },
+    "Tolleranza": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tolerance"
+          }
+        }
+      }
+    },
+    "Totale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Total"
+          }
+        }
+      }
+    },
+    "Totale %@ · ancora da pagare %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Total %@ · still to pay %@"
+          }
+        }
+      }
+    },
+    "Tra %lld giorni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In %lld days"
+          }
+        }
+      }
+    },
+    "Tramonta": {
+      "comment": "Moonset time label.",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sets"
+          }
+        }
+      }
+    },
+    "Tuo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yours"
+          }
+        }
+      }
+    },
+    "Tutte": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All"
+          }
+        }
+      }
+    },
+    "Tutti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All"
+          }
+        }
+      }
+    },
+    "Tutti i lati": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All sides"
+          }
+        }
+      }
+    },
+    "Tutti i tuoi abbonamenti sono in %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All your subscriptions are in %@."
+          }
+        }
+      }
+    },
+    "Ultimo quarto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last quarter"
+          }
+        }
+      }
+    },
+    "Una tantum": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One-off"
+          }
+        }
+      }
+    },
+    "Unità": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Units"
+          }
+        }
+      }
+    },
+    "Unità di misura": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unit"
+          }
+        }
+      }
+    },
+    "Usa il tasso BCE": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use the ECB rate"
+          }
+        }
+      }
+    },
+    "Usa la mia posizione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use my location"
+          }
+        }
+      }
+    },
+    "VPN": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "VPN"
+          }
+        }
+      }
+    },
+    "Vai in Impostazioni > Notifiche > Sbu Subscriptions > Consenti notifiche.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go to Settings > Notifications > Sbu Subscriptions > Allow Notifications."
+          }
+        }
+      }
+    },
+    "Valore": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Value"
+          }
+        }
+      }
+    },
+    "Valuta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Currency"
+          }
+        }
+      }
+    },
+    "Valuta principale": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Main currency"
+          }
+        }
+      }
+    },
+    "Versione precedente": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous version"
+          }
+        }
+      }
+    },
+    "Viaggi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Travel"
+          }
+        }
+      }
+    },
+    "Voce e suono": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice and sound"
+          }
+        }
+      }
+    },
+    "Zero sui lati": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zero at the sides"
+          }
+        }
+      }
+    },
+    "^[%lld giorno](inflect: true) prima": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld day](inflect: true) before"
+          }
+        }
+      }
+    },
+    "^[%lld pagamento](inflect: true)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "^[%lld payment](inflect: true)"
+          }
+        }
+      }
+    },
+    "al mese": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "a month"
+          }
+        }
+      }
+    },
+    "al mese · %@ all'anno · ^[%lld abbonamento](inflect: true)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "a month · %@ a year · ^[%lld subscription](inflect: true)"
+          }
+        }
+      }
+    },
+    "all'anno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "a year"
+          }
+        }
+      }
+    },
+    "all'anno · %@ al mese · ^[%lld abbonamento](inflect: true)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "a year · %@ a month · ^[%lld subscription](inflect: true)"
+          }
+        }
+      }
+    },
+    "domani": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tomorrow"
+          }
+        }
+      }
+    },
+    "oggi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "today"
+          }
+        }
+      }
+    },
+    "spesi nel %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "spent in %lld"
+          }
+        }
+      }
+    },
+    "spesi nel %lld · più %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "spent in %lld · plus %@"
+          }
+        }
+      }
+    },
+    "tra %lld giorni": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in %lld days"
+          }
+        }
+      }
+    },
+    "x:12": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "x:12"
+          }
+        }
+      }
+    },
+    "x:12 è l'alzata su 12 di base, come si legge un tetto. 1V:H è la base per 1 di alzata. Con Zero sui lati, un bordo legge 0° sui lati invece che in alto e in basso.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "x:12 is the rise on a run of 12, as a roof is read. 1V:H is the run for a rise of 1. With Zero at the sides, an edge reads 0° on the sides instead of the top and bottom."
+          }
+        }
+      }
+    },
+    "·": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "·"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

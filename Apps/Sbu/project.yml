@@ -1,0 +1,124 @@
+name: Sbu
+options:
+  bundleIdPrefix: dev.sbu
+  deploymentTarget:
+    iOS: "17.0"
+  developmentLanguage: it
+  createIntermediateGroups: true
+packages:
+  SbuKit:
+    path: ../../Packages/SbuKit
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "0.1"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: $(SBU_TEAM_ID)
+    TARGETED_DEVICE_FAMILY: "1"
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+    SWIFT_APPROACHABLE_CONCURRENCY: YES
+# ADR-0027: each tool is a static library built from its app's own sources, without the app's @main,
+# string catalogs, asset catalog and privacy manifest. A library is its own Swift module, so the apps'
+# MainView, RootView and NotificationAccess don't collide, and SbuKit is linked once, into the app.
+# Strings and resources live in the Sbu app: code in a library looks them up in Bundle.main.
+targetTemplates:
+  Tool:
+    type: library.static
+    platform: iOS
+    dependencies:
+      - package: SbuKit
+        link: false
+    settings:
+      base:
+        PRODUCT_NAME: ${target_name}
+targets:
+  Sbu:
+    type: application
+    platform: iOS
+    sources:
+      - Sbu
+      # The apps' bundled data, read with Bundle.main by their code.
+      - ../SbuMoon/SbuMoon/Resources/cities.json
+      - ../SbuSubscriptions/SbuSubscriptions/Catalog/Catalog.json
+      - ../SbuSubscriptions/SbuSubscriptions/Currency/ExchangeRates.json
+    dependencies:
+      - package: SbuKit
+      - target: LevelTool
+      - target: MoonTool
+      - target: SubscriptionsTool
+    preBuildScripts:
+      # The tools' strings and the shell's in one Localizable table: see merge_strings.py.
+      - name: Merge string catalogs
+        script: python3 "$SRCROOT/merge_strings.py" --check
+        basedOnDependencyAnalysis: false
+    info:
+      path: Sbu/Info.plist
+      properties:
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        # sbu://level opens a tool straight from a link, a shortcut or a future App Clip.
+        CFBundleURLTypes:
+          - CFBundleURLName: dev.sbu.sbu
+            CFBundleURLSchemes: [sbu]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.sbu
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Sbu
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        # Asked only when you open the tool that needs it. English in InfoPlist.xcstrings.
+        INFOPLIST_KEY_NSCameraUsageDescription: "La fotocamera fa da mirino per misurare l'inclinazione di un punto lontano. L'immagine resta sullo schermo: non viene salvata né inviata."
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "Sbu usa la posizione una volta, quando la chiedi in Luna, per calcolare il sorgere e il tramonto della luna. La posizione resta su questo iPhone."
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+  LevelTool:
+    templates: [Tool]
+    sources:
+      - Modules/Level
+      - path: ../SbuLevel/SbuLevel
+        excludes: [SbuLevelApp.swift, "*.xcstrings", Assets.xcassets, PrivacyInfo.xcprivacy]
+  MoonTool:
+    templates: [Tool]
+    sources:
+      - Modules/Moon
+      - path: ../SbuMoon/SbuMoon
+        excludes: [SbuMoonApp.swift, "*.xcstrings", Assets.xcassets, PrivacyInfo.xcprivacy, Resources]
+  SubscriptionsTool:
+    templates: [Tool]
+    sources:
+      - Modules/Subscriptions
+      - path: ../SbuSubscriptions/SbuSubscriptions
+        excludes: [SbuSubscriptionsApp.swift, "*.xcstrings", Assets.xcassets, PrivacyInfo.xcprivacy, Info.plist,
+                   "*.entitlements", "**/*.json"]
+  SbuTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [SbuTests]
+    dependencies:
+      - target: Sbu
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+  SbuUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [SbuUITests]
+    dependencies:
+      - target: Sbu
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_DEFAULT_ACTOR_ISOLATION: nonisolated
+schemes:
+  Sbu:
+    build:
+      targets:
+        Sbu: all
+    test:
+      targets: [SbuTests, SbuUITests]
