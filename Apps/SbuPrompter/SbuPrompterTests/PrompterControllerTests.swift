@@ -109,6 +109,21 @@ struct PrompterControllerTests {
         #expect(controller.status.currentLine == top.currentLine)
     }
 
+    /// SBU-424: the time on the iPhone follows the text when it is moved by hand, at the current speed.
+    @Test func scrollingMovesTheReadingTime() {
+        let controller = makeController()
+        controller.speed = 40
+        controller.perform(.togglePlay)
+        controller.tick(2)
+        #expect(controller.elapsed == 2)
+        controller.scrollManually(by: -40)
+        #expect(controller.elapsed == 1)
+        controller.scrollManually(by: 20)
+        #expect(controller.elapsed == 1.5)
+        controller.scrollManually(by: -500)
+        #expect(controller.elapsed == 0)
+    }
+
     @Test func rewindStopsAtTheTop() {
         let controller = makeController()
         controller.perform(.togglePlay)
