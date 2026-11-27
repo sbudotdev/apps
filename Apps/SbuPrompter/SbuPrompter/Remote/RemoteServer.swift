@@ -9,7 +9,8 @@ import Observation
 final class RemoteServer: NSObject {
     static let serviceType = "sbu-prompter"
     private static let tokensKey = "remoteTokens"
-    private static let statusInterval: TimeInterval = 0.25
+    /// The line being read changes several times a second while the text scrolls.
+    private static let statusInterval: TimeInterval = 0.1
 
     private(set) var gate: RemoteGate<MCPeerID>
 
@@ -22,6 +23,9 @@ final class RemoteServer: NSObject {
     @ObservationIgnored private let advertiser: MCNearbyServiceAdvertiser
     @ObservationIgnored private var timer: Timer?
     @ObservationIgnored private var lastSent: PrompterStatus?
+    /// Keeps App Nap off while an iPhone drives: it throttles the status timer to seconds when the
+    /// prompter is on another Space or behind other windows.
+    @ObservationIgnored private var driving: NSObjectProtocol?
 
     override init() {
         // shortcut: tokens sit in the sandboxed defaults, not the Keychain; they only let a paired
@@ -48,9 +52,12 @@ final class RemoteServer: NSObject {
 
     func start() {
         advertiser.startAdvertisingPeer()
-        timer = Timer.scheduledTimer(withTimeInterval: Self.statusInterval, repeats: true) { [weak self] _ in
+        let timer = Timer(timeInterval: Self.statusInterval, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.pushStatusIfChanged() }
         }
+        // `.common`, or the timer stops while the person drags or scrolls on the Mac.
+        RunLoop.main.add(timer, forMode: .common)
+        self.timer = timer
     }
 
     /// Every iPhone needs the code again, and the ones connected now are dropped.
@@ -58,6 +65,7 @@ final class RemoteServer: NSObject {
         gate.forgetAll()
         saveTokens()
         session.disconnect()
+        updateDriving()
     }
 
     private func receive(_ data: Data, from peer: MCPeerID) {
@@ -68,11 +76,25 @@ final class RemoteServer: NSObject {
             switch action {
             case .send(let reply): send(reply, to: [peer])
             case .sendStatus:
-                if let status = status() { send(.status(status), to: [peer]) }
+                // To every paired iPhone, so the timer does not send the same status again.
+                if let status = status() {
+                    lastSent = status
+                    send(.status(status), to: session.connectedPeers.filter(gate.isTrusted))
+                }
             case .perform(let command): onCommand?(command)
             }
         }
         if gate.tokens != hadTokens { saveTokens() }
+        updateDriving()
+    }
+
+    private func updateDriving() {
+        if gate.driver == nil {
+            driving.map(ProcessInfo.processInfo.endActivity)
+            driving = nil
+        } else if driving == nil {
+            driving = ProcessInfo.processInfo.beginActivity(options: .userInitiated, reason: "iPhone remote connected")
+        }
     }
 
     private func pushStatusIfChanged() {
@@ -90,6 +112,7 @@ final class RemoteServer: NSObject {
     private func peerChanged(_ peer: MCPeerID, connected: Bool) {
         guard !connected else { return }
         gate.disconnected(peer)
+        updateDriving()
     }
 
     private func saveTokens() {
