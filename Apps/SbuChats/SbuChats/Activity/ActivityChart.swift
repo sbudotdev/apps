@@ -23,9 +23,13 @@ struct ActivityChart: View {
         }
         .chartForegroundStyleScale(domain: seriesDomain, range: seriesColors)
         .chartXAxis {
-            AxisMarks(values: axisValues) { _ in
-                AxisValueLabel()
-                    .foregroundStyle(SbuTheme.inkMuted)
+            // `AxisMarks(values:)` ignores a list of category strings and labels every bar: filter here.
+            let labels = Set(data.axisLabels(axis: axis, isLarge: dynamicTypeSize.isAccessibilitySize))
+            AxisMarks { value in
+                if let label = value.as(String.self), labels.contains(label) {
+                    AxisValueLabel()
+                        .foregroundStyle(SbuTheme.inkMuted)
+                }
             }
         }
         .chartYAxis {
@@ -67,29 +71,5 @@ struct ActivityChart: View {
     /// You and everyone in ink, the others in grey.
     private var seriesColors: [Color] {
         series.map { $0 == .others ? SbuTheme.inkMuted : SbuTheme.ink }
-    }
-
-    /// Every hour would crowd the axis: one label in three (six at the accessibility sizes); months
-    /// about four labels (one). Never a label on the first bar, nor a month on the last, where it
-    /// would run past the chart's edge and be cut.
-    private var axisValues: [String] {
-        let labels = data.slots.map(\.label)
-        let isLarge = dynamicTypeSize.isAccessibilitySize
-        switch axis {
-        case .hour:
-            let step = isLarge ? 6 : 3
-            return labels.enumerated().filter { $0.offset > 0 && $0.offset.isMultiple(of: step) }.map(\.element)
-        case .weekday, .year:
-            return labels
-        case .month:
-            // At the accessibility sizes a month's name is wider than a third of the chart: one, mid-way.
-            if isLarge { return labels.isEmpty ? [] : [labels[labels.count / 2]] }
-            let count = 4
-            guard labels.count > count else { return labels }
-            let stride = max(1, (labels.count - 2) / count)
-            return labels.enumerated()
-                .filter { $0.offset > 0 && $0.offset < labels.count - 1 && ($0.offset - 1).isMultiple(of: stride) }
-                .map(\.element)
-        }
     }
 }
