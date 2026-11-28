@@ -1,0 +1,42 @@
+{
+  "sourceLanguage" : "it",
+  "strings" : {
+    "NSHealthShareUsageDescription" : {
+      "comment" : "The Health permission prompt: reads the heart rate and calories of the match workout.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sbu Padel reads the heart rate and calories of the match workout. The data stays in Health, on your watch and your iPhone."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sbu Padel legge battito e calorie dell'allenamento della partita. I dati restano in Salute, sul tuo orologio e sul tuo iPhone."
+          }
+        }
+      }
+    },
+    "NSHealthUpdateUsageDescription" : {
+      "comment" : "The Health permission prompt: saves each match as a tennis workout.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sbu Padel saves each match in Health as a tennis workout, with its duration and calories."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sbu Padel salva in Salute ogni partita come allenamento di tennis, con la durata e le calorie."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -1,0 +1,31 @@
+{
+  "id": "6443518532",
+  "name": "Padel Watch: Conta i punti",
+  "developer": "GARCIA DE PALAU ROCA PABLO",
+  "bundle_id": "com.joselufo.PadelWatch",
+  "store_country": "it",
+  "ranks": {},
+  "price": 0.0,
+  "formatted_price": "Gratis",
+  "currency": "EUR",
+  "genre": "Sports",
+  "genres": [
+    "Sport",
+    "Utility"
+  ],
+  "description": "Segui il punteggio delle tue partite di padel direttamente dall'Apple Watch. Un tocco, un punto, senza perdere il ritmo del gioco. E gratis!\n\nQuanti punti hai discusso per via di un \"Eravamo 30-15 o 40-15?\" Quando dai tutto in campo, è facile perdere il conto. Con Padel Watch dimentichi il punteggio, non i punti: tu giochi, il tuo polso tiene il conto e poi analizzi la partita nei dettagli sul tuo iPhone.\n\n• Segna i punti in meno di un secondo: Guarda l'orologio, tocca la squadra che vince il punto e continua a giocare. Niente cellulari, niente discussioni.\n• Partite su misura per te: punti per set, vantaggio o punto d'oro, con o senza tie-break, vantaggio, punto d'oro o il nuovo star point. Decidi tu!\n• Il servizio, sempre chiaro: L'indicatore di servizio gestisce l'ordine al posto tuo e puoi correggerlo a metà partita se cambiate l'ordine tra un set e l'altro. Basta con il \"A chi tocca servire?\".\n• Trasforma la partita in allenamento: Attiva la modalità allenamento e registra battito, distanza e calorie in una sessione di attività, proprio come gli allenamenti di tennis nativi dell'Apple Watch.\n• Un errore? Annullalo: Torna al punteggio precedente con un solo tocco, in pochi secondi e senza intaccare le tue statistiche finali.\n• Batteria per tutti e tre i set: Padel Watch consuma poca batteria e regge l'intera partita. (La modalità allenamento può aumentare il consumo.)\n• Il tuo storico, sempre con te: Ogni partita viene salvata sull'orologio e sul tuo iPhone. Rivivi i momenti migliori quando vuoi e annota facilmente i risultati nelle tue app di padel preferite.\n• Statistiche di livello professionale: Sull'iPhone, analizza ogni partita set per set: la serie di punti più lunga, i break point convertiti da ciascuna squadra, la percentuale di punti vinti, i tuoi progressi complessivi e molto altro.\n\nSeguire il punteggio sull'Apple Watch e nell'app per iPhone è gratis. Le statistiche avanzate si sbloccano con l'abbonamento.\n\nPuoi abbonarti e pagare tramite il tuo ID Apple sull'App Store. Il pagamento verrà addebitato sul tuo account al momento della conferma dell'acquisto. L'abbonamento si rinnova automaticamente a meno che tu non lo annulli almeno 24 ore prima della fine del periodo in corso. Il rinnovo viene addebitato nelle 24 ore precedenti la fine del periodo. Puoi gestire il tuo abbonamento e disattivare il rinnovo automatico dalle impostazioni del tuo account. La parte non utilizzata di un eventuale periodo di prova gratuito andrà persa al momento dell'acquisto di un abbonamento. L'abbonamento si rinnova allo stesso prezzo.\n\nPadel Watchers! Per sfruttare al massimo l'app, consulta le istruzioni d'uso nell'app per iPhone o sul nostro sito di supporto.\n\nTermini e condizioni: https://padel.watch/en/terms-of-service/\nInformativa sulla privacy: https://padel.watch/en/privacy-policy/",
+  "release_notes": "E continuiamo con un paio di aggiornamenti di quelli fantastici! ;)\n\nOra puoi finalmente condividere le tue partite sui tuoi social network preferiti! Scegli il formato (per i post o per le storie/reel) e condividi i risultati delle tue partite con i tuoi amici. Inoltre, se sei un abbonato, appariranno anche le statistiche!\n\nIn più, introduciamo la funzionalità \"Match Replay\", che consente agli utenti abbonati di rivivere la partita punto per punto e identificare i momenti chiave di ogni match.\n\nDacci dentro! / Spacchiamo tutto!",
+  "version": "1.1.13",
+  "current_version_release_date": "2026-06-29T02:25:07Z",
+  "rating": 3.63333,
+  "rating_count": 30,
+  "minimum_os": "15.0",
+  "url": "https://apps.apple.com/it/app/padel-watch-conta-i-punti/id6443518532?uo=4",
+  "screenshot_urls": [
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource116/v4/5b/e0/c2/5be0c2c0-6819-ce5d-60f7-8b6bdaed2136/cc77977a-2fdf-40c9-9b73-425e7e15de68_1_-_ITA_-_55.png/392x696bb.png",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/c2/59/c0/c259c052-f98d-3ede-3c8c-cf9a72217a02/503bae45-6bf0-41da-b0ea-b93f9fb7b11c_2_-_ITA_-_55.png/392x696bb.png",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource116/v4/c8/9e/0b/c89e0bc5-0e36-1aad-96ae-bb217be0be0e/b917a285-69c1-4b27-a063-7aa4721aaf00_3_-_ITA_-_55.png/392x696bb.png",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/b9/cd/99/b9cd99f1-3cfe-e223-d1eb-59e36f4aa1c0/f0200caf-fb48-4402-acfd-53f7ecee351d_4_-_ITA_-_55.png/392x696bb.png",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource116/v4/e2/ab/5c/e2ab5cb2-d173-4901-9a76-4b7f2dc7442b/07cd3adb-a368-42b3-a2af-af7d2b2b5668_5_-_ITA_-_55.png/392x696bb.png"
+  ]
+}

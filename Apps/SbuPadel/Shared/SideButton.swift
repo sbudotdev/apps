@@ -2,22 +2,21 @@ import SbuKit
 import SwiftUI
 
 /// Half of the court: the whole half is the button that gives a point to its pair, so it can be
-/// hit without looking. Shows the game call large, the games and sets small, and the full stop
-/// on the pair that serves.
+/// hit without looking. Shows the game call large, and the full stop with "Al servizio" on the
+/// pair that serves; the games and sets are in `SetTable`.
 struct SideButton: View {
     let side: Side
     let score: MatchScore
     let figureSize: CGFloat
     let action: () -> Void
 
-    private var name: LocalizedStringKey { side == .us ? "Noi" : "Loro" }
     private var serves: Bool { score.winner == nil && score.server == side }
 
     var body: some View {
         Button(action: action) {
             VStack(spacing: SbuTheme.space1) {
                 HStack(spacing: SbuTheme.space1) {
-                    Text(name)
+                    Text(side.name)
                         .font(SbuTheme.headline)
                         .foregroundStyle(SbuTheme.inkMuted)
                     SbuFullStop(serves ? .set : .absent, size: .mark)
@@ -29,15 +28,13 @@ struct SideButton: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.4)
                     .contentTransition(.numericText())
-                // Two lines, so neither is cut at the largest text sizes.
-                Group {
-                    Text("Game \(score.games[side])")
-                    Text("Set \(score.setsWon[side])")
-                }
-                .font(SbuTheme.footnote)
-                .foregroundStyle(SbuTheme.inkMuted)
-                .lineLimit(1)
-                .minimumScaleFactor(0.6)
+                // The word that goes with the full stop; kept in place when hidden so the two calls line up.
+                Text("Al servizio")
+                    .font(SbuTheme.footnote)
+                    .foregroundStyle(SbuTheme.inkMuted)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+                    .opacity(serves ? 1 : 0)
             }
             .padding(SbuTheme.space1)
             .frame(maxWidth: .infinity, maxHeight: .infinity)

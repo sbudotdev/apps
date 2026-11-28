@@ -4,10 +4,11 @@ import SwiftUI
 @main
 struct SbuPadelWatchApp: App {
     @State private var board = Scoreboard()
+    @State private var workout = MatchWorkout()
 
     var body: some Scene {
         WindowGroup {
-            WatchRootView(board: board)
+            WatchRootView(board: board, workout: workout)
                 .tint(SbuTheme.ink)
                 // No shell on the watch: the accent of the full stop comes from here.
                 .environment(\.sbuAccent, .steps)

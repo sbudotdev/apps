@@ -7,6 +7,8 @@ nonisolated struct MatchScore: Equatable, Sendable {
     let deuceRule: DeuceRule
     /// The finished sets, games for each side.
     private(set) var sets: [Pair] = []
+    /// The tie-break points of the sets that ended in one, by set index.
+    private(set) var tiebreaks: [Int: Pair] = [:]
     private(set) var games = Pair()
     /// Points in the current game, or in the tie-break.
     private(set) var points = Pair()
@@ -25,6 +27,19 @@ nonisolated struct MatchScore: Equatable, Sendable {
 
     var setsWon: Pair {
         sets.reduce(into: Pair()) { won, set in won[set.us > set.them ? .us : .them] += 1 }
+    }
+
+    /// The columns of the scoreboard: the finished sets, then the games of the set in play.
+    var columns: [Pair] { winner == nil ? sets + [games] : sets }
+
+    /// The sets as they are written, the tie-break loser's points in brackets: "6-4 7-6(5)".
+    var summary: String {
+        columns.indices.map { index in
+            let set = columns[index]
+            let tiebreak = tiebreaks[index].map { "(\(min($0.us, $0.them)))" } ?? ""
+            return "\(set.us)-\(set.them)" + tiebreak
+        }
+        .joined(separator: " ")
     }
 
     /// The game score as it is called: 0, 15, 30, 40, AD; plain numbers in the tie-break.
@@ -60,6 +75,7 @@ nonisolated struct MatchScore: Equatable, Sendable {
 
     private mutating func winGame(_ side: Side) {
         let wasTiebreak = isTiebreak
+        if wasTiebreak { tiebreaks[sets.count] = points }
         games[side] += 1
         points = Pair()
         isTiebreak = false

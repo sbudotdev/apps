@@ -1,0 +1,32 @@
+{
+  "id": "6742737363",
+  "name": "Segnapunti Padel - PadelMax",
+  "developer": "RSApps Nordics",
+  "bundle_id": "eu.rsapps.padelmax",
+  "store_country": "it",
+  "ranks": {},
+  "price": 0.0,
+  "formatted_price": "Gratis",
+  "currency": "EUR",
+  "genre": "Sports",
+  "genres": [
+    "Sport",
+    "Salute e benessere"
+  ],
+  "description": "PadelMax è il modo migliore per tenere traccia dei tuoi punteggi durante una partita di padel, direttamente dal tuo Apple Watch!\n\nPadelMax ti permette di concentrarti completamente sul tuo gioco, non sul conteggio dei punti. Ricco di funzionalità per aiutarti a ottenere il massimo dal tuo gioco ed evitare malintesi sul campo. Basta avviare l'app, selezionare la prima squadra che serve e sei pronto per iniziare!\n\nAlcune delle funzionalità aggiuntive:\n\n- Condivisione del punteggio in tempo reale: Qualsiasi altro giocatore con Apple Watch può unirsi alla partita e monitorare i punteggi in tempo reale, assicurando che tutti rimangano sulla stessa pagina.\n- Monitoraggio dell'allenamento: Registra e salva i tuoi allenamenti di padel senza la necessità di avviarli separatamente, catturando facilmente tutti i dati della tua attività.\n- Configurazione dinamica per il punto d'oro o i tie-break, permettendoti di giocare esattamente come vuoi e adattarti a diversi formati di partita.\n- Statistiche dettagliate dopo la partita: Analizza e tieni traccia delle tue prestazioni dal telefono con dati chiari e intuitivi per aiutarti a migliorare il tuo gioco.\n- Sincronizzazione iCloud: I tuoi dati sono conservati in modo sicuro e sincronizzati su tutti i tuoi dispositivi, dandoti accesso alla cronologia delle tue partite quando ne hai bisogno.\n\nE molto altro!\n\nScarica PadelMax oggi e scopri un modo migliore per tenere traccia dei punteggi delle tue partite durante il gioco. Lascia che PadelMax gestisca il conteggio mentre tu ti concentri sulla vittoria!\n\n\n---\n\nTermini di Servizio: https://padelmax.app/legal/terms/\nInformativa sulla Privacy: https://padelmax.app/legal/privacy/",
+  "release_notes": "Lavoriamo costantemente per migliorare PadelMax. Questa versione porta un design rinnovato, prestazioni migliori e nuove funzionalità in tutta l'app.\n\nEcco le novità:\n- Circoli: aggiungi a qualsiasi partita il luogo in cui hai giocato e ritrova tutti i tuoi circoli su una mappa, con il tuo bilancio in ognuno.\n- Aggiunta manuale delle partite: registra una partita giocata senza PadelMax, così conterà nelle tue statistiche.\n- Punteggio live migliorato: segui una partita condivisa con numeri più grandi e personalizzane facilmente l'aspetto.\n- Pieno supporto per iPhone Duo.\n- Design migliorato, condivisione live delle partite più veloce tra dispositivi, correzioni di bug e altro ancora.",
+  "version": "2.17",
+  "current_version_release_date": "2026-11-12T06:49:32Z",
+  "rating": 4.48888,
+  "rating_count": 45,
+  "minimum_os": "17.0",
+  "url": "https://apps.apple.com/it/app/segnapunti-padel-padelmax/id6742737363?uo=4",
+  "screenshot_urls": [
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/35/eb/f5/35ebf56a-980a-d4a0-07bf-c87d514e2e5e/01-padel-scoring-simplified.jpeg/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/d6/7d/44/d67d4417-2212-0702-eee8-396d3dfbc21f/02-record-scores.jpeg/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/cd/e9/3b/cde93bf8-526f-d3b1-0f33-31fde6d05565/03-share-scores.jpeg/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/56/80/ac/5680acd6-be7c-4781-4f38-9a4eef9c72c8/04-view-match-results.jpeg/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/a9/b6/93/a9b693b1-9398-d11c-8485-3de80b9e43ad/05-track-progress.jpeg/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/e9/7e/49/e97e4916-ca18-7d1f-6c47-e20b21172b96/06-matches-history.jpeg/320x480bb.jpg"
+  ]
+}
