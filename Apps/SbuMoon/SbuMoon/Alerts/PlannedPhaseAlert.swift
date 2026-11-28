@@ -11,4 +11,10 @@ nonisolated struct PlannedPhaseAlert: Equatable, Sendable {
     var identifier: String {
         "phase-\(phase.storageKey)-\(Int(eventDate.timeIntervalSince1970))"
     }
+
+    /// An alert of an older plan, to take back. Never another app's notification: inside Sbu the
+    /// notification center is shared with Subscriptions (ADR-0027).
+    static func isStale(_ identifier: String, keeping planned: Set<String>) -> Bool {
+        identifier.hasPrefix("phase-") && !planned.contains(identifier)
+    }
 }

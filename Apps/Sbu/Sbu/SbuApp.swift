@@ -1,3 +1,4 @@
+import SubscriptionsTool
 import SwiftUI
 import UserNotifications
 
@@ -8,6 +9,7 @@ struct SbuApp: App {
 
     init() {
         UNUserNotificationCenter.current().delegate = notificationPresenter
+        SubscriptionsTool.registerIntentDependencies()
     }
 
     var body: some Scene {

@@ -18,7 +18,12 @@ struct SystemReminderCenter: ReminderCenter {
 
     func replace(with reminders: [PlannedReminder]) {
         let center = UNUserNotificationCenter.current()
-        center.removeAllPendingNotificationRequests()
+        // Planned ones with the same identifier are replaced by `add`; only the old ones go.
+        let planned = Set(reminders.map(\.identifier))
+        center.getPendingNotificationRequests { requests in
+            let stale = requests.map(\.identifier).filter { PlannedReminder.isStale($0, keeping: planned) }
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: stale)
+        }
         let calendar = Calendar.current
         for reminder in reminders {
             let content = UNMutableNotificationContent()
@@ -36,7 +41,7 @@ struct SystemReminderCenter: ReminderCenter {
         content.title = String(localized: "Sbu Subscriptions")
         content.body = String(localized: "Così arrivano i promemoria prima di ogni rinnovo.")
         content.sound = .default
-        // Delivered now, never pending: a reschedule clears the queue and would drop it.
+        // Delivered now, never pending: a reschedule never has to keep it.
         UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: "test", content: content, trigger: nil))
     }
 }

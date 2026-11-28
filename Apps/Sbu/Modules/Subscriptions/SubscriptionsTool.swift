@@ -7,7 +7,6 @@ import SwiftUI
 /// shortcut: the store is Sbu's own, on this iPhone only: no App Group, no iCloud sync and no shared lists,
 /// which need entitlements Sbu doesn't have yet. Upgrade when the tool leaves the spike (ADR-0027, Passi futuri).
 public struct SubscriptionsTool: View {
-    @State private var router = AppRouter()
     @State private var sharing = ListSharing(outbox: nil)
     @State private var received = ReceivedLists(store: .shared, inbox: nil)
 
@@ -15,13 +14,28 @@ public struct SubscriptionsTool: View {
 
     public var body: some View {
         RootView()
-            .environment(router)
+            .environment(Self.router)
             .environment(sharing)
             .environment(received)
             .modelContainer(Self.container)
     }
 
-    /// Opened the first time you open the tool, never at Sbu's launch.
+    /// Shared with Siri, Shortcuts and Spotlight, which leave the route here for the tool to follow.
+    private static let router = AppRouter()
+
+    /// Whether Siri, Shortcuts or Spotlight asked for a subscription, the calendar or a new one: Sbu then opens the tool.
+    public static var hasPendingRoute: Bool { router.pending != nil }
+
+    /// What the tool's App Intents need, as `SbuSubscriptionsApp.init` does: call it in Sbu's `init`, which also runs
+    /// for an intent with no window. It opens the store at launch, as the app does: a local file, no permission.
+    public static func registerIntentDependencies() {
+        let container = container
+        let router = router
+        AppDependencyManager.shared.add(dependency: container)
+        AppDependencyManager.shared.add(dependency: router)
+    }
+
+    /// Opened at Sbu's launch by `registerIntentDependencies`.
     // ponytail: no recovery screen, as in the app: a store that can't open is a bug, never a reason to start empty.
     private static let container: ModelContainer = {
         let defaults = UserDefaults.standard

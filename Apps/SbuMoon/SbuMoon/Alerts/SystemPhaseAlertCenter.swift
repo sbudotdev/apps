@@ -18,7 +18,12 @@ struct SystemPhaseAlertCenter: PhaseAlertCenter {
 
     func replace(with alerts: [PlannedPhaseAlert]) {
         let center = UNUserNotificationCenter.current()
-        center.removeAllPendingNotificationRequests()
+        // Planned ones with the same identifier are replaced by `add`; only the old ones go.
+        let planned = Set(alerts.map(\.identifier))
+        center.getPendingNotificationRequests { requests in
+            let stale = requests.map(\.identifier).filter { PlannedPhaseAlert.isStale($0, keeping: planned) }
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: stale)
+        }
         let calendar = Calendar.current
         for alert in alerts {
             let content = UNMutableNotificationContent()

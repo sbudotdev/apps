@@ -23,4 +23,10 @@ nonisolated struct PlannedReminder: Equatable, Sendable {
     var identifier: String {
         "subscription-\(subscriptionID)-\(Int(paymentDate.timeIntervalSince1970))"
     }
+
+    /// A reminder of an older plan, to take back. Never another app's notification: inside Sbu the
+    /// notification center is shared with Moon (ADR-0027).
+    static func isStale(_ identifier: String, keeping planned: Set<String>) -> Bool {
+        identifier.hasPrefix("subscription-") && !planned.contains(identifier)
+    }
 }

@@ -15,6 +15,8 @@ xcodebuild test -project Sbu.xcodeproj -scheme Sbu -destination 'platform=iOS Si
 - **Uno strumento** si apre a tutto schermo, come nella sua app, sotto la striscia «Quaderno» che torna indietro. Anche da un link: `sbu://level`, `sbu://moon`, `sbu://subscriptions`.
 - **Impostazioni** condivise, quelle standard di `SbuAppShell`.
 
+Gli intent di Abbonamenti (Siri, Comandi, Spotlight) funzionano anche in Sbu: le loro dipendenze le registra `SbuApp.init`, e una strada lasciata da un intent apre lo strumento Abbonamenti.
+
 Nessun permesso all'avvio: la fotocamera la chiede il Mirino di Livella, le notifiche un avviso di Luna o un promemoria di Abbonamenti, la posizione «Mostra sorgere e tramonto» di Luna.
 
 ## Dove sta cosa

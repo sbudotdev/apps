@@ -1,4 +1,5 @@
 import SbuKit
+import SubscriptionsTool
 import SwiftUI
 
 /// Sbu inside the standard shell: the notebook is the tool screen, settings are the shared ones.
@@ -22,6 +23,10 @@ struct RootView: View {
         }
         .onOpenURL { url in
             openTool = Tool(url: url)
+        }
+        // Siri, Shortcuts or a Spotlight result asked Subscriptions for something: the tool follows the route.
+        .onChange(of: SubscriptionsTool.hasPendingRoute, initial: true) { _, pending in
+            if pending { openTool = .subscriptions }
         }
     }
 }

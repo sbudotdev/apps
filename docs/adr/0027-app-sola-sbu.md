@@ -9,11 +9,18 @@ Oggi ogni strumento sbu.dev è un'app a sé. Con la strada A c'è anche un'app s
 - **Ogni strumento è una libreria statica costruita dai sorgenti della sua app**, senza copiarli. In `Apps/Sbu/project.yml` il target `LevelTool` include `../SbuLevel/SbuLevel` ed esclude solo ciò che è dell'app: il file con `@main`, i cataloghi di stringhe, l'asset catalog e il manifesto privacy. Lo stesso per `MoonTool` e `SubscriptionsTool`. È il modo più piccolo che regge:
   - una libreria è un modulo Swift suo, quindi i `RootView`, `MainView` e `NotificationAccess` delle tre app non si scontrano;
   - SbuKit si collega una volta sola, nell'app (`link: false` nelle librerie);
-  - le app singole non cambiano di una riga.
+  - le app singole restano come sono: cambia solo ciò che in un processo condiviso darebbe fastidio a un altro strumento (vedi «Un processo, tanti strumenti»).
 - **Un file per strumento in `Apps/Sbu/Modules/<Strumento>`**: una vista pubblica (`LevelTool`, `MoonTool`, `SubscriptionsTool`) che mostra il `RootView` dell'app con quello che le dava il suo `App` (per Subscriptions il `ModelContainer` e gli oggetti d'ambiente), più l'`ImageResource` dell'icona nelle impostazioni.
 - **Stringhe e risorse stanno nell'app Sbu**: il codice di una libreria cerca in `Bundle.main`. `Apps/Sbu/merge_strings.py` unisce le stringhe della shell (`Strings/Shell.xcstrings`) e i cataloghi delle tre app in `Sbu/Localizable.xcstrings`; la build fallisce se il file unito non è aggiornato. I JSON che le app leggono (città di Moon, catalogo e cambi di Subscriptions) sono inclusi dal loro percorso, non copiati.
 - **La shell**: `Notebook` (elenco, aggiungi, togli, riordina, salvato nei default con la chiave `notebook.tools`), `Tool` (il catalogo degli strumenti), la pagina iniziale dentro `SbuAppShell` con le impostazioni condivise, il foglio «Strumenti» per modificarli, e `ToolPage`, che apre lo strumento a tutto schermo sotto una striscia «Quaderno» per tornare indietro (come le piattaforme di Social, ADR-0017: non copre mai il tasto indietro dello strumento). `sbu://<strumento>` apre uno strumento da un link o da una scorciatoia.
 - **Niente modifiche a SbuKit né a `Design/tokens.json`** in questo spike (SBU-455 li sta toccando). Ciò che serve in comune sta nel target Sbu (per esempio `ForegroundNotificationPresenter`, uguale a quello di Moon e Subscriptions).
+
+## Un processo, tanti strumenti
+
+Dentro Sbu gli strumenti condividono il processo, il centro notifiche e App Intents. Due regole, emerse dal QA (SBU-468):
+
+- **Ogni strumento toglie solo le sue notifiche.** Moon e Subscriptions toglievano tutte le notifiche in coda prima di ripianificare (`removeAllPendingNotificationRequests`): dentro Sbu si sarebbero cancellate a vicenda. Ora ognuna toglie solo le sue vecchie richieste, riconosciute dal prefisso dell'identificativo (`phase-`, `subscription-`): `PlannedPhaseAlert.isStale` e `PlannedReminder.isStale`, con un test in ogni app. Nell'app singola il comportamento non cambia. Uno strumento nuovo con notifiche fa lo stesso, con un prefisso suo.
+- **Le dipendenze degli intent le registra Sbu.** Gli intent di Subscriptions (Siri, Comandi, Spotlight) usano `@Dependency` per `ModelContainer` e `AppRouter`, che nell'app registra `SbuSubscriptionsApp.init`. In Sbu lo fa `SubscriptionsTool.registerIntentDependencies()`, chiamato da `SbuApp.init`; per questo l'archivio di Subscriptions si apre all'avvio di Sbu, come nell'app (un file locale, nessun permesso). Quando un intent lascia una strada (un abbonamento, il calendario, «aggiungi»), Sbu apre lo strumento Abbonamenti, che la segue.
 
 ## Alternative scartate
 
@@ -28,7 +35,8 @@ Oggi ogni strumento sbu.dev è un'app a sé. Con la strada A c'è anche un'app s
 2. `Modules/<Nome>/<Nome>Tool.swift`: una vista pubblica che mostra il `RootView` dell'app con quello che le dà il suo `App`. Se l'app usa `ImageResource.appIconArtwork`, anche il file `ImageResource+Artwork.swift` e l'immagine `<Nome>Artwork` in `Sbu/Assets.xcassets`.
 3. Il catalogo dell'app in `SOURCES` di `merge_strings.py`, poi `python3 Apps/Sbu/merge_strings.py`. I JSON o altre risorse lette con `Bundle.main` tra i `sources` del target Sbu.
 4. Un caso nuovo in `Tool` (nome, riga, simbolo) e in `ToolPage`; le chiavi d'uso dei permessi nell'`Info.plist` di Sbu e la voce nel manifesto privacy, se lo strumento le usa.
-5. Il test UI `testOpensEachToolFromTheNotebook` con il titolo dello strumento.
+5. Se lo strumento ha notifiche o App Intents: le regole di «Un processo, tanti strumenti» (notifiche con un prefisso suo, dipendenze registrate in `SbuApp.init`).
+6. Il test UI `testOpensEachToolFromTheNotebook` con il titolo dello strumento.
 
 ## Le app singole già in vendita
 
@@ -61,6 +69,7 @@ Un widget per strumento si farebbe con un'estensione WidgetKit sola in Sbu, con 
 
 ## Conseguenze
 
+- Gli intent di Subscriptions in Sbu non sono ancora provati a mano dall'app Comandi: va fatto con il ticket di TestFlight.
 - Una modifica a una delle tre app finisce anche in Sbu: i test di Sbu vanno lanciati anche quando si tocca Level, Moon o Subscriptions.
 - Un tipo nuovo con lo stesso nome dentro due strumenti non dà problemi (moduli separati); un file nuovo con `@main` o una nuova risorsa letta da `Bundle.main` in un'app va escluso o aggiunto in `Apps/Sbu/project.yml`.
 - Una chiave di stringa uguale in due strumenti con traduzioni diverse tiene la prima: `merge_strings.py` lo stampa a ogni build (oggi «Unità», Level e Subscriptions).
