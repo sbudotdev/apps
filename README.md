@@ -85,6 +85,7 @@ Specs come only from public App Store data. Nothing here decompiles or extracts 
 | [Sbu Remote](Apps/SbuRemote) | `accent-remote` | TV Remote - Universal Control | In development |
 | [Sbu Prompter](Apps/SbuPrompter) | `accent-prompter` | Moody Teleprompter (Mac + iPhone remote) | 1.0.1, [Download .dmg](https://github.com/sbudotdev/apps/releases/download/prompter-1.0.1/SbuPrompter-1.0.1.dmg) |
 | [Sbu Keys](Apps/SbuKeys) | `accent-keys` | Klack (Mac) | In development |
+| [Sbu Padel](Apps/SbuPadel) | `accent-steps` (placeholder) | — (padel scorer for Apple Watch and iPhone: golden point or advantages, tie-break, undo) | In development |
 | [Sbu Seasons](Apps/SbuSeasons) | — | — (Mac menu-bar app) | 2.3.0, [Download](https://sbu.dev/en/seasons) |
 
 Live, in review and coming apps, with their pages: [sbu.dev](https://sbu.dev).
