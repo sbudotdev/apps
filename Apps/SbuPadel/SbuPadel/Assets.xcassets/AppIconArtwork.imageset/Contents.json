@@ -1,4 +1,22 @@
 {
-  "images" : [ { "filename" : "AppIconArtwork.png", "idiom" : "universal" } ],
-  "info" : { "author" : "xcode", "version" : 1 }
+  "images": [
+    {
+      "filename": "AppIconArtwork-light.png",
+      "idiom": "universal"
+    },
+    {
+      "filename": "AppIconArtwork-dark.png",
+      "idiom": "universal",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "dark"
+        }
+      ]
+    }
+  ],
+  "info": {
+    "author": "xcode",
+    "version": 1
+  }
 }
