@@ -254,5 +254,13 @@
       "it": "Buca del suggeritore",
       "en": "Prompter's box"
     }
+  },
+  "padel": {
+    "accent": "accent-steps",
+    "subject": "a padel racket, its solid face perforated with holes, with a padel ball resting beside it",
+    "name": {
+      "it": "Racchetta da padel",
+      "en": "Padel racket"
+    }
   }
 }
