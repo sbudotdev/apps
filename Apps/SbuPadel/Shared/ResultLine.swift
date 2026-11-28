@@ -1,0 +1,22 @@
+import SbuKit
+import SwiftUI
+
+/// One line under the court: the sets played so far, or the result once the match is over.
+struct ResultLine: View {
+    let score: MatchScore
+
+    var body: some View {
+        Group {
+            if let winner = score.winner {
+                Text(winner == .us ? "Partita vinta" : "Partita persa")
+                    .font(SbuTheme.headline)
+                    .foregroundStyle(SbuTheme.ink)
+            } else if score.isTiebreak {
+                Text("Tie-break")
+                    .font(SbuTheme.footnote)
+                    .foregroundStyle(SbuTheme.inkMuted)
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
+}

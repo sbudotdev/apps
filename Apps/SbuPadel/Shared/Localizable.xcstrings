@@ -1,0 +1,186 @@
+{
+  "sourceLanguage": "it",
+  "version": "1.0",
+  "strings": {
+    "Sbu Padel": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu Padel"
+          }
+        }
+      }
+    },
+    "Padel": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Padel"
+          }
+        }
+      }
+    },
+    "Noi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Us"
+          }
+        }
+      }
+    },
+    "Loro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Them"
+          }
+        }
+      }
+    },
+    "Punto a Noi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Point to us"
+          }
+        }
+      }
+    },
+    "Punto a Loro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Point to them"
+          }
+        }
+      }
+    },
+    "Game %lld · Set %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Games %lld · Sets %lld"
+          }
+        }
+      }
+    },
+    "al servizio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "serving"
+          }
+        }
+      }
+    },
+    "Partita vinta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Match won"
+          }
+        }
+      }
+    },
+    "Partita persa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Match lost"
+          }
+        }
+      }
+    },
+    "Tie-break": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tie-break"
+          }
+        }
+      }
+    },
+    "Al 40 pari": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At 40 all"
+          }
+        }
+      }
+    },
+    "Punto d'oro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Golden point"
+          }
+        }
+      }
+    },
+    "Vantaggi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Advantages"
+          }
+        }
+      }
+    },
+    "Serve per prima": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serves first"
+          }
+        }
+      }
+    },
+    "Annulla punto": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo point"
+          }
+        }
+      }
+    },
+    "Nuova partita": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New match"
+          }
+        }
+      }
+    },
+    "Il punteggio di questa partita si cancella.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This match's score is cleared."
+          }
+        }
+      }
+    }
+  }
+}
