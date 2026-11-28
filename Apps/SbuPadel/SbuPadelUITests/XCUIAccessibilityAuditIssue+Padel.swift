@@ -1,5 +1,6 @@
 import XCTest
 
+@MainActor
 extension XCUIAccessibilityAuditIssue {
     /// SbuScreenTitle's cartiglio, "SBU · PADEL": the audit reads `Font.sbuCartiglio`, which SbuKit
     /// scales with `.caption2`, as clipped and only partly following the text size. Face and size come from SbuKit.
