@@ -1,7 +1,8 @@
 # Lanes for Sbu Prompter: one App Store record for the Mac app and the iPhone remote
 # (universal purchase, same bundle id). Run from Apps/SbuPrompter.
 # metadata needs an App Store Connect API key in the environment:
-#   ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_PATH (path to the .p8), SBU_TEAM_ID
+#   ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_PATH (path to the .p8), SBU_TEAM_ID,
+#   SBU_TESTER_EMAIL (Apple ID of the internal TestFlight tester)
 
 # The App Store Connect API can't create apps, so this lane logs in with the Apple ID in
 # FASTLANE_USER: 2FA the first time, then the session cached in ~/.fastlane/spaceship.

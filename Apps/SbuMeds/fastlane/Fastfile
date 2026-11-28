@@ -1,6 +1,7 @@
 # Lanes for Sbu Meds. Run from Apps/SbuMeds.
 # beta/release need an App Store Connect API key in the environment:
-#   ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_PATH (path to the .p8), SBU_TEAM_ID
+#   ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_PATH (path to the .p8), SBU_TEAM_ID,
+#   SBU_TESTER_EMAIL (Apple ID of the internal TestFlight tester)
 default_platform(:ios)
 import(File.expand_path("../../../Tools/fastlane/Fastfile", __dir__))
 
