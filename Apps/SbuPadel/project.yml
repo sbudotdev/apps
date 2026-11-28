@@ -70,13 +70,24 @@ targets:
       base:
         GENERATE_INFOPLIST_FILE: YES
         TARGETED_DEVICE_FAMILY: "1"
+  SbuPadelUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [SbuPadelUITests]
+    dependencies:
+      - target: SbuPadel
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_DEFAULT_ACTOR_ISOLATION: nonisolated
 schemes:
   SbuPadel:
     build:
       targets:
         SbuPadel: all
     test:
-      targets: [SbuPadelTests]
+      targets: [SbuPadelTests, SbuPadelUITests]
   # The Apple Watch app alone, to run it on a watch simulator.
   SbuPadelWatch:
     build:

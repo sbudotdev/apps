@@ -4,6 +4,14 @@ import SwiftUI
 /// The one screen: the court in two halves, then undo, a new match and the rules.
 struct MatchView: View {
     let board: Scoreboard
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    /// Side by side, or one under the other at the accessibility sizes so no word breaks.
+    private var buttonsLayout: AnyLayout {
+        dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: SbuTheme.space2))
+            : AnyLayout(HStackLayout(spacing: SbuTheme.space2))
+    }
 
     var body: some View {
         let score = board.score
@@ -20,10 +28,10 @@ struct MatchView: View {
             ResultLine(score: score)
             RulesPickers(board: board)
                 .pickerStyle(.segmented)
-            HStack(spacing: SbuTheme.space2) {
+            buttonsLayout {
                 SbuButton("Annulla punto", kind: .secondary, action: board.undo)
                     .disabled(board.match.hasStarted == false)
-                SbuButton("Nuova partita", kind: .destructive, confirmationTitle: "Il punteggio di questa partita si cancella.", action: board.newMatch)
+                SbuButton("Nuova partita", kind: .destructive, confirmationTitle: "Cancellare il punteggio di questa partita?", action: board.newMatch)
                     .disabled(board.match.hasStarted == false)
             }
         }

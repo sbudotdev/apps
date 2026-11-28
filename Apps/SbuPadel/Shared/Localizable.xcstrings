@@ -62,16 +62,6 @@
         }
       }
     },
-    "Game %lld · Set %lld": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Games %lld · Sets %lld"
-          }
-        }
-      }
-    },
     "al servizio": {
       "localizations": {
         "en": {
@@ -172,12 +162,32 @@
         }
       }
     },
-    "Il punteggio di questa partita si cancella.": {
+    "Game %lld": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This match's score is cleared."
+            "value": "Games %lld"
+          }
+        }
+      }
+    },
+    "Set %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sets %lld"
+          }
+        }
+      }
+    },
+    "Cancellare il punteggio di questa partita?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear this match's score?"
           }
         }
       }

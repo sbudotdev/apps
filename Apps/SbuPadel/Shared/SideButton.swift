@@ -29,11 +29,15 @@ struct SideButton: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.4)
                     .contentTransition(.numericText())
-                Text("Game \(score.games[side]) · Set \(score.setsWon[side])")
-                    .font(SbuTheme.footnote)
-                    .foregroundStyle(SbuTheme.inkMuted)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.6)
+                // Two lines, so neither is cut at the largest text sizes.
+                Group {
+                    Text("Game \(score.games[side])")
+                    Text("Set \(score.setsWon[side])")
+                }
+                .font(SbuTheme.footnote)
+                .foregroundStyle(SbuTheme.inkMuted)
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
             }
             .padding(SbuTheme.space1)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -43,14 +47,14 @@ struct SideButton: View {
         }
         .buttonStyle(.plain)
         .disabled(score.winner != nil)
-        .accessibilityElement(children: .ignore)
+        // On the Button itself, so VoiceOver reads one element with the button trait.
         .accessibilityLabel(Text(side == .us ? "Punto a Noi" : "Punto a Loro"))
         .accessibilityValue(accessibilityValue)
     }
 
     private var accessibilityValue: Text {
         let base = Text(verbatim: score.call(for: side) + ", ")
-            + Text("Game \(score.games[side]) · Set \(score.setsWon[side])")
+            + Text("Game \(score.games[side])") + Text(verbatim: ", ") + Text("Set \(score.setsWon[side])")
         return serves ? base + Text(verbatim: ", ") + Text("al servizio") : base
     }
 }

@@ -1,7 +1,7 @@
 import SbuKit
 import SwiftUI
 
-/// One line under the court: the sets played so far, or the result once the match is over.
+/// One line under the court: the result once the match is over, or Tie-break while one is played.
 struct ResultLine: View {
     let score: MatchScore
 

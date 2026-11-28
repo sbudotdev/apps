@@ -19,7 +19,7 @@ struct WatchControlsView: View {
         .confirmationDialog("Nuova partita", isPresented: $isConfirmingNewMatch, titleVisibility: .visible) {
             Button("Nuova partita", role: .destructive, action: board.newMatch)
         } message: {
-            Text("Il punteggio di questa partita si cancella.")
+            Text("Cancellare il punteggio di questa partita?")
         }
     }
 }
