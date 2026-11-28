@@ -18,14 +18,8 @@ struct SystemPhaseAlertCenter: PhaseAlertCenter {
 
     func replace(with alerts: [PlannedPhaseAlert]) {
         let center = UNUserNotificationCenter.current()
-        // Planned ones with the same identifier are replaced by `add`; only the old ones go.
-        let planned = Set(alerts.map(\.identifier))
-        center.getPendingNotificationRequests { requests in
-            let stale = requests.map(\.identifier).filter { PlannedPhaseAlert.isStale($0, keeping: planned) }
-            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: stale)
-        }
         let calendar = Calendar.current
-        for alert in alerts {
+        let requests = alerts.map { alert in
             let content = UNMutableNotificationContent()
             content.title = alert.phase.localizedName
             let time = alert.eventDate.formatted(date: .omitted, time: .shortened)
@@ -33,8 +27,17 @@ struct SystemPhaseAlertCenter: PhaseAlertCenter {
             content.sound = .default
             let parts = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: alert.fireDate)
             let trigger = UNCalendarNotificationTrigger(dateMatching: parts, repeats: false)
+            return UNNotificationRequest(identifier: alert.identifier, content: content, trigger: trigger)
+        }
+        let planned = Set(requests.map(\.identifier))
+        // Only its own old alerts go, never another tool's inside Sbu (ADR-0027). Taken back and added in the
+        // same callback, so a plan made right after never loses an alert to this one's late removal.
+        center.getPendingNotificationRequests { pending in
+            let stale = pending.map(\.identifier).filter { PlannedPhaseAlert.isStale($0, keeping: planned) }
+            let center = UNUserNotificationCenter.current()
+            center.removePendingNotificationRequests(withIdentifiers: stale)
             // An alert iOS refuses is skipped; the next time the app opens plans it again.
-            center.add(UNNotificationRequest(identifier: alert.identifier, content: content, trigger: trigger))
+            requests.forEach { center.add($0) }
         }
     }
 }

@@ -18,21 +18,24 @@ struct SystemReminderCenter: ReminderCenter {
 
     func replace(with reminders: [PlannedReminder]) {
         let center = UNUserNotificationCenter.current()
-        // Planned ones with the same identifier are replaced by `add`; only the old ones go.
-        let planned = Set(reminders.map(\.identifier))
-        center.getPendingNotificationRequests { requests in
-            let stale = requests.map(\.identifier).filter { PlannedReminder.isStale($0, keeping: planned) }
-            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: stale)
-        }
         let calendar = Calendar.current
-        for reminder in reminders {
+        let requests = reminders.map { reminder in
             let content = UNMutableNotificationContent()
             content.title = reminder.name
             content.body = ReminderText.body(for: reminder)
             content.sound = .default
             let parts = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: reminder.fireDate)
+            return UNNotificationRequest(identifier: reminder.identifier, content: content, trigger: UNCalendarNotificationTrigger(dateMatching: parts, repeats: false))
+        }
+        let planned = Set(requests.map(\.identifier))
+        // Only its own old reminders go, never another tool's inside Sbu (ADR-0027). Taken back and added in the
+        // same callback, so a plan made right after never loses a reminder to this one's late removal.
+        center.getPendingNotificationRequests { pending in
+            let stale = pending.map(\.identifier).filter { PlannedReminder.isStale($0, keeping: planned) }
+            let center = UNUserNotificationCenter.current()
+            center.removePendingNotificationRequests(withIdentifiers: stale)
             // A reminder iOS refuses is skipped; the next save or launch plans it again.
-            center.add(UNNotificationRequest(identifier: reminder.identifier, content: content, trigger: UNCalendarNotificationTrigger(dateMatching: parts, repeats: false)))
+            requests.forEach { center.add($0) }
         }
     }
 
