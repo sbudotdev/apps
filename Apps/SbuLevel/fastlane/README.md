@@ -21,7 +21,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios internal_testers
 ```
 
-Internal TestFlight group with every build, with SBU_TESTER_EMAIL (default matteogiuditta@gmail.com) in it
+Internal TestFlight group with every build, with the SBU_TESTER_EMAIL tester in it
 
 ### ios test
 
