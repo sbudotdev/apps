@@ -33,4 +33,13 @@ Come si aggiunge uno strumento: ADR-0027.
 
 - Abbonamenti salva solo su questo iPhone: niente iCloud, niente liste condivise, niente App Group.
 - Niente widget e niente icona definitiva (dopo SBU-455).
-- Non è su App Store Connect: TestFlight è il ticket successivo.
+- Solo TestFlight interno (SBU-467): niente TestFlight esterno, niente review, niente metadati o screenshot per lo Store.
+
+## TestFlight
+
+Record su App Store Connect: «Sbu», bundle e SKU `dev.sbu.sbu`, Apple ID 6840293338. Da `Apps/Sbu`:
+
+```sh
+fastlane beta        # build, upload, gruppo interno «Internal Test» (chiave API in ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_PATH, SBU_TEAM_ID)
+fastlane create_app  # già fatto: serve il login Apple ID in FASTLANE_USER e il team in FASTLANE_ITC_TEAM_ID
+```
