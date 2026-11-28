@@ -1,0 +1,31 @@
+{
+  "id": "6502829514",
+  "name": "Padelio: Track Padel Activity",
+  "developer": "Marcos Sabaris",
+  "bundle_id": "com.kildos.padelBuddyWrapped",
+  "store_country": "it",
+  "ranks": {},
+  "price": 0.0,
+  "formatted_price": "Gratis",
+  "currency": "EUR",
+  "genre": "Sports",
+  "genres": [
+    "Sport",
+    "Salute e benessere"
+  ],
+  "description": "Padelio is the ultimate app for padel and pickleball enthusiasts looking to take their game to the next level. Using the advanced sensors of your Apple Watch, Padelio allows you to meticulously analyse every aspect of your game. Padelio identifies and records each type of stroke you make, from lobs and volleys to bandejas, viboras and smashes, providing a detailed analysis that was previously available only to professionals.\n\nAdditionally, Padelio lets you keep score live during matches directly from your Apple Watch, including multiplayer live scoring with other players on court, making it easier than ever to track the action in real time while you play.\n\nPadelio also monitors your calorie burn and heart rate while you play, offering a comprehensive view of your physical condition. All this information is stored in the app and synced with your health data so you can review your progress over time. Finally, you can fill your Health rings by playing padel or pickleball!\n\nShare your progress with friends and followers: thanks to Padelio, you can get custom stickers with your performance statistics and post them on Instagram or any other social network. Let everyone know how you did in your last match!\n\nFor the padel and pickleball globetrotters, you can also see on the map where you have played over time.\n\nAre you ready to discover how you play?\n\nPrivacy Policy:  padelio.app/privacy-policy\nTerms of Service:  padelio.app/tos",
+  "release_notes": "- Added support for iPhone Duo\n- Added support for Huawei smartwatches\n- Added monthly recaps\n- Improved map view\n- Added support for the 7-point format in Pickleball live scoring\n- Bug fixes",
+  "version": "3.3.0",
+  "current_version_release_date": "2026-11-06T14:56:18Z",
+  "rating": 4.6208,
+  "rating_count": 625,
+  "minimum_os": "18.6",
+  "url": "https://apps.apple.com/it/app/padelio-track-padel-activity/id6502829514?uo=4",
+  "screenshot_urls": [
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/cf/f0/ac/cff0ac85-1f85-36f3-c9d4-fd80ce88d6b0/3e1330bf-cc99-4a2e-bd93-a67b4e7b559d_2_en_5.5.png/392x696bb.png",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/aa/a6/9d/aaa69da0-1af6-5ed1-8e81-f2e044f65cfb/096f80f7-c5bf-4617-b520-df298666211f_5_en_5.5.png/392x696bb.png",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/40/aa/19/40aa197d-7ce0-e633-bb6d-2ff2cf006d5d/505055c9-7af0-49da-ae55-4e7f398818f8_3_en_5.5.png/392x696bb.png",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/b3/2b/31/b32b31c6-376a-65da-a7cb-91960ce16010/bc75cabe-e0df-4011-845d-d2783eac28b8_1_en_5.5.png/392x696bb.png",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/c7/15/51/c715519a-256f-47d5-3dc4-8cafe4dffc77/c6ffd59e-3caa-4edb-bab7-ca3e68b2ea4c_4_en_5.5.png/392x696bb.png"
+  ]
+}

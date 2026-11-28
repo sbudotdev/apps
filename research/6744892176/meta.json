@@ -1,0 +1,33 @@
+{
+  "id": "6744892176",
+  "name": "PadelTick: Segnapunti Padel",
+  "developer": "Philipp Schmid",
+  "bundle_id": "de.pscoding.PadelTick",
+  "store_country": "it",
+  "ranks": {},
+  "price": 0.0,
+  "formatted_price": "Gratis",
+  "currency": "EUR",
+  "genre": "Health & Fitness",
+  "genres": [
+    "Salute e benessere",
+    "Sport"
+  ],
+  "description": "PadelTick è una potente app per il tracciamento del punteggio nel padel, progettata appositamente per Apple Watch. Che tu sia un giocatore occasionale o un agonista, ti aiuta a restare concentrato sul gioco registrando automaticamente le tue prestazioni e i tuoi dati di salute.\n\nTracker di punteggio per padel su Apple Watch\nAggiorna il punteggio con un semplice tocco – senza bisogno del telefono. PadelTick è ottimizzata per watchOS, così puoi segnare ogni punto in modo rapido e preciso anche durante gli scambi più veloci.\n\nMonitoraggio fitness e allenamenti con Apple Health:\nPadelTick registra automaticamente le calorie bruciate, la frequenza cardiaca (BPM) e la durata dell’allenamento. Tutti i dati vengono sincronizzati con Apple Health e l’app Fitness – senza inserimenti manuali. Perfetta per chi tiene alla salute e alle prestazioni.\n\nStatistiche dettagliate delle partite:\nOttieni informazioni approfondite su ogni partita di padel. Visualizza la durata del match, la cronologia del punteggio, la media degli scambi, il totale dei game giocati e molto altro. La cronologia delle partite resta organizzata e sempre accessibile in un unico posto.\n\nCondivisione in tempo reale con giocatori e spettatori:\nVuoi condividere il punteggio della tua partita in diretta? PadelTick ti permette di condividere il match con amici, compagni di squadra o allenatori, così possono seguirti in tempo reale.\n\nPensata per il padel competitivo e sociale:\nChe tu stia monitorando tornei o partite informali al club, PadelTick si adatta al tuo stile di gioco. Usala da solo o in doppio e mantieni il punteggio sempre chiaro e sincronizzato durante tutta la partita.\n\nPadelTick è l’app definitiva per il punteggio nel padel su Apple Watch.\nUnisce tracciamento delle partite, gestione del punteggio, integrazione fitness e condivisione in tempo reale: tutto ciò di cui hai bisogno per migliorare il tuo padel, direttamente al polso.\n\n---\n\nTermini di utilizzo: https://www.apple.com/legal/internet-services/itunes/dev/stde",
+  "release_notes": "- Follow live matches with an improved scoreboard and spoken scores\n- Play Mixed Americano tournaments\n- Even more Apple Watch stability improvements",
+  "version": "1.10.0",
+  "current_version_release_date": "2026-11-24T12:31:45Z",
+  "rating": 4.81818,
+  "rating_count": 11,
+  "minimum_os": "17.0",
+  "url": "https://apps.apple.com/it/app/padeltick-segnapunti-padel/id6744892176?uo=4",
+  "screenshot_urls": [
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/4e/de/79/4ede793a-fe24-86f1-c0f4-dda2e268e845/6.5___-_14.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/ce/9d/fe/ce9dfeda-ff87-fd97-fc3f-7cbb35a8d154/6.5___-_8.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/fb/d3/da/fbd3da18-04fe-ac09-6d98-ae242c24ea3a/6.5___-_13.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/d9/c1/0b/d9c10b8a-bd9a-a449-0942-8ee7ad2fa731/6.5___-_12.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/9a/ab/3f/9aab3f00-50d1-f34b-62cf-05c88152fd9b/6.5___-_11.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/4c/00/71/4c007111-cd45-6e5c-8d26-7fece82b74ae/6.5___-_9.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/81/85/04/81850417-a713-6969-2fba-ac61194fc307/6.5___-_10@3x.png/320x480bb.jpg"
+  ]
+}

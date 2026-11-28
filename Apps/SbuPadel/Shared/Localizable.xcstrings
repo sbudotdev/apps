@@ -191,6 +191,126 @@
           }
         }
       }
+    },
+    "Al servizio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serving"
+          }
+        }
+      }
+    },
+    "Set": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set"
+          }
+        }
+      }
+    },
+    "Set %lld: Noi %lld, Loro %lld. ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set %lld: Us %lld, Them %lld. "
+          }
+        }
+      }
+    },
+    "Set %lld a %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sets %lld to %lld"
+          }
+        }
+      }
+    },
+    "Vinta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Won"
+          }
+        }
+      }
+    },
+    "Persa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lost"
+          }
+        }
+      }
+    },
+    "Regole": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rules"
+          }
+        }
+      }
+    },
+    "Le regole le scegli prima del primo punto.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You choose the rules before the first point."
+          }
+        }
+      }
+    },
+    "Valgono dal primo punto.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "They apply from the first point."
+          }
+        }
+      }
+    },
+    "Allenamento in corso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout in progress"
+          }
+        }
+      }
+    },
+    "Nessun allenamento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No workout"
+          }
+        }
+      }
+    },
+    "Dal primo all'ultimo punto la partita è un allenamento di tennis in Salute, così Sbu Padel resta sullo schermo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From the first to the last point the match is a tennis workout in Health, so Sbu Padel stays on screen."
+          }
+        }
+      }
     }
   }
 }

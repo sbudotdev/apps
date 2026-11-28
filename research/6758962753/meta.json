@@ -1,0 +1,32 @@
+{
+  "id": "6758962753",
+  "name": "Padel Score Tracker - PadelPro",
+  "developer": "MIKAPPS LIMITED",
+  "bundle_id": "com.maksymkarpenko.padelscoretrackerpadelpro",
+  "store_country": "it",
+  "ranks": {},
+  "price": 0.0,
+  "formatted_price": "Gratis",
+  "currency": "EUR",
+  "genre": "Sports",
+  "genres": [
+    "Sport",
+    "Salute e benessere"
+  ],
+  "description": "Every point matters. But keeping track of the score shouldn't be what's on your mind during a rally.\n\nPadelPro is the padel scoreboard that stays out of your way. Start a match, tap when you score, and the app tracks the rest - games, sets, tiebreaks, serve rotations, and all the padel rules you'd rather not think about mid-point.\n\nBuilt exclusively for padel. Every feature follows official padel regulations, so you can fully focus on your game.\n\nAPPLE WATCH - SCORE FROM YOUR WRIST\nLeave your phone in the bag. PadelPro runs natively on Apple Watch, so you can score every point in under a second - glance, tap, done. Everything syncs seamlessly between your Watch and iPhone. Find the match results after the match ends, either on Watch or on iPhone.\n\nSMART SCOREBOARD\n• Tap to score with a fast, one-handed interface designed for sweaty hands\n• Automatic tiebreak detection following official padel rules\n• Server tracking with automatic rotation - no more \"whose serve is it?\"\n• Deuce and advantage side indicators so you always know where to stand\n• Choose who serves first, and the app tracks everything from there\n\nAMERICANO MODE\n• Score Americano matches by total points, not games or sets\n• Perfect for social sessions, round-robins, and club nights\n• Same one-tap simplicity, adapted for the Americano tournament format\n\nDETAILED MATCH STATISTICS\nGo beyond the final score. After every match, dive into professional-level stats:\n• Break points won and saved by each team\n• Set point and match point conversion rates\n• Game-by-game serve performance tracking\n• Identify patterns in your play and track your improvement over time\n\nYOUR COMPLETE MATCH ARCHIVE\nEvery match is saved automatically with full details - set-by-set scores, duration, date, and outcome. Scroll through your history, recall your best victories, and track your progress across weeks and months. Always know what match results to submit in Playtomic\n\nSHARE YOUR RESULTS\nWon a great match? Create a beautiful result card and share it instantly with your padel partners, your group chat, or social media.\n\nPRIVATE & SIMPLE\nNo account required. No ads. No tracking. Your match data stays on your device and syncs only between your own iPhone and Apple Watch. Open the app and start scoring in seconds.\n\n\n\n---\nTerms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula\nPrivacy Policy: https://www.mikapps.xyz/privacy",
+  "release_notes": "- Adds optional anonymous usage analytics to help us build the features you want (Settings → Share Usage Analytics)\n\nKeep hitting those bandejas! If you enjoy PadelPro, please leave a quick review.",
+  "version": "1.1.33",
+  "current_version_release_date": "2026-10-23T09:33:01Z",
+  "rating": 4.66667,
+  "rating_count": 3,
+  "minimum_os": "17.6",
+  "url": "https://apps.apple.com/it/app/padel-score-tracker-padelpro/id6758962753?uo=4",
+  "screenshot_urls": [
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/8e/8f/23/8e8f23a8-d0d4-20b5-881f-f617beb9d86f/App_Store_Track_Padel_Matches.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/bf/52/8c/bf528c2e-13f1-1543-288d-cf17a8c0d68f/screenshot-1.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/83/07/2a/83072ac6-2567-4944-6d47-58b9b1386e0c/screenshot-6.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/bd/6e/7a/bd6e7ab4-97bd-fea5-fce0-5d48df9b5700/screenshot-2.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/5b/e3/74/5be3748b-5faf-92a9-6c10-5ca8c684cfb9/screenshot-9.png/320x480bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/b0/08/3f/b0083ffd-cf64-e905-2b00-e139c69d3813/screenshot-3.png/320x480bb.jpg"
+  ]
+}
