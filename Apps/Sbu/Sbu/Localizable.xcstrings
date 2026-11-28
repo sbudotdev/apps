@@ -361,12 +361,32 @@
         }
       }
     },
+    "Aggiungi gli strumenti che usi: ognuno è una pagina del quaderno.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add the tools you use: each one is a page of the notebook."
+          }
+        }
+      }
+    },
     "Aggiungi il tuo primo abbonamento: qui vedi quanto spendi.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Add your first subscription: this is where you see what you spend."
+          }
+        }
+      }
+    },
+    "Aggiungi strumenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add tools"
           }
         }
       }
@@ -1247,6 +1267,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "History"
+          }
+        }
+      }
+    },
+    "Da aggiungere": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To add"
           }
         }
       }
@@ -2142,6 +2172,16 @@
         }
       }
     },
+    "La fase di oggi e le prossime": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's phase and the next ones"
+          }
+        }
+      }
+    },
     "La lista sparisce da questo iPhone. Chi la condivide la tiene.": {
       "localizations": {
         "en": {
@@ -2423,7 +2463,6 @@
       }
     },
     "Luna": {
-      "comment": "The app in the tool screen cartiglio: Sbu · Luna · day · place.",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -2624,6 +2663,16 @@
         }
       }
     },
+    "Misura l'inclinazione": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Measures the tilt"
+          }
+        }
+      }
+    },
     "Misurare": {
       "localizations": {
         "en": {
@@ -2660,6 +2709,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Edit billing history"
+          }
+        }
+      }
+    },
+    "Modifica strumenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit tools"
           }
         }
       }
@@ -2760,6 +2819,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "The file has no name and price columns."
+          }
+        }
+      }
+    },
+    "Nel quaderno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the notebook"
           }
         }
       }
@@ -3598,6 +3667,16 @@
         }
       }
     },
+    "Quaderno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notebook"
+          }
+        }
+      }
+    },
     "Quando si ferma": {
       "localizations": {
         "en": {
@@ -3664,6 +3743,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "What you spend and the next renewals."
+          }
+        }
+      }
+    },
+    "Quanto spendi e quando": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What you spend, and when"
           }
         }
       }
@@ -3924,6 +4013,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Unlock"
+          }
+        }
+      }
+    },
+    "Sbu": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu"
           }
         }
       }
@@ -4375,6 +4474,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Streaming"
+          }
+        }
+      }
+    },
+    "Strumenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tools"
           }
         }
       }
@@ -4846,6 +4955,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "spent in %lld · plus %@"
+          }
+        }
+      }
+    },
+    "strumenti": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tools"
+          }
+        }
+      }
+    },
+    "strumento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tool"
           }
         }
       }

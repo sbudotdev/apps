@@ -1,0 +1,60 @@
+{
+  "sourceLanguage": "it",
+  "strings": {
+    "CFBundleDisplayName": {
+      "comment": "The app's name under its icon.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu"
+          }
+        }
+      }
+    },
+    "NSCameraUsageDescription": {
+      "comment": "Why Livella's sight asks for the camera.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The camera is a sight for measuring the angle to a distant point. The picture stays on screen: it is never saved or sent."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La fotocamera fa da mirino per misurare l'inclinazione di un punto lontano. L'immagine resta sullo schermo: non viene salvata né inviata."
+          }
+        }
+      }
+    },
+    "NSLocationWhenInUseUsageDescription": {
+      "comment": "Why Luna asks for the location.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu uses your location once, when you ask for it in Moon, to work out moonrise and moonset. Your location stays on this iPhone."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sbu usa la posizione una volta, quando la chiedi in Luna, per calcolare il sorgere e il tramonto della luna. La posizione resta su questo iPhone."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
