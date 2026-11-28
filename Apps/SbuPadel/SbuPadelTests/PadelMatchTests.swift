@@ -74,6 +74,25 @@ struct PadelMatchTests {
         #expect(match(sixAll + points + "u").score.sets == [Pair(us: 7, them: 6)])
     }
 
+    @Test func tiebreakPointsAreKeptForTheSet() {
+        let sixAll = games([.us, .them, .us, .them, .us, .them, .us, .them, .us, .them, .us, .them])
+        let score = match(sixAll + "ttttt uuuuuuu").score
+        #expect(score.tiebreaks == [0: Pair(us: 7, them: 5)])
+        #expect(score.summary == "7-6(5) 0-0")
+    }
+
+    @Test func columnsAreTheFinishedSetsThenTheSetInPlay() {
+        let setOne = games([.us, .them, .us, .them, .us, .them, .us, .them, .us, .us])
+        let playing = match(setOne + games([.us, .them, .us]) + "uu").score
+        #expect(playing.columns == [Pair(us: 6, them: 4), Pair(us: 2, them: 1)])
+        #expect(playing.summary == "6-4 2-1")
+        #expect(match("").score.columns == [Pair()])
+        let set = games(Array(repeating: .us, count: 6))
+        let won = match(set + set).score
+        #expect(won.columns == [Pair(us: 6, them: 0), Pair(us: 6, them: 0)])
+        #expect(won.summary == "6-0 6-0")
+    }
+
     @Test func matchTwoSetsToLove() {
         let set = games(Array(repeating: .us, count: 6))
         let score = match(set + set).score
