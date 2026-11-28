@@ -81,6 +81,9 @@ final class ShellFlowTests: XCTestCase {
             guard Self.isSbuKitGridType(issue) == false else { return true }
             // The system search field's own placeholder (Subscriptions), drawn by iOS: as in that app's tests.
             if issue.auditType == .textClipped, issue.element?.elementType == .searchField { return true }
+            // SbuKit's share link under Subscriptions' figure: whole on screen (testScreenshots), the audit
+            // reads it as clipped only inside the List cell under the strip. Only that label, only that check.
+            if issue.auditType == .textClipped, issue.element?.label == "Condividi la cifra" { return true }
             XCTFail("\(issue.compactDescription): \(issue.element?.debugDescription ?? "no element")")
             return true
         }
