@@ -1,0 +1,95 @@
+name: SbuPadel
+options:
+  bundleIdPrefix: dev.sbu
+  deploymentTarget:
+    iOS: "17.0"
+    watchOS: "10.0"
+  developmentLanguage: it
+  createIntermediateGroups: true
+packages:
+  SbuKit:
+    path: ../../Packages/SbuKit
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: $(SBU_TEAM_ID)
+    CODE_SIGN_STYLE: Automatic
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+    SWIFT_APPROACHABLE_CONCURRENCY: YES
+    SWIFT_EMIT_LOC_STRINGS: YES
+targets:
+  SbuPadel:
+    type: application
+    platform: iOS
+    # The scoring rules, the halves and the strings, shared with the watch.
+    sources: [SbuPadel, Shared]
+    dependencies:
+      - package: SbuKit
+      # The Apple Watch app, in the iPhone app's Watch folder.
+      - target: SbuPadelWatch
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.padel
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Sbu Padel
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.sports
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        # XcodeGen's target default is iPhone and iPad, which beats the project setting.
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
+  SbuPadelWatch:
+    type: application
+    platform: watchOS
+    sources: [SbuPadelWatch, Shared]
+    dependencies:
+      - package: SbuKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sbu.padel.watchkitapp
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Sbu Padel
+        INFOPLIST_KEY_WKCompanionAppBundleIdentifier: dev.sbu.padel
+        INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp: NO
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        TARGETED_DEVICE_FAMILY: "4"
+        SKIP_INSTALL: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+  SbuPadelTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [SbuPadelTests]
+    dependencies:
+      - target: SbuPadel
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1"
+  SbuPadelUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [SbuPadelUITests]
+    dependencies:
+      - target: SbuPadel
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_DEFAULT_ACTOR_ISOLATION: nonisolated
+schemes:
+  SbuPadel:
+    build:
+      targets:
+        SbuPadel: all
+    test:
+      targets: [SbuPadelTests, SbuPadelUITests]
+  # The Apple Watch app alone, to run it on a watch simulator.
+  SbuPadelWatch:
+    build:
+      targets:
+        SbuPadelWatch: all
